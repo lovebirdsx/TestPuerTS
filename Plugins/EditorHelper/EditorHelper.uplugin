@@ -1,0 +1,33 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Editor Helper",
+  "Description": "Useful Editor Helper",
+  "Category": "Other",
+  "CreatedBy": "lovebird",
+  "CreatedByURL": "",
+  "DocsURL": "",
+  "MarketplaceURL": "",
+  "CanContainContent": true,
+  "IsBetaVersion": false,
+  "IsExperimentalVersion": false,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "EditorHelper",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "AssetManagerEditor",
+      "Enabled": true
+    },
+    {
+      "Name": "GameplayTagsEditor",
+      "Enabled": true
+    }
+  ]
+}

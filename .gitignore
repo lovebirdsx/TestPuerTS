@@ -1,0 +1,52 @@
+# Ignore binary files
+*.exe
+*.dll
+*.lib
+*.so
+*.dylib
+
+# Ignore build directories
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Ignore user-specific files
+*.user
+*.userprefs
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+
+# Ignore project-specific files
+.idea/
+.vs/
+.vscode/
+*.xcodeproj/
+*.xcworkspace/
+*.sln
+*.vsconfig
+*.ignore
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore js files
+node_modules/
+
+# Ignore blender files
+*.blend1
+*.blend2
+*.fbx
