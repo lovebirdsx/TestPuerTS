@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../Content/JavaScript/editor"
+  },
+  "include": [
+    "src/**/*"
+  ],
+}

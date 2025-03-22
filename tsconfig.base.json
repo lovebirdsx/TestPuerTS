@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "typeRoots": [
+      "Typing",
+      "./node_modules/@types"
+    ]
+  }  
+}

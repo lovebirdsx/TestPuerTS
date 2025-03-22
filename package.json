@@ -1,0 +1,30 @@
+{
+  "name": "test-puerts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:lovebirdsx/TestPuerTS.git",
+  "author": "lovebird <lovebirdsx@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "tool:build": "cd packages/tool && tsc",
+    "postinstall": "yarn tool:build",
+    "watch:all": "nodemon -w packages/tool/src -e ts -x \"gulp tool:build && gulp watch:all\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "9.x",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.35.0",
+    "madge": "^8.0.0",
+    "mocha": "^10.7.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.3.3",
+    "typescript-eslint": "^7.17.0"
+  }
+}
