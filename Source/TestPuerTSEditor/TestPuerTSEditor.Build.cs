@@ -22,7 +22,7 @@ public class TestPuerTSEditor : ModuleRules
             "DataRegistry",
             "UnrealEd",
             "DeveloperSettings",
-            "CQTest",
+            "CQTest",            
             "TestPuerTS",
         });
 
