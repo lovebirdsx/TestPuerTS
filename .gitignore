@@ -11,6 +11,7 @@ Build/
 DerivedDataCache/
 Intermediate/
 Saved/
+obj/
 
 # Ignore user-specific files
 *.user
@@ -23,10 +24,10 @@ Saved/
 # Ignore project-specific files
 .idea/
 .vs/
-.vscode/
 *.xcodeproj/
 *.xcworkspace/
 *.sln
+*.csproj.props
 *.vsconfig
 *.ignore
 
@@ -50,3 +51,6 @@ node_modules/
 *.blend1
 *.blend2
 *.fbx
+
+# Ignore config files
+Config/DefaultEditorSave.ini

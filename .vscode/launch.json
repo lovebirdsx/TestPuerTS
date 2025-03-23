@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Attach Editor",
+          "port": 8888,
+          "restart": true,
+          "request": "attach",
+          "skipFiles": [
+              "<node_internals>/**"
+          ],
+          "outFiles": [
+              "${workspaceFolder}/Content/JavaScript/**/*.js",
+              "!**/node_modules/**"
+          ],
+          "type": "node"
+      }
+  ]
+}

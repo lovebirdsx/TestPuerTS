@@ -10,12 +10,9 @@ public class TestPuerTSEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
-		ExtraModuleNames.Add("TestPuerTSEditor");
-		RegisterModulesCreatedByRider();
-	}
-
-	private void RegisterModulesCreatedByRider()
-	{
-		ExtraModuleNames.AddRange(new string[] {"TsEditor"});
+		ExtraModuleNames.AddRange(new string[] {
+			"TsEditor",
+			"TestPuerTSEditor",
+		});
 	}
 }

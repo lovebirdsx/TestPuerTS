@@ -12,7 +12,7 @@
   "scripts": {
     "tool:build": "cd packages/tool && tsc",
     "postinstall": "yarn tool:build",
-    "watch:all": "nodemon -w packages/tool/src -e ts -x \"gulp tool:build && gulp watch:all\""
+    "watch": "nodemon -w packages/tool/src -e ts -x \"gulp tool:build && gulp watch\""
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

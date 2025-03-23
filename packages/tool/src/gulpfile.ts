@@ -1,12 +1,8 @@
 import * as gulp from 'gulp';
-import { info } from 'gulplog';
 
 import './packages/tool';
+import './packages/editor';
 
-gulp.task('test', async () => {
-	info('Running tests...');
-});
-
-gulp.task('watch:all', async () => {
-	info('Watching all files ...');
-});
+gulp.task('test', gulp.parallel('tool:test', 'editor:test'));
+gulp.task('test:watch', gulp.parallel('tool:test:watch', 'editor:test:watch'));
+gulp.task('watch', gulp.parallel('editor:watch'));

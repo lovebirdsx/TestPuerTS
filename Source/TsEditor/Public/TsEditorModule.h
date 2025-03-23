@@ -13,6 +13,10 @@ public:
     virtual void StartupModule() override;
     virtual void ShutdownModule() override;
 
+    UTsEditor* GetTsEditor() { return TsEditor; }
+
 private:
     UTsEditor *TsEditor;
+
+    void SyncSettingsToEditor();
 };
