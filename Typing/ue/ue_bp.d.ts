@@ -191,4 +191,31 @@ declare module "ue" {
     }
 
 // __TYPE_DECL_END
+// __TYPE_DECL_START: BA075DF54F595C489B8B16B285E0D38E
+    namespace Game.Editor.W_Main {
+        class W_Main_C extends UE.EditorUtilityWidget {
+            constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+            UberGraphFrame: UE.PointerToUberGraphFrame;
+            ButtonBasicTest: UE.EditorUtilityButton;
+            ButtonContainerTest: UE.EditorUtilityButton;
+            ButtonRestartEditor: UE.EditorUtilityButton;
+            Bind() : void;
+            Bind__puerts_mixin__() : void;
+            /*
+             *Called after the underlying slate widget is constructed.  Depending on how the slate object is used
+             *this event may be called multiple times due to adding and removing from the hierarchy.
+             *If you need a true called-once-when-created event, use OnInitialized.
+             */
+            Construct() : void;
+            ExecuteUbergraph_W_Main(EntryPoint: number) : void;
+            static StaticClass(): Class;
+            static Find(OrigInName: string, Outer?: Object): W_Main_C;
+            static Load(InName: string): W_Main_C;
+        
+            __tid_W_Main_C_0__: boolean;
+        }
+        
+    }
+
+// __TYPE_DECL_END
 }

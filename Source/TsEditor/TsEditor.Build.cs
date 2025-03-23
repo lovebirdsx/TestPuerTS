@@ -22,6 +22,8 @@ public class TsEditor : ModuleRules
                 "SlateCore",
                 "DeveloperSettings",
                 "UnrealEd",
+                "Blutility",
+                "UMG",
                 "JsEnv",
             }
         );

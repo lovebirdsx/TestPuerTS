@@ -3,6 +3,7 @@
 #include "ISettingsModule.h"
 #include "TsEditor.h"
 #include "TsEditorSettings.h"
+#include "Interfaces/IMainFrameModule.h"
 
 #define LOCTEXT_NAMESPACE "FTsEditorModule"
 
@@ -25,9 +26,16 @@ void FTsEditorModule::StartupModule()
         SyncSettingsToEditor();
     });
 
-    TsEditor = NewObject<UTsEditor>(GetTransientPackage(), FName("TsEditor"));
-    this->SyncSettingsToEditor();
-    TsEditor->Start();
+    if (FModuleManager::Get().IsModuleLoaded("MainFrame"))
+    {
+        IMainFrameModule& MainFrameModule = IMainFrameModule::Get();
+        MainFrameModule.OnMainFrameCreationFinished().AddLambda([this](TSharedPtr<SWindow> Window, bool bValue)
+        {
+            TsEditor = NewObject<UTsEditor>(GetTransientPackage(), FName("TsEditor"));
+            this->SyncSettingsToEditor();
+            TsEditor->Start();            
+        });
+    }
 }
 
 void FTsEditorModule::ShutdownModule()

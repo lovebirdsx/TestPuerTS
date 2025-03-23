@@ -7,6 +7,7 @@
 #include "TsEditorLibrary.generated.h"
 
 class UTsEditor;
+class UEditorUtilityWidgetBlueprint;
 
 /**
  * 
@@ -19,4 +20,10 @@ class TSEDITOR_API UTsEditorLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "TsEditor")
 	static UTsEditor* GetTsEditor();
+
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "TsEditor")
+	static FName ShowEditorWidget(UEditorUtilityWidgetBlueprint* EditorUtilityWidgetBlueprint);
+
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "TsEditor")
+	static void CloseEditorWidget(const FName &TabName);
 };
