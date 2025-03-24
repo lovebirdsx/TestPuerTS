@@ -14,7 +14,7 @@ public:
 
 	virtual void Log(const FString& Message) const override
 	{
-		UE_LOG(LogTsEditor, Display, TEXT("%s"), *Message);
+		UE_LOG(LogTsEditor, Log, TEXT("%s"), *Message);		
 	}
 
 	virtual void Info(const FString& Message) const override
@@ -59,7 +59,7 @@ void UTsEditor::Start()
 		JsEnv->WaitDebugger();
 	}
 
-	const TArray<TPair<FString, UObject*>> Arguments;
+	const TArray<TPair<FString, UObject*>> Arguments;	
 	JsEnv->Start(ModuleName, Arguments);
 
 	OnStarted.Broadcast();

@@ -25,6 +25,7 @@ public class TsEditor : ModuleRules
                 "Blutility",
                 "UMG",
                 "JsEnv",
+                "EditorCommon",
             }
         );
     }

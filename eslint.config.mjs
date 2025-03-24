@@ -14,6 +14,8 @@ export default tseslint.config(
 			'**/Temp/**',
 			'**/Resources/**',
 			'**/index.d.ts',
+			'**/Typing/**',
+			'**/Content/JavaScript/**',
 		],
 	},
 
@@ -21,6 +23,7 @@ export default tseslint.config(
 		files: ['**/*.{ts,tsx,js,mjs}'],
 		extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
 		rules: {
+			'@typescript-eslint/no-unsafe-declaration-merging': 'off',
 			'no-constant-condition': 'off',
 			'no-prototype-builtins': 'off',
 			'no-constant-binary-expression': 'off',

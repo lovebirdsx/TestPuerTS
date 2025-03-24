@@ -3,7 +3,6 @@
 #include "ISettingsModule.h"
 #include "TsEditor.h"
 #include "TsEditorSettings.h"
-#include "Interfaces/IMainFrameModule.h"
 
 #define LOCTEXT_NAMESPACE "FTsEditorModule"
 
@@ -19,23 +18,21 @@ void FTsEditorModule::StartupModule()
             NSLOCTEXT("TsEditor", "TsEditorSettingsDescription", "Configure TsEditor settings"),
             Settings);
     }
-    
+
     Settings->OnPropertyChanged.AddLambda([this](const FString& FieldName)
     {
         UE_LOG(LogTsEditor, Display, TEXT("Settings Changed: %s"), *FieldName);
         SyncSettingsToEditor();
-    });
+    });    
 
-    if (FModuleManager::Get().IsModuleLoaded("MainFrame"))
-    {
-        IMainFrameModule& MainFrameModule = IMainFrameModule::Get();
-        MainFrameModule.OnMainFrameCreationFinished().AddLambda([this](TSharedPtr<SWindow> Window, bool bValue)
-        {
-            TsEditor = NewObject<UTsEditor>(GetTransientPackage(), FName("TsEditor"));
-            this->SyncSettingsToEditor();
-            TsEditor->Start();            
-        });
-    }
+    TsEditor = NewObject<UTsEditor>(GetTransientPackage(), FName("TsEditor"));
+    SyncSettingsToEditor();
+    TsEditor->Start();
+
+    // 引擎关闭前，先停止虚拟机，以便处理资源释放相关操作（譬如解绑mixin），避免报错
+    FCoreDelegates::OnPreExit.AddLambda([this]() {        
+        TsEditor->Stop();
+    });
 }
 
 void FTsEditorModule::ShutdownModule()

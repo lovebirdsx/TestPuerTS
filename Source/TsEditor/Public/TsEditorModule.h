@@ -10,6 +10,11 @@ class UTsEditor;
 class FTsEditorModule : public IModuleInterface
 {
 public:
+    explicit FTsEditorModule()
+        : TsEditor(nullptr)
+    {
+    }
+
     virtual void StartupModule() override;
     virtual void ShutdownModule() override;
 

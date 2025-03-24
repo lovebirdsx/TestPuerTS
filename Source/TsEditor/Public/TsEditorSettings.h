@@ -33,6 +33,10 @@ public:
 	UPROPERTY(EditAnywhere, config, Category = "Ts Editor", meta = (DisplayName = "Wait JS Debug"))
 	bool bWaitJSDebug;
 
+	// 是否自动运行单元测试
+	UPROPERTY(EditAnywhere, config, Category = "Ts Editor", meta = (DisplayName = "Auto Run Unit Tests"))
+	bool bAutoRunUnitTests;
+
 private:
 	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
 };

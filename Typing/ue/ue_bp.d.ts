@@ -191,23 +191,24 @@ declare module "ue" {
     }
 
 // __TYPE_DECL_END
-// __TYPE_DECL_START: BA075DF54F595C489B8B16B285E0D38E
+// __TYPE_DECL_START: 2CE1D8194DC8A817A83B5193D4029D33
     namespace Game.Editor.W_Main {
         class W_Main_C extends UE.EditorUtilityWidget {
             constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
             UberGraphFrame: UE.PointerToUberGraphFrame;
             ButtonBasicTest: UE.EditorUtilityButton;
             ButtonContainerTest: UE.EditorUtilityButton;
+            ButtonMixinTest: UE.EditorUtilityButton;
             ButtonRestartEditor: UE.EditorUtilityButton;
-            Bind() : void;
-            Bind__puerts_mixin__() : void;
-            /*
-             *Called after the underlying slate widget is constructed.  Depending on how the slate object is used
-             *this event may be called multiple times due to adding and removing from the hierarchy.
-             *If you need a true called-once-when-created event, use OnInitialized.
-             */
-            Construct() : void;
+            ButtonUnitTest: UE.EditorUtilityButton;
+            BndEvt__W_Main_ButtonBasicTest_K2Node_ComponentBoundEvent_1_OnButtonClickedEvent__DelegateSignature() : void;
+            BndEvt__W_Main_ButtonContainerTest_K2Node_ComponentBoundEvent_2_OnButtonClickedEvent__DelegateSignature() : void;
+            BndEvt__W_Main_ButtonMixinTest_K2Node_ComponentBoundEvent_3_OnButtonClickedEvent__DelegateSignature() : void;
+            BndEvt__W_Main_ButtonRestartEditor_K2Node_ComponentBoundEvent_0_OnButtonClickedEvent__DelegateSignature() : void;
+            BndEvt__W_Main_ButtonUnitTest_K2Node_ComponentBoundEvent_4_OnButtonClickedEvent__DelegateSignature() : void;
             ExecuteUbergraph_W_Main(EntryPoint: number) : void;
+            OnClick(EventType: string) : void;
+            OnClick__puerts_mixin__(EventType: string) : void;
             static StaticClass(): Class;
             static Find(OrigInName: string, Outer?: Object): W_Main_C;
             static Load(InName: string): W_Main_C;

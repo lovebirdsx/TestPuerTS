@@ -3,7 +3,7 @@
 
 #include "TsEditorSettings.h"
 
-UTsEditorSettings::UTsEditorSettings() : ModuleName(TEXT("editor/main")), DebugPort(8888), bWaitJSDebug(false)
+UTsEditorSettings::UTsEditorSettings() : ModuleName(TEXT("editor/main")), DebugPort(8888), bWaitJSDebug(false), bAutoRunUnitTests(false)
 {
 }
 

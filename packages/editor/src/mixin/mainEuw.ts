@@ -1,28 +1,20 @@
 import { blueprint } from 'puerts';
 import * as ue from 'ue';
+import { runTest } from '../tests/runTest';
 
-interface MainEUW extends ue.Game.Editor.W_Main.W_Main_C {};
+interface MainEUW extends ue.Game.Editor.W_Main.W_Main_C {}
 
 class MainEUW {
-    Bind() {
-        const tsEditor = ue.TsEditorLibrary.GetTsEditor_EditorOnly();
-        this.ButtonRestartEditor.OnClicked.Add(() => {
-            tsEditor.Restart_EditorOnly();
-        });
-
-        this.ButtonBasicTest.OnClicked.Add(() => {
-            console.log('ButtonBasicTest clicked!');
-        });
-
-        this.ButtonContainerTest.OnClicked.Add(() => {
-            console.log('ButtonContainerTest clicked!');
-        });
-    }
+	OnClick(event: string) {
+		runTest(event);
+	}
 }
 
 export function bindMainEUWClass(path: string) {
-    const ucls = ue.Class.Load(path);
-    const JsMainEUW = blueprint.tojs<typeof ue.Game.Editor.W_Main.W_Main_C>(ucls);
-    const MixinMainEUW = blueprint.mixin(JsMainEUW, MainEUW);
-    return MixinMainEUW;
+	const ucls = ue.Class.Load(path);
+	const JsMainEUW = blueprint.tojs<typeof ue.Game.Editor.W_Main.W_Main_C>(ucls);
+	blueprint.mixin(JsMainEUW, MainEUW);
+	return () => {
+		blueprint.unmixin(JsMainEUW);
+	};
 }

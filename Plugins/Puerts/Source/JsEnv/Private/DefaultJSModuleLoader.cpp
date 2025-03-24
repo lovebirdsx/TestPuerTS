@@ -84,8 +84,9 @@ bool DefaultJSModuleLoader::SearchModuleInDir(
 
 bool DefaultJSModuleLoader::SearchModuleWithExtInDir(
     const FString& Dir, const FString& RequiredModule, FString& Path, FString& AbsolutePath)
-{
+{    
     return CheckExists(Dir / RequiredModule, Path, AbsolutePath) ||
+            CheckExists(RequiredModule, Path, AbsolutePath) ||
            (!Dir.EndsWith(TEXT("node_modules")) && CheckExists(Dir / TEXT("node_modules") / RequiredModule, Path, AbsolutePath));
 }
 

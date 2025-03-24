@@ -8,6 +8,11 @@ public class TestPuerTS : ModuleRules
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
+        PrivateDependencyModuleNames.AddRange(new string[]
+        {
+            "JsEnv"
+        });
+        
         PublicDependencyModuleNames.AddRange(new string[]
         {
             "Core",
