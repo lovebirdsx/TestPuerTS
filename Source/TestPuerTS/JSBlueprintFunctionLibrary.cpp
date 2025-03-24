@@ -4,13 +4,12 @@
 
 FString UJSBlueprintFunctionLibrary::GetName()
 {
-	return TEXT("小马哥");//返回中文
+	return TEXT("Hello");
 }
 
 FString UJSBlueprintFunctionLibrary::Hello(FString To)
 {
     FString Result = FString::Printf(TEXT("Hello %s"), *(To));
-    UE_LOG(LogTemp, Warning, TEXT("%s"), *Result);
     return Result;
 }
 
@@ -20,7 +19,6 @@ FString UJSBlueprintFunctionLibrary::Concat(FString First, FString Second)
 }
 
 void UJSBlueprintFunctionLibrary::Info(UClass* To)
-{
-	UE_LOG(LogTemp, Warning, TEXT("Info %s %p"), *(To->GetPathName()), To);
+{	
 }
 

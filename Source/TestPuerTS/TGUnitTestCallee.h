@@ -18,28 +18,26 @@ public:
 
 	FCustomStruct()
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FCustomStruct1(%p)"), this);
+		
 	}
 
 	FCustomStruct( const FCustomStruct &obj)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FCustomStruct2(%p)"), this);
+		
 	}
 
 	FCustomStruct( FCustomStruct &&obj)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("FCustomStruct3(%p)"), this);
+		
 	}
 	
 	FCustomStruct &operator =(const FCustomStruct &obj)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("operator =(%p)"), this);
+	{		
 		return *this;
 	}
 
 	~FCustomStruct()
-	{
-		UE_LOG(LogTemp, Warning, TEXT("~FCustomStruct(%p)"), this);
+	{		
 	}
 };
 

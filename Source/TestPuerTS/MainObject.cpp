@@ -32,9 +32,7 @@ UMainObject::UMainObject()
     for (int i = 0; i < ArrayBuffer.Length; i++)
     {
         Data[i] = 2 * (i + 1);
-    }
-
-    UE_LOG(LogTemp, Warning, TEXT("Data(%p, %d)"), ArrayBuffer.Data, ArrayBuffer.Length);
+    }    
 }
 
 int32 UMainObject::Add(int32 a, int32 b) const
@@ -51,22 +49,19 @@ FString UMainObject::Foo() const
 
 FString UMainObject::Bar(FVector VV) const
 {
-    FString Result = FString::Printf(TEXT("UMyObject::Bar(%s)"), *VV.ToString());
-    UE_LOG(LogTemp, Warning, TEXT("%s"), *Result);
+    FString Result = FString::Printf(TEXT("UMyObject::Bar(%s)"), *VV.ToString());    
     return Result;
 }
 
 FString UMainObject::Bar2(FVector& VV) const
 {
-    FString Result = FString::Printf(TEXT("UMyObject::Bar2(%s)"), *VV.ToString());
-    UE_LOG(LogTemp, Warning, TEXT("%s"), *Result);
+    FString Result = FString::Printf(TEXT("UMyObject::Bar2(%s)"), *VV.ToString());    
     VV.X = 1024;
     return Result;
 }
 
 FVector UMainObject::Bar3(FVector& VV) const
-{
-    UE_LOG(LogTemp, Warning, TEXT("UMyObject::Bar3(%s)"), *VV.ToString());
+{    
     VV.X = 1024;
     return VV + 1;
 }
@@ -97,22 +92,21 @@ TArray<int32> UMainObject::GetInts()
 
 void UMainObject::EnumTest(EToTest E)
 {
-    UE_LOG(LogTemp, Warning, TEXT("UMyObject::EnumTest(%d)"), (int32)E);
+    
 }
 
 void UMainObject::NameTest(FName Name)
 {
-    UE_LOG(LogTemp, Warning, TEXT("IsNone? %d"), Name == NAME_None);
+    
 }
 
 void UMainObject::DefaultTest(FString Str, int I, FVector Vec)
 {
-    UE_LOG(LogTemp, Warning, TEXT("DefaultTest Str = '%s', I = %d, Vec = %s"), *Str, I, *Vec.ToString());
+    
 }
 
 FArrayBuffer UMainObject::ArrayBufferTest(const FArrayBuffer& Ab) const
-{
-    UE_LOG(LogTemp, Warning, TEXT("Ab(%p, %d)"), Ab.Data, Ab.Length);
+{    
     if (Ab.Length > 0)
     {
         return FArrayBuffer{ static_cast<char*>(Ab.Data) + 1, Ab.Length - 1};
@@ -125,24 +119,17 @@ FArrayBuffer UMainObject::ArrayBufferTest(const FArrayBuffer& Ab) const
 
 void  UMainObject::PrintState() const
 {
-    UE_LOG(LogTemp, Warning, TEXT("V = %s"), *(V.ToString()));
-    UE_LOG(LogTemp, Warning, TEXT("SomeData.Alignment = %s"), *(SomeData.Alignment.ToString()));
-    UE_LOG(LogTemp, Warning, TEXT("SomeData.DoNoSerialize = %d"), SomeData.DoNoSerialize);
-    UE_LOG(LogTemp, Warning, TEXT("SomeData.WillSerialize = %d"), SomeData.WillSerialize);
+    
 }
 
 void UMainObject::PassJsFunctionAsDelegate(FCallback Callback) const
 {
-    auto Ret = Callback.Execute(TEXT("John"));
-    UE_LOG(LogTemp, Warning, TEXT("John ? %d"), Ret);
-
-    Ret = Callback.Execute(TEXT("Che"));
-    UE_LOG(LogTemp, Warning, TEXT("Che ? %d"), Ret);
+    Callback.Execute(TEXT("John"));
+    Callback.Execute(TEXT("Che"));
 }
 
 int32 UMainObject::Mult_Implementation(int32 a, int32 b) const
-{
-	UE_LOG(LogTemp, Warning, TEXT("wrong implementation div %d %d"), a, b);
+{	
 	return a + b;
 }
 
