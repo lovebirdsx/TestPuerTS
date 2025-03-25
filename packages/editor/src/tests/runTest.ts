@@ -27,12 +27,12 @@ class Reporter extends Mocha.reporters.Base {
 		super(runner, options);
 
 		runner.on('pass', (test) => {
-			console.log(`✅ 测试通过: ${test.fullTitle()}`);
+			console.log(`✅ ${test.fullTitle()} (${test.duration}ms)`);
 		});
 
 		runner.on('fail', (test, err) => {
-			console.log(`❌ 测试失败: ${test.fullTitle()}`);
-			console.log(`   错误信息: ${err.message}`);
+			console.error(`❌ ${test.fullTitle()}`);
+			console.error(`   错误信息: ${err.message}`);
 		});
 
 		runner.on('end', () => {

@@ -100,9 +100,9 @@ void UMainObject::NameTest(FName Name)
     
 }
 
-void UMainObject::DefaultTest(FString Str, int I, FVector Vec)
+FString UMainObject::DefaultTest(FString Str, int I, FVector Vec)
 {
-    
+    return FString::Printf(TEXT("Str: %s, I: %d, Vec: %s"), *Str, I, *Vec.ToString());
 }
 
 FArrayBuffer UMainObject::ArrayBufferTest(const FArrayBuffer& Ab) const

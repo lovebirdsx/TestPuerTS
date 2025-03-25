@@ -15,6 +15,8 @@ class EDITORCOMMON_API UEditorCommonLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 	
 public:
+	DECLARE_DYNAMIC_DELEGATE_OneParam(FWorldCallbackDelegate, UWorld*, World);
+	
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
 	static UEditorEvent* GetEditorEvent();
 
@@ -26,4 +28,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
 	static bool IsMainFrameCreationFinished();
+	
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
+	static UWorld* GetWorld();
+	
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
+	static void TempWorldTest(FWorldCallbackDelegate Callback); 
 };

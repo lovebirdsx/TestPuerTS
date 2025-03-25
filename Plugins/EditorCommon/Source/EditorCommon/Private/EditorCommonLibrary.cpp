@@ -1,7 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "EditorCommonLibrary.h"
+﻿#include "EditorCommonLibrary.h"
 
 #include "EditorCommonModule.h"
 #include "EditorUtilitySubsystem.h"
@@ -55,4 +52,36 @@ bool UEditorCommonLibrary::IsMainFrameCreationFinished()
 
 	const IMainFrameModule& MainFrameModule = IMainFrameModule::Get();
 	return MainFrameModule.IsWindowInitialized();
+}
+
+UWorld* UEditorCommonLibrary::GetWorld()
+{
+	UWorld* World = nullptr;
+	if (GEditor) {
+		for (const auto ViewportClient : GEditor->GetAllViewportClients()) {
+			if (ViewportClient && ViewportClient->IsPerspective()) {
+				if (UWorld* ViewportWorld = ViewportClient->GetWorld()) {
+					World = ViewportWorld;
+					break;
+				}
+			}
+		}
+	}
+
+	return World;
+}
+
+void UEditorCommonLibrary::TempWorldTest(FWorldCallbackDelegate Callback)
+{
+	const FName WorldName = MakeUniqueObjectName(nullptr, UWorld::StaticClass(), NAME_None, EUniqueObjectNameOptions::GloballyUnique);
+	UWorld* World = UWorld::CreateWorld(EWorldType::EditorPreview, false, WorldName, GetTransientPackage());
+	FWorldContext& WorldContext = GEngine->CreateNewWorldContext(EWorldType::EditorPreview);	
+	World->AddToRoot();
+	WorldContext.SetCurrentWorld(World);
+	
+	Callback.ExecuteIfBound(World);
+	
+	World->RemoveFromRoot();
+	World->DestroyWorld(false);	
+	GEngine->DestroyWorldContext(World);
 }

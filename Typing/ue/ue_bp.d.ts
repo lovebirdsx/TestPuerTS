@@ -219,4 +219,18 @@ declare module "ue" {
     }
 
 // __TYPE_DECL_END
+// __TYPE_DECL_START: 76D8B57D43FD71D23169D9AA5AA3A482
+    namespace Game.Editor.B_Object {
+        class B_Object_C extends UE.Object {
+            constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+            static StaticClass(): Class;
+            static Find(OrigInName: string, Outer?: Object): B_Object_C;
+            static Load(InName: string): B_Object_C;
+        
+            __tid_B_Object_C_0__: boolean;
+        }
+        
+    }
+
+// __TYPE_DECL_END
 }

@@ -41,6 +41,27 @@ class TESTPUERTS_API UMainObject : public UObject
 
 public:
     UMainObject();
+    
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNotifyWithInt, int32, A);
+    DECLARE_DYNAMIC_DELEGATE_OneParam(FNotifyWithString, FString, A);
+    DECLARE_DYNAMIC_DELEGATE_RetVal_OneParam(FString, FNotifyWithStringRet, FString, A);
+    DECLARE_DYNAMIC_DELEGATE_OneParam(FNotifyWithRefString, FString&, A);
+    DECLARE_DYNAMIC_MULTICAST_DELEGATE(FNotifyWithNothing);
+
+    UPROPERTY()
+    FNotifyWithInt NotifyWithInt;
+
+    UPROPERTY()
+    FNotifyWithString NotifyWithString;
+
+    UPROPERTY()
+    FNotifyWithRefString NotifyWithRefString;
+
+    UPROPERTY()
+    FNotifyWithStringRet NotifyWithStringRet;
+
+    UPROPERTY()
+    FNotifyWithNothing NotifyWithNothing;    
 
     UFUNCTION(BlueprintCallable, meta = (DisplayName = "Add", ScriptName = "Add", Keywords = "test"), Category = "Test")
     int32 Add(int32 a, int32 b) const;
@@ -76,7 +97,7 @@ public:
     void NameTest(FName Name);
 
     UFUNCTION(BlueprintCallable, meta = (DisplayName = "DefaultTest", ScriptName = "DefaultTest", Keywords = "test"), Category = "Test")
-    void DefaultTest(FString Str = TEXT("i am default"), int I = 10, FVector Vec = FVector(1.1, 2.2, 3.3));
+    FString DefaultTest(FString Str = TEXT("i am default"), int I = 10, FVector Vec = FVector(1.1, 2.2, 3.3));
 
 	UFUNCTION(BlueprintNativeEvent)
 	int32 Mult(int32 a, int32 b) const;
