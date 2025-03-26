@@ -13,20 +13,7 @@
 			"Name": "TestPuerTSEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
-		},
-		{
-			"Name": "TsEditor",
-			"Type": "Editor",
-			"LoadingPhase": "Default"
 		}
 	],
-	"Plugins": [
-		{
-			"Name": "ModelingToolsEditorMode",
-			"Enabled": true,
-			"TargetAllowList": [
-				"Editor"
-			]
-		}
-	]
+	"Plugins": []
 }
