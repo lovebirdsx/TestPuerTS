@@ -10,7 +10,9 @@ function removeEmptyLines(data: string): string {
 }
 
 interface IExecOptions {
-	logPrefix: string;
+	logPrefix?: string;
+
+	originalLog?: boolean;
 
 	workingDir?: string;
 
@@ -18,8 +20,6 @@ interface IExecOptions {
 	formatText?: (data: string, isError: boolean) => string;
 
 	noThrow?: boolean;
-
-	verbose?: boolean;
 }
 
 let execVerbose = false;
@@ -32,11 +32,11 @@ export function setExecVerbose(verbose: boolean): void {
  * @param cmd 命令
  * @param options {@link IExecOptions} 选项
  */
-export async function exec(cmd: string, { logPrefix, workingDir, noThrow, formatText }: IExecOptions): Promise<void> {
+export async function exec(cmd: string, { logPrefix, originalLog, workingDir, noThrow, formatText }: IExecOptions): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		const process = spawn(cmd, { shell: true, cwd: workingDir });
+		const subProcess = spawn(cmd, { shell: true, cwd: workingDir });
 
-		process.on('close', (code) => {
+		subProcess.on('close', (code) => {
 			if (code !== 0 && !noThrow) {
 				reject(new Error(`Error executing command: ${cmd}`));
 			} else {
@@ -51,8 +51,8 @@ export async function exec(cmd: string, { logPrefix, workingDir, noThrow, format
 				return;
 			}
 
-			const str = removeEmptyLines(data.toString());
-			if (!str) {
+			const str = data.toString();
+			if (str.trim() === '') {
 				return;
 			}
 
@@ -61,14 +61,19 @@ export async function exec(cmd: string, { logPrefix, workingDir, noThrow, format
 				return;
 			}
 
-			info(`${blue(logPrefix)}${formatedText}`);
+			const output = logPrefix ? `${blue(logPrefix)}${formatedText}` : formatedText;
+			if (originalLog) {
+				process.stdout.write(output);
+			} else {
+				info(output);
+			}
 		};
 
-		process.stdout?.on('data', (data) => {
+		subProcess.stdout?.on('data', (data) => {
 			onOutput(data, false);
 		});
 
-		process.stderr?.on('data', (data) => {
+		subProcess.stderr?.on('data', (data) => {
 			onOutput(data, true);
 		});
 	});

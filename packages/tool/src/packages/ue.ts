@@ -64,10 +64,31 @@ gulp.task('ue:build', async () => {
 	info(`[ue:build] ${cmd}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
-		logPrefix: '[ue:build] ',
+		originalLog: true,
 		formatText: formatCSharpOutput,
 	});
 	info(green('[ue:build] Build completed successfully'));
+});
+
+function getEditorCmdPath(): string {
+	const engineRoot = getEngineRoot();
+	const editorCmd = path.join(engineRoot, 'Engine', 'Binaries', 'Win64', 'UnrealEditor-Cmd.exe');
+	if (!fs.existsSync(editorCmd)) {
+		throw new Error(`UnrealEditor-Cmd.exe not found: ${editorCmd}`);
+	}
+
+	return editorCmd;
+}
+
+gulp.task('ue:test', async () => {
+	const editorCmd = getEditorCmdPath();
+	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
+	info(`[ue:test] ${cmd}`);
+	await exec(cmd, {
+		workingDir: projectRoot,
+		originalLog: true,
+	});
+	info(green('[ue:test] Tests completed'));
 });
 
 gulp.task('ue:build:clean', async () => {
@@ -76,8 +97,7 @@ gulp.task('ue:build:clean', async () => {
 	info(`[ue:build:clean] ${cmd}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
-		logPrefix: '[ue:build:clean] ',
-		formatText: formatCSharpOutput,
+		originalLog: true,
 	});
 	info(green('[ue:build:clean] Clean build completed successfully'));
 });

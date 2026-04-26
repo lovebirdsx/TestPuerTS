@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { getCmdArgs, ICmdArgs } from './cmdArgs';
+import { setExecVerbose } from './common/exec';
 
 interface IConfig extends ICmdArgs {
 	localJsEnvPorts: number[];
@@ -26,6 +27,10 @@ function init() {
 			config[k] = cmdArgs[k];
 		}
 	});
+
+	if (cmdArgs.verbose) {
+		setExecVerbose(true);
+	}
 
 	isInit = true;
 }

@@ -34,7 +34,7 @@ gulp.task('tool:test:watch', async () => {
 });
 
 gulp.task('tool:watch', async () => {
-	await exec('tsc -w', { workingDir, logPrefix: '[tool:watch] ' });
+	await exec('tsc -w', { workingDir, logPrefix: '[tool:watch] ', formatText: formatTscCheckOutput });
 });
 
 gulp.task('tool:tsc-check', async () => {

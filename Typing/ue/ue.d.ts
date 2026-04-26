@@ -27846,6 +27846,20 @@ declare module "ue" {
         __tid_AnchorData_0__: boolean;
     }
     
+    class AngularRangeLimit {
+        constructor();
+        constructor(LimitMin: UE.Vector, LimitMax: UE.Vector, Bone: UE.BoneReference);
+        LimitMin: UE.Vector;
+        LimitMax: UE.Vector;
+        Bone: UE.BoneReference;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AngularRangeLimit_0__: boolean;
+    }
+    
     enum EPixelFormat { PF_Unknown, PF_A32B32G32R32F, PF_B8G8R8A8, PF_G8, PF_G16, PF_DXT1, PF_DXT3, PF_DXT5, PF_UYVY, PF_FloatRGB, PF_FloatRGBA, PF_DepthStencil, PF_ShadowDepth, PF_R32_FLOAT, PF_G16R16, PF_G16R16F, PF_G16R16F_FILTER, PF_G32R32F, PF_A2B10G10R10, PF_A16B16G16R16, PF_D24, PF_R16F, PF_R16F_FILTER, PF_BC5, PF_V8U8, PF_A1, PF_FloatR11G11B10, PF_A8, PF_R32_UINT, PF_R32_SINT, PF_PVRTC2, PF_PVRTC4, PF_R16_UINT, PF_R16_SINT, PF_R16G16B16A16_UINT, PF_R16G16B16A16_SINT, PF_R5G6B5_UNORM, PF_R8G8B8A8, PF_A8R8G8B8, PF_BC4, PF_R8G8, PF_ATC_RGB, PF_ATC_RGBA_E, PF_ATC_RGBA_I, PF_X24_G8, PF_ETC1, PF_ETC2_RGB, PF_ETC2_RGBA, PF_R32G32B32A32_UINT, PF_R16G16_UINT, PF_ASTC_4x4, PF_ASTC_6x6, PF_ASTC_8x8, PF_ASTC_10x10, PF_ASTC_12x12, PF_BC6H, PF_BC7, PF_R8_UINT, PF_L8, PF_XGXR8, PF_R8G8B8A8_UINT, PF_R8G8B8A8_SNORM, PF_R16G16B16A16_UNORM, PF_R16G16B16A16_SNORM, PF_PLATFORM_HDR_0, PF_PLATFORM_HDR_1, PF_PLATFORM_HDR_2, PF_NV12, PF_R32G32_UINT, PF_ETC2_R11_EAC, PF_ETC2_RG11_EAC, PF_R8, PF_B5G5R5A1_UNORM, PF_ASTC_4x4_HDR, PF_ASTC_6x6_HDR, PF_ASTC_8x8_HDR, PF_ASTC_10x10_HDR, PF_ASTC_12x12_HDR, PF_G16R16_SNORM, PF_R8G8_UINT, PF_R32G32B32_UINT, PF_R32G32B32_SINT, PF_R32G32B32F, PF_R8_SINT, PF_R64_UINT, PF_R9G9B9EXP5, PF_P010, PF_ASTC_4x4_NORM_RG, PF_ASTC_6x6_NORM_RG, PF_ASTC_8x8_NORM_RG, PF_ASTC_10x10_NORM_RG, PF_ASTC_12x12_NORM_RG, PF_R16G16_SINT, PF_MAX, __typeKeyDoNoAccess}
     class SparseVolumeTextureFrame extends UE.SparseVolumeTexture {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
@@ -28007,6 +28021,219 @@ declare module "ue" {
         __tid_AnimationAttributeIdentifierExtensions_0__: boolean;
     }
     
+    class K2Node extends UE.EdGraphNode {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node;
+        static Load(InName: string): K2Node;
+    
+        __tid_K2Node_0__: boolean;
+    }
+    
+    class OptionalPinFromProperty {
+        constructor();
+        constructor(PropertyName: string, PropertyFriendlyName: string, PropertyTooltip: string, CategoryName: string, bShowPin: boolean, bCanToggleVisibility: boolean, bPropertyIsCustomized: boolean, bHasOverridePin: boolean, bIsMarkedForAdvancedDisplay: boolean, bIsOverrideEnabled: boolean, bIsSetValuePinVisible: boolean, bIsOverridePinVisible: boolean);
+        PropertyName: string;
+        PropertyFriendlyName: string;
+        PropertyTooltip: string;
+        CategoryName: string;
+        bShowPin: boolean;
+        bCanToggleVisibility: boolean;
+        bPropertyIsCustomized: boolean;
+        bHasOverridePin: boolean;
+        bIsMarkedForAdvancedDisplay: boolean;
+        bIsOverrideEnabled: boolean;
+        bIsSetValuePinVisible: boolean;
+        bIsOverridePinVisible: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_OptionalPinFromProperty_0__: boolean;
+    }
+    
+    enum EAnimGraphNodePropertyBindingType { None, Property, Function, EAnimGraphNodePropertyBindingType_MAX, __typeKeyDoNoAccess}
+    class AnimGraphNodePropertyBinding {
+        constructor();
+        constructor(PinType: UE.EdGraphPinType, PromotedPinType: UE.EdGraphPinType, PropertyName: string, ArrayIndex: number, PathAsText: string, PropertyPath: TArray<string>, ContextId: string, CompiledContext: string, CompiledContextDesc: string, Type: UE.EAnimGraphNodePropertyBindingType, bIsBound: boolean, bIsPromotion: boolean, bOnlyUpdateWhenActive: boolean);
+        PinType: UE.EdGraphPinType;
+        PromotedPinType: UE.EdGraphPinType;
+        PropertyName: string;
+        ArrayIndex: number;
+        PathAsText: string;
+        PropertyPath: TArray<string>;
+        ContextId: string;
+        CompiledContext: string;
+        CompiledContextDesc: string;
+        Type: UE.EAnimGraphNodePropertyBindingType;
+        bIsBound: boolean;
+        bIsPromotion: boolean;
+        bOnlyUpdateWhenActive: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimGraphNodePropertyBinding_0__: boolean;
+    }
+    
+    enum EBlueprintUsage { NoProperties, DoesNotUseBlueprint, UsesBlueprint, EBlueprintUsage_MAX, __typeKeyDoNoAccess}
+    class MemberReference {
+        constructor();
+        constructor(MemberParent: UE.Object, MemberScope: string, MemberName: string, MemberGuid: UE.Guid, bSelfContext: boolean, bWasDeprecated: boolean);
+        MemberParent: UE.Object;
+        MemberScope: string;
+        MemberName: string;
+        MemberGuid: UE.Guid;
+        bSelfContext: boolean;
+        bWasDeprecated: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MemberReference_0__: boolean;
+    }
+    
+    class AnimGraphNodeBinding extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNodeBinding;
+        static Load(InName: string): AnimGraphNodeBinding;
+    
+        __tid_AnimGraphNodeBinding_0__: boolean;
+    }
+    
+    class AnimGraphNode_Base extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ShowPinForProperties: TArray<UE.OptionalPinFromProperty>;
+        PropertyBindings: TMap<string, UE.AnimGraphNodePropertyBinding>;
+        AlwaysDynamicProperties: TSet<string>;
+        BlueprintUsage: UE.EBlueprintUsage;
+        InitialUpdateFunction: UE.MemberReference;
+        BecomeRelevantFunction: UE.MemberReference;
+        UpdateFunction: UE.MemberReference;
+        Binding: UE.AnimGraphNodeBinding;
+        Tag: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Base;
+        static Load(InName: string): AnimGraphNode_Base;
+    
+        __tid_AnimGraphNode_Base_0__: boolean;
+    }
+    
+    class AnimationGraph extends UE.EdGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlendOptions: UE.AnimGraphBlendOptions;
+        /*
+         *Returns contained graph nodes of the specified (or child) class
+         */
+        GetGraphNodesOfClass(NodeClass: $Nullable<UE.Class>, GraphNodes: $Ref<TArray<UE.AnimGraphNode_Base>>, bIncludeChildClasses?: boolean /* = true */) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationGraph;
+        static Load(InName: string): AnimationGraph;
+    
+        __tid_AnimationGraph_0__: boolean;
+    }
+    
+    class AnimNodeFunctionRef {
+        constructor();
+        constructor(ClassName: string, FunctionName: string, Class: UE.Class, Function: UE.Function);
+        ClassName: string;
+        FunctionName: string;
+        Class: UE.Class;
+        Function: UE.Function;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNodeFunctionRef_0__: boolean;
+    }
+    
+    class AnimNode_Base {
+        constructor();
+        constructor(InitialUpdateFunction: UE.AnimNodeFunctionRef, BecomeRelevantFunction: UE.AnimNodeFunctionRef, UpdateFunction: UE.AnimNodeFunctionRef);
+        InitialUpdateFunction: UE.AnimNodeFunctionRef;
+        BecomeRelevantFunction: UE.AnimNodeFunctionRef;
+        UpdateFunction: UE.AnimNodeFunctionRef;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Base_0__: boolean;
+    }
+    
+    class PoseLinkBase {
+        constructor();
+        constructor(LinkID: number, SourceLinkID: number);
+        LinkID: number;
+        SourceLinkID: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PoseLinkBase_0__: boolean;
+    }
+    
+    class PoseLink extends UE.PoseLinkBase {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PoseLink_0__: boolean;
+    }
+    
+    class AnimNode_Root extends UE.AnimNode_Base {
+        constructor();
+        constructor(Result: UE.PoseLink, Name: string, LayerGroup: string, Group: string);
+        Result: UE.PoseLink;
+        Name: string;
+        LayerGroup: string;
+        Group: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Root_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpaceSampleResult extends UE.AnimNode_Root {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendSpaceSampleResult_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpaceSampleResult extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendSpaceSampleResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpaceSampleResult;
+        static Load(InName: string): AnimGraphNode_BlendSpaceSampleResult;
+    
+        __tid_AnimGraphNode_BlendSpaceSampleResult_0__: boolean;
+    }
+    
+    class AnimationBlendSpaceSampleGraph extends UE.AnimationGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ResultNode: UE.AnimGraphNode_BlendSpaceSampleResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationBlendSpaceSampleGraph;
+        static Load(InName: string): AnimationBlendSpaceSampleGraph;
+    
+        __tid_AnimationBlendSpaceSampleGraph_0__: boolean;
+    }
+    
     class AnimationBlueprintEditorOptions extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         bHideUnrelatedNodes: boolean;
@@ -28018,6 +28245,50 @@ declare module "ue" {
     }
     
     enum AnimationCompressionFormat { ACF_None, ACF_Float96NoW, ACF_Fixed48NoW, ACF_IntervalFixed32NoW, ACF_Fixed32NoW, ACF_Float32NoW, ACF_Identity, ACF_MAX, __typeKeyDoNoAccess}
+    class EdGraphSchema extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EdGraphSchema;
+        static Load(InName: string): EdGraphSchema;
+    
+        __tid_EdGraphSchema_0__: boolean;
+    }
+    
+    class BlueprintCallableFunctionRedirect {
+        constructor();
+        constructor(ClassName: string, OldFunctionName: string, NewFunctionName: string, BlueprintParamName: string, ClassParamName: string);
+        ClassName: string;
+        OldFunctionName: string;
+        NewFunctionName: string;
+        BlueprintParamName: string;
+        ClassParamName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlueprintCallableFunctionRedirect_0__: boolean;
+    }
+    
+    class EdGraphSchema_K2 extends UE.EdGraphSchema {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        EditoronlyBPFunctionRedirects: TArray<UE.BlueprintCallableFunctionRedirect>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EdGraphSchema_K2;
+        static Load(InName: string): EdGraphSchema_K2;
+    
+        __tid_EdGraphSchema_K2_0__: boolean;
+    }
+    
+    class AnimationConduitGraphSchema extends UE.EdGraphSchema_K2 {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationConduitGraphSchema;
+        static Load(InName: string): AnimationConduitGraphSchema;
+    
+        __tid_AnimationConduitGraphSchema_0__: boolean;
+    }
+    
     class AnimationCurveIdentifierExtensions extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
@@ -28075,6 +28346,81 @@ declare module "ue" {
         static Load(InName: string): AnimationCurveIdentifierExtensions;
     
         __tid_AnimationCurveIdentifierExtensions_0__: boolean;
+    }
+    
+    class AnimNode_StateResult extends UE.AnimNode_Root {
+        constructor();
+        constructor(StateIndex: number, StateEntryFunction: UE.AnimNodeFunctionRef, StateFullyBlendedInFunction: UE.AnimNodeFunctionRef, StateExitFunction: UE.AnimNodeFunctionRef, StateFullyBlendedOutFunction: UE.AnimNodeFunctionRef);
+        StateIndex: number;
+        StateEntryFunction: UE.AnimNodeFunctionRef;
+        StateFullyBlendedInFunction: UE.AnimNodeFunctionRef;
+        StateExitFunction: UE.AnimNodeFunctionRef;
+        StateFullyBlendedOutFunction: UE.AnimNodeFunctionRef;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_StateResult_0__: boolean;
+    }
+    
+    class AnimGraphNode_StateResult extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_StateResult;
+        StateEntryFunction: UE.MemberReference;
+        StateFullyBlendedInFunction: UE.MemberReference;
+        StateExitFunction: UE.MemberReference;
+        StateFullyBlendedOutFunction: UE.MemberReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_StateResult;
+        static Load(InName: string): AnimGraphNode_StateResult;
+    
+        __tid_AnimGraphNode_StateResult_0__: boolean;
+    }
+    
+    class AnimGraphNode_CustomTransitionResult extends UE.AnimGraphNode_StateResult {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CustomTransitionResult;
+        static Load(InName: string): AnimGraphNode_CustomTransitionResult;
+    
+        __tid_AnimGraphNode_CustomTransitionResult_0__: boolean;
+    }
+    
+    class AnimationCustomTransitionGraph extends UE.AnimationGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MyResultNode: UE.AnimGraphNode_CustomTransitionResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationCustomTransitionGraph;
+        static Load(InName: string): AnimationCustomTransitionGraph;
+    
+        __tid_AnimationCustomTransitionGraph_0__: boolean;
+    }
+    
+    class AnimationGraphSchema extends UE.EdGraphSchema_K2 {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PN_SequenceName: string;
+        NAME_NeverAsPin: string;
+        NAME_PinHiddenByDefault: string;
+        NAME_PinShownByDefault: string;
+        NAME_AlwaysAsPin: string;
+        NAME_CustomizeProperty: string;
+        NAME_OnEvaluate: string;
+        DefaultEvaluationHandlerName: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationGraphSchema;
+        static Load(InName: string): AnimationGraphSchema;
+    
+        __tid_AnimationGraphSchema_0__: boolean;
+    }
+    
+    class AnimationCustomTransitionSchema extends UE.AnimationGraphSchema {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationCustomTransitionSchema;
+        static Load(InName: string): AnimationCustomTransitionSchema;
+    
+        __tid_AnimationCustomTransitionSchema_0__: boolean;
     }
     
     class EmptyPayload {
@@ -28301,6 +28647,165 @@ declare module "ue" {
         __tid_AnimationState_0__: boolean;
     }
     
+    class AnimationStateGraph extends UE.AnimationGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MyResultNode: UE.AnimGraphNode_StateResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationStateGraph;
+        static Load(InName: string): AnimationStateGraph;
+    
+        __tid_AnimationStateGraph_0__: boolean;
+    }
+    
+    class AnimationStateGraphSchema extends UE.AnimationGraphSchema {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationStateGraphSchema;
+        static Load(InName: string): AnimationStateGraphSchema;
+    
+        __tid_AnimationStateGraphSchema_0__: boolean;
+    }
+    
+    class AnimStateEntryNode extends UE.EdGraphNode {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateEntryNode;
+        static Load(InName: string): AnimStateEntryNode;
+    
+        __tid_AnimStateEntryNode_0__: boolean;
+    }
+    
+    class AnimGraphNode_StateMachineBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        EditorStateMachineGraph: UE.AnimationStateMachineGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_StateMachineBase;
+        static Load(InName: string): AnimGraphNode_StateMachineBase;
+    
+        __tid_AnimGraphNode_StateMachineBase_0__: boolean;
+    }
+    
+    class AnimationStateMachineGraph extends UE.EdGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        EntryNode: UE.AnimStateEntryNode;
+        OwnerAnimGraphNode: UE.AnimGraphNode_StateMachineBase;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationStateMachineGraph;
+        static Load(InName: string): AnimationStateMachineGraph;
+    
+        __tid_AnimationStateMachineGraph_0__: boolean;
+    }
+    
+    class AnimExecutionContext {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimExecutionContext_0__: boolean;
+    }
+    
+    class AnimUpdateContext extends UE.AnimExecutionContext {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimUpdateContext_0__: boolean;
+    }
+    
+    class AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNodeReference_0__: boolean;
+    }
+    
+    class AnimationStateMachineReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimationStateMachineReference_0__: boolean;
+    }
+    
+    class AnimationStateResultReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimationStateResultReference_0__: boolean;
+    }
+    
+    enum EAnimNodeReferenceConversionResult { Succeeded, Failed, EAnimNodeReferenceConversionResult_MAX, __typeKeyDoNoAccess}
+    class AnimationStateMachineLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get an anim state machine from an anim node reference
+         */
+        static ConvertToAnimationStateMachine(Node: UE.AnimNodeReference, AnimationState: $Ref<UE.AnimationStateMachineReference>, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : void;
+        /*
+         *Get an anim state machine from an anim node reference (pure)
+         */
+        static ConvertToAnimationStateMachinePure(Node: UE.AnimNodeReference, AnimationState: $Ref<UE.AnimationStateMachineReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get an anim state reference from an anim node reference
+         */
+        static ConvertToAnimationStateResult(Node: UE.AnimNodeReference, AnimationState: $Ref<UE.AnimationStateResultReference>, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : void;
+        /*
+         *Get an anim state reference from an anim node reference (pure)
+         */
+        static ConvertToAnimationStateResultPure(Node: UE.AnimNodeReference, AnimationState: $Ref<UE.AnimationStateResultReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Returns the remaining animation time of the state's most relevant asset player
+         */
+        static GetRelevantAnimTimeRemaining(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateResultReference) : number;
+        /*
+         *Returns the remaining animation time as a fraction of the duration for the state's most relevant asset player
+         */
+        static GetRelevantAnimTimeRemainingFraction(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateResultReference) : number;
+        /*
+         *Returns the name of the current state of this state machine
+         */
+        static GetState(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateMachineReference) : string;
+        /*
+         *Returns whether the state the node belongs to is blending in
+         */
+        static IsStateBlendingIn(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateResultReference) : boolean;
+        /*
+         *Returns whether the state the node belongs to is blending out
+         */
+        static IsStateBlendingOut(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateResultReference) : boolean;
+        /*
+         *Manually set the current state of the state machine
+         *              NOTE: Custom blend type is not supported
+         */
+        static SetState(UpdateContext: UE.AnimUpdateContext, Node: UE.AnimationStateMachineReference, TargetState: string, Duration: number, BlendType: UE.ETransitionLogicType, BlendProfile: $Nullable<UE.BlendProfile>, AlphaBlendOption: UE.EAlphaBlendOption, CustomBlendCurve: $Nullable<UE.CurveFloat>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationStateMachineLibrary;
+        static Load(InName: string): AnimationStateMachineLibrary;
+    
+        __tid_AnimationStateMachineLibrary_0__: boolean;
+    }
+    
+    class AnimationStateMachineSchema extends UE.EdGraphSchema {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationStateMachineSchema;
+        static Load(InName: string): AnimationStateMachineSchema;
+    
+        __tid_AnimationStateMachineSchema_0__: boolean;
+    }
+    
     class SkeletalMeshActor extends UE.Actor {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         bShouldDoAnimNotifies: boolean;
@@ -28357,6 +28862,47 @@ declare module "ue" {
         __tid_AnimationTrackAddedPayload_0__: boolean;
     }
     
+    class AnimNode_TransitionResult extends UE.AnimNode_Base {
+        constructor();
+        constructor(bCanEnterTransition: boolean);
+        bCanEnterTransition: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_TransitionResult_0__: boolean;
+    }
+    
+    class AnimGraphNode_TransitionResult extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_TransitionResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_TransitionResult;
+        static Load(InName: string): AnimGraphNode_TransitionResult;
+    
+        __tid_AnimGraphNode_TransitionResult_0__: boolean;
+    }
+    
+    class AnimationTransitionGraph extends UE.AnimationGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MyResultNode: UE.AnimGraphNode_TransitionResult;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationTransitionGraph;
+        static Load(InName: string): AnimationTransitionGraph;
+    
+        __tid_AnimationTransitionGraph_0__: boolean;
+    }
+    
+    class AnimationTransitionSchema extends UE.EdGraphSchema_K2 {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimationTransitionSchema;
+        static Load(InName: string): AnimationTransitionSchema;
+    
+        __tid_AnimationTransitionSchema_0__: boolean;
+    }
+    
     class AnimBlueprintClassSubsystem_PropertyAccess extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -28384,6 +28930,318 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimBlueprintDebugData_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension extends UE.BlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension;
+        static Load(InName: string): AnimBlueprintExtension;
+    
+        __tid_AnimBlueprintExtension_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_Attributes extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_Attributes;
+        static Load(InName: string): AnimBlueprintExtension_Attributes;
+    
+        __tid_AnimBlueprintExtension_Attributes_0__: boolean;
+    }
+    
+    class AnimSubsystem {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_0__: boolean;
+    }
+    
+    class AnimSubsystem_Base extends UE.AnimSubsystem {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_Base_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_Base extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Subsystem: UE.AnimSubsystem_Base;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_Base;
+        static Load(InName: string): AnimBlueprintExtension_Base;
+    
+        __tid_AnimBlueprintExtension_Base_0__: boolean;
+    }
+    
+    class AnimSubsystem_BlendSpaceGraph extends UE.AnimSubsystem {
+        constructor();
+        constructor(BlendSpaces: TArray<UE.BlendSpace>);
+        BlendSpaces: TArray<UE.BlendSpace>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_BlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_BlendSpaceGraph extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Class: UE.Class;
+        Subsystem: UE.AnimSubsystem_BlendSpaceGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_BlendSpaceGraph;
+        static Load(InName: string): AnimBlueprintExtension_BlendSpaceGraph;
+    
+        __tid_AnimBlueprintExtension_BlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_CachedPose extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_CachedPose;
+        static Load(InName: string): AnimBlueprintExtension_CachedPose;
+    
+        __tid_AnimBlueprintExtension_CachedPose_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_CallFunction extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_CallFunction;
+        static Load(InName: string): AnimBlueprintExtension_CallFunction;
+    
+        __tid_AnimBlueprintExtension_CallFunction_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_LinkedAnimGraph extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_LinkedAnimGraph;
+        static Load(InName: string): AnimBlueprintExtension_LinkedAnimGraph;
+    
+        __tid_AnimBlueprintExtension_LinkedAnimGraph_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_LinkedInputPose extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_LinkedInputPose;
+        static Load(InName: string): AnimBlueprintExtension_LinkedInputPose;
+    
+        __tid_AnimBlueprintExtension_LinkedInputPose_0__: boolean;
+    }
+    
+    class AnimSubsystemInstance {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystemInstance_0__: boolean;
+    }
+    
+    class AnimSubsystemInstance_NodeRelevancy extends UE.AnimSubsystemInstance {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystemInstance_NodeRelevancy_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_NodeRelevancy extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Subsystem: UE.AnimSubsystemInstance_NodeRelevancy;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_NodeRelevancy;
+        static Load(InName: string): AnimBlueprintExtension_NodeRelevancy;
+    
+        __tid_AnimBlueprintExtension_NodeRelevancy_0__: boolean;
+    }
+    
+    class PropertyAccessSegment {
+        constructor();
+        constructor(Name: string, Struct: UE.Struct, Property: string, Function: UE.Function, ArrayIndex: number, Flags: number);
+        Name: string;
+        Struct: UE.Struct;
+        Property: string;
+        Function: UE.Function;
+        ArrayIndex: number;
+        Flags: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PropertyAccessSegment_0__: boolean;
+    }
+    
+    class PropertyAccessPath {
+        constructor();
+        constructor(PathSegmentStartIndex: number, PathSegmentCount: number);
+        PathSegmentStartIndex: number;
+        PathSegmentCount: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PropertyAccessPath_0__: boolean;
+    }
+    
+    enum EPropertyAccessCopyType { None, Plain, Complex, Bool, Struct, Object, Name, Array, PromoteBoolToByte, PromoteBoolToInt32, PromoteBoolToInt64, PromoteBoolToFloat, PromoteBoolToDouble, PromoteByteToInt32, PromoteByteToInt64, PromoteByteToFloat, PromoteByteToDouble, PromoteInt32ToInt64, PromoteInt32ToFloat, PromoteInt32ToDouble, PromoteFloatToDouble, DemoteDoubleToFloat, PromoteArrayFloatToDouble, DemoteArrayDoubleToFloat, PromoteMapValueFloatToDouble, DemoteMapValueDoubleToFloat, EPropertyAccessCopyType_MAX, __typeKeyDoNoAccess}
+    class PropertyAccessCopy {
+        constructor();
+        constructor(AccessIndex: number, DestAccessStartIndex: number, DestAccessEndIndex: number, Type: UE.EPropertyAccessCopyType);
+        AccessIndex: number;
+        DestAccessStartIndex: number;
+        DestAccessEndIndex: number;
+        Type: UE.EPropertyAccessCopyType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PropertyAccessCopy_0__: boolean;
+    }
+    
+    class PropertyAccessCopyBatch {
+        constructor();
+        constructor(Copies: TArray<UE.PropertyAccessCopy>);
+        Copies: TArray<UE.PropertyAccessCopy>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PropertyAccessCopyBatch_0__: boolean;
+    }
+    
+    class PropertyAccessLibrary {
+        constructor();
+        constructor(PathSegments: TArray<UE.PropertyAccessSegment>, SrcPaths: TArray<UE.PropertyAccessPath>, DestPaths: TArray<UE.PropertyAccessPath>, CopyBatches: FixSizeArray<UE.PropertyAccessCopyBatch>, CopyBatchArray: TArray<UE.PropertyAccessCopyBatch>);
+        PathSegments: TArray<UE.PropertyAccessSegment>;
+        SrcPaths: TArray<UE.PropertyAccessPath>;
+        DestPaths: TArray<UE.PropertyAccessPath>;
+        CopyBatches: FixSizeArray<UE.PropertyAccessCopyBatch>;
+        CopyBatchArray: TArray<UE.PropertyAccessCopyBatch>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PropertyAccessLibrary_0__: boolean;
+    }
+    
+    class AnimSubsystem_PropertyAccess extends UE.AnimSubsystem {
+        constructor();
+        constructor(Library: UE.PropertyAccessLibrary);
+        Library: UE.PropertyAccessLibrary;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_PropertyAccess_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_PropertyAccess extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Subsystem: UE.AnimSubsystem_PropertyAccess;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_PropertyAccess;
+        static Load(InName: string): AnimBlueprintExtension_PropertyAccess;
+    
+        __tid_AnimBlueprintExtension_PropertyAccess_0__: boolean;
+    }
+    
+    class LinkedAnimLayerInstanceData {
+        constructor();
+        constructor(Instance: UE.AnimInstance, LinkedFunctions: TMap<string, TWeakObjectPtr<UE.AnimInstance>>);
+        Instance: UE.AnimInstance;
+        LinkedFunctions: TMap<string, TWeakObjectPtr<UE.AnimInstance>>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LinkedAnimLayerInstanceData_0__: boolean;
+    }
+    
+    class LinkedAnimLayerClassData {
+        constructor();
+        constructor(InstancesData: TArray<UE.LinkedAnimLayerInstanceData>);
+        InstancesData: TArray<UE.LinkedAnimLayerInstanceData>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LinkedAnimLayerClassData_0__: boolean;
+    }
+    
+    class AnimSubsystem_SharedLinkedAnimLayers extends UE.AnimSubsystemInstance {
+        constructor();
+        constructor(ClassesData: TArray<UE.LinkedAnimLayerClassData>, PersistentClasses: TArray<UE.Class>);
+        ClassesData: TArray<UE.LinkedAnimLayerClassData>;
+        PersistentClasses: TArray<UE.Class>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_SharedLinkedAnimLayers_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_SharedLinkedAnimLayers extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Subsystem: UE.AnimSubsystem_SharedLinkedAnimLayers;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_SharedLinkedAnimLayers;
+        static Load(InName: string): AnimBlueprintExtension_SharedLinkedAnimLayers;
+    
+        __tid_AnimBlueprintExtension_SharedLinkedAnimLayers_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_StateMachine extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_StateMachine;
+        static Load(InName: string): AnimBlueprintExtension_StateMachine;
+    
+        __tid_AnimBlueprintExtension_StateMachine_0__: boolean;
+    }
+    
+    class AnimSubsystem_Tag extends UE.AnimSubsystem {
+        constructor();
+        constructor(NodeIndices: TMap<string, number>);
+        NodeIndices: TMap<string, number>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSubsystem_Tag_0__: boolean;
+    }
+    
+    class AnimBlueprintExtension_Tag extends UE.AnimBlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Subsystem: UE.AnimSubsystem_Tag;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintExtension_Tag;
+        static Load(InName: string): AnimBlueprintExtension_Tag;
+    
+        __tid_AnimBlueprintExtension_Tag_0__: boolean;
     }
     
     class AnimBlueprintFactory extends UE.Factory {
@@ -28417,6 +29275,19 @@ declare module "ue" {
         __tid_AnimBlueprintFunction_0__: boolean;
     }
     
+    class AnimBlueprintFunctionPinInfo {
+        constructor();
+        constructor(Name: string, Type: UE.EdGraphPinType);
+        Name: string;
+        Type: UE.EdGraphPinType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimBlueprintFunctionPinInfo_0__: boolean;
+    }
+    
     class AnimBlueprintGeneratedStruct extends UE.ScriptStruct {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -28434,6 +29305,15 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimBlueprintMutableData_0__: boolean;
+    }
+    
+    class AnimBlueprintPostCompileValidation extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimBlueprintPostCompileValidation;
+        static Load(InName: string): AnimBlueprintPostCompileValidation;
+    
+        __tid_AnimBlueprintPostCompileValidation_0__: boolean;
     }
     
     class AnimBlueprintSettings extends UE.Object {
@@ -28490,16 +29370,6 @@ declare module "ue" {
         static Load(InName: string): AnimBoneCompressionSettingsFactory;
     
         __tid_AnimBoneCompressionSettingsFactory_0__: boolean;
-    }
-    
-    class AnimExecutionContext {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimExecutionContext_0__: boolean;
     }
     
     class AnimComponentSpacePoseContext extends UE.AnimExecutionContext {
@@ -28739,14 +29609,15 @@ declare module "ue" {
         __tid_AnimCurveParam_0__: boolean;
     }
     
-    class AnimGroupInstance {
+    enum EAnimExecutionContextConversionResult { Succeeded, Failed, EAnimExecutionContextConversionResult_MAX, __typeKeyDoNoAccess}
+    class AnimPoseContext extends UE.AnimExecutionContext {
         constructor();
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimGroupInstance_0__: boolean;
+        __tid_AnimPoseContext_0__: boolean;
     }
     
     class AnimInitializationContext extends UE.AnimExecutionContext {
@@ -28759,135 +29630,230 @@ declare module "ue" {
         __tid_AnimInitializationContext_0__: boolean;
     }
     
-    enum EAnimInstanceLocatorFragmentType { AnimInstance, PostProcessAnimInstance, EAnimInstanceLocatorFragmentType_MAX, __typeKeyDoNoAccess}
-    class AnimInstanceLocatorFragment {
+    class AnimExecutionContextLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Prototype function for thread-safe anim node calls
+         */
+        Prototype_ThreadSafeAnimNodeCall(Context: UE.AnimExecutionContext, Node: UE.AnimNodeReference) : void;
+        /*
+         *Prototype function for thread-safe anim update calls
+         */
+        Prototype_ThreadSafeAnimUpdateCall(Context: UE.AnimUpdateContext, Node: UE.AnimNodeReference) : void;
+        /*
+         *Convert to a component space pose context
+         */
+        static ConvertToComponentSpacePoseContext(Context: UE.AnimExecutionContext, Result: $Ref<UE.EAnimExecutionContextConversionResult>) : UE.AnimComponentSpacePoseContext;
+        /*
+         *Convert to an initialization context
+         */
+        static ConvertToInitializationContext(Context: UE.AnimExecutionContext, Result: $Ref<UE.EAnimExecutionContextConversionResult>) : UE.AnimInitializationContext;
+        /*
+         *Convert to a pose context
+         */
+        static ConvertToPoseContext(Context: UE.AnimExecutionContext, Result: $Ref<UE.EAnimExecutionContextConversionResult>) : UE.AnimPoseContext;
+        /*
+         *Convert to an update context
+         */
+        static ConvertToUpdateContext(Context: UE.AnimExecutionContext, Result: $Ref<UE.EAnimExecutionContextConversionResult>) : UE.AnimUpdateContext;
+        /*
+         *Get the anim instance that hosts this context
+         */
+        static GetAnimInstance(Context: UE.AnimExecutionContext) : UE.AnimInstance;
+        /*
+         *Internal compiler use only - Get a reference to an anim node by index
+         */
+        static GetAnimNodeReference(Instance: $Nullable<UE.AnimInstance>, Index: number) : UE.AnimNodeReference;
+        /*
+         *Get the current weight of this branch of the graph
+         */
+        static GetCurrentWeight(Context: UE.AnimUpdateContext) : number;
+        /*
+         *Get the current delta time in seconds
+         */
+        static GetDeltaTime(Context: UE.AnimUpdateContext) : number;
+        /*
+         *Get whether this branch of the graph is active (i.e. NOT blending out).
+         */
+        static IsActive(Context: UE.AnimExecutionContext) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimExecutionContextLibrary;
+        static Load(InName: string): AnimExecutionContextLibrary;
+    
+        __tid_AnimExecutionContextLibrary_0__: boolean;
+    }
+    
+    enum EAnimGraphAttributesDisplayMode { HideOnPins, ShowOnPins, Automatic, EAnimGraphAttributesDisplayMode_MAX, __typeKeyDoNoAccess}
+    enum EAnimGraphAttributeBlend { Blendable, NonBlendable, EAnimGraphAttributeBlend_MAX, __typeKeyDoNoAccess}
+    class AnimGraphAttributeDesc {
         constructor();
-        constructor(Type: UE.EAnimInstanceLocatorFragmentType);
-        Type: UE.EAnimInstanceLocatorFragmentType;
+        constructor(Name: string, Icon: UE.SlateBrush, DisplayName: string, ToolTipText: string, Color: UE.SlateColor, DisplayMode: UE.EAnimGraphAttributesDisplayMode, Blend: UE.EAnimGraphAttributeBlend, SortOrder: number);
+        Name: string;
+        Icon: UE.SlateBrush;
+        DisplayName: string;
+        ToolTipText: string;
+        Color: UE.SlateColor;
+        DisplayMode: UE.EAnimGraphAttributesDisplayMode;
+        Blend: UE.EAnimGraphAttributeBlend;
+        SortOrder: number;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimInstanceLocatorFragment_0__: boolean;
+        __tid_AnimGraphAttributeDesc_0__: boolean;
     }
     
-    class AnimInstanceProxy {
+    class AnimGraphAttributes extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Attributes: TArray<UE.AnimGraphAttributeDesc>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphAttributes;
+        static Load(InName: string): AnimGraphAttributes;
+    
+        __tid_AnimGraphAttributes_0__: boolean;
+    }
+    
+    class AnimGraphNode_AssetPlayerBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SyncGroup: UE.AnimationGroupReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_AssetPlayerBase;
+        static Load(InName: string): AnimGraphNode_AssetPlayerBase;
+    
+        __tid_AnimGraphNode_AssetPlayerBase_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpaceBase extends UE.AnimGraphNode_AssetPlayerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpaceBase;
+        static Load(InName: string): AnimGraphNode_BlendSpaceBase;
+    
+        __tid_AnimGraphNode_BlendSpaceBase_0__: boolean;
+    }
+    
+    class AnimNode_AssetPlayerRelevancyBase extends UE.AnimNode_Base {
         constructor();
-        constructor(SlotGroupInertializationRequestDataMap: TMap<string, UE.InertializationRequest>);
-        SlotGroupInertializationRequestDataMap: TMap<string, UE.InertializationRequest>;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimInstanceProxy_0__: boolean;
+        __tid_AnimNode_AssetPlayerRelevancyBase_0__: boolean;
     }
     
-    class AnimLayerInterface extends UE.Interface {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): AnimLayerInterface;
-        static Load(InName: string): AnimLayerInterface;
-    
-        __tid_AnimLayerInterface_0__: boolean;
-    }
-    
-    class AnimLayerInterfaceFactory extends UE.AnimBlueprintFactory {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): AnimLayerInterfaceFactory;
-        static Load(InName: string): AnimLayerInterfaceFactory;
-    
-        __tid_AnimLayerInterfaceFactory_0__: boolean;
-    }
-    
-    class AnimMontageFactory extends UE.Factory {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        TargetSkeleton: UE.Skeleton;
-        SourceAnimation: UE.AnimSequence;
-        PreviewSkeletalMesh: UE.SkeletalMesh;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): AnimMontageFactory;
-        static Load(InName: string): AnimMontageFactory;
-    
-        __tid_AnimMontageFactory_0__: boolean;
-    }
-    
-    class AnimMontageInstance {
+    enum EAnimSyncGroupScope { Local, Component, EAnimSyncGroupScope_MAX, __typeKeyDoNoAccess}
+    class AnimNode_AssetPlayerBase extends UE.AnimNode_AssetPlayerRelevancyBase {
         constructor();
-        constructor(Montage: UE.AnimMontage, bPlaying: boolean, DefaultBlendTimeMultiplier: number, NextSections: TArray<number>, PrevSections: TArray<number>, ActiveStateBranchingPoints: TArray<UE.AnimNotifyEvent>, Position: number, PlayRate: number, Blend: UE.AlphaBlend, DisableRootMotionCount: number);
-        Montage: UE.AnimMontage;
-        bPlaying: boolean;
-        DefaultBlendTimeMultiplier: number;
-        NextSections: TArray<number>;
-        PrevSections: TArray<number>;
-        ActiveStateBranchingPoints: TArray<UE.AnimNotifyEvent>;
-        Position: number;
+        constructor(GroupIndex: number, GroupScope: UE.EAnimSyncGroupScope, BlendWeight: number, InternalTimeAccumulator: number);
+        GroupIndex: number;
+        GroupScope: UE.EAnimSyncGroupScope;
+        BlendWeight: number;
+        InternalTimeAccumulator: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_AssetPlayerBase_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpacePlayerBase extends UE.AnimNode_AssetPlayerBase {
+        constructor();
+        constructor(PreviousBlendSpace: UE.BlendSpace);
+        PreviousBlendSpace: UE.BlendSpace;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendSpacePlayerBase_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpacePlayer extends UE.AnimNode_BlendSpacePlayerBase {
+        constructor();
+        constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, X: number, Y: number, PlayRate: number, bLoop: boolean, bResetPlayTimeWhenBlendSpaceChanges: boolean, StartPosition: number, BlendSpace: UE.BlendSpace);
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        Method: UE.EAnimSyncMethod;
+        bIgnoreForRelevancyTest: boolean;
+        X: number;
+        Y: number;
         PlayRate: number;
-        Blend: UE.AlphaBlend;
-        DisableRootMotionCount: number;
+        bLoop: boolean;
+        bResetPlayTimeWhenBlendSpaceChanges: boolean;
+        StartPosition: number;
+        BlendSpace: UE.BlendSpace;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimMontageInstance_0__: boolean;
+        __tid_AnimNode_BlendSpacePlayer_0__: boolean;
     }
     
-    class AnimNodeFunctionRef {
+    class AnimNode_AimOffsetLookAt extends UE.AnimNode_BlendSpacePlayer {
         constructor();
-        constructor(ClassName: string, FunctionName: string, Class: UE.Class, Function: UE.Function);
-        ClassName: string;
-        FunctionName: string;
-        Class: UE.Class;
-        Function: UE.Function;
+        constructor(BasePose: UE.PoseLink, LODThreshold: number, SourceSocketName: string, PivotSocketName: string, LookAtLocation: UE.Vector, SocketAxis: UE.Vector, Alpha: number);
+        BasePose: UE.PoseLink;
+        LODThreshold: number;
+        SourceSocketName: string;
+        PivotSocketName: string;
+        LookAtLocation: UE.Vector;
+        SocketAxis: UE.Vector;
+        Alpha: number;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimNodeFunctionRef_0__: boolean;
+        __tid_AnimNode_AimOffsetLookAt_0__: boolean;
     }
     
-    class AnimNode_Base {
-        constructor();
-        constructor(InitialUpdateFunction: UE.AnimNodeFunctionRef, BecomeRelevantFunction: UE.AnimNodeFunctionRef, UpdateFunction: UE.AnimNodeFunctionRef);
-        InitialUpdateFunction: UE.AnimNodeFunctionRef;
-        BecomeRelevantFunction: UE.AnimNodeFunctionRef;
-        UpdateFunction: UE.AnimNodeFunctionRef;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_Base_0__: boolean;
+    class AnimGraphNode_AimOffsetLookAt extends UE.AnimGraphNode_BlendSpaceBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_AimOffsetLookAt;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_AimOffsetLookAt;
+        static Load(InName: string): AnimGraphNode_AimOffsetLookAt;
+    
+        __tid_AnimGraphNode_AimOffsetLookAt_0__: boolean;
     }
     
-    class PoseLinkBase {
-        constructor();
-        constructor(LinkID: number, SourceLinkID: number);
-        LinkID: number;
-        SourceLinkID: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PoseLinkBase_0__: boolean;
+    class AnimGraphNode_SkeletalControlBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SkeletalControlBase;
+        static Load(InName: string): AnimGraphNode_SkeletalControlBase;
+    
+        __tid_AnimGraphNode_SkeletalControlBase_0__: boolean;
     }
     
-    class PoseLink extends UE.PoseLinkBase {
+    class ComponentSpacePoseLink extends UE.PoseLinkBase {
         constructor();
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_PoseLink_0__: boolean;
+        __tid_ComponentSpacePoseLink_0__: boolean;
     }
     
     enum EAnimAlphaInputType { Float, Bool, Curve, EAnimAlphaInputType_MAX, __typeKeyDoNoAccess}
+    class InputScaleBias {
+        constructor();
+        constructor(Scale: number, Bias: number);
+        Scale: number;
+        Bias: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputScaleBias_0__: boolean;
+    }
+    
     class InputAlphaBoolBlend {
         constructor();
         constructor(BlendInTime: number, BlendOutTime: number, BlendOption: UE.EAlphaBlendOption, bInitialized: boolean, CustomCurve: UE.CurveFloat, AlphaBlend: UE.AlphaBlend);
@@ -28903,19 +29869,6 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_InputAlphaBoolBlend_0__: boolean;
-    }
-    
-    class InputScaleBias {
-        constructor();
-        constructor(Scale: number, Bias: number);
-        Scale: number;
-        Bias: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_InputScaleBias_0__: boolean;
     }
     
     class InputRange {
@@ -28953,6 +29906,254 @@ declare module "ue" {
         __tid_InputScaleBiasClamp_0__: boolean;
     }
     
+    class AnimNode_SkeletalControlBase extends UE.AnimNode_Base {
+        constructor();
+        constructor(ComponentPose: UE.ComponentSpacePoseLink, LODThreshold: number, ActualAlpha: number, AlphaInputType: UE.EAnimAlphaInputType, bAlphaBoolEnabled: boolean, Alpha: number, AlphaScaleBias: UE.InputScaleBias, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBiasClamp: UE.InputScaleBiasClamp, ValidationVisualWarningMessage: string);
+        ComponentPose: UE.ComponentSpacePoseLink;
+        LODThreshold: number;
+        ActualAlpha: number;
+        AlphaInputType: UE.EAnimAlphaInputType;
+        bAlphaBoolEnabled: boolean;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        AlphaBoolBlend: UE.InputAlphaBoolBlend;
+        AlphaCurveName: string;
+        AlphaScaleBiasClamp: UE.InputScaleBiasClamp;
+        ValidationVisualWarningMessage: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SkeletalControlBase_0__: boolean;
+    }
+    
+    enum AnimPhysLinearConstraintType { Free, Limited, AnimPhysLinearConstraintType_MAX, __typeKeyDoNoAccess}
+    enum AnimPhysAngularConstraintType { Angular, Cone, AnimPhysAngularConstraintType_MAX, __typeKeyDoNoAccess}
+    enum AnimPhysTwistAxis { AxisX, AxisY, AxisZ, AnimPhysTwistAxis_MAX, __typeKeyDoNoAccess}
+    class AnimPhysConstraintSetup {
+        constructor();
+        constructor(LinearXLimitType: UE.AnimPhysLinearConstraintType, LinearYLimitType: UE.AnimPhysLinearConstraintType, LinearZLimitType: UE.AnimPhysLinearConstraintType, LinearAxesMin: UE.Vector, LinearAxesMax: UE.Vector, AngularConstraintType: UE.AnimPhysAngularConstraintType, TwistAxis: UE.AnimPhysTwistAxis, AngularTargetAxis: UE.AnimPhysTwistAxis, ConeAngle: number, AngularXAngle: number, AngularYAngle: number, AngularZAngle: number, AngularLimitsMin: UE.Vector, AngularLimitsMax: UE.Vector, AngularTarget: UE.Vector);
+        LinearXLimitType: UE.AnimPhysLinearConstraintType;
+        LinearYLimitType: UE.AnimPhysLinearConstraintType;
+        LinearZLimitType: UE.AnimPhysLinearConstraintType;
+        LinearAxesMin: UE.Vector;
+        LinearAxesMax: UE.Vector;
+        AngularConstraintType: UE.AnimPhysAngularConstraintType;
+        TwistAxis: UE.AnimPhysTwistAxis;
+        AngularTargetAxis: UE.AnimPhysTwistAxis;
+        ConeAngle: number;
+        AngularXAngle: number;
+        AngularYAngle: number;
+        AngularZAngle: number;
+        AngularLimitsMin: UE.Vector;
+        AngularLimitsMax: UE.Vector;
+        AngularTarget: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimPhysConstraintSetup_0__: boolean;
+    }
+    
+    enum AnimPhysCollisionType { CoM, CustomSphere, InnerSphere, OuterSphere, AnimPhysCollisionType_MAX, __typeKeyDoNoAccess}
+    class AnimPhysBodyDefinition {
+        constructor();
+        constructor(BoundBone: UE.BoneReference, BoxExtents: UE.Vector, LocalJointOffset: UE.Vector, ConstraintSetup: UE.AnimPhysConstraintSetup, CollisionType: UE.AnimPhysCollisionType, SphereCollisionRadius: number);
+        BoundBone: UE.BoneReference;
+        BoxExtents: UE.Vector;
+        LocalJointOffset: UE.Vector;
+        ConstraintSetup: UE.AnimPhysConstraintSetup;
+        CollisionType: UE.AnimPhysCollisionType;
+        SphereCollisionRadius: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimPhysBodyDefinition_0__: boolean;
+    }
+    
+    enum ESphericalLimitType { Inner, Outer, ESphericalLimitType_MAX, __typeKeyDoNoAccess}
+    class AnimPhysSphericalLimit {
+        constructor();
+        constructor(DrivingBone: UE.BoneReference, SphereLocalOffset: UE.Vector, LimitRadius: number, LimitType: UE.ESphericalLimitType);
+        DrivingBone: UE.BoneReference;
+        SphereLocalOffset: UE.Vector;
+        LimitRadius: number;
+        LimitType: UE.ESphericalLimitType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimPhysSphericalLimit_0__: boolean;
+    }
+    
+    class AnimPhysPlanarLimit {
+        constructor();
+        constructor(DrivingBone: UE.BoneReference, PlaneTransform: UE.Transform);
+        DrivingBone: UE.BoneReference;
+        PlaneTransform: UE.Transform;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimPhysPlanarLimit_0__: boolean;
+    }
+    
+    enum AnimPhysSimSpaceType { Component, Actor, World, RootRelative, BoneRelative, AnimPhysSimSpaceType_MAX, __typeKeyDoNoAccess}
+    enum ERotationComponent { EulerX, EulerY, EulerZ, QuaternionAngle, SwingAngle, TwistAngle, ERotationComponent_MAX, __typeKeyDoNoAccess}
+    enum EEasingFuncType { Linear, Sinusoidal, Cubic, QuadraticInOut, CubicInOut, HermiteCubic, QuarticInOut, QuinticInOut, CircularIn, CircularOut, CircularInOut, ExpIn, ExpOut, ExpInOut, CustomCurve, EEasingFuncType_MAX, __typeKeyDoNoAccess}
+    class RotationRetargetingInfo {
+        constructor();
+        constructor(bEnabled: boolean, Source: UE.Transform, Target: UE.Transform, RotationComponent: UE.ERotationComponent, TwistAxis: UE.Vector, bUseAbsoluteAngle: boolean, SourceMinimum: number, SourceMaximum: number, TargetMinimum: number, TargetMaximum: number, EasingType: UE.EEasingFuncType, CustomCurve: UE.RuntimeFloatCurve, bFlipEasing: boolean, EasingWeight: number, bClamp: boolean);
+        bEnabled: boolean;
+        Source: UE.Transform;
+        Target: UE.Transform;
+        RotationComponent: UE.ERotationComponent;
+        TwistAxis: UE.Vector;
+        bUseAbsoluteAngle: boolean;
+        SourceMinimum: number;
+        SourceMaximum: number;
+        TargetMinimum: number;
+        TargetMaximum: number;
+        EasingType: UE.EEasingFuncType;
+        CustomCurve: UE.RuntimeFloatCurve;
+        bFlipEasing: boolean;
+        EasingWeight: number;
+        bClamp: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RotationRetargetingInfo_0__: boolean;
+    }
+    
+    class AnimNode_AnimDynamics extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(LinearDampingOverride: number, AngularDampingOverride: number, RelativeSpaceBone: UE.BoneReference, BoundBone: UE.BoneReference, ChainEnd: UE.BoneReference, PhysicsBodyDefinitions: TArray<UE.AnimPhysBodyDefinition>, GravityScale: number, GravityOverride: UE.Vector, LinearSpringConstant: number, AngularSpringConstant: number, WindScale: number, ComponentLinearAccScale: UE.Vector, ComponentLinearVelScale: UE.Vector, ComponentAppliedLinearAccClamp: UE.Vector, AngularBiasOverride: number, NumSolverIterationsPreUpdate: number, NumSolverIterationsPostUpdate: number, SphericalLimits: TArray<UE.AnimPhysSphericalLimit>, ExternalForce: UE.Vector, PlanarLimits: TArray<UE.AnimPhysPlanarLimit>, SimulationSpace: UE.AnimPhysSimSpaceType, bUseSphericalLimits: boolean, bUsePlanarLimit: boolean, bDoUpdate: boolean, bDoEval: boolean, bOverrideLinearDamping: boolean, bOverrideAngularBias: boolean, bOverrideAngularDamping: boolean, bEnableWind: boolean, bUseGravityOverride: boolean, bGravityOverrideInSimSpace: boolean, bLinearSpring: boolean, bAngularSpring: boolean, bChain: boolean, RetargetingSettings: UE.RotationRetargetingInfo, BoxExtents: UE.Vector, LocalJointOffset: UE.Vector, ConstraintSetup: UE.AnimPhysConstraintSetup, CollisionType: UE.AnimPhysCollisionType, SphereCollisionRadius: number);
+        LinearDampingOverride: number;
+        AngularDampingOverride: number;
+        RelativeSpaceBone: UE.BoneReference;
+        BoundBone: UE.BoneReference;
+        ChainEnd: UE.BoneReference;
+        PhysicsBodyDefinitions: TArray<UE.AnimPhysBodyDefinition>;
+        GravityScale: number;
+        GravityOverride: UE.Vector;
+        LinearSpringConstant: number;
+        AngularSpringConstant: number;
+        WindScale: number;
+        ComponentLinearAccScale: UE.Vector;
+        ComponentLinearVelScale: UE.Vector;
+        ComponentAppliedLinearAccClamp: UE.Vector;
+        AngularBiasOverride: number;
+        NumSolverIterationsPreUpdate: number;
+        NumSolverIterationsPostUpdate: number;
+        SphericalLimits: TArray<UE.AnimPhysSphericalLimit>;
+        ExternalForce: UE.Vector;
+        PlanarLimits: TArray<UE.AnimPhysPlanarLimit>;
+        SimulationSpace: UE.AnimPhysSimSpaceType;
+        bUseSphericalLimits: boolean;
+        bUsePlanarLimit: boolean;
+        bDoUpdate: boolean;
+        bDoEval: boolean;
+        bOverrideLinearDamping: boolean;
+        bOverrideAngularBias: boolean;
+        bOverrideAngularDamping: boolean;
+        bEnableWind: boolean;
+        bUseGravityOverride: boolean;
+        bGravityOverrideInSimSpace: boolean;
+        bLinearSpring: boolean;
+        bAngularSpring: boolean;
+        bChain: boolean;
+        RetargetingSettings: UE.RotationRetargetingInfo;
+        BoxExtents: UE.Vector;
+        LocalJointOffset: UE.Vector;
+        ConstraintSetup: UE.AnimPhysConstraintSetup;
+        CollisionType: UE.AnimPhysCollisionType;
+        SphereCollisionRadius: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_AnimDynamics_0__: boolean;
+    }
+    
+    class AnimGraphNode_AnimDynamics extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_AnimDynamics;
+        bPreviewLive: boolean;
+        bShowLinearLimits: boolean;
+        bShowAngularLimits: boolean;
+        bShowPlanarLimit: boolean;
+        bShowSphericalLimit: boolean;
+        bShowCollisionSpheres: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_AnimDynamics;
+        static Load(InName: string): AnimGraphNode_AnimDynamics;
+    
+        __tid_AnimGraphNode_AnimDynamics_0__: boolean;
+    }
+    
+    class AnimNode_ApplyAdditive extends UE.AnimNode_Base {
+        constructor();
+        constructor(Base: UE.PoseLink, Additive: UE.PoseLink, Alpha: number, AlphaScaleBias: UE.InputScaleBias, LODThreshold: number, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBiasClamp: UE.InputScaleBiasClamp, AlphaInputType: UE.EAnimAlphaInputType, bAlphaBoolEnabled: boolean);
+        Base: UE.PoseLink;
+        Additive: UE.PoseLink;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        LODThreshold: number;
+        AlphaBoolBlend: UE.InputAlphaBoolBlend;
+        AlphaCurveName: string;
+        AlphaScaleBiasClamp: UE.InputScaleBiasClamp;
+        AlphaInputType: UE.EAnimAlphaInputType;
+        bAlphaBoolEnabled: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ApplyAdditive_0__: boolean;
+    }
+    
+    class AnimGraphNode_ApplyAdditive extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ApplyAdditive;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ApplyAdditive;
+        static Load(InName: string): AnimGraphNode_ApplyAdditive;
+    
+        __tid_AnimGraphNode_ApplyAdditive_0__: boolean;
+    }
+    
+    class AnimNode_ApplyLimits extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(AngularRangeLimits: TArray<UE.AngularRangeLimit>, AngularOffsets: TArray<UE.Vector>);
+        AngularRangeLimits: TArray<UE.AngularRangeLimit>;
+        AngularOffsets: TArray<UE.Vector>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ApplyLimits_0__: boolean;
+    }
+    
+    class AnimGraphNode_ApplyLimits extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ApplyLimits;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ApplyLimits;
+        static Load(InName: string): AnimGraphNode_ApplyLimits;
+    
+        __tid_AnimGraphNode_ApplyLimits_0__: boolean;
+    }
+    
     class AnimNode_ApplyMeshSpaceAdditive extends UE.AnimNode_Base {
         constructor();
         constructor(Base: UE.PoseLink, Additive: UE.PoseLink, AlphaInputType: UE.EAnimAlphaInputType, Alpha: number, bAlphaBoolEnabled: boolean, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBias: UE.InputScaleBias, AlphaScaleBiasClamp: UE.InputScaleBiasClamp, LODThreshold: number);
@@ -28974,40 +30175,404 @@ declare module "ue" {
         __tid_AnimNode_ApplyMeshSpaceAdditive_0__: boolean;
     }
     
-    class AnimNode_AssetPlayerRelevancyBase extends UE.AnimNode_Base {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_AssetPlayerRelevancyBase_0__: boolean;
+    class AnimGraphNode_ApplyMeshSpaceAdditive extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ApplyMeshSpaceAdditive;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ApplyMeshSpaceAdditive;
+        static Load(InName: string): AnimGraphNode_ApplyMeshSpaceAdditive;
+    
+        __tid_AnimGraphNode_ApplyMeshSpaceAdditive_0__: boolean;
     }
     
-    enum EAnimSyncGroupScope { Local, Component, EAnimSyncGroupScope_MAX, __typeKeyDoNoAccess}
-    class AnimNode_AssetPlayerBase extends UE.AnimNode_AssetPlayerRelevancyBase {
+    class BlendBoneByChannelEntry {
         constructor();
-        constructor(GroupIndex: number, GroupScope: UE.EAnimSyncGroupScope, BlendWeight: number, InternalTimeAccumulator: number);
-        GroupIndex: number;
-        GroupScope: UE.EAnimSyncGroupScope;
-        BlendWeight: number;
-        InternalTimeAccumulator: number;
+        constructor(SourceBone: UE.BoneReference, TargetBone: UE.BoneReference, bBlendTranslation: boolean, bBlendRotation: boolean, bBlendScale: boolean);
+        SourceBone: UE.BoneReference;
+        TargetBone: UE.BoneReference;
+        bBlendTranslation: boolean;
+        bBlendRotation: boolean;
+        bBlendScale: boolean;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_AssetPlayerBase_0__: boolean;
+        __tid_BlendBoneByChannelEntry_0__: boolean;
     }
     
-    class ComponentSpacePoseLink extends UE.PoseLinkBase {
+    enum EBoneControlSpace { BCS_WorldSpace, BCS_ComponentSpace, BCS_ParentBoneSpace, BCS_BoneSpace, BCS_MAX, __typeKeyDoNoAccess}
+    class AnimNode_BlendBoneByChannel extends UE.AnimNode_Base {
+        constructor();
+        constructor(A: UE.PoseLink, B: UE.PoseLink, BoneDefinitions: TArray<UE.BlendBoneByChannelEntry>, Alpha: number, AlphaScaleBias: UE.InputScaleBias, TransformsSpace: UE.EBoneControlSpace);
+        A: UE.PoseLink;
+        B: UE.PoseLink;
+        BoneDefinitions: TArray<UE.BlendBoneByChannelEntry>;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        TransformsSpace: UE.EBoneControlSpace;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendBoneByChannel_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendBoneByChannel extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlendNode: UE.AnimNode_BlendBoneByChannel;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendBoneByChannel;
+        static Load(InName: string): AnimGraphNode_BlendBoneByChannel;
+    
+        __tid_AnimGraphNode_BlendBoneByChannel_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendListBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendListBase;
+        static Load(InName: string): AnimGraphNode_BlendListBase;
+    
+        __tid_AnimGraphNode_BlendListBase_0__: boolean;
+    }
+    
+    enum EBlendListTransitionType { StandardBlend, Inertialization, EBlendListTransitionType_MAX, __typeKeyDoNoAccess}
+    class AnimNode_BlendListBase extends UE.AnimNode_Base {
+        constructor();
+        constructor(BlendPose: TArray<UE.PoseLink>, BlendTime: TArray<number>, TransitionType: UE.EBlendListTransitionType, BlendType: UE.EAlphaBlendOption, bResetChildOnActivation: boolean, CustomBlendCurve: UE.CurveFloat, BlendProfile: UE.BlendProfile);
+        BlendPose: TArray<UE.PoseLink>;
+        BlendTime: TArray<number>;
+        TransitionType: UE.EBlendListTransitionType;
+        BlendType: UE.EAlphaBlendOption;
+        bResetChildOnActivation: boolean;
+        CustomBlendCurve: UE.CurveFloat;
+        BlendProfile: UE.BlendProfile;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendListBase_0__: boolean;
+    }
+    
+    class AnimNode_BlendListByBool extends UE.AnimNode_BlendListBase {
+        constructor();
+        constructor(bActiveValue: boolean);
+        bActiveValue: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendListByBool_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendListByBool extends UE.AnimGraphNode_BlendListBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendListByBool;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendListByBool;
+        static Load(InName: string): AnimGraphNode_BlendListByBool;
+    
+        __tid_AnimGraphNode_BlendListByBool_0__: boolean;
+    }
+    
+    class AnimNode_BlendListByEnum extends UE.AnimNode_BlendListBase {
+        constructor();
+        constructor(EnumToPoseIndex: TArray<number>, ActiveEnumValue: number);
+        EnumToPoseIndex: TArray<number>;
+        ActiveEnumValue: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendListByEnum_0__: boolean;
+    }
+    
+    class Enum extends UE.Field {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): Enum;
+        static Load(InName: string): Enum;
+    
+        __tid_Enum_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendListByEnum extends UE.AnimGraphNode_BlendListBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendListByEnum;
+        BoundEnum: UE.Enum;
+        VisibleEnumEntries: TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendListByEnum;
+        static Load(InName: string): AnimGraphNode_BlendListByEnum;
+    
+        __tid_AnimGraphNode_BlendListByEnum_0__: boolean;
+    }
+    
+    class AnimNode_BlendListByInt extends UE.AnimNode_BlendListBase {
+        constructor();
+        constructor(ActiveChildIndex: number);
+        ActiveChildIndex: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendListByInt_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendListByInt extends UE.AnimGraphNode_BlendListBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendListByInt;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendListByInt;
+        static Load(InName: string): AnimGraphNode_BlendListByInt;
+    
+        __tid_AnimGraphNode_BlendListByInt_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpaceEvaluator extends UE.AnimNode_BlendSpacePlayer {
+        constructor();
+        constructor(NormalizedTime: number, bTeleportToNormalizedTime: boolean);
+        NormalizedTime: number;
+        bTeleportToNormalizedTime: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendSpaceEvaluator_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpaceEvaluator extends UE.AnimGraphNode_BlendSpaceBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendSpaceEvaluator;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpaceEvaluator;
+        static Load(InName: string): AnimGraphNode_BlendSpaceEvaluator;
+    
+        __tid_AnimGraphNode_BlendSpaceEvaluator_0__: boolean;
+    }
+    
+    class BlendSpaceGraph extends UE.EdGraph {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlendSpace: UE.BlendSpace;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BlendSpaceGraph;
+        static Load(InName: string): BlendSpaceGraph;
+    
+        __tid_BlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpaceGraphBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlendSpace: UE.BlendSpace;
+        BlendSpaceClass: UE.Class;
+        BlendSpaceGraph: UE.BlendSpaceGraph;
+        Graphs: TArray<UE.EdGraph>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpaceGraphBase;
+        static Load(InName: string): AnimGraphNode_BlendSpaceGraphBase;
+    
+        __tid_AnimGraphNode_BlendSpaceGraphBase_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpaceGraphBase extends UE.AnimNode_Base {
+        constructor();
+        constructor(X: number, Y: number, GroupName: string, GroupRole: UE.EAnimGroupRole, BlendSpace: UE.BlendSpace, SamplePoseLinks: TArray<UE.PoseLink>);
+        X: number;
+        Y: number;
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        BlendSpace: UE.BlendSpace;
+        SamplePoseLinks: TArray<UE.PoseLink>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendSpaceGraphBase_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpaceGraph extends UE.AnimNode_BlendSpaceGraphBase {
         constructor();
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_ComponentSpacePoseLink_0__: boolean;
+        __tid_AnimNode_BlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpaceGraph extends UE.AnimGraphNode_BlendSpaceGraphBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendSpaceGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpaceGraph;
+        static Load(InName: string): AnimGraphNode_BlendSpaceGraph;
+    
+        __tid_AnimGraphNode_BlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimGraphNode_BlendSpacePlayer extends UE.AnimGraphNode_BlendSpaceBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BlendSpacePlayer;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BlendSpacePlayer;
+        static Load(InName: string): AnimGraphNode_BlendSpacePlayer;
+    
+        __tid_AnimGraphNode_BlendSpacePlayer_0__: boolean;
+    }
+    
+    enum EComponentType { None, TranslationX, TranslationY, TranslationZ, RotationX, RotationY, RotationZ, Scale, ScaleX, ScaleY, ScaleZ, EComponentType_MAX, __typeKeyDoNoAccess}
+    enum EDrivenDestinationMode { Bone, MorphTarget, MaterialParameter, EDrivenDestinationMode_MAX, __typeKeyDoNoAccess}
+    enum EDrivenBoneModificationMode { AddToInput, ReplaceComponent, AddToRefPose, EDrivenBoneModificationMode_MAX, __typeKeyDoNoAccess}
+    class AnimNode_BoneDrivenController extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(SourceBone: UE.BoneReference, DrivingCurve: UE.CurveFloat, Multiplier: number, RangeMin: number, RangeMax: number, RemappedMin: number, RemappedMax: number, ParameterName: string, TargetBone: UE.BoneReference, TargetComponent: UE.EComponentType, DestinationMode: UE.EDrivenDestinationMode, ModificationMode: UE.EDrivenBoneModificationMode, SourceComponent: UE.EComponentType, bUseRange: boolean, bAffectTargetTranslationX: boolean, bAffectTargetTranslationY: boolean, bAffectTargetTranslationZ: boolean, bAffectTargetRotationX: boolean, bAffectTargetRotationY: boolean, bAffectTargetRotationZ: boolean, bAffectTargetScaleX: boolean, bAffectTargetScaleY: boolean, bAffectTargetScaleZ: boolean);
+        SourceBone: UE.BoneReference;
+        DrivingCurve: UE.CurveFloat;
+        Multiplier: number;
+        RangeMin: number;
+        RangeMax: number;
+        RemappedMin: number;
+        RemappedMax: number;
+        ParameterName: string;
+        TargetBone: UE.BoneReference;
+        TargetComponent: UE.EComponentType;
+        DestinationMode: UE.EDrivenDestinationMode;
+        ModificationMode: UE.EDrivenBoneModificationMode;
+        SourceComponent: UE.EComponentType;
+        bUseRange: boolean;
+        bAffectTargetTranslationX: boolean;
+        bAffectTargetTranslationY: boolean;
+        bAffectTargetTranslationZ: boolean;
+        bAffectTargetRotationX: boolean;
+        bAffectTargetRotationY: boolean;
+        bAffectTargetRotationZ: boolean;
+        bAffectTargetScaleX: boolean;
+        bAffectTargetScaleY: boolean;
+        bAffectTargetScaleZ: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BoneDrivenController_0__: boolean;
+    }
+    
+    class AnimGraphNode_BoneDrivenController extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_BoneDrivenController;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_BoneDrivenController;
+        static Load(InName: string): AnimGraphNode_BoneDrivenController;
+    
+        __tid_AnimGraphNode_BoneDrivenController_0__: boolean;
+    }
+    
+    enum ENodePurityOverride { Unset, Pure, Impure, ENodePurityOverride_MAX, __typeKeyDoNoAccess}
+    class K2Node_CallFunction extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bDefaultsToPureFunc: boolean;
+        bWantsEnumToExecExpansion: boolean;
+        FunctionReference: UE.MemberReference;
+        CallFunctionName: string;
+        CallFunctionClass: UE.Class;
+        NodePurityOverride: UE.ENodePurityOverride;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_CallFunction;
+        static Load(InName: string): K2Node_CallFunction;
+    
+        __tid_K2Node_CallFunction_0__: boolean;
+    }
+    
+    enum EAnimFunctionCallSite { OnInitialize, OnUpdate, OnBecomeRelevant, OnEvaluate, OnInitializePostRecursion, OnUpdatePostRecursion, OnBecomeRelevantPostRecursion, OnEvaluatePostRecursion, OnStartedBlendingOut, OnStartedBlendingIn, OnFinishedBlendingOut, OnFinishedBlendingIn, EAnimFunctionCallSite_MAX, __typeKeyDoNoAccess}
+    class AnimNode_CallFunction extends UE.AnimNode_Base {
+        constructor();
+        constructor(Source: UE.PoseLink, Function: UE.AnimNodeFunctionRef, CallSite: UE.EAnimFunctionCallSite);
+        Source: UE.PoseLink;
+        Function: UE.AnimNodeFunctionRef;
+        CallSite: UE.EAnimFunctionCallSite;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CallFunction_0__: boolean;
+    }
+    
+    class AnimGraphNode_CallFunction extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        InnerGraph: UE.EdGraph;
+        CallFunctionPrototype: UE.K2Node_CallFunction;
+        Node: UE.AnimNode_CallFunction;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CallFunction;
+        static Load(InName: string): AnimGraphNode_CallFunction;
+    
+        __tid_AnimGraphNode_CallFunction_0__: boolean;
+    }
+    
+    class SocketReference {
+        constructor();
+        constructor(SocketName: string);
+        SocketName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SocketReference_0__: boolean;
+    }
+    
+    class BoneSocketTarget {
+        constructor();
+        constructor(bUseSocket: boolean, BoneReference: UE.BoneReference, SocketReference: UE.SocketReference);
+        bUseSocket: boolean;
+        BoneReference: UE.BoneReference;
+        SocketReference: UE.SocketReference;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BoneSocketTarget_0__: boolean;
+    }
+    
+    class AnimNode_CCDIK extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(EffectorLocation: UE.Vector, EffectorLocationSpace: UE.EBoneControlSpace, EffectorTarget: UE.BoneSocketTarget, TipBone: UE.BoneReference, RootBone: UE.BoneReference, Precision: number, MaxIterations: number, bStartFromTail: boolean, bEnableRotationLimit: boolean, RotationLimitPerJoints: TArray<number>);
+        EffectorLocation: UE.Vector;
+        EffectorLocationSpace: UE.EBoneControlSpace;
+        EffectorTarget: UE.BoneSocketTarget;
+        TipBone: UE.BoneReference;
+        RootBone: UE.BoneReference;
+        Precision: number;
+        MaxIterations: number;
+        bStartFromTail: boolean;
+        bEnableRotationLimit: boolean;
+        RotationLimitPerJoints: TArray<number>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CCDIK_0__: boolean;
+    }
+    
+    class AnimGraphNode_CCDIK extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_CCDIK;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CCDIK;
+        static Load(InName: string): AnimGraphNode_CCDIK;
+    
+        __tid_AnimGraphNode_CCDIK_0__: boolean;
     }
     
     class AnimNode_ConvertComponentToLocalSpace extends UE.AnimNode_Base {
@@ -29022,31 +30587,226 @@ declare module "ue" {
         __tid_AnimNode_ConvertComponentToLocalSpace_0__: boolean;
     }
     
-    class AnimNode_ConvertLocalToComponentSpace extends UE.AnimNode_Base {
-        constructor();
-        constructor(LocalPose: UE.PoseLink);
-        LocalPose: UE.PoseLink;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_ConvertLocalToComponentSpace_0__: boolean;
+    class AnimGraphNode_ComponentToLocalSpace extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ConvertComponentToLocalSpace;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ComponentToLocalSpace;
+        static Load(InName: string): AnimGraphNode_ComponentToLocalSpace;
+    
+        __tid_AnimGraphNode_ComponentToLocalSpace_0__: boolean;
     }
     
-    class AnimNode_CustomProperty extends UE.AnimNode_Base {
+    enum EConstraintOffsetOption { None, Offset_RefPose, EConstraintOffsetOption_MAX, __typeKeyDoNoAccess}
+    enum ETransformConstraintType { Translation, Rotation, Scale, Parent, LookAt, ETransformConstraintType_MAX, __typeKeyDoNoAccess}
+    class FilterOptionPerAxis {
         constructor();
-        constructor(SourcePropertyNames: TArray<string>, DestPropertyNames: TArray<string>, TargetInstance: UE.Object, SourceInstance: UE.Object);
-        SourcePropertyNames: TArray<string>;
-        DestPropertyNames: TArray<string>;
-        TargetInstance: UE.Object;
-        SourceInstance: UE.Object;
+        constructor(bX: boolean, bY: boolean, bZ: boolean);
+        bX: boolean;
+        bY: boolean;
+        bZ: boolean;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_CustomProperty_0__: boolean;
+        __tid_FilterOptionPerAxis_0__: boolean;
+    }
+    
+    class Constraint {
+        constructor();
+        constructor(TargetBone: UE.BoneReference, OffsetOption: UE.EConstraintOffsetOption, TransformType: UE.ETransformConstraintType, PerAxis: UE.FilterOptionPerAxis);
+        TargetBone: UE.BoneReference;
+        OffsetOption: UE.EConstraintOffsetOption;
+        TransformType: UE.ETransformConstraintType;
+        PerAxis: UE.FilterOptionPerAxis;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_Constraint_0__: boolean;
+    }
+    
+    class AnimNode_Constraint extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(BoneToModify: UE.BoneReference, ConstraintSetup: TArray<UE.Constraint>, ConstraintWeights: TArray<number>);
+        BoneToModify: UE.BoneReference;
+        ConstraintSetup: TArray<UE.Constraint>;
+        ConstraintWeights: TArray<number>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Constraint_0__: boolean;
+    }
+    
+    class AnimGraphNode_Constraint extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Constraint;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Constraint;
+        static Load(InName: string): AnimGraphNode_Constraint;
+    
+        __tid_AnimGraphNode_Constraint_0__: boolean;
+    }
+    
+    class AnimNode_CopyBone extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(SourceBone: UE.BoneReference, TargetBone: UE.BoneReference, bCopyTranslation: boolean, bCopyRotation: boolean, bCopyScale: boolean, ControlSpace: UE.EBoneControlSpace);
+        SourceBone: UE.BoneReference;
+        TargetBone: UE.BoneReference;
+        bCopyTranslation: boolean;
+        bCopyRotation: boolean;
+        bCopyScale: boolean;
+        ControlSpace: UE.EBoneControlSpace;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CopyBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_CopyBone extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_CopyBone;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CopyBone;
+        static Load(InName: string): AnimGraphNode_CopyBone;
+    
+        __tid_AnimGraphNode_CopyBone_0__: boolean;
+    }
+    
+    enum CopyBoneDeltaMode { Accumulate, Copy, CopyBoneDeltaMode_MAX, __typeKeyDoNoAccess}
+    class AnimNode_CopyBoneDelta extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(SourceBone: UE.BoneReference, TargetBone: UE.BoneReference, bCopyTranslation: boolean, bCopyRotation: boolean, bCopyScale: boolean, CopyMode: UE.CopyBoneDeltaMode, TranslationMultiplier: number, RotationMultiplier: number, ScaleMultiplier: number);
+        SourceBone: UE.BoneReference;
+        TargetBone: UE.BoneReference;
+        bCopyTranslation: boolean;
+        bCopyRotation: boolean;
+        bCopyScale: boolean;
+        CopyMode: UE.CopyBoneDeltaMode;
+        TranslationMultiplier: number;
+        RotationMultiplier: number;
+        ScaleMultiplier: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CopyBoneDelta_0__: boolean;
+    }
+    
+    class AnimGraphNode_CopyBoneDelta extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_CopyBoneDelta;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CopyBoneDelta;
+        static Load(InName: string): AnimGraphNode_CopyBoneDelta;
+    
+        __tid_AnimGraphNode_CopyBoneDelta_0__: boolean;
+    }
+    
+    class AnimNode_CopyPoseFromMesh extends UE.AnimNode_Base {
+        constructor();
+        constructor(SourceMeshComponent: TWeakObjectPtr<UE.SkeletalMeshComponent>, bUseAttachedParent: boolean, bCopyCurves: boolean, bCopyCustomAttributes: boolean, bUseMeshPose: boolean, RootBoneToCopy: string);
+        SourceMeshComponent: TWeakObjectPtr<UE.SkeletalMeshComponent>;
+        bUseAttachedParent: boolean;
+        bCopyCurves: boolean;
+        bCopyCustomAttributes: boolean;
+        bUseMeshPose: boolean;
+        RootBoneToCopy: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CopyPoseFromMesh_0__: boolean;
+    }
+    
+    class AnimGraphNode_CopyPoseFromMesh extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_CopyPoseFromMesh;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CopyPoseFromMesh;
+        static Load(InName: string): AnimGraphNode_CopyPoseFromMesh;
+    
+        __tid_AnimGraphNode_CopyPoseFromMesh_0__: boolean;
+    }
+    
+    class NamedCurveValue {
+        constructor();
+        constructor(Name: string, Value: number);
+        Name: string;
+        Value: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_NamedCurveValue_0__: boolean;
+    }
+    
+    class CurveSourceInterface extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get the name that this curve source can be bound to by.
+         *Clients of this curve source will use this name to identify this source.
+         */
+        GetBindingName() : string;
+        /*
+         *Evaluate all curves that this source provides
+         */
+        GetCurves(OutValues: $Ref<TArray<UE.NamedCurveValue>>) : void;
+        /*
+         *Get the value for a specified curve
+         */
+        GetCurveValue(CurveName: string) : number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): CurveSourceInterface;
+        static Load(InName: string): CurveSourceInterface;
+    
+        __tid_CurveSourceInterface_0__: boolean;
+    }
+    
+    class AnimNode_CurveSource extends UE.AnimNode_Base {
+        constructor();
+        constructor(SourcePose: UE.PoseLink, SourceBinding: string, Alpha: number, CurveSource: UE.CurveSourceInterface);
+        SourcePose: UE.PoseLink;
+        SourceBinding: string;
+        Alpha: number;
+        CurveSource: UE.CurveSourceInterface;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CurveSource_0__: boolean;
+    }
+    
+    class AnimGraphNode_CurveSource extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_CurveSource;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CurveSource;
+        static Load(InName: string): AnimGraphNode_CurveSource;
+    
+        __tid_AnimGraphNode_CurveSource_0__: boolean;
+    }
+    
+    class AnimGraphNode_CustomProperty extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        KnownExposableProperties: TArray<string>;
+        ExposedPropertyNames: TArray<string>;
+        CustomPinProperties: TArray<UE.OptionalPinFromProperty>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_CustomProperty;
+        static Load(InName: string): AnimGraphNode_CustomProperty;
+    
+        __tid_AnimGraphNode_CustomProperty_0__: boolean;
     }
     
     class AnimNode_DeadBlending extends UE.AnimNode_Base {
@@ -29083,6 +30843,108 @@ declare module "ue" {
         __tid_AnimNode_DeadBlending_0__: boolean;
     }
     
+    class AnimGraphNode_DeadBlending extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_DeadBlending;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_DeadBlending;
+        static Load(InName: string): AnimGraphNode_DeadBlending;
+    
+        __tid_AnimGraphNode_DeadBlending_0__: boolean;
+    }
+    
+    enum EBoneRotationSource { BRS_KeepComponentSpaceRotation, BRS_KeepLocalSpaceRotation, BRS_CopyFromTarget, BRS_MAX, __typeKeyDoNoAccess}
+    class AnimNode_Fabrik extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(EffectorTransform: UE.Transform, EffectorTarget: UE.BoneSocketTarget, TipBone: UE.BoneReference, RootBone: UE.BoneReference, Precision: number, MaxIterations: number, EffectorTransformSpace: UE.EBoneControlSpace, EffectorRotationSource: UE.EBoneRotationSource, bEnableDebugDraw: boolean, EffectorTransformBone: UE.BoneReference);
+        EffectorTransform: UE.Transform;
+        EffectorTarget: UE.BoneSocketTarget;
+        TipBone: UE.BoneReference;
+        RootBone: UE.BoneReference;
+        Precision: number;
+        MaxIterations: number;
+        EffectorTransformSpace: UE.EBoneControlSpace;
+        EffectorRotationSource: UE.EBoneRotationSource;
+        bEnableDebugDraw: boolean;
+        EffectorTransformBone: UE.BoneReference;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Fabrik_0__: boolean;
+    }
+    
+    class AnimGraphNode_Fabrik extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Fabrik;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Fabrik;
+        static Load(InName: string): AnimGraphNode_Fabrik;
+    
+        __tid_AnimGraphNode_Fabrik_0__: boolean;
+    }
+    
+    class AnimNode_HandIKRetargeting extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(RightHandFK: UE.BoneReference, LeftHandFK: UE.BoneReference, RightHandIK: UE.BoneReference, LeftHandIK: UE.BoneReference, IKBonesToMove: TArray<UE.BoneReference>, PerAxisAlpha: UE.Vector, HandFKWeight: number);
+        RightHandFK: UE.BoneReference;
+        LeftHandFK: UE.BoneReference;
+        RightHandIK: UE.BoneReference;
+        LeftHandIK: UE.BoneReference;
+        IKBonesToMove: TArray<UE.BoneReference>;
+        PerAxisAlpha: UE.Vector;
+        HandFKWeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_HandIKRetargeting_0__: boolean;
+    }
+    
+    class AnimGraphNode_HandIKRetargeting extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_HandIKRetargeting;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_HandIKRetargeting;
+        static Load(InName: string): AnimGraphNode_HandIKRetargeting;
+    
+        __tid_AnimGraphNode_HandIKRetargeting_0__: boolean;
+    }
+    
+    enum ERefPoseType { EIT_LocalSpace, EIT_Additive, EIT_MAX, __typeKeyDoNoAccess}
+    class AnimNode_RefPose extends UE.AnimNode_Base {
+        constructor();
+        constructor(RefPoseType: UE.ERefPoseType);
+        RefPoseType: UE.ERefPoseType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RefPose_0__: boolean;
+    }
+    
+    class AnimGraphNode_RefPoseBase extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RefPose;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RefPoseBase;
+        static Load(InName: string): AnimGraphNode_RefPoseBase;
+    
+        __tid_AnimGraphNode_RefPoseBase_0__: boolean;
+    }
+    
+    class AnimGraphNode_IdentityPose extends UE.AnimGraphNode_RefPoseBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_IdentityPose;
+        static Load(InName: string): AnimGraphNode_IdentityPose;
+    
+        __tid_AnimGraphNode_IdentityPose_0__: boolean;
+    }
+    
     class AnimNode_Inertialization extends UE.AnimNode_Base {
         constructor();
         constructor(Source: UE.PoseLink, DefaultBlendProfile: UE.BlendProfile, FilteredCurves: TArray<string>, FilteredBones: TArray<UE.BoneReference>, bPreallocateMemory: boolean, bResetOnBecomingRelevant: boolean, bForwardRequestsThroughSkippedCachedPoseNodes: boolean, RequestQueue: TArray<UE.InertializationRequest>, InertializationRequestAnimInstance: UE.Object);
@@ -29101,6 +30963,162 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimNode_Inertialization_0__: boolean;
+    }
+    
+    class AnimGraphNode_Inertialization extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Inertialization;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Inertialization;
+        static Load(InName: string): AnimGraphNode_Inertialization;
+    
+        __tid_AnimGraphNode_Inertialization_0__: boolean;
+    }
+    
+    enum ELayeredBoneBlendMode { BranchFilter, BlendMask, ELayeredBoneBlendMode_MAX, __typeKeyDoNoAccess}
+    class BranchFilter {
+        constructor();
+        constructor(BoneName: string, BlendDepth: number);
+        BoneName: string;
+        BlendDepth: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BranchFilter_0__: boolean;
+    }
+    
+    class InputBlendPose {
+        constructor();
+        constructor(BranchFilters: TArray<UE.BranchFilter>);
+        BranchFilters: TArray<UE.BranchFilter>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputBlendPose_0__: boolean;
+    }
+    
+    class PerBoneBlendWeight {
+        constructor();
+        constructor(SourceIndex: number, BlendWeight: number);
+        SourceIndex: number;
+        BlendWeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PerBoneBlendWeight_0__: boolean;
+    }
+    
+    enum ECurveBlendOption { Override, DoNotOverride, NormalizeByWeight, BlendByWeight, UseBasePose, UseMaxValue, UseMinValue, ECurveBlendOption_MAX, __typeKeyDoNoAccess}
+    class AnimNode_LayeredBoneBlend extends UE.AnimNode_Base {
+        constructor();
+        constructor(BasePose: UE.PoseLink, BlendPoses: TArray<UE.PoseLink>, BlendMode: UE.ELayeredBoneBlendMode, BlendMasks: TArray<UE.BlendProfile>, LayerSetup: TArray<UE.InputBlendPose>, BlendWeights: TArray<number>, PerBoneBlendWeights: TArray<UE.PerBoneBlendWeight>, SkeletonGuid: UE.Guid, VirtualBoneGuid: UE.Guid, LODThreshold: number, bMeshSpaceRotationBlend: boolean, bMeshSpaceScaleBlend: boolean, CurveBlendOption: UE.ECurveBlendOption, bBlendRootMotionBasedOnRootBone: boolean);
+        BasePose: UE.PoseLink;
+        BlendPoses: TArray<UE.PoseLink>;
+        BlendMode: UE.ELayeredBoneBlendMode;
+        BlendMasks: TArray<UE.BlendProfile>;
+        LayerSetup: TArray<UE.InputBlendPose>;
+        BlendWeights: TArray<number>;
+        PerBoneBlendWeights: TArray<UE.PerBoneBlendWeight>;
+        SkeletonGuid: UE.Guid;
+        VirtualBoneGuid: UE.Guid;
+        LODThreshold: number;
+        bMeshSpaceRotationBlend: boolean;
+        bMeshSpaceScaleBlend: boolean;
+        CurveBlendOption: UE.ECurveBlendOption;
+        bBlendRootMotionBasedOnRootBone: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_LayeredBoneBlend_0__: boolean;
+    }
+    
+    class AnimGraphNode_LayeredBoneBlend extends UE.AnimGraphNode_BlendListBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LayeredBoneBlend;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LayeredBoneBlend;
+        static Load(InName: string): AnimGraphNode_LayeredBoneBlend;
+    
+        __tid_AnimGraphNode_LayeredBoneBlend_0__: boolean;
+    }
+    
+    class AnimLegIKDefinition {
+        constructor();
+        constructor(IKFootBone: UE.BoneReference, FKFootBone: UE.BoneReference, NumBonesInLimb: number, MinRotationAngle: number, FootBoneForwardAxis: UE.EAxis, HingeRotationAxis: UE.EAxis, bEnableRotationLimit: boolean, bEnableKneeTwistCorrection: boolean, TwistOffsetCurveName: string);
+        IKFootBone: UE.BoneReference;
+        FKFootBone: UE.BoneReference;
+        NumBonesInLimb: number;
+        MinRotationAngle: number;
+        FootBoneForwardAxis: UE.EAxis;
+        HingeRotationAxis: UE.EAxis;
+        bEnableRotationLimit: boolean;
+        bEnableKneeTwistCorrection: boolean;
+        TwistOffsetCurveName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimLegIKDefinition_0__: boolean;
+    }
+    
+    class AnimNode_LegIK extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(ReachPrecision: number, MaxIterations: number, SoftPercentLength: number, SoftAlpha: number, LegsDefinition: TArray<UE.AnimLegIKDefinition>);
+        ReachPrecision: number;
+        MaxIterations: number;
+        SoftPercentLength: number;
+        SoftAlpha: number;
+        LegsDefinition: TArray<UE.AnimLegIKDefinition>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_LegIK_0__: boolean;
+    }
+    
+    class AnimGraphNode_LegIK extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LegIK;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LegIK;
+        static Load(InName: string): AnimGraphNode_LegIK;
+    
+        __tid_AnimGraphNode_LegIK_0__: boolean;
+    }
+    
+    class AnimGraphNode_LinkedAnimGraphBase extends UE.AnimGraphNode_CustomProperty {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        FunctionReference: UE.MemberReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LinkedAnimGraphBase;
+        static Load(InName: string): AnimGraphNode_LinkedAnimGraphBase;
+    
+        __tid_AnimGraphNode_LinkedAnimGraphBase_0__: boolean;
+    }
+    
+    class AnimNode_CustomProperty extends UE.AnimNode_Base {
+        constructor();
+        constructor(SourcePropertyNames: TArray<string>, DestPropertyNames: TArray<string>, TargetInstance: UE.Object, SourceInstance: UE.Object);
+        SourcePropertyNames: TArray<string>;
+        DestPropertyNames: TArray<string>;
+        TargetInstance: UE.Object;
+        SourceInstance: UE.Object;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_CustomProperty_0__: boolean;
     }
     
     class AnimNode_LinkedAnimGraph extends UE.AnimNode_CustomProperty {
@@ -29122,6 +31140,16 @@ declare module "ue" {
         __tid_AnimNode_LinkedAnimGraph_0__: boolean;
     }
     
+    class AnimGraphNode_LinkedAnimGraph extends UE.AnimGraphNode_LinkedAnimGraphBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LinkedAnimGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LinkedAnimGraph;
+        static Load(InName: string): AnimGraphNode_LinkedAnimGraph;
+    
+        __tid_AnimGraphNode_LinkedAnimGraph_0__: boolean;
+    }
+    
     class AnimNode_LinkedAnimLayer extends UE.AnimNode_LinkedAnimGraph {
         constructor();
         constructor(Interface: UE.Class, Layer: string);
@@ -29133,6 +31161,17 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimNode_LinkedAnimLayer_0__: boolean;
+    }
+    
+    class AnimGraphNode_LinkedAnimLayer extends UE.AnimGraphNode_LinkedAnimGraphBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LinkedAnimLayer;
+        InterfaceGuid: UE.Guid;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LinkedAnimLayer;
+        static Load(InName: string): AnimGraphNode_LinkedAnimLayer;
+    
+        __tid_AnimGraphNode_LinkedAnimLayer_0__: boolean;
     }
     
     class AnimNode_LinkedInputPose extends UE.AnimNode_Base {
@@ -29150,19 +31189,775 @@ declare module "ue" {
         __tid_AnimNode_LinkedInputPose_0__: boolean;
     }
     
-    class AnimNode_Root extends UE.AnimNode_Base {
+    class AnimGraphNode_LinkedInputPose extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LinkedInputPose;
+        Inputs: TArray<UE.AnimBlueprintFunctionPinInfo>;
+        FunctionReference: UE.MemberReference;
+        InputPoseIndex: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LinkedInputPose;
+        static Load(InName: string): AnimGraphNode_LinkedInputPose;
+    
+        __tid_AnimGraphNode_LinkedInputPose_0__: boolean;
+    }
+    
+    class AnimGraphNode_LocalRefPose extends UE.AnimGraphNode_RefPoseBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LocalRefPose;
+        static Load(InName: string): AnimGraphNode_LocalRefPose;
+    
+        __tid_AnimGraphNode_LocalRefPose_0__: boolean;
+    }
+    
+    class AnimNode_ConvertLocalToComponentSpace extends UE.AnimNode_Base {
         constructor();
-        constructor(Result: UE.PoseLink, Name: string, LayerGroup: string, Group: string);
-        Result: UE.PoseLink;
-        Name: string;
-        LayerGroup: string;
-        Group: string;
+        constructor(LocalPose: UE.PoseLink);
+        LocalPose: UE.PoseLink;
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_Root_0__: boolean;
+        __tid_AnimNode_ConvertLocalToComponentSpace_0__: boolean;
+    }
+    
+    class AnimGraphNode_LocalToComponentSpace extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ConvertLocalToComponentSpace;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LocalToComponentSpace;
+        static Load(InName: string): AnimGraphNode_LocalToComponentSpace;
+    
+        __tid_AnimGraphNode_LocalToComponentSpace_0__: boolean;
+    }
+    
+    class Axis {
+        constructor();
+        constructor(Axis: UE.Vector, bInLocalSpace: boolean);
+        Axis: UE.Vector;
+        bInLocalSpace: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_Axis_0__: boolean;
+    }
+    
+    enum EInterpolationBlend { Linear, Cubic, Sinusoidal, EaseInOutExponent2, EaseInOutExponent3, EaseInOutExponent4, EaseInOutExponent5, MAX, __typeKeyDoNoAccess}
+    enum EAxisOption { X, Y, Z, X_Neg, Y_Neg, Z_Neg, Custom, EAxisOption_MAX, __typeKeyDoNoAccess}
+    class AnimNode_LookAt extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(BoneToModify: UE.BoneReference, LookAtTarget: UE.BoneSocketTarget, LookAtLocation: UE.Vector, LookAt_Axis: UE.Axis, bUseLookUpAxis: boolean, InterpolationType: UE.EInterpolationBlend, LookUp_Axis: UE.Axis, LookAtClamp: number, InterpolationTime: number, InterpolationTriggerThreashold: number, LookAtBone: UE.BoneReference, LookAtSocket: string, LookAtAxis: UE.EAxisOption, CustomLookAtAxis: UE.Vector, LookUpAxis: UE.EAxisOption, CustomLookUpAxis: UE.Vector);
+        BoneToModify: UE.BoneReference;
+        LookAtTarget: UE.BoneSocketTarget;
+        LookAtLocation: UE.Vector;
+        LookAt_Axis: UE.Axis;
+        bUseLookUpAxis: boolean;
+        InterpolationType: UE.EInterpolationBlend;
+        LookUp_Axis: UE.Axis;
+        LookAtClamp: number;
+        InterpolationTime: number;
+        InterpolationTriggerThreashold: number;
+        LookAtBone: UE.BoneReference;
+        LookAtSocket: string;
+        LookAtAxis: UE.EAxisOption;
+        CustomLookAtAxis: UE.Vector;
+        LookUpAxis: UE.EAxisOption;
+        CustomLookUpAxis: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_LookAt_0__: boolean;
+    }
+    
+    class AnimGraphNode_LookAt extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_LookAt;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_LookAt;
+        static Load(InName: string): AnimGraphNode_LookAt;
+    
+        __tid_AnimGraphNode_LookAt_0__: boolean;
+    }
+    
+    class AnimNode_MakeDynamicAdditive extends UE.AnimNode_Base {
+        constructor();
+        constructor(Base: UE.PoseLink, Additive: UE.PoseLink, bMeshSpaceAdditive: boolean);
+        Base: UE.PoseLink;
+        Additive: UE.PoseLink;
+        bMeshSpaceAdditive: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_MakeDynamicAdditive_0__: boolean;
+    }
+    
+    class AnimGraphNode_MakeDynamicAdditive extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_MakeDynamicAdditive;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_MakeDynamicAdditive;
+        static Load(InName: string): AnimGraphNode_MakeDynamicAdditive;
+    
+        __tid_AnimGraphNode_MakeDynamicAdditive_0__: boolean;
+    }
+    
+    class AnimNode_MeshSpaceRefPose extends UE.AnimNode_Base {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_MeshSpaceRefPose_0__: boolean;
+    }
+    
+    class AnimGraphNode_MeshRefPose extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_MeshSpaceRefPose;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_MeshRefPose;
+        static Load(InName: string): AnimGraphNode_MeshRefPose;
+    
+        __tid_AnimGraphNode_MeshRefPose_0__: boolean;
+    }
+    
+    class AnimNode_MirrorBase extends UE.AnimNode_Base {
+        constructor();
+        constructor(Source: UE.PoseLink);
+        Source: UE.PoseLink;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_MirrorBase_0__: boolean;
+    }
+    
+    class AnimNode_Mirror extends UE.AnimNode_MirrorBase {
+        constructor();
+        constructor(bMirror: boolean, MirrorDataTable: UE.MirrorDataTable, BlendTime: number, bResetChild: boolean, bBoneMirroring: boolean, bCurveMirroring: boolean, bAttributeMirroring: boolean);
+        bMirror: boolean;
+        MirrorDataTable: UE.MirrorDataTable;
+        BlendTime: number;
+        bResetChild: boolean;
+        bBoneMirroring: boolean;
+        bCurveMirroring: boolean;
+        bAttributeMirroring: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Mirror_0__: boolean;
+    }
+    
+    class AnimGraphNode_Mirror extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Mirror;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Mirror;
+        static Load(InName: string): AnimGraphNode_Mirror;
+    
+        __tid_AnimGraphNode_Mirror_0__: boolean;
+    }
+    
+    enum EBoneModificationMode { BMM_Ignore, BMM_Replace, BMM_Additive, BMM_MAX, __typeKeyDoNoAccess}
+    class AnimNode_ModifyBone extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(BoneToModify: UE.BoneReference, Translation: UE.Vector, Rotation: UE.Rotator, Scale: UE.Vector, TranslationMode: UE.EBoneModificationMode, RotationMode: UE.EBoneModificationMode, ScaleMode: UE.EBoneModificationMode, TranslationSpace: UE.EBoneControlSpace, RotationSpace: UE.EBoneControlSpace, ScaleSpace: UE.EBoneControlSpace);
+        BoneToModify: UE.BoneReference;
+        Translation: UE.Vector;
+        Rotation: UE.Rotator;
+        Scale: UE.Vector;
+        TranslationMode: UE.EBoneModificationMode;
+        RotationMode: UE.EBoneModificationMode;
+        ScaleMode: UE.EBoneModificationMode;
+        TranslationSpace: UE.EBoneControlSpace;
+        RotationSpace: UE.EBoneControlSpace;
+        ScaleSpace: UE.EBoneControlSpace;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ModifyBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_ModifyBone extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ModifyBone;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ModifyBone;
+        static Load(InName: string): AnimGraphNode_ModifyBone;
+    
+        __tid_AnimGraphNode_ModifyBone_0__: boolean;
+    }
+    
+    enum EModifyCurveApplyMode { Add, Scale, Blend, WeightedMovingAverage, RemapCurve, EModifyCurveApplyMode_MAX, __typeKeyDoNoAccess}
+    class AnimNode_ModifyCurve extends UE.AnimNode_Base {
+        constructor();
+        constructor(SourcePose: UE.PoseLink, CurveMap: TMap<string, number>, CurveValues: TArray<number>, CurveNames: TArray<string>, Alpha: number, ApplyMode: UE.EModifyCurveApplyMode);
+        SourcePose: UE.PoseLink;
+        CurveMap: TMap<string, number>;
+        CurveValues: TArray<number>;
+        CurveNames: TArray<string>;
+        Alpha: number;
+        ApplyMode: UE.EModifyCurveApplyMode;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ModifyCurve_0__: boolean;
+    }
+    
+    class AnimGraphNode_ModifyCurve extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ModifyCurve;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ModifyCurve;
+        static Load(InName: string): AnimGraphNode_ModifyCurve;
+    
+        __tid_AnimGraphNode_ModifyCurve_0__: boolean;
+    }
+    
+    class AnimNode_MultiWayBlend extends UE.AnimNode_Base {
+        constructor();
+        constructor(Poses: TArray<UE.PoseLink>, DesiredAlphas: TArray<number>, AlphaScaleBias: UE.InputScaleBias, bAdditiveNode: boolean, bNormalizeAlpha: boolean);
+        Poses: TArray<UE.PoseLink>;
+        DesiredAlphas: TArray<number>;
+        AlphaScaleBias: UE.InputScaleBias;
+        bAdditiveNode: boolean;
+        bNormalizeAlpha: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_MultiWayBlend_0__: boolean;
+    }
+    
+    class AnimGraphNode_MultiWayBlend extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_MultiWayBlend;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_MultiWayBlend;
+        static Load(InName: string): AnimGraphNode_MultiWayBlend;
+    
+        __tid_AnimGraphNode_MultiWayBlend_0__: boolean;
+    }
+    
+    class AnimNode_ObserveBone extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(BoneToObserve: UE.BoneReference, DisplaySpace: UE.EBoneControlSpace, bRelativeToRefPose: boolean, Translation: UE.Vector, Rotation: UE.Rotator, Scale: UE.Vector);
+        BoneToObserve: UE.BoneReference;
+        DisplaySpace: UE.EBoneControlSpace;
+        bRelativeToRefPose: boolean;
+        Translation: UE.Vector;
+        Rotation: UE.Rotator;
+        Scale: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ObserveBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_ObserveBone extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ObserveBone;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ObserveBone;
+        static Load(InName: string): AnimGraphNode_ObserveBone;
+    
+        __tid_AnimGraphNode_ObserveBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_PoseHandler extends UE.AnimGraphNode_AssetPlayerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_PoseHandler;
+        static Load(InName: string): AnimGraphNode_PoseHandler;
+    
+        __tid_AnimGraphNode_PoseHandler_0__: boolean;
+    }
+    
+    class AnimNode_PoseHandler extends UE.AnimNode_AssetPlayerBase {
+        constructor();
+        constructor(PoseAsset: UE.PoseAsset);
+        PoseAsset: UE.PoseAsset;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_PoseHandler_0__: boolean;
+    }
+    
+    class AnimNode_PoseBlendNode extends UE.AnimNode_PoseHandler {
+        constructor();
+        constructor(SourcePose: UE.PoseLink, BlendOption: UE.EAlphaBlendOption, CustomCurve: UE.CurveFloat);
+        SourcePose: UE.PoseLink;
+        BlendOption: UE.EAlphaBlendOption;
+        CustomCurve: UE.CurveFloat;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_PoseBlendNode_0__: boolean;
+    }
+    
+    class AnimGraphNode_PoseBlendNode extends UE.AnimGraphNode_PoseHandler {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_PoseBlendNode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_PoseBlendNode;
+        static Load(InName: string): AnimGraphNode_PoseBlendNode;
+    
+        __tid_AnimGraphNode_PoseBlendNode_0__: boolean;
+    }
+    
+    class AnimNode_PoseByName extends UE.AnimNode_PoseHandler {
+        constructor();
+        constructor(PoseName: string, PoseWeight: number);
+        PoseName: string;
+        PoseWeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_PoseByName_0__: boolean;
+    }
+    
+    class AnimGraphNode_PoseByName extends UE.AnimGraphNode_AssetPlayerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_PoseByName;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_PoseByName;
+        static Load(InName: string): AnimGraphNode_PoseByName;
+    
+        __tid_AnimGraphNode_PoseByName_0__: boolean;
+    }
+    
+    class PoseDriverTransform {
+        constructor();
+        constructor(TargetTranslation: UE.Vector, TargetRotation: UE.Rotator);
+        TargetTranslation: UE.Vector;
+        TargetRotation: UE.Rotator;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PoseDriverTransform_0__: boolean;
+    }
+    
+    enum ERBFDistanceMethod { Euclidean, Quaternion, SwingAngle, TwistAngle, DefaultMethod, ERBFDistanceMethod_MAX, __typeKeyDoNoAccess}
+    enum ERBFFunctionType { Gaussian, Exponential, Linear, Cubic, Quintic, DefaultFunction, ERBFFunctionType_MAX, __typeKeyDoNoAccess}
+    class PoseDriverTarget {
+        constructor();
+        constructor(BoneTransforms: TArray<UE.PoseDriverTransform>, TargetRotation: UE.Rotator, TargetScale: number, DistanceMethod: UE.ERBFDistanceMethod, FunctionType: UE.ERBFFunctionType, bApplyCustomCurve: boolean, CustomCurve: UE.RichCurve, DrivenName: string, bIsHidden: boolean);
+        BoneTransforms: TArray<UE.PoseDriverTransform>;
+        TargetRotation: UE.Rotator;
+        TargetScale: number;
+        DistanceMethod: UE.ERBFDistanceMethod;
+        FunctionType: UE.ERBFFunctionType;
+        bApplyCustomCurve: boolean;
+        CustomCurve: UE.RichCurve;
+        DrivenName: string;
+        bIsHidden: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PoseDriverTarget_0__: boolean;
+    }
+    
+    enum ERBFSolverType { Additive, Interpolative, ERBFSolverType_MAX, __typeKeyDoNoAccess}
+    enum EBoneAxis { BA_X, BA_Y, BA_Z, BA_MAX, __typeKeyDoNoAccess}
+    enum ERBFNormalizeMethod { OnlyNormalizeAboveOne, AlwaysNormalize, NormalizeWithinMedian, NoNormalization, ERBFNormalizeMethod_MAX, __typeKeyDoNoAccess}
+    class RBFParams {
+        constructor();
+        constructor(TargetDimensions: number, SolverType: UE.ERBFSolverType, Radius: number, bAutomaticRadius: boolean, Function: UE.ERBFFunctionType, DistanceMethod: UE.ERBFDistanceMethod, TwistAxis: UE.EBoneAxis, WeightThreshold: number, NormalizeMethod: UE.ERBFNormalizeMethod, MedianReference: UE.Vector, MedianMin: number, MedianMax: number);
+        TargetDimensions: number;
+        SolverType: UE.ERBFSolverType;
+        Radius: number;
+        bAutomaticRadius: boolean;
+        Function: UE.ERBFFunctionType;
+        DistanceMethod: UE.ERBFDistanceMethod;
+        TwistAxis: UE.EBoneAxis;
+        WeightThreshold: number;
+        NormalizeMethod: UE.ERBFNormalizeMethod;
+        MedianReference: UE.Vector;
+        MedianMin: number;
+        MedianMax: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RBFParams_0__: boolean;
+    }
+    
+    enum EPoseDriverSource { Rotation, Translation, EPoseDriverSource_MAX, __typeKeyDoNoAccess}
+    enum EPoseDriverOutput { DrivePoses, DriveCurves, EPoseDriverOutput_MAX, __typeKeyDoNoAccess}
+    enum EPoseDriverType { SwingAndTwist, SwingOnly, Translation, EPoseDriverType_MAX, __typeKeyDoNoAccess}
+    class AnimNode_PoseDriver extends UE.AnimNode_PoseHandler {
+        constructor();
+        constructor(SourcePose: UE.PoseLink, SourceBones: TArray<UE.BoneReference>, EvalSpaceBone: UE.BoneReference, bEvalFromRefPose: boolean, OnlyDriveBones: TArray<UE.BoneReference>, PoseTargets: TArray<UE.PoseDriverTarget>, RBFParams: UE.RBFParams, DriveSource: UE.EPoseDriverSource, DriveOutput: UE.EPoseDriverOutput, SourceBone: UE.BoneReference, TwistAxis: UE.EBoneAxis, Type: UE.EPoseDriverType, RadialScaling: number, bSoloDrivenOnly: boolean, LODThreshold: number);
+        SourcePose: UE.PoseLink;
+        SourceBones: TArray<UE.BoneReference>;
+        EvalSpaceBone: UE.BoneReference;
+        bEvalFromRefPose: boolean;
+        OnlyDriveBones: TArray<UE.BoneReference>;
+        PoseTargets: TArray<UE.PoseDriverTarget>;
+        RBFParams: UE.RBFParams;
+        DriveSource: UE.EPoseDriverSource;
+        DriveOutput: UE.EPoseDriverOutput;
+        SourceBone: UE.BoneReference;
+        TwistAxis: UE.EBoneAxis;
+        Type: UE.EPoseDriverType;
+        RadialScaling: number;
+        bSoloDrivenOnly: boolean;
+        LODThreshold: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_PoseDriver_0__: boolean;
+    }
+    
+    class AnimGraphNode_PoseDriver extends UE.AnimGraphNode_PoseHandler {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_PoseDriver;
+        AxisLength: number;
+        ConeSubdivision: number;
+        bDrawDebugCones: boolean;
+        LastPreviewComponent: UE.SkeletalMeshComponent;
+        /*
+         *Util to replace current contents of PoseTargets with info from assigned PoseAsset
+         */
+        CopyTargetsFromPoseAsset() : void;
+        /*
+         *Returns the pose-driver its driven bones by name
+         */
+        GetDrivingBoneNames(BoneNames: $Ref<TArray<string>>) : void;
+        GetPoseDriverOutput() : UE.EPoseDriverOutput;
+        GetPoseDriverSource() : UE.EPoseDriverSource;
+        GetRBFParameters() : UE.RBFParams;
+        /*
+         *Returns the pose-driver its source bones by name
+         */
+        GetSourceBoneNames(BoneNames: $Ref<TArray<string>>) : void;
+        /*
+         *Set the pose-driver its driven bones by name
+         */
+        SetDrivingBones(BoneNames: TArray<string>) : void;
+        SetPoseDriverOutput(DriverOutput: UE.EPoseDriverOutput) : void;
+        SetPoseDriverSource(DriverSource: UE.EPoseDriverSource) : void;
+        SetRBFParameters(Parameters: UE.RBFParams) : void;
+        /*
+         *Sets the pose-driver its source bones by name
+         */
+        SetSourceBones(BoneNames: TArray<string>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_PoseDriver;
+        static Load(InName: string): AnimGraphNode_PoseDriver;
+    
+        __tid_AnimGraphNode_PoseDriver_0__: boolean;
+    }
+    
+    enum ESnapshotSourceMode { NamedSnapshot, SnapshotPin, ESnapshotSourceMode_MAX, __typeKeyDoNoAccess}
+    class AnimNode_PoseSnapshot extends UE.AnimNode_Base {
+        constructor();
+        constructor(SnapshotName: string, Snapshot: UE.PoseSnapshot, Mode: UE.ESnapshotSourceMode);
+        SnapshotName: string;
+        Snapshot: UE.PoseSnapshot;
+        Mode: UE.ESnapshotSourceMode;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_PoseSnapshot_0__: boolean;
+    }
+    
+    class AnimGraphNode_PoseSnapshot extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_PoseSnapshot;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_PoseSnapshot;
+        static Load(InName: string): AnimGraphNode_PoseSnapshot;
+    
+        __tid_AnimGraphNode_PoseSnapshot_0__: boolean;
+    }
+    
+    class RandomPlayerSequenceEntry {
+        constructor();
+        constructor(Sequence: UE.AnimSequenceBase, ChanceToPlay: number, MinLoopCount: number, MaxLoopCount: number, MinPlayRate: number, MaxPlayRate: number, BlendIn: UE.AlphaBlend);
+        Sequence: UE.AnimSequenceBase;
+        ChanceToPlay: number;
+        MinLoopCount: number;
+        MaxLoopCount: number;
+        MinPlayRate: number;
+        MaxPlayRate: number;
+        BlendIn: UE.AlphaBlend;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RandomPlayerSequenceEntry_0__: boolean;
+    }
+    
+    class AnimNode_RandomPlayer extends UE.AnimNode_AssetPlayerRelevancyBase {
+        constructor();
+        constructor(Entries: TArray<UE.RandomPlayerSequenceEntry>, bIgnoreForRelevancyTest: boolean, BlendWeight: number, bShuffleMode: boolean);
+        Entries: TArray<UE.RandomPlayerSequenceEntry>;
+        bIgnoreForRelevancyTest: boolean;
+        BlendWeight: number;
+        bShuffleMode: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RandomPlayer_0__: boolean;
+    }
+    
+    class AnimGraphNode_RandomPlayer extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RandomPlayer;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RandomPlayer;
+        static Load(InName: string): AnimGraphNode_RandomPlayer;
+    
+        __tid_AnimGraphNode_RandomPlayer_0__: boolean;
+    }
+    
+    class AnimNode_ResetRoot extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ResetRoot_0__: boolean;
+    }
+    
+    class AnimGraphNode_ResetRoot extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ResetRoot;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ResetRoot;
+        static Load(InName: string): AnimGraphNode_ResetRoot;
+    
+        __tid_AnimGraphNode_ResetRoot_0__: boolean;
+    }
+    
+    class SimSpaceSettings {
+        constructor();
+        constructor(WorldAlpha: number, VelocityScaleZ: number, MaxLinearVelocity: number, MaxAngularVelocity: number, MaxLinearAcceleration: number, MaxAngularAcceleration: number, ExternalLinearDrag: number, ExternalLinearDragV: UE.Vector, ExternalLinearVelocity: UE.Vector, ExternalAngularVelocity: UE.Vector);
+        WorldAlpha: number;
+        VelocityScaleZ: number;
+        MaxLinearVelocity: number;
+        MaxAngularVelocity: number;
+        MaxLinearAcceleration: number;
+        MaxAngularAcceleration: number;
+        ExternalLinearDrag: number;
+        ExternalLinearDragV: UE.Vector;
+        ExternalLinearVelocity: UE.Vector;
+        ExternalAngularVelocity: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SimSpaceSettings_0__: boolean;
+    }
+    
+    enum ESimulationSpace { ComponentSpace, WorldSpace, BaseBoneSpace, ESimulationSpace_MAX, __typeKeyDoNoAccess}
+    enum ESimulationTiming { Default, Synchronous, Deferred, ESimulationTiming_MAX, __typeKeyDoNoAccess}
+    class AnimNode_RigidBody extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(OverridePhysicsAsset: UE.PhysicsAsset, bDefaultToSkeletalMeshPhysicsAsset: boolean, bUseLocalLODThresholdOnly: boolean, OverrideWorldGravity: UE.Vector, ExternalForce: UE.Vector, ComponentLinearAccScale: UE.Vector, ComponentLinearVelScale: UE.Vector, ComponentAppliedLinearAccClamp: UE.Vector, SimSpaceSettings: UE.SimSpaceSettings, CachedBoundsScale: number, BaseBoneRef: UE.BoneReference, OverlapChannel: UE.ECollisionChannel, SimulationSpace: UE.ESimulationSpace, bForceDisableCollisionBetweenConstraintBodies: boolean, bUseExternalClothCollision: boolean, bEnableWorldGeometry: boolean, bOverrideWorldGravity: boolean, bTransferBoneVelocities: boolean, bFreezeIncomingPoseOnStart: boolean, bClampLinearTranslationLimitToRefPose: boolean, WorldSpaceMinimumScale: number, EvaluationResetTime: number, bComponentSpaceSimulation: boolean, SimulationTiming: UE.ESimulationTiming);
+        OverridePhysicsAsset: UE.PhysicsAsset;
+        bDefaultToSkeletalMeshPhysicsAsset: boolean;
+        bUseLocalLODThresholdOnly: boolean;
+        OverrideWorldGravity: UE.Vector;
+        ExternalForce: UE.Vector;
+        ComponentLinearAccScale: UE.Vector;
+        ComponentLinearVelScale: UE.Vector;
+        ComponentAppliedLinearAccClamp: UE.Vector;
+        SimSpaceSettings: UE.SimSpaceSettings;
+        CachedBoundsScale: number;
+        BaseBoneRef: UE.BoneReference;
+        OverlapChannel: UE.ECollisionChannel;
+        SimulationSpace: UE.ESimulationSpace;
+        bForceDisableCollisionBetweenConstraintBodies: boolean;
+        bUseExternalClothCollision: boolean;
+        bEnableWorldGeometry: boolean;
+        bOverrideWorldGravity: boolean;
+        bTransferBoneVelocities: boolean;
+        bFreezeIncomingPoseOnStart: boolean;
+        bClampLinearTranslationLimitToRefPose: boolean;
+        WorldSpaceMinimumScale: number;
+        EvaluationResetTime: number;
+        bComponentSpaceSimulation: boolean;
+        SimulationTiming: UE.ESimulationTiming;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RigidBody_0__: boolean;
+    }
+    
+    class AnimGraphNode_RigidBody extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RigidBody;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RigidBody;
+        static Load(InName: string): AnimGraphNode_RigidBody;
+    
+        __tid_AnimGraphNode_RigidBody_0__: boolean;
+    }
+    
+    class AnimGraphNode_Root extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Root;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Root;
+        static Load(InName: string): AnimGraphNode_Root;
+    
+        __tid_AnimGraphNode_Root_0__: boolean;
+    }
+    
+    class AnimNode_RotateRootBone extends UE.AnimNode_Base {
+        constructor();
+        constructor(BasePose: UE.PoseLink, Pitch: number, Yaw: number, PitchScaleBiasClamp: UE.InputScaleBiasClamp, YawScaleBiasClamp: UE.InputScaleBiasClamp, MeshToComponent: UE.Rotator, bRotateRootMotionAttribute: boolean);
+        BasePose: UE.PoseLink;
+        Pitch: number;
+        Yaw: number;
+        PitchScaleBiasClamp: UE.InputScaleBiasClamp;
+        YawScaleBiasClamp: UE.InputScaleBiasClamp;
+        MeshToComponent: UE.Rotator;
+        bRotateRootMotionAttribute: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RotateRootBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_RotateRootBone extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RotateRootBone;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RotateRootBone;
+        static Load(InName: string): AnimGraphNode_RotateRootBone;
+    
+        __tid_AnimGraphNode_RotateRootBone_0__: boolean;
+    }
+    
+    class AnimNode_RotationMultiplier extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(TargetBone: UE.BoneReference, SourceBone: UE.BoneReference, Multiplier: number, RotationAxisToRefer: UE.EBoneAxis, bIsAdditive: boolean);
+        TargetBone: UE.BoneReference;
+        SourceBone: UE.BoneReference;
+        Multiplier: number;
+        RotationAxisToRefer: UE.EBoneAxis;
+        bIsAdditive: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RotationMultiplier_0__: boolean;
+    }
+    
+    class AnimGraphNode_RotationMultiplier extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RotationMultiplier;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RotationMultiplier;
+        static Load(InName: string): AnimGraphNode_RotationMultiplier;
+    
+        __tid_AnimGraphNode_RotationMultiplier_0__: boolean;
+    }
+    
+    class AnimNode_RotationOffsetBlendSpace extends UE.AnimNode_BlendSpacePlayer {
+        constructor();
+        constructor(BasePose: UE.PoseLink, LODThreshold: number, Alpha: number, AlphaScaleBias: UE.InputScaleBias, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBiasClamp: UE.InputScaleBiasClamp, AlphaInputType: UE.EAnimAlphaInputType, bAlphaBoolEnabled: boolean);
+        BasePose: UE.PoseLink;
+        LODThreshold: number;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        AlphaBoolBlend: UE.InputAlphaBoolBlend;
+        AlphaCurveName: string;
+        AlphaScaleBiasClamp: UE.InputScaleBiasClamp;
+        AlphaInputType: UE.EAnimAlphaInputType;
+        bAlphaBoolEnabled: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RotationOffsetBlendSpace_0__: boolean;
+    }
+    
+    class AnimGraphNode_RotationOffsetBlendSpace extends UE.AnimGraphNode_BlendSpaceBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RotationOffsetBlendSpace;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RotationOffsetBlendSpace;
+        static Load(InName: string): AnimGraphNode_RotationOffsetBlendSpace;
+    
+        __tid_AnimGraphNode_RotationOffsetBlendSpace_0__: boolean;
+    }
+    
+    class AnimNode_RotationOffsetBlendSpaceGraph extends UE.AnimNode_BlendSpaceGraphBase {
+        constructor();
+        constructor(BasePose: UE.PoseLink, LODThreshold: number, Alpha: number, AlphaScaleBias: UE.InputScaleBias, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBiasClamp: UE.InputScaleBiasClamp, AlphaInputType: UE.EAnimAlphaInputType, bAlphaBoolEnabled: boolean);
+        BasePose: UE.PoseLink;
+        LODThreshold: number;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        AlphaBoolBlend: UE.InputAlphaBoolBlend;
+        AlphaCurveName: string;
+        AlphaScaleBiasClamp: UE.InputScaleBiasClamp;
+        AlphaInputType: UE.EAnimAlphaInputType;
+        bAlphaBoolEnabled: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_RotationOffsetBlendSpaceGraph_0__: boolean;
+    }
+    
+    class AnimGraphNode_RotationOffsetBlendSpaceGraph extends UE.AnimGraphNode_BlendSpaceGraphBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_RotationOffsetBlendSpaceGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_RotationOffsetBlendSpaceGraph;
+        static Load(InName: string): AnimGraphNode_RotationOffsetBlendSpaceGraph;
+    
+        __tid_AnimGraphNode_RotationOffsetBlendSpaceGraph_0__: boolean;
     }
     
     class AnimNode_SaveCachedPose extends UE.AnimNode_Base {
@@ -29176,6 +31971,91 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimNode_SaveCachedPose_0__: boolean;
+    }
+    
+    class AnimGraphNode_SaveCachedPose extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_SaveCachedPose;
+        CacheName: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SaveCachedPose;
+        static Load(InName: string): AnimGraphNode_SaveCachedPose;
+    
+        __tid_AnimGraphNode_SaveCachedPose_0__: boolean;
+    }
+    
+    enum EScaleChainInitialLength { FixedDefaultLengthValue, Distance, ChainLength, EScaleChainInitialLength_MAX, __typeKeyDoNoAccess}
+    class AnimNode_ScaleChainLength extends UE.AnimNode_Base {
+        constructor();
+        constructor(InputPose: UE.PoseLink, DefaultChainLength: number, ChainStartBone: UE.BoneReference, ChainEndBone: UE.BoneReference, TargetLocation: UE.Vector, Alpha: number, AlphaScaleBias: UE.InputScaleBias, ChainInitialLength: UE.EScaleChainInitialLength);
+        InputPose: UE.PoseLink;
+        DefaultChainLength: number;
+        ChainStartBone: UE.BoneReference;
+        ChainEndBone: UE.BoneReference;
+        TargetLocation: UE.Vector;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        ChainInitialLength: UE.EScaleChainInitialLength;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_ScaleChainLength_0__: boolean;
+    }
+    
+    class AnimGraphNode_ScaleChainLength extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_ScaleChainLength;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_ScaleChainLength;
+        static Load(InName: string): AnimGraphNode_ScaleChainLength;
+    
+        __tid_AnimGraphNode_ScaleChainLength_0__: boolean;
+    }
+    
+    class AnimNode_SequenceEvaluatorBase extends UE.AnimNode_AssetPlayerBase {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SequenceEvaluatorBase_0__: boolean;
+    }
+    
+    enum ESequenceEvalReinit { NoReset, StartPosition, ExplicitTime, ESequenceEvalReinit_MAX, __typeKeyDoNoAccess}
+    class AnimNode_SequenceEvaluator extends UE.AnimNode_SequenceEvaluatorBase {
+        constructor();
+        constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, Sequence: UE.AnimSequenceBase, ExplicitTime: number, bUseExplicitFrame: boolean, ExplicitFrame: number, bShouldLoop: boolean, bTeleportToExplicitTime: boolean, ReinitializationBehavior: UE.ESequenceEvalReinit, StartPosition: number);
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        Method: UE.EAnimSyncMethod;
+        bIgnoreForRelevancyTest: boolean;
+        Sequence: UE.AnimSequenceBase;
+        ExplicitTime: number;
+        bUseExplicitFrame: boolean;
+        ExplicitFrame: number;
+        bShouldLoop: boolean;
+        bTeleportToExplicitTime: boolean;
+        ReinitializationBehavior: UE.ESequenceEvalReinit;
+        StartPosition: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SequenceEvaluator_0__: boolean;
+    }
+    
+    class AnimGraphNode_SequenceEvaluator extends UE.AnimGraphNode_AssetPlayerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_SequenceEvaluator;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SequenceEvaluator;
+        static Load(InName: string): AnimGraphNode_SequenceEvaluator;
+    
+        __tid_AnimGraphNode_SequenceEvaluator_0__: boolean;
     }
     
     class InputScaleBiasClampState {
@@ -29245,6 +32125,579 @@ declare module "ue" {
         __tid_AnimNode_SequencePlayer_0__: boolean;
     }
     
+    class AnimGraphNode_SequencePlayer extends UE.AnimGraphNode_AssetPlayerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_SequencePlayer;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SequencePlayer;
+        static Load(InName: string): AnimGraphNode_SequencePlayer;
+    
+        __tid_AnimGraphNode_SequencePlayer_0__: boolean;
+    }
+    
+    class AnimNode_Slot extends UE.AnimNode_Base {
+        constructor();
+        constructor(Source: UE.PoseLink, SlotName: string, bAlwaysUpdateSourcePose: boolean);
+        Source: UE.PoseLink;
+        SlotName: string;
+        bAlwaysUpdateSourcePose: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Slot_0__: boolean;
+    }
+    
+    class AnimGraphNode_Slot extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Slot;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Slot;
+        static Load(InName: string): AnimGraphNode_Slot;
+    
+        __tid_AnimGraphNode_Slot_0__: boolean;
+    }
+    
+    enum ESplineBoneAxis { None, X, Y, Z, ESplineBoneAxis_MAX, __typeKeyDoNoAccess}
+    class AnimNode_SplineIK extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(StartBone: UE.BoneReference, EndBone: UE.BoneReference, BoneAxis: UE.ESplineBoneAxis, bAutoCalculateSpline: boolean, PointCount: number, ControlPoints: TArray<UE.Transform>, Roll: number, TwistStart: number, TwistEnd: number, TwistBlend: UE.AlphaBlend, Stretch: number, Offset: number);
+        StartBone: UE.BoneReference;
+        EndBone: UE.BoneReference;
+        BoneAxis: UE.ESplineBoneAxis;
+        bAutoCalculateSpline: boolean;
+        PointCount: number;
+        ControlPoints: TArray<UE.Transform>;
+        Roll: number;
+        TwistStart: number;
+        TwistEnd: number;
+        TwistBlend: UE.AlphaBlend;
+        Stretch: number;
+        Offset: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SplineIK_0__: boolean;
+    }
+    
+    class AnimGraphNode_SplineIK extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_SplineIK;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SplineIK;
+        static Load(InName: string): AnimGraphNode_SplineIK;
+    
+        __tid_AnimGraphNode_SplineIK_0__: boolean;
+    }
+    
+    class AnimNode_SpringBone extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(SpringBone: UE.BoneReference, MaxDisplacement: number, SpringStiffness: number, SpringDamping: number, ErrorResetThresh: number, bNoZSpring: boolean, bLimitDisplacement: boolean, bTranslateX: boolean, bTranslateY: boolean, bTranslateZ: boolean, bRotateX: boolean, bRotateY: boolean, bRotateZ: boolean);
+        SpringBone: UE.BoneReference;
+        MaxDisplacement: number;
+        SpringStiffness: number;
+        SpringDamping: number;
+        ErrorResetThresh: number;
+        bNoZSpring: boolean;
+        bLimitDisplacement: boolean;
+        bTranslateX: boolean;
+        bTranslateY: boolean;
+        bTranslateZ: boolean;
+        bRotateX: boolean;
+        bRotateY: boolean;
+        bRotateZ: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SpringBone_0__: boolean;
+    }
+    
+    class AnimGraphNode_SpringBone extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_SpringBone;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_SpringBone;
+        static Load(InName: string): AnimGraphNode_SpringBone;
+    
+        __tid_AnimGraphNode_SpringBone_0__: boolean;
+    }
+    
+    class AnimNode_StateMachine extends UE.AnimNode_Base {
+        constructor();
+        constructor(StateMachineIndexInClass: number, MaxTransitionsPerFrame: number, MaxTransitionsRequests: number, bSkipFirstUpdateTransition: boolean, bReinitializeOnBecomingRelevant: boolean, bCreateNotifyMetaData: boolean, bAllowConduitEntryStates: boolean);
+        StateMachineIndexInClass: number;
+        MaxTransitionsPerFrame: number;
+        MaxTransitionsRequests: number;
+        bSkipFirstUpdateTransition: boolean;
+        bReinitializeOnBecomingRelevant: boolean;
+        bCreateNotifyMetaData: boolean;
+        bAllowConduitEntryStates: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_StateMachine_0__: boolean;
+    }
+    
+    class AnimGraphNode_StateMachine extends UE.AnimGraphNode_StateMachineBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_StateMachine;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_StateMachine;
+        static Load(InName: string): AnimGraphNode_StateMachine;
+    
+        __tid_AnimGraphNode_StateMachine_0__: boolean;
+    }
+    
+    class AnimNode_Sync extends UE.AnimNode_Base {
+        constructor();
+        constructor(Source: UE.PoseLink, GroupName: string, GroupRole: UE.EAnimGroupRole);
+        Source: UE.PoseLink;
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Sync_0__: boolean;
+    }
+    
+    class AnimGraphNode_Sync extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Sync;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Sync;
+        static Load(InName: string): AnimGraphNode_Sync;
+    
+        __tid_AnimGraphNode_Sync_0__: boolean;
+    }
+    
+    class RotationLimit {
+        constructor();
+        constructor(LimitMin: UE.Vector, LimitMax: UE.Vector);
+        LimitMin: UE.Vector;
+        LimitMax: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RotationLimit_0__: boolean;
+    }
+    
+    class AnimNode_Trail extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(TrailBone: UE.BoneReference, ChainLength: number, ChainBoneAxis: UE.EAxis, bInvertChainBoneAxis: boolean, bLimitStretch: boolean, bLimitRotation: boolean, bUsePlanarLimit: boolean, bActorSpaceFakeVel: boolean, bReorientParentToChild: boolean, bEnableDebug: boolean, bShowBaseMotion: boolean, bShowTrailLocation: boolean, bShowLimit: boolean, DebugLifeTime: number, TrailRelaxation: number, MaxDeltaTime: number, RelaxationSpeedScale: number, TrailRelaxationSpeed: UE.RuntimeFloatCurve, RelaxationSpeedScaleInputProcessor: UE.InputScaleBiasClamp, RotationLimits: TArray<UE.RotationLimit>, RotationOffsets: TArray<UE.Vector>, PlanarLimits: TArray<UE.AnimPhysPlanarLimit>, StretchLimit: number, FakeVelocity: UE.Vector, BaseJoint: UE.BoneReference, TrailBoneRotationBlendAlpha: number, LastBoneRotationAnimAlphaBlend: number);
+        TrailBone: UE.BoneReference;
+        ChainLength: number;
+        ChainBoneAxis: UE.EAxis;
+        bInvertChainBoneAxis: boolean;
+        bLimitStretch: boolean;
+        bLimitRotation: boolean;
+        bUsePlanarLimit: boolean;
+        bActorSpaceFakeVel: boolean;
+        bReorientParentToChild: boolean;
+        bEnableDebug: boolean;
+        bShowBaseMotion: boolean;
+        bShowTrailLocation: boolean;
+        bShowLimit: boolean;
+        DebugLifeTime: number;
+        TrailRelaxation: number;
+        MaxDeltaTime: number;
+        RelaxationSpeedScale: number;
+        TrailRelaxationSpeed: UE.RuntimeFloatCurve;
+        RelaxationSpeedScaleInputProcessor: UE.InputScaleBiasClamp;
+        RotationLimits: TArray<UE.RotationLimit>;
+        RotationOffsets: TArray<UE.Vector>;
+        PlanarLimits: TArray<UE.AnimPhysPlanarLimit>;
+        StretchLimit: number;
+        FakeVelocity: UE.Vector;
+        BaseJoint: UE.BoneReference;
+        TrailBoneRotationBlendAlpha: number;
+        LastBoneRotationAnimAlphaBlend: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Trail_0__: boolean;
+    }
+    
+    class AnimGraphNode_Trail extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_Trail;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_Trail;
+        static Load(InName: string): AnimGraphNode_Trail;
+    
+        __tid_AnimGraphNode_Trail_0__: boolean;
+    }
+    
+    enum EEvaluatorDataSource { EDS_SourcePose, EDS_DestinationPose, EDS_MAX, __typeKeyDoNoAccess}
+    enum EEvaluatorMode { EM_Standard, EM_Freeze, EM_DelayedFreeze, EM_MAX, __typeKeyDoNoAccess}
+    class AnimNode_TransitionPoseEvaluator extends UE.AnimNode_Base {
+        constructor();
+        constructor(FramesToCachePose: number, DataSource: UE.EEvaluatorDataSource, EvaluatorMode: UE.EEvaluatorMode);
+        FramesToCachePose: number;
+        DataSource: UE.EEvaluatorDataSource;
+        EvaluatorMode: UE.EEvaluatorMode;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_TransitionPoseEvaluator_0__: boolean;
+    }
+    
+    class AnimGraphNode_TransitionPoseEvaluator extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_TransitionPoseEvaluator;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_TransitionPoseEvaluator;
+        static Load(InName: string): AnimGraphNode_TransitionPoseEvaluator;
+    
+        __tid_AnimGraphNode_TransitionPoseEvaluator_0__: boolean;
+    }
+    
+    class ReferenceBoneFrame {
+        constructor();
+        constructor(Bone: UE.BoneReference, Axis: UE.Axis);
+        Bone: UE.BoneReference;
+        Axis: UE.Axis;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ReferenceBoneFrame_0__: boolean;
+    }
+    
+    class AnimNode_TwistCorrectiveNode extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(BaseFrame: UE.ReferenceBoneFrame, TwistFrame: UE.ReferenceBoneFrame, TwistPlaneNormalAxis: UE.Axis, RangeMax: number, RemappedMin: number, RemappedMax: number, Curve: UE.AnimCurveParam, CurveName: string);
+        BaseFrame: UE.ReferenceBoneFrame;
+        TwistFrame: UE.ReferenceBoneFrame;
+        TwistPlaneNormalAxis: UE.Axis;
+        RangeMax: number;
+        RemappedMin: number;
+        RemappedMax: number;
+        Curve: UE.AnimCurveParam;
+        CurveName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_TwistCorrectiveNode_0__: boolean;
+    }
+    
+    class AnimGraphNode_TwistCorrectiveNode extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_TwistCorrectiveNode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_TwistCorrectiveNode;
+        static Load(InName: string): AnimGraphNode_TwistCorrectiveNode;
+    
+        __tid_AnimGraphNode_TwistCorrectiveNode_0__: boolean;
+    }
+    
+    class AnimNode_TwoBoneIK extends UE.AnimNode_SkeletalControlBase {
+        constructor();
+        constructor(IKBone: UE.BoneReference, StartStretchRatio: number, MaxStretchScale: number, StretchLimits: UE.Vector2D, bNoTwist: boolean, JointTargetSpaceBoneName: string, EffectorSpaceBoneName: string, EffectorLocation: UE.Vector, EffectorTarget: UE.BoneSocketTarget, JointTargetLocation: UE.Vector, JointTarget: UE.BoneSocketTarget, TwistAxis: UE.Axis, EffectorLocationSpace: UE.EBoneControlSpace, JointTargetLocationSpace: UE.EBoneControlSpace, bAllowStretching: boolean, bTakeRotationFromEffectorSpace: boolean, bMaintainEffectorRelRot: boolean, bAllowTwist: boolean);
+        IKBone: UE.BoneReference;
+        StartStretchRatio: number;
+        MaxStretchScale: number;
+        StretchLimits: UE.Vector2D;
+        bNoTwist: boolean;
+        JointTargetSpaceBoneName: string;
+        EffectorSpaceBoneName: string;
+        EffectorLocation: UE.Vector;
+        EffectorTarget: UE.BoneSocketTarget;
+        JointTargetLocation: UE.Vector;
+        JointTarget: UE.BoneSocketTarget;
+        TwistAxis: UE.Axis;
+        EffectorLocationSpace: UE.EBoneControlSpace;
+        JointTargetLocationSpace: UE.EBoneControlSpace;
+        bAllowStretching: boolean;
+        bTakeRotationFromEffectorSpace: boolean;
+        bMaintainEffectorRelRot: boolean;
+        bAllowTwist: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_TwoBoneIK_0__: boolean;
+    }
+    
+    class AnimGraphNode_TwoBoneIK extends UE.AnimGraphNode_SkeletalControlBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_TwoBoneIK;
+        bEnableDebugDraw: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_TwoBoneIK;
+        static Load(InName: string): AnimGraphNode_TwoBoneIK;
+    
+        __tid_AnimGraphNode_TwoBoneIK_0__: boolean;
+    }
+    
+    class AnimNode_TwoWayBlend extends UE.AnimNode_Base {
+        constructor();
+        constructor(A: UE.PoseLink, B: UE.PoseLink, AlphaInputType: UE.EAnimAlphaInputType, bAlphaBoolEnabled: boolean, bResetChildOnActivation: boolean, bAlwaysUpdateChildren: boolean, Alpha: number, AlphaScaleBias: UE.InputScaleBias, AlphaBoolBlend: UE.InputAlphaBoolBlend, AlphaCurveName: string, AlphaScaleBiasClamp: UE.InputScaleBiasClamp);
+        A: UE.PoseLink;
+        B: UE.PoseLink;
+        AlphaInputType: UE.EAnimAlphaInputType;
+        bAlphaBoolEnabled: boolean;
+        bResetChildOnActivation: boolean;
+        bAlwaysUpdateChildren: boolean;
+        Alpha: number;
+        AlphaScaleBias: UE.InputScaleBias;
+        AlphaBoolBlend: UE.InputAlphaBoolBlend;
+        AlphaCurveName: string;
+        AlphaScaleBiasClamp: UE.InputScaleBiasClamp;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_TwoWayBlend_0__: boolean;
+    }
+    
+    class AnimGraphNode_TwoWayBlend extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlendNode: UE.AnimNode_TwoWayBlend;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_TwoWayBlend;
+        static Load(InName: string): AnimGraphNode_TwoWayBlend;
+    
+        __tid_AnimGraphNode_TwoWayBlend_0__: boolean;
+    }
+    
+    class AnimNode_UseCachedPose extends UE.AnimNode_Base {
+        constructor();
+        constructor(LinkToCachingNode: UE.PoseLink, CachePoseName: string);
+        LinkToCachingNode: UE.PoseLink;
+        CachePoseName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_UseCachedPose_0__: boolean;
+    }
+    
+    class AnimGraphNode_UseCachedPose extends UE.AnimGraphNode_Base {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Node: UE.AnimNode_UseCachedPose;
+        SaveCachedPoseNode: TWeakObjectPtr<UE.AnimGraphNode_SaveCachedPose>;
+        NameOfCache: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNode_UseCachedPose;
+        static Load(InName: string): AnimGraphNode_UseCachedPose;
+    
+        __tid_AnimGraphNode_UseCachedPose_0__: boolean;
+    }
+    
+    class AnimGraphNodeBinding_Base extends UE.AnimGraphNodeBinding {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PropertyBindings: TMap<string, UE.AnimGraphNodePropertyBinding>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNodeBinding_Base;
+        static Load(InName: string): AnimGraphNodeBinding_Base;
+    
+        __tid_AnimGraphNodeBinding_Base_0__: boolean;
+    }
+    
+    class AnimGraphNodeCustomizationInterface extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get the custom color for this node
+         */
+        GetTitleColor() : UE.LinearColor;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphNodeCustomizationInterface;
+        static Load(InName: string): AnimGraphNodeCustomizationInterface;
+    
+        __tid_AnimGraphNodeCustomizationInterface_0__: boolean;
+    }
+    
+    class AnimGraphSettings extends UE.DeveloperSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bShowInstancedEnumBlendAnimNodeBlueprintActions: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimGraphSettings;
+        static Load(InName: string): AnimGraphSettings;
+    
+        __tid_AnimGraphSettings_0__: boolean;
+    }
+    
+    class AnimGroupInstance {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimGroupInstance_0__: boolean;
+    }
+    
+    enum EAnimInstanceLocatorFragmentType { AnimInstance, PostProcessAnimInstance, EAnimInstanceLocatorFragmentType_MAX, __typeKeyDoNoAccess}
+    class AnimInstanceLocatorFragment {
+        constructor();
+        constructor(Type: UE.EAnimInstanceLocatorFragmentType);
+        Type: UE.EAnimInstanceLocatorFragmentType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimInstanceLocatorFragment_0__: boolean;
+    }
+    
+    class AnimInstanceProxy {
+        constructor();
+        constructor(SlotGroupInertializationRequestDataMap: TMap<string, UE.InertializationRequest>);
+        SlotGroupInertializationRequestDataMap: TMap<string, UE.InertializationRequest>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimInstanceProxy_0__: boolean;
+    }
+    
+    class AnimLayerInterface extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimLayerInterface;
+        static Load(InName: string): AnimLayerInterface;
+    
+        __tid_AnimLayerInterface_0__: boolean;
+    }
+    
+    class AnimLayerInterfaceFactory extends UE.AnimBlueprintFactory {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimLayerInterfaceFactory;
+        static Load(InName: string): AnimLayerInterfaceFactory;
+    
+        __tid_AnimLayerInterfaceFactory_0__: boolean;
+    }
+    
+    class AnimLegIKData {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimLegIKData_0__: boolean;
+    }
+    
+    class AnimMontageFactory extends UE.Factory {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        TargetSkeleton: UE.Skeleton;
+        SourceAnimation: UE.AnimSequence;
+        PreviewSkeletalMesh: UE.SkeletalMesh;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimMontageFactory;
+        static Load(InName: string): AnimMontageFactory;
+    
+        __tid_AnimMontageFactory_0__: boolean;
+    }
+    
+    class AnimMontageInstance {
+        constructor();
+        constructor(Montage: UE.AnimMontage, bPlaying: boolean, DefaultBlendTimeMultiplier: number, NextSections: TArray<number>, PrevSections: TArray<number>, ActiveStateBranchingPoints: TArray<UE.AnimNotifyEvent>, Position: number, PlayRate: number, Blend: UE.AlphaBlend, DisableRootMotionCount: number);
+        Montage: UE.AnimMontage;
+        bPlaying: boolean;
+        DefaultBlendTimeMultiplier: number;
+        NextSections: TArray<number>;
+        PrevSections: TArray<number>;
+        ActiveStateBranchingPoints: TArray<UE.AnimNotifyEvent>;
+        Position: number;
+        PlayRate: number;
+        Blend: UE.AlphaBlend;
+        DisableRootMotionCount: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimMontageInstance_0__: boolean;
+    }
+    
+    class AnimNode_BlendSpacePlayer_Standalone extends UE.AnimNode_BlendSpacePlayerBase {
+        constructor();
+        constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, bOverridePositionWhenJoiningSyncGroupAsLeader: boolean, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, X: number, Y: number, PlayRate: number, bLoop: boolean, bResetPlayTimeWhenBlendSpaceChanges: boolean, StartPosition: number, BlendSpace: UE.BlendSpace);
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        bOverridePositionWhenJoiningSyncGroupAsLeader: boolean;
+        Method: UE.EAnimSyncMethod;
+        bIgnoreForRelevancyTest: boolean;
+        X: number;
+        Y: number;
+        PlayRate: number;
+        bLoop: boolean;
+        bResetPlayTimeWhenBlendSpaceChanges: boolean;
+        StartPosition: number;
+        BlendSpace: UE.BlendSpace;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_BlendSpacePlayer_Standalone_0__: boolean;
+    }
+    
+    class AnimNode_Mirror_Standalone extends UE.AnimNode_MirrorBase {
+        constructor();
+        constructor(bMirror: boolean, MirrorDataTable: UE.MirrorDataTable, BlendTime: number, bResetChild: boolean, bBoneMirroring: boolean, bCurveMirroring: boolean, bAttributeMirroring: boolean);
+        bMirror: boolean;
+        MirrorDataTable: UE.MirrorDataTable;
+        BlendTime: number;
+        bResetChild: boolean;
+        bBoneMirroring: boolean;
+        bCurveMirroring: boolean;
+        bAttributeMirroring: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_Mirror_Standalone_0__: boolean;
+    }
+    
+    class AnimNode_SequenceEvaluator_Standalone extends UE.AnimNode_SequenceEvaluatorBase {
+        constructor();
+        constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, Sequence: UE.AnimSequenceBase, ExplicitTime: number, bUseExplicitFrame: boolean, ExplicitFrame: number, bShouldLoop: boolean, bTeleportToExplicitTime: boolean, ReinitializationBehavior: UE.ESequenceEvalReinit, StartPosition: number);
+        GroupName: string;
+        GroupRole: UE.EAnimGroupRole;
+        Method: UE.EAnimSyncMethod;
+        bIgnoreForRelevancyTest: boolean;
+        Sequence: UE.AnimSequenceBase;
+        ExplicitTime: number;
+        bUseExplicitFrame: boolean;
+        ExplicitFrame: number;
+        bShouldLoop: boolean;
+        bTeleportToExplicitTime: boolean;
+        ReinitializationBehavior: UE.ESequenceEvalReinit;
+        StartPosition: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimNode_SequenceEvaluator_Standalone_0__: boolean;
+    }
+    
     class AnimNode_SequencePlayer_Standalone extends UE.AnimNode_SequencePlayerBase {
         constructor();
         constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, bOverridePositionWhenJoiningSyncGroupAsLeader: boolean, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, Sequence: UE.AnimSequenceBase, PlayRateBasis: number, PlayRate: number, PlayRateScaleBiasClampConstants: UE.InputScaleBiasClampConstants, StartPosition: number, bLoopAnimation: boolean, bStartFromMatchingPose: boolean);
@@ -29278,81 +32731,6 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimNode_SingleNode_0__: boolean;
-    }
-    
-    class AnimNode_StateMachine extends UE.AnimNode_Base {
-        constructor();
-        constructor(StateMachineIndexInClass: number, MaxTransitionsPerFrame: number, MaxTransitionsRequests: number, bSkipFirstUpdateTransition: boolean, bReinitializeOnBecomingRelevant: boolean, bCreateNotifyMetaData: boolean, bAllowConduitEntryStates: boolean);
-        StateMachineIndexInClass: number;
-        MaxTransitionsPerFrame: number;
-        MaxTransitionsRequests: number;
-        bSkipFirstUpdateTransition: boolean;
-        bReinitializeOnBecomingRelevant: boolean;
-        bCreateNotifyMetaData: boolean;
-        bAllowConduitEntryStates: boolean;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_StateMachine_0__: boolean;
-    }
-    
-    class AnimNode_StateResult extends UE.AnimNode_Root {
-        constructor();
-        constructor(StateIndex: number, StateEntryFunction: UE.AnimNodeFunctionRef, StateFullyBlendedInFunction: UE.AnimNodeFunctionRef, StateExitFunction: UE.AnimNodeFunctionRef, StateFullyBlendedOutFunction: UE.AnimNodeFunctionRef);
-        StateIndex: number;
-        StateEntryFunction: UE.AnimNodeFunctionRef;
-        StateFullyBlendedInFunction: UE.AnimNodeFunctionRef;
-        StateExitFunction: UE.AnimNodeFunctionRef;
-        StateFullyBlendedOutFunction: UE.AnimNodeFunctionRef;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_StateResult_0__: boolean;
-    }
-    
-    enum EEvaluatorDataSource { EDS_SourcePose, EDS_DestinationPose, EDS_MAX, __typeKeyDoNoAccess}
-    enum EEvaluatorMode { EM_Standard, EM_Freeze, EM_DelayedFreeze, EM_MAX, __typeKeyDoNoAccess}
-    class AnimNode_TransitionPoseEvaluator extends UE.AnimNode_Base {
-        constructor();
-        constructor(FramesToCachePose: number, DataSource: UE.EEvaluatorDataSource, EvaluatorMode: UE.EEvaluatorMode);
-        FramesToCachePose: number;
-        DataSource: UE.EEvaluatorDataSource;
-        EvaluatorMode: UE.EEvaluatorMode;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_TransitionPoseEvaluator_0__: boolean;
-    }
-    
-    class AnimNode_TransitionResult extends UE.AnimNode_Base {
-        constructor();
-        constructor(bCanEnterTransition: boolean);
-        bCanEnterTransition: boolean;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_TransitionResult_0__: boolean;
-    }
-    
-    class AnimNode_UseCachedPose extends UE.AnimNode_Base {
-        constructor();
-        constructor(LinkToCachingNode: UE.PoseLink, CachePoseName: string);
-        LinkToCachingNode: UE.PoseLink;
-        CachePoseName: string;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_UseCachedPose_0__: boolean;
     }
     
     class AnimNodeConstantData {
@@ -29418,14 +32796,35 @@ declare module "ue" {
         __tid_AnimNodeExposedValueHandler_PropertyAccess_0__: boolean;
     }
     
-    class AnimNodeReference {
+    class RigidBodyAnimNodeReference extends UE.AnimNodeReference {
         constructor();
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimNodeReference_0__: boolean;
+        __tid_RigidBodyAnimNodeReference_0__: boolean;
+    }
+    
+    class AnimNodeRigidBodyLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a rigid body anim node context from an anim node context
+         */
+        static ConvertToRigidBodyAnimNode(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.RigidBodyAnimNodeReference;
+        /*
+         *Get a rigid body anim node context from an anim node context (pure)
+         */
+        static ConvertToRigidBodyAnimNodePure(Node: UE.AnimNodeReference, RigidBodyAnimNode: $Ref<UE.RigidBodyAnimNodeReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Set the physics asset on the rigid body anim graph node (RBAN).
+         */
+        static SetOverridePhysicsAsset(Node: UE.RigidBodyAnimNodeReference, PhysicsAsset: $Nullable<UE.PhysicsAsset>) : UE.RigidBodyAnimNodeReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimNodeRigidBodyLibrary;
+        static Load(InName: string): AnimNodeRigidBodyLibrary;
+    
+        __tid_AnimNodeRigidBodyLibrary_0__: boolean;
     }
     
     class AnimNotify_PauseClothingSimulation extends UE.AnimNotify {
@@ -29435,6 +32834,26 @@ declare module "ue" {
         static Load(InName: string): AnimNotify_PauseClothingSimulation;
     
         __tid_AnimNotify_PauseClothingSimulation_0__: boolean;
+    }
+    
+    class AnimNotify_PlayMontageNotify extends UE.AnimNotify {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        NotifyName: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimNotify_PlayMontageNotify;
+        static Load(InName: string): AnimNotify_PlayMontageNotify;
+    
+        __tid_AnimNotify_PlayMontageNotify_0__: boolean;
+    }
+    
+    class AnimNotify_PlayMontageNotifyWindow extends UE.AnimNotifyState {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        NotifyName: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimNotify_PlayMontageNotifyWindow;
+        static Load(InName: string): AnimNotify_PlayMontageNotifyWindow;
+    
+        __tid_AnimNotify_PlayMontageNotifyWindow_0__: boolean;
     }
     
     class AnimNotify_PlayParticleEffect extends UE.AnimNotify {
@@ -29656,16 +33075,93 @@ declare module "ue" {
         __tid_AnimNotifyStateMachineInspectionLibrary_0__: boolean;
     }
     
-    enum AnimPhysCollisionType { CoM, CustomSphere, InnerSphere, OuterSphere, AnimPhysCollisionType_MAX, __typeKeyDoNoAccess}
-    enum AnimPhysTwistAxis { AxisX, AxisY, AxisZ, AnimPhysTwistAxis_MAX, __typeKeyDoNoAccess}
-    class AnimPoseContext extends UE.AnimExecutionContext {
+    class AnimPreviewAttacheInstance extends UE.AnimInstance {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimPreviewAttacheInstance;
+        static Load(InName: string): AnimPreviewAttacheInstance;
+    
+        __tid_AnimPreviewAttacheInstance_0__: boolean;
+    }
+    
+    class AnimPreviewAttacheInstanceProxy extends UE.AnimInstanceProxy {
         constructor();
         /**
          * @deprecated use StaticStruct instead.
          */
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
-        __tid_AnimPoseContext_0__: boolean;
+        __tid_AnimPreviewAttacheInstanceProxy_0__: boolean;
+    }
+    
+    class AnimSingleNodeInstance extends UE.AnimInstance {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        CurrentAsset: UE.AnimationAsset;
+        PostEvaluateAnimEvent: $Delegate<() => void>;
+        /*
+         *Get the currently used asset
+         */
+        GetAnimationAsset() : UE.AnimationAsset;
+        GetLength() : number;
+        GetMirrorDataTable() : UE.MirrorDataTable;
+        /*
+         *For AnimSequence specific *
+         */
+        PlayAnim(bIsLooping?: boolean /* = false */, InPlayRate?: number /* = 1.000000 */, InStartPosition?: number /* = 0.000000 */) : void;
+        /*
+         *Set New Asset - calls InitializeAnimation, for now we need MeshComponent *
+         */
+        SetAnimationAsset(NewAsset: $Nullable<UE.AnimationAsset>, bIsLooping?: boolean /* = true */, InPlayRate?: number /* = 1.000000 */) : void;
+        SetBlendSpacePosition(InPosition: UE.Vector) : void;
+        SetLooping(bIsLooping: boolean) : void;
+        SetMirrorDataTable(MirrorDataTable: $Nullable<UE.MirrorDataTable>) : void;
+        SetPlaying(bIsPlaying: boolean) : void;
+        SetPlayRate(InPlayRate: number) : void;
+        SetPosition(InPosition: number, bFireNotifies?: boolean /* = true */) : void;
+        SetPositionWithPreviousTime(InPosition: number, InPreviousTime: number, bFireNotifies?: boolean /* = true */) : void;
+        /*
+         *Set pose value
+         */
+        SetPreviewCurveOverride(PoseName: string, Value: number, bRemoveIfZero: boolean) : void;
+        SetReverse(bInReverse: boolean) : void;
+        StopAnim() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimSingleNodeInstance;
+        static Load(InName: string): AnimSingleNodeInstance;
+    
+        __tid_AnimSingleNodeInstance_0__: boolean;
+    }
+    
+    enum EMontagePreviewType { EMPT_Normal, EMPT_AllSections, EMPT_MAX, __typeKeyDoNoAccess}
+    class AnimPreviewInstance extends UE.AnimSingleNodeInstance {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MontagePreviewType: UE.EMontagePreviewType;
+        MontagePreviewStartSectionIdx: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimPreviewInstance;
+        static Load(InName: string): AnimPreviewInstance;
+    
+        __tid_AnimPreviewInstance_0__: boolean;
+    }
+    
+    class AnimSingleNodeInstanceProxy extends UE.AnimInstanceProxy {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSingleNodeInstanceProxy_0__: boolean;
+    }
+    
+    class AnimPreviewInstanceProxy extends UE.AnimSingleNodeInstanceProxy {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimPreviewInstanceProxy_0__: boolean;
     }
     
     class AnimSeqExportOption extends UE.Object {
@@ -29723,6 +33219,25 @@ declare module "ue" {
         __tid_AnimSequenceFactory_0__: boolean;
     }
     
+    class AnimSequencerInstance extends UE.AnimInstance {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimSequencerInstance;
+        static Load(InName: string): AnimSequencerInstance;
+    
+        __tid_AnimSequencerInstance_0__: boolean;
+    }
+    
+    class AnimSequencerInstanceProxy extends UE.AnimInstanceProxy {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AnimSequencerInstanceProxy_0__: boolean;
+    }
+    
     class AnimSequenceThumbnailRenderer extends UE.DefaultSizedThumbnailRenderer {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -29776,54 +33291,6 @@ declare module "ue" {
         __tid_AnimSet_0__: boolean;
     }
     
-    class AnimSingleNodeInstance extends UE.AnimInstance {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        CurrentAsset: UE.AnimationAsset;
-        PostEvaluateAnimEvent: $Delegate<() => void>;
-        /*
-         *Get the currently used asset
-         */
-        GetAnimationAsset() : UE.AnimationAsset;
-        GetLength() : number;
-        GetMirrorDataTable() : UE.MirrorDataTable;
-        /*
-         *For AnimSequence specific *
-         */
-        PlayAnim(bIsLooping?: boolean /* = false */, InPlayRate?: number /* = 1.000000 */, InStartPosition?: number /* = 0.000000 */) : void;
-        /*
-         *Set New Asset - calls InitializeAnimation, for now we need MeshComponent *
-         */
-        SetAnimationAsset(NewAsset: $Nullable<UE.AnimationAsset>, bIsLooping?: boolean /* = true */, InPlayRate?: number /* = 1.000000 */) : void;
-        SetBlendSpacePosition(InPosition: UE.Vector) : void;
-        SetLooping(bIsLooping: boolean) : void;
-        SetMirrorDataTable(MirrorDataTable: $Nullable<UE.MirrorDataTable>) : void;
-        SetPlaying(bIsPlaying: boolean) : void;
-        SetPlayRate(InPlayRate: number) : void;
-        SetPosition(InPosition: number, bFireNotifies?: boolean /* = true */) : void;
-        SetPositionWithPreviousTime(InPosition: number, InPreviousTime: number, bFireNotifies?: boolean /* = true */) : void;
-        /*
-         *Set pose value
-         */
-        SetPreviewCurveOverride(PoseName: string, Value: number, bRemoveIfZero: boolean) : void;
-        SetReverse(bInReverse: boolean) : void;
-        StopAnim() : void;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): AnimSingleNodeInstance;
-        static Load(InName: string): AnimSingleNodeInstance;
-    
-        __tid_AnimSingleNodeInstance_0__: boolean;
-    }
-    
-    class AnimSingleNodeInstanceProxy extends UE.AnimInstanceProxy {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSingleNodeInstanceProxy_0__: boolean;
-    }
-    
     class AnimSlotDesc {
         constructor();
         constructor(SlotName: string, NumChannels: number);
@@ -29837,6 +33304,37 @@ declare module "ue" {
         __tid_AnimSlotDesc_0__: boolean;
     }
     
+    class AnimStateNodeBase extends UE.EdGraphNode {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateNodeBase;
+        static Load(InName: string): AnimStateNodeBase;
+    
+        __tid_AnimStateNodeBase_0__: boolean;
+    }
+    
+    class AnimStateAliasNode extends UE.AnimStateNodeBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bGlobalAlias: boolean;
+        StateAliasName: string;
+        AliasedStateNodes: TSet<TWeakObjectPtr<UE.AnimStateNodeBase>>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateAliasNode;
+        static Load(InName: string): AnimStateAliasNode;
+    
+        __tid_AnimStateAliasNode_0__: boolean;
+    }
+    
+    class AnimStateConduitNode extends UE.AnimStateNodeBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BoundGraph: UE.EdGraph;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateConduitNode;
+        static Load(InName: string): AnimStateConduitNode;
+    
+        __tid_AnimStateConduitNode_0__: boolean;
+    }
+    
     class AnimStateMachineTypes extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -29844,6 +33342,56 @@ declare module "ue" {
         static Load(InName: string): AnimStateMachineTypes;
     
         __tid_AnimStateMachineTypes_0__: boolean;
+    }
+    
+    enum EAnimStateType { AST_SingleAnimation, AST_BlendGraph, AST_MAX, __typeKeyDoNoAccess}
+    class AnimStateNode extends UE.AnimStateNodeBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BoundGraph: UE.EdGraph;
+        StateType: UE.EAnimStateType;
+        StateEntered: UE.AnimNotifyEvent;
+        StateLeft: UE.AnimNotifyEvent;
+        StateFullyBlended: UE.AnimNotifyEvent;
+        bAlwaysResetOnEntry: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateNode;
+        static Load(InName: string): AnimStateNode;
+    
+        __tid_AnimStateNode_0__: boolean;
+    }
+    
+    enum ETransitionBlendMode { TBM_Linear, TBM_Cubic, TBM_MAX, __typeKeyDoNoAccess}
+    class AnimStateTransitionNode extends UE.AnimStateNodeBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BoundGraph: UE.EdGraph;
+        CustomTransitionGraph: UE.EdGraph;
+        PriorityOrder: number;
+        CrossfadeDuration: number;
+        CrossfadeMode: UE.ETransitionBlendMode;
+        BlendMode: UE.EAlphaBlendOption;
+        CustomBlendCurve: UE.CurveFloat;
+        BlendProfile: UE.BlendProfile;
+        bAutomaticRuleBasedOnSequencePlayerInState: boolean;
+        AutomaticRuleTriggerTime: number;
+        SyncGroupNameToRequireValidMarkersRule: string;
+        LogicType: UE.ETransitionLogicType;
+        TransitionStart: UE.AnimNotifyEvent;
+        TransitionEnd: UE.AnimNotifyEvent;
+        TransitionInterrupt: UE.AnimNotifyEvent;
+        Bidirectional: boolean;
+        bSharedRules: boolean;
+        bSharedCrossfade: boolean;
+        SharedRulesName: string;
+        SharedRulesGuid: UE.Guid;
+        SharedColor: UE.LinearColor;
+        SharedCrossfadeName: string;
+        SharedCrossfadeGuid: UE.Guid;
+        SharedCrossfadeIdx: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimStateTransitionNode;
+        static Load(InName: string): AnimStateTransitionNode;
+    
+        __tid_AnimStateTransitionNode_0__: boolean;
     }
     
     class TrackToSkeletonMap {
@@ -29895,194 +33443,6 @@ declare module "ue" {
         __tid_AnimStreamableFactory_0__: boolean;
     }
     
-    class AnimSubsystem {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_0__: boolean;
-    }
-    
-    class AnimSubsystem_Base extends UE.AnimSubsystem {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_Base_0__: boolean;
-    }
-    
-    class AnimSubsystem_BlendSpaceGraph extends UE.AnimSubsystem {
-        constructor();
-        constructor(BlendSpaces: TArray<UE.BlendSpace>);
-        BlendSpaces: TArray<UE.BlendSpace>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_BlendSpaceGraph_0__: boolean;
-    }
-    
-    class PropertyAccessSegment {
-        constructor();
-        constructor(Name: string, Struct: UE.Struct, Property: string, Function: UE.Function, ArrayIndex: number, Flags: number);
-        Name: string;
-        Struct: UE.Struct;
-        Property: string;
-        Function: UE.Function;
-        ArrayIndex: number;
-        Flags: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PropertyAccessSegment_0__: boolean;
-    }
-    
-    class PropertyAccessPath {
-        constructor();
-        constructor(PathSegmentStartIndex: number, PathSegmentCount: number);
-        PathSegmentStartIndex: number;
-        PathSegmentCount: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PropertyAccessPath_0__: boolean;
-    }
-    
-    enum EPropertyAccessCopyType { None, Plain, Complex, Bool, Struct, Object, Name, Array, PromoteBoolToByte, PromoteBoolToInt32, PromoteBoolToInt64, PromoteBoolToFloat, PromoteBoolToDouble, PromoteByteToInt32, PromoteByteToInt64, PromoteByteToFloat, PromoteByteToDouble, PromoteInt32ToInt64, PromoteInt32ToFloat, PromoteInt32ToDouble, PromoteFloatToDouble, DemoteDoubleToFloat, PromoteArrayFloatToDouble, DemoteArrayDoubleToFloat, PromoteMapValueFloatToDouble, DemoteMapValueDoubleToFloat, EPropertyAccessCopyType_MAX, __typeKeyDoNoAccess}
-    class PropertyAccessCopy {
-        constructor();
-        constructor(AccessIndex: number, DestAccessStartIndex: number, DestAccessEndIndex: number, Type: UE.EPropertyAccessCopyType);
-        AccessIndex: number;
-        DestAccessStartIndex: number;
-        DestAccessEndIndex: number;
-        Type: UE.EPropertyAccessCopyType;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PropertyAccessCopy_0__: boolean;
-    }
-    
-    class PropertyAccessCopyBatch {
-        constructor();
-        constructor(Copies: TArray<UE.PropertyAccessCopy>);
-        Copies: TArray<UE.PropertyAccessCopy>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PropertyAccessCopyBatch_0__: boolean;
-    }
-    
-    class PropertyAccessLibrary {
-        constructor();
-        constructor(PathSegments: TArray<UE.PropertyAccessSegment>, SrcPaths: TArray<UE.PropertyAccessPath>, DestPaths: TArray<UE.PropertyAccessPath>, CopyBatches: FixSizeArray<UE.PropertyAccessCopyBatch>, CopyBatchArray: TArray<UE.PropertyAccessCopyBatch>);
-        PathSegments: TArray<UE.PropertyAccessSegment>;
-        SrcPaths: TArray<UE.PropertyAccessPath>;
-        DestPaths: TArray<UE.PropertyAccessPath>;
-        CopyBatches: FixSizeArray<UE.PropertyAccessCopyBatch>;
-        CopyBatchArray: TArray<UE.PropertyAccessCopyBatch>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PropertyAccessLibrary_0__: boolean;
-    }
-    
-    class AnimSubsystem_PropertyAccess extends UE.AnimSubsystem {
-        constructor();
-        constructor(Library: UE.PropertyAccessLibrary);
-        Library: UE.PropertyAccessLibrary;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_PropertyAccess_0__: boolean;
-    }
-    
-    class AnimSubsystemInstance {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystemInstance_0__: boolean;
-    }
-    
-    class LinkedAnimLayerInstanceData {
-        constructor();
-        constructor(Instance: UE.AnimInstance, LinkedFunctions: TMap<string, TWeakObjectPtr<UE.AnimInstance>>);
-        Instance: UE.AnimInstance;
-        LinkedFunctions: TMap<string, TWeakObjectPtr<UE.AnimInstance>>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_LinkedAnimLayerInstanceData_0__: boolean;
-    }
-    
-    class LinkedAnimLayerClassData {
-        constructor();
-        constructor(InstancesData: TArray<UE.LinkedAnimLayerInstanceData>);
-        InstancesData: TArray<UE.LinkedAnimLayerInstanceData>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_LinkedAnimLayerClassData_0__: boolean;
-    }
-    
-    class AnimSubsystem_SharedLinkedAnimLayers extends UE.AnimSubsystemInstance {
-        constructor();
-        constructor(ClassesData: TArray<UE.LinkedAnimLayerClassData>, PersistentClasses: TArray<UE.Class>);
-        ClassesData: TArray<UE.LinkedAnimLayerClassData>;
-        PersistentClasses: TArray<UE.Class>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_SharedLinkedAnimLayers_0__: boolean;
-    }
-    
-    class AnimSubsystem_Tag extends UE.AnimSubsystem {
-        constructor();
-        constructor(NodeIndices: TMap<string, number>);
-        NodeIndices: TMap<string, number>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystem_Tag_0__: boolean;
-    }
-    
-    class AnimSubsystemInstance_NodeRelevancy extends UE.AnimSubsystemInstance {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimSubsystemInstance_NodeRelevancy_0__: boolean;
-    }
-    
     class AnimTickRecord {
         constructor();
         constructor(SourceAsset: UE.AnimationAsset);
@@ -30093,16 +33453,6 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AnimTickRecord_0__: boolean;
-    }
-    
-    class AnimUpdateContext extends UE.AnimExecutionContext {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimUpdateContext_0__: boolean;
     }
     
     enum EUpdateRateShiftBucket { ShiftBucket0, ShiftBucket1, ShiftBucket2, ShiftBucket3, ShiftBucket4, ShiftBucket5, ShiftBucketMax, EUpdateRateShiftBucket_MAX, __typeKeyDoNoAccess}
@@ -30289,6 +33639,24 @@ declare module "ue" {
         static Load(InName: string): AssetDefinitionDefault;
     
         __tid_AssetDefinitionDefault_0__: boolean;
+    }
+    
+    class AssetDefinition_WidgetBlueprint extends UE.AssetDefinitionDefault {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AssetDefinition_WidgetBlueprint;
+        static Load(InName: string): AssetDefinition_WidgetBlueprint;
+    
+        __tid_AssetDefinition_WidgetBlueprint_0__: boolean;
+    }
+    
+    class AssetDefinition_WidgetBlueprintGeneratedClass extends UE.AssetDefinitionDefault {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AssetDefinition_WidgetBlueprintGeneratedClass;
+        static Load(InName: string): AssetDefinition_WidgetBlueprintGeneratedClass;
+    
+        __tid_AssetDefinition_WidgetBlueprintGeneratedClass_0__: boolean;
     }
     
     class AssetEditor extends UE.Object {
@@ -30878,6 +34246,54 @@ declare module "ue" {
         static Load(InName: string): AssetSizeQueryCommandlet;
     
         __tid_AssetSizeQueryCommandlet_0__: boolean;
+    }
+    
+    enum EThumbnailLabelType_BlueprintType { ClassName, AssetName, NoLabel, EThumbnailLabelType_MAX, __typeKeyDoNoAccess}
+    enum EThumbnailColorStripOrientation_BlueprintType { HorizontalBottomEdge, VerticalRightEdge, EThumbnailColorStripOrientation_MAX, __typeKeyDoNoAccess}
+    class AssetThumbnailWidgetSettings {
+        constructor();
+        constructor(bForceGenericThumbnail: boolean, bAllowHintText: boolean, bAllowRealTimeOnHovered: boolean, bAllowAssetSpecificThumbnailOverlay: boolean, ThumbnailLabel: UE.EThumbnailLabelType_BlueprintType, HighlightedTextDelegate: $Delegate<() => string>, HintColorAndOpacity: UE.LinearColor, bOverrideAssetTypeColor: boolean, AssetTypeColorOverride: UE.LinearColor, Padding: UE.Margin, GenericThumbnailSize: number, ColorStripOrientation: UE.EThumbnailColorStripOrientation_BlueprintType);
+        bForceGenericThumbnail: boolean;
+        bAllowHintText: boolean;
+        bAllowRealTimeOnHovered: boolean;
+        bAllowAssetSpecificThumbnailOverlay: boolean;
+        ThumbnailLabel: UE.EThumbnailLabelType_BlueprintType;
+        HighlightedTextDelegate: $Delegate<() => string>;
+        HintColorAndOpacity: UE.LinearColor;
+        bOverrideAssetTypeColor: boolean;
+        AssetTypeColorOverride: UE.LinearColor;
+        Padding: UE.Margin;
+        GenericThumbnailSize: number;
+        ColorStripOrientation: UE.EThumbnailColorStripOrientation_BlueprintType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AssetThumbnailWidgetSettings_0__: boolean;
+    }
+    
+    class AssetThumbnailWidget extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AssetToShow: UE.AssetData;
+        Resolution: UE.IntPoint;
+        ThumbnailSettings: UE.AssetThumbnailWidgetSettings;
+        /*
+         *Gets the resolution of the rendered thumbnail.
+         */
+        GetResolution() : UE.IntPoint;
+        SetAsset(AssetData: UE.AssetData) : void;
+        SetAssetByObject(Object: $Nullable<UE.Object>) : void;
+        /*
+         *Sets the resolution for the rendered thumbnail.
+         */
+        SetResolution(InResolution: UE.IntPoint) : void;
+        SetThumbnailSettings(InThumbnailSettings: UE.AssetThumbnailWidgetSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AssetThumbnailWidget;
+        static Load(InName: string): AssetThumbnailWidget;
+    
+        __tid_AssetThumbnailWidget_0__: boolean;
     }
     
     class BlueprintAsyncActionBase extends UE.Object {
@@ -33033,6 +36449,33 @@ declare module "ue" {
         __tid_BlendFilter_0__: boolean;
     }
     
+    class BlendListBaseReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlendListBaseReference_0__: boolean;
+    }
+    
+    class BlendListBaseLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a blend list base context from an anim node context.
+         */
+        static ConvertToBlendListBase(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.BlendListBaseReference;
+        /*
+         *Reset target blend list node to that the next blend is executed from a blank state
+         */
+        static ResetNode(BlendListBase: UE.BlendListBaseReference) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BlendListBaseLibrary;
+        static Load(InName: string): BlendListBaseLibrary;
+    
+        __tid_BlendListBaseLibrary_0__: boolean;
+    }
+    
     class BlendSampleData {
         constructor();
         constructor(SampleDataIndex: number, Animation: UE.AnimSequence, TotalWeight: number, WeightRate: number, Time: number, PreviousTime: number, SamplePlayRate: number);
@@ -33049,6 +36492,120 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_BlendSampleData_0__: boolean;
+    }
+    
+    class BlendSpaceReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlendSpaceReference_0__: boolean;
+    }
+    
+    class BlendSpaceLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a blend space context from an anim node context.
+         */
+        static ConvertToBlendSpace(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.BlendSpaceReference;
+        /*
+         *Get a blend space context from an anim node context (pure).
+         */
+        static ConvertToBlendSpacePure(Node: UE.AnimNodeReference, BlendSpace: $Ref<UE.BlendSpaceReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get the current sample coordinates after going through the filtering.
+         */
+        static GetFilteredPosition(BlendSpace: UE.BlendSpaceReference) : UE.Vector;
+        /*
+         *Get the current position of the blend space.
+         */
+        static GetPosition(BlendSpace: UE.BlendSpaceReference) : UE.Vector;
+        /*
+         *Forces the Position to the specified value
+         */
+        static SnapToPosition(BlendSpace: UE.BlendSpaceReference, NewPosition: UE.Vector) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BlendSpaceLibrary;
+        static Load(InName: string): BlendSpaceLibrary;
+    
+        __tid_BlendSpaceLibrary_0__: boolean;
+    }
+    
+    class BlendSpacePlayerReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlendSpacePlayerReference_0__: boolean;
+    }
+    
+    class BlendSpacePlayerLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a blend space player context from an anim node context.
+         */
+        static ConvertToBlendSpacePlayer(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.BlendSpacePlayerReference;
+        /*
+         *Get a blend space player context from an anim node context (pure).
+         */
+        static ConvertToBlendSpacePlayerPure(Node: UE.AnimNodeReference, BlendSpacePlayer: $Ref<UE.BlendSpacePlayerReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get the current BlendSpace of the blend space player.
+         */
+        static GetBlendSpace(BlendSpacePlayer: UE.BlendSpacePlayerReference) : UE.BlendSpace;
+        /*
+         *Get the current loop of the blend space player.
+         */
+        static GetLoop(BlendSpacePlayer: UE.BlendSpacePlayerReference) : boolean;
+        /*
+         *Get the current play rate of the blend space player.
+         */
+        static GetPlayRate(BlendSpacePlayer: UE.BlendSpacePlayerReference) : number;
+        /*
+         *Get the current position of the blend space player.
+         */
+        static GetPosition(BlendSpacePlayer: UE.BlendSpacePlayerReference) : UE.Vector;
+        /*
+         *Get the current start position of the blend space player.
+         */
+        static GetStartPosition(BlendSpacePlayer: UE.BlendSpacePlayerReference) : number;
+        /*
+         *Set the current BlendSpace of the blend space player.
+         */
+        static SetBlendSpace(BlendSpacePlayer: UE.BlendSpacePlayerReference, BlendSpace: $Nullable<UE.BlendSpace>) : UE.BlendSpacePlayerReference;
+        /*
+         *Set the current BlendSpace of the blend space player with an interial blend time.
+         */
+        static SetBlendSpaceWithInertialBlending(UpdateContext: UE.AnimUpdateContext, BlendSpacePlayer: UE.BlendSpacePlayerReference, BlendSpace: $Nullable<UE.BlendSpace>, BlendTime?: number /* = 0.200000 */) : UE.BlendSpacePlayerReference;
+        /*
+         *Set the loop of the blend space player.
+         */
+        static SetLoop(BlendSpacePlayer: UE.BlendSpacePlayerReference, bLoop: boolean) : UE.BlendSpacePlayerReference;
+        /*
+         *Set the play rate of the blend space player.
+         */
+        static SetPlayRate(BlendSpacePlayer: UE.BlendSpacePlayerReference, PlayRate: number) : UE.BlendSpacePlayerReference;
+        /*
+         *Set whether the current play time should reset when BlendSpace changes of the blend space player.
+         */
+        static SetResetPlayTimeWhenBlendSpaceChanges(BlendSpacePlayer: UE.BlendSpacePlayerReference, bReset: boolean) : UE.BlendSpacePlayerReference;
+        /*
+         *Get the current value of whether the current play time should reset when BlendSpace changes of the blend space player.
+         */
+        static ShouldResetPlayTimeWhenBlendSpaceChanges(BlendSpacePlayer: UE.BlendSpacePlayerReference) : boolean;
+        /*
+         *Forces the Position to the specified value
+         */
+        static SnapToPosition(BlendSpacePlayer: UE.BlendSpacePlayerReference, NewPosition: UE.Vector) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BlendSpacePlayerLibrary;
+        static Load(InName: string): BlendSpacePlayerLibrary;
+    
+        __tid_BlendSpacePlayerLibrary_0__: boolean;
     }
     
     class BlendSpaceThumbnailRenderer extends UE.DefaultSizedThumbnailRenderer {
@@ -33127,6 +36684,287 @@ declare module "ue" {
         static Load(InName: string): BlueprintEditorProjectSettings;
     
         __tid_BlueprintEditorProjectSettings_0__: boolean;
+    }
+    
+    enum EInputActionValueType { Boolean, Axis1D, Axis2D, Axis3D, EInputActionValueType_MAX, __typeKeyDoNoAccess}
+    enum EInputActionAccumulationBehavior { TakeHighestAbsoluteValue, Cumulative, EInputActionAccumulationBehavior_MAX, __typeKeyDoNoAccess}
+    class InputActionValue {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputActionValue_0__: boolean;
+    }
+    
+    class KeyConsumptionOptions {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_KeyConsumptionOptions_0__: boolean;
+    }
+    
+    class PlayerMappableKeyOptions {
+        constructor();
+        constructor(Metadata: UE.Object, Name: string, DisplayName: string, DisplayCategory: string);
+        Metadata: UE.Object;
+        Name: string;
+        DisplayName: string;
+        DisplayCategory: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayerMappableKeyOptions_0__: boolean;
+    }
+    
+    class InputModifier extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Helper to allow debug visualization of the modifier.
+         *@param SampleValue - The base input action value pre-modification (ranging -1 -> 1 across all applicable axes).
+         *@param FinalValue - The post-modification input action value for the provided SampleValue.
+         */
+        GetVisualizationColor(SampleValue: UE.InputActionValue, FinalValue: UE.InputActionValue) : UE.LinearColor;
+        /*
+         *ModifyRaw
+         *Will be called by each modifier in the modifier chain
+         *@param CurrentValue - The modified value returned by the previous modifier in the chain, or the base raw value if this is the first modifier in the chain.
+         */
+        ModifyRaw(PlayerInput: $Nullable<UE.EnhancedPlayerInput>, CurrentValue: UE.InputActionValue, DeltaTime: number) : UE.InputActionValue;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifier;
+        static Load(InName: string): InputModifier;
+    
+        __tid_InputModifier_0__: boolean;
+    }
+    
+    enum EPlayerMappableKeySettingBehaviors { InheritSettingsFromAction, OverrideSettings, IgnoreSettings, EPlayerMappableKeySettingBehaviors_MAX, __typeKeyDoNoAccess}
+    class GameplayTag {
+        constructor();
+        constructor(TagName: string);
+        TagName: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_GameplayTag_0__: boolean;
+    }
+    
+    class GameplayTagContainer {
+        constructor();
+        constructor(GameplayTags: TArray<UE.GameplayTag>, ParentTags: TArray<UE.GameplayTag>);
+        GameplayTags: TArray<UE.GameplayTag>;
+        ParentTags: TArray<UE.GameplayTag>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_GameplayTagContainer_0__: boolean;
+    }
+    
+    class PlayerMappableKeySettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Metadata: UE.Object;
+        Name: string;
+        DisplayName: string;
+        DisplayCategory: string;
+        SupportedKeyProfiles: UE.GameplayTagContainer;
+        /*
+         *Get the known mapping names that are current in use. This is a helper function if you want to use a "GetOptions" metadata on a UPROPERTY.
+         *For example, the following will display a little drop down menu to select from all current mapping names:
+         *
+         * UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(GetOptions="EnhancedInput.PlayerMappableKeySettings.GetKnownMappingNames"))
+         * FName MappingName;
+         */
+        static GetKnownMappingNames() : TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PlayerMappableKeySettings;
+        static Load(InName: string): PlayerMappableKeySettings;
+    
+        __tid_PlayerMappableKeySettings_0__: boolean;
+    }
+    
+    class EnhancedActionKeyMapping {
+        constructor();
+        constructor(PlayerMappableOptions: UE.PlayerMappableKeyOptions, Triggers: TArray<UE.InputTrigger>, Modifiers: TArray<UE.InputModifier>, Action: UE.InputAction, Key: UE.Key, bShouldBeIgnored: boolean, bHasAlwaysTickTrigger: boolean, bIsPlayerMappable: boolean, SettingBehavior: UE.EPlayerMappableKeySettingBehaviors, PlayerMappableKeySettings: UE.PlayerMappableKeySettings);
+        PlayerMappableOptions: UE.PlayerMappableKeyOptions;
+        Triggers: TArray<UE.InputTrigger>;
+        Modifiers: TArray<UE.InputModifier>;
+        Action: UE.InputAction;
+        Key: UE.Key;
+        bShouldBeIgnored: boolean;
+        bHasAlwaysTickTrigger: boolean;
+        bIsPlayerMappable: boolean;
+        SettingBehavior: UE.EPlayerMappableKeySettingBehaviors;
+        PlayerMappableKeySettings: UE.PlayerMappableKeySettings;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_EnhancedActionKeyMapping_0__: boolean;
+    }
+    
+    class InputMappingContext extends UE.DataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Mappings: TArray<UE.EnhancedActionKeyMapping>;
+        ContextDescription: string;
+        /*
+         *Map a key to an action within the mapping context.
+         */
+        MapKey(Action: $Nullable<UE.InputAction>, ToKey: UE.Key) : UE.EnhancedActionKeyMapping;
+        UnmapAction(Action: $Nullable<UE.InputAction>) : void;
+        /*
+         *Unmap everything within the mapping context.
+         */
+        UnmapAll() : void;
+        /*
+         *Unmap all key maps to an action within the mapping context.
+         */
+        UnmapAllKeysFromAction(Action: $Nullable<UE.InputAction>) : void;
+        /*
+         *Unmap a key from an action within the mapping context.
+         */
+        UnmapKey(Action: $Nullable<UE.InputAction>, Key: UE.Key) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputMappingContext;
+        static Load(InName: string): InputMappingContext;
+    
+        __tid_InputMappingContext_0__: boolean;
+    }
+    
+    enum ETriggerEvent { None, Triggered, Started, Ongoing, Canceled, Completed, ETriggerEvent_MAX, __typeKeyDoNoAccess}
+    class InputActionInstance {
+        constructor();
+        constructor(SourceAction: UE.InputAction, TriggerEvent: UE.ETriggerEvent, LastTriggeredWorldTime: number, Triggers: TArray<UE.InputTrigger>, Modifiers: TArray<UE.InputModifier>, ElapsedProcessedTime: number, ElapsedTriggeredTime: number);
+        SourceAction: UE.InputAction;
+        TriggerEvent: UE.ETriggerEvent;
+        LastTriggeredWorldTime: number;
+        Triggers: TArray<UE.InputTrigger>;
+        Modifiers: TArray<UE.InputModifier>;
+        ElapsedProcessedTime: number;
+        ElapsedTriggeredTime: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputActionInstance_0__: boolean;
+    }
+    
+    class InjectedInput {
+        constructor();
+        constructor(Triggers: TArray<UE.InputTrigger>, Modifiers: TArray<UE.InputModifier>);
+        Triggers: TArray<UE.InputTrigger>;
+        Modifiers: TArray<UE.InputModifier>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InjectedInput_0__: boolean;
+    }
+    
+    class InjectedInputArray {
+        constructor();
+        constructor(Injected: TArray<UE.InjectedInput>);
+        Injected: TArray<UE.InjectedInput>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InjectedInputArray_0__: boolean;
+    }
+    
+    class EnhancedPlayerInput extends UE.PlayerInput {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        KeyConsumptionData: TMap<UE.InputAction, UE.KeyConsumptionOptions>;
+        AppliedInputContexts: TMap<UE.InputMappingContext, number>;
+        EnhancedActionMappings: TArray<UE.EnhancedActionKeyMapping>;
+        ActionInstanceData: TMap<UE.InputAction, UE.InputActionInstance>;
+        KeysPressedThisTick: TMap<UE.Key, UE.Vector>;
+        InputsInjectedThisTick: TMap<UE.InputAction, UE.InjectedInputArray>;
+        LastInjectedActions: TSet<UE.InputAction>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedPlayerInput;
+        static Load(InName: string): EnhancedPlayerInput;
+    
+        __tid_EnhancedPlayerInput_0__: boolean;
+    }
+    
+    enum ETriggerState { None, Ongoing, Triggered, ETriggerState_MAX, __typeKeyDoNoAccess}
+    enum ETriggerType { Explicit, Implicit, Blocker, ETriggerType_MAX, __typeKeyDoNoAccess}
+    class InputTrigger extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ActuationThreshold: number;
+        bShouldAlwaysTick: boolean;
+        LastValue: UE.InputActionValue;
+        /*
+         *Changes the way this trigger affects an action with multiple triggers:
+         *        All implicit triggers must be triggering to trigger the action.
+         *        If there are any explicit triggers at least one must be triggering to trigger the action.
+         */
+        GetTriggerType() : UE.ETriggerType;
+        /*
+         ** Is the value passed in sufficiently large to be of interest to the trigger.
+         ** This is a helper function that implements the most obvious (>=) interpretation of the actuation threshold.
+         */
+        IsActuated(ForValue: UE.InputActionValue) : boolean;
+        /*
+         *This function checks if the requisite conditions have been met for the trigger to fire.
+         * Returns Trigger State None              - No trigger conditions have been met. Trigger is inactive.
+         *                 Trigger State Ongoing   - Some trigger conditions have been met. Trigger is processing but not yet active.
+         *                 Trigger State Triggered - All trigger conditions have been met to fire. Trigger is active.
+         */
+        UpdateState(PlayerInput: $Nullable<UE.EnhancedPlayerInput>, ModifiedValue: UE.InputActionValue, DeltaTime: number) : UE.ETriggerState;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTrigger;
+        static Load(InName: string): InputTrigger;
+    
+        __tid_InputTrigger_0__: boolean;
+    }
+    
+    class InputAction extends UE.DataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ActionDescription: string;
+        bTriggerWhenPaused: boolean;
+        bConsumeInput: boolean;
+        bConsumesActionAndAxisMappings: boolean;
+        bReserveAllMappings: boolean;
+        TriggerEventsThatConsumeLegacyKeys: number;
+        ValueType: UE.EInputActionValueType;
+        AccumulationBehavior: UE.EInputActionAccumulationBehavior;
+        Triggers: TArray<UE.InputTrigger>;
+        Modifiers: TArray<UE.InputModifier>;
+        PlayerMappableKeySettings: UE.PlayerMappableKeySettings;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputAction;
+        static Load(InName: string): InputAction;
+    
+        __tid_InputAction_0__: boolean;
+    }
+    
+    class BlueprintEnhancedInputActionBinding {
+        constructor();
+        constructor(InputAction: UE.InputAction, TriggerEvent: UE.ETriggerEvent, FunctionNameToBind: string);
+        InputAction: UE.InputAction;
+        TriggerEvent: UE.ETriggerEvent;
+        FunctionNameToBind: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlueprintEnhancedInputActionBinding_0__: boolean;
     }
     
     class BlueprintFactory extends UE.Factory {
@@ -33218,6 +37056,21 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_InputChord_0__: boolean;
+    }
+    
+    class BlueprintInputDebugKeyDelegateBinding {
+        constructor();
+        constructor(InputChord: UE.InputChord, InputKeyEvent: UE.EInputEvent, FunctionNameToBind: string, bExecuteWhenPaused: boolean);
+        InputChord: UE.InputChord;
+        InputKeyEvent: UE.EInputEvent;
+        FunctionNameToBind: string;
+        bExecuteWhenPaused: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BlueprintInputDebugKeyDelegateBinding_0__: boolean;
     }
     
     class BlueprintInputKeyDelegateBinding extends UE.BlueprintInputDelegateBinding {
@@ -34179,31 +38032,6 @@ declare module "ue" {
         __tid_BlutilityFunctionData_0__: boolean;
     }
     
-    class BranchFilter {
-        constructor();
-        constructor(BoneName: string, BlendDepth: number);
-        BoneName: string;
-        BlendDepth: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_BranchFilter_0__: boolean;
-    }
-    
-    class InputBlendPose {
-        constructor();
-        constructor(BranchFilters: TArray<UE.BranchFilter>);
-        BranchFilters: TArray<UE.BranchFilter>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_InputBlendPose_0__: boolean;
-    }
-    
     class BoneMaskFilter extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         BlendPoses: TArray<UE.InputBlendPose>;
@@ -34247,32 +38075,6 @@ declare module "ue" {
         static Load(InName: string): BoneReferenceSkeletonProvider;
     
         __tid_BoneReferenceSkeletonProvider_0__: boolean;
-    }
-    
-    class SocketReference {
-        constructor();
-        constructor(SocketName: string);
-        SocketName: string;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_SocketReference_0__: boolean;
-    }
-    
-    class BoneSocketTarget {
-        constructor();
-        constructor(bUseSocket: boolean, BoneReference: UE.BoneReference, SocketReference: UE.SocketReference);
-        bUseSocket: boolean;
-        BoneReference: UE.BoneReference;
-        SocketReference: UE.SocketReference;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_BoneSocketTarget_0__: boolean;
     }
     
     class BookMark2D extends UE.BookmarkBase {
@@ -35872,6 +39674,15 @@ declare module "ue" {
         static Load(InName: string): ClassThumbnailRenderer;
     
         __tid_ClassThumbnailRenderer_0__: boolean;
+    }
+    
+    class ClassVariableCreator extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ClassVariableCreator;
+        static Load(InName: string): ClassVariableCreator;
+    
+        __tid_ClassVariableCreator_0__: boolean;
     }
     
     enum EClassViewerDeveloperType { CVDT_None, CVDT_CurrentUser, CVDT_All, CVDT_Max, CVDT_MAX, __typeKeyDoNoAccess}
@@ -38082,41 +41893,6 @@ declare module "ue" {
         __tid_CurveScaledPayload_0__: boolean;
     }
     
-    class NamedCurveValue {
-        constructor();
-        constructor(Name: string, Value: number);
-        Name: string;
-        Value: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_NamedCurveValue_0__: boolean;
-    }
-    
-    class CurveSourceInterface extends UE.Interface {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        /*
-         *Get the name that this curve source can be bound to by.
-         *Clients of this curve source will use this name to identify this source.
-         */
-        GetBindingName() : string;
-        /*
-         *Evaluate all curves that this source provides
-         */
-        GetCurves(OutValues: $Ref<TArray<UE.NamedCurveValue>>) : void;
-        /*
-         *Get the value for a specified curve
-         */
-        GetCurveValue(CurveName: string) : number;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): CurveSourceInterface;
-        static Load(InName: string): CurveSourceInterface;
-    
-        __tid_CurveSourceInterface_0__: boolean;
-    }
-    
     class CurveTableFactory extends UE.Factory {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -38765,21 +42541,24 @@ declare module "ue" {
         __tid_DebuggingInfoForSingleFunction_0__: boolean;
     }
     
+    class DebugResolution {
+        constructor();
+        constructor(Width: number, Height: number, Description: string, Color: UE.LinearColor);
+        Width: number;
+        Height: number;
+        Description: string;
+        Color: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DebugResolution_0__: boolean;
+    }
+    
     enum ESkeletonDrawMode { Default, Hidden, GreyedOut, ESkeletonDrawMode_MAX, __typeKeyDoNoAccess}
     enum EProcessRootMotionMode { Ignore, Loop, LoopAndReset, EProcessRootMotionMode_MAX, __typeKeyDoNoAccess}
     enum EVisualizeRootMotionMode { None, Trajectory, TrajectoryAndOrientation, EVisualizeRootMotionMode_MAX, __typeKeyDoNoAccess}
-    enum EMontagePreviewType { EMPT_Normal, EMPT_AllSections, EMPT_MAX, __typeKeyDoNoAccess}
-    class AnimPreviewInstance extends UE.AnimSingleNodeInstance {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        MontagePreviewType: UE.EMontagePreviewType;
-        MontagePreviewStartSectionIdx: number;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): AnimPreviewInstance;
-        static Load(InName: string): AnimPreviewInstance;
-    
-        __tid_AnimPreviewInstance_0__: boolean;
-    }
-    
     class DebugSkelMeshComponent extends UE.SkeletalMeshComponent {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         SkeletonDrawMode: UE.ESkeletonDrawMode;
@@ -39081,6 +42860,21 @@ declare module "ue" {
         static Load(InName: string): DEditorVectorParameterValue;
     
         __tid_DEditorVectorParameterValue_0__: boolean;
+    }
+    
+    class DefaultContextSetting {
+        constructor();
+        constructor(InputMappingContext: TSoftObjectPtr<UE.InputMappingContext>, Priority: number, bAddImmediately: boolean, bRegisterWithUserSettings: boolean);
+        InputMappingContext: TSoftObjectPtr<UE.InputMappingContext>;
+        Priority: number;
+        bAddImmediately: boolean;
+        bRegisterWithUserSettings: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DefaultContextSetting_0__: boolean;
     }
     
     class DefaultPhysicsVolume extends UE.PhysicsVolume {
@@ -39640,6 +43434,36 @@ declare module "ue" {
         static Load(InName: string): DirectionalLight;
     
         __tid_DirectionalLight_0__: boolean;
+    }
+    
+    enum EPropertyBindingPermissionLevel { Allow, Prevent, PreventAndWarn, PreventAndError, EPropertyBindingPermissionLevel_MAX, __typeKeyDoNoAccess}
+    class WidgetCompilerOptions {
+        constructor();
+        constructor(bAllowBlueprintTick: boolean, bAllowBlueprintPaint: boolean, PropertyBindingRule: UE.EPropertyBindingPermissionLevel, Rules: TArray<TSoftClassPtr<UE.WidgetCompilerRule>>);
+        bAllowBlueprintTick: boolean;
+        bAllowBlueprintPaint: boolean;
+        PropertyBindingRule: UE.EPropertyBindingPermissionLevel;
+        Rules: TArray<TSoftClassPtr<UE.WidgetCompilerRule>>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_WidgetCompilerOptions_0__: boolean;
+    }
+    
+    class DirectoryWidgetCompilerOptions {
+        constructor();
+        constructor(Directory: UE.DirectoryPath, IgnoredWidgets: TArray<TSoftObjectPtr<UE.WidgetBlueprint>>, Options: UE.WidgetCompilerOptions);
+        Directory: UE.DirectoryPath;
+        IgnoredWidgets: TArray<TSoftObjectPtr<UE.WidgetBlueprint>>;
+        Options: UE.WidgetCompilerOptions;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DirectoryWidgetCompilerOptions_0__: boolean;
     }
     
     class DistanceDatum {
@@ -40314,9 +44138,7 @@ declare module "ue" {
     
     enum EAdManagerDelegate { AMD_ClickedBanner, AMD_UserClosedAd, AMD_MAX, __typeKeyDoNoAccess}
     enum EAlphaChannelMode { Disabled, Enabled, LinearColorSpaceOnly, AllowThroughTonemapper, EAlphaChannelMode_MAX, __typeKeyDoNoAccess}
-    enum EAnimExecutionContextConversionResult { Succeeded, Failed, EAnimExecutionContextConversionResult_MAX, __typeKeyDoNoAccess}
     enum EAnimNodeDataFlags { None, HasInitialUpdateFunction, HasBecomeRelevantFunction, HasUpdateFunction, AllFunctions, EAnimNodeDataFlags_MAX, __typeKeyDoNoAccess}
-    enum EAnimNodeReferenceConversionResult { Succeeded, Failed, EAnimNodeReferenceConversionResult_MAX, __typeKeyDoNoAccess}
     enum EAnimPropertyAccessCallSite { WorkerThread_Unbatched, WorkerThread_Batched_PreEventGraph, WorkerThread_Batched_PostEventGraph, GameThread_Batched_PreEventGraph, GameThread_Batched_PostEventGraph, EAnimPropertyAccessCallSite_MAX, __typeKeyDoNoAccess}
     enum EAntiAliasingMethod { AAM_None, AAM_FXAA, AAM_TemporalAA, AAM_MSAA, AAM_TSR, AAM_MAX, __typeKeyDoNoAccess}
     enum EApplicationState { Unknown, Inactive, Background, Active, EApplicationState_MAX, __typeKeyDoNoAccess}
@@ -40330,14 +44152,10 @@ declare module "ue" {
     enum EAutoExposureMethodUI { AEM_Histogram, AEM_Basic, AEM_Manual, AEM_MAX, __typeKeyDoNoAccess}
     enum EAutoSaveMethod { BackupAndRestore, BackupAndOverwrite, EAutoSaveMethod_MAX, __typeKeyDoNoAccess}
     enum EAxisList { None, X, Y, Z, Screen, XY, XZ, YZ, XYZ, All, ZRotation, Rotate2D, EAxisList_MAX, __typeKeyDoNoAccess}
-    enum EAxisOption { X, Y, Z, X_Neg, Y_Neg, Z_Neg, Custom, EAxisOption_MAX, __typeKeyDoNoAccess}
     enum EBeam2Method { PEB2M_Distance, PEB2M_Target, PEB2M_Branch, PEB2M_MAX, __typeKeyDoNoAccess}
     enum EBeamTaperMethod { PEBTM_None, PEBTM_Full, PEBTM_Partial, PEBTM_MAX, __typeKeyDoNoAccess}
     enum EBlueprintBreakpointReloadMethod { RestoreAll, RestoreAllAndDisable, DiscardAll, EBlueprintBreakpointReloadMethod_MAX, __typeKeyDoNoAccess}
     enum EBlueprintPinStyleType { BPST_Original, BPST_VariantA, BPST_MAX, __typeKeyDoNoAccess}
-    enum EBoneAxis { BA_X, BA_Y, BA_Z, BA_MAX, __typeKeyDoNoAccess}
-    enum EBoneControlSpace { BCS_WorldSpace, BCS_ComponentSpace, BCS_ParentBoneSpace, BCS_BoneSpace, BCS_MAX, __typeKeyDoNoAccess}
-    enum EBoneRotationSource { BRS_KeepComponentSpaceRotation, BRS_KeepLocalSpaceRotation, BRS_CopyFromTarget, BRS_MAX, __typeKeyDoNoAccess}
     enum EBoneSpaces { WorldSpace, ComponentSpace, EBoneSpaces_MAX, __typeKeyDoNoAccess}
     enum EBoneVisibilityStatus { BVS_HiddenByParent, BVS_Visible, BVS_ExplicitlyHidden, BVS_MAX, __typeKeyDoNoAccess}
     enum ECameraAlphaBlendMode { CABM_Linear, CABM_Cubic, CABM_MAX, __typeKeyDoNoAccess}
@@ -40351,7 +44169,6 @@ declare module "ue" {
     enum EColorVisionDeficiency { NormalVision, Deuteranope, Protanope, Tritanope, EColorVisionDeficiency_MAX, __typeKeyDoNoAccess}
     enum ECommentBoxMode { GroupMovement, NoGroupMovement, ECommentBoxMode_MAX, __typeKeyDoNoAccess}
     enum EComponentSocketType { Invalid, Bone, Socket, EComponentSocketType_MAX, __typeKeyDoNoAccess}
-    enum EComponentType { None, TranslationX, TranslationY, TranslationZ, RotationX, RotationY, RotationZ, Scale, ScaleX, ScaleY, ScaleZ, EComponentType_MAX, __typeKeyDoNoAccess}
     enum ECompositingSampleCount { One, Two, Four, Eight, ECompositingSampleCount_MAX, __typeKeyDoNoAccess}
     enum EConsoleForGamepadLabels { None, XBoxOne, PS4, EConsoleForGamepadLabels_MAX, __typeKeyDoNoAccess}
     enum EConstraintTransformComponentFlags { None, ChildPosition, ChildRotation, ParentPosition, ParentRotation, AllChild, AllParent, AllPosition, AllRotation, All, EConstraintTransformComponentFlags_MAX, __typeKeyDoNoAccess}
@@ -40361,7 +44178,6 @@ declare module "ue" {
     enum ECookMode { CookOnTheFly, CookOnTheFlyFromTheEditor, CookByTheBookFromTheEditor, CookByTheBook, CookWorker, ECookMode_MAX, __typeKeyDoNoAccess}
     enum ECookTickFlags { None, MarkupInUsePackages, HideProgressDisplay, ECookTickFlags_MAX, __typeKeyDoNoAccess}
     enum ECsgOper { CSG_Active, CSG_Add, CSG_Subtract, CSG_Intersect, CSG_Deintersect, CSG_None, CSG_MAX, __typeKeyDoNoAccess}
-    enum ECurveBlendOption { Override, DoNotOverride, NormalizeByWeight, BlendByWeight, UseBasePose, UseMaxValue, UseMinValue, ECurveBlendOption_MAX, __typeKeyDoNoAccess}
     enum ECurveTableMode { Empty, SimpleCurves, RichCurves, ECurveTableMode_MAX, __typeKeyDoNoAccess}
     enum ECustomDepthStencil { Disabled, Enabled, EnabledOnDemand, EnabledWithStencil, ECustomDepthStencil_MAX, __typeKeyDoNoAccess}
     enum ECustomTimeStepSynchronizationState { Closed, Error, Synchronized, Synchronizing, ECustomTimeStepSynchronizationState_MAX, __typeKeyDoNoAccess}
@@ -40369,6 +44185,7 @@ declare module "ue" {
     enum EDataValidationUsecase { None, Manual, Commandlet, Save, PreSubmit, Script, EDataValidationUsecase_MAX, __typeKeyDoNoAccess}
     enum EDateTimeStyle { Default, Short, Medium, Long, Full, Custom, EDateTimeStyle_MAX, __typeKeyDoNoAccess}
     enum EDBufferTextureId { DBT_A, DBT_B, DBT_C, DBT_MAX, __typeKeyDoNoAccess}
+    enum EDeadZoneType { Axial, Radial, UnscaledRadial, EDeadZoneType_MAX, __typeKeyDoNoAccess}
     enum EDecompressionType { DTYPE_Setup, DTYPE_Invalid, DTYPE_RealTime, DTYPE_Procedural, DTYPE_Xenon, DTYPE_Streaming, DTYPE_MAX, __typeKeyDoNoAccess}
     enum EDefaultBackBufferPixelFormat { DBBPF_B8G8R8A8, DBBPF_A16B16G16R16_DEPRECATED, DBBPF_FloatRGB_DEPRECATED, DBBPF_FloatRGBA, DBBPF_A2B10G10R10, DBBPF_MAX, __typeKeyDoNoAccess}
     enum EDefaultLocationUnit { Micrometers, Millimeters, Centimeters, Meters, Kilometers, Inches, Feet, Yards, Miles, Invalid, EDefaultLocationUnit_MAX, __typeKeyDoNoAccess}
@@ -40401,15 +44218,6 @@ declare module "ue" {
         static Load(InName: string): EdGraphNode_Documentation;
     
         __tid_EdGraphNode_Documentation_0__: boolean;
-    }
-    
-    class EdGraphSchema extends UE.Object {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): EdGraphSchema;
-        static Load(InName: string): EdGraphSchema;
-    
-        __tid_EdGraphSchema_0__: boolean;
     }
     
     class EdGraphSchemaAction {
@@ -40451,6 +44259,27 @@ declare module "ue" {
         __tid_EdGraphSchemaAction_NewNode_0__: boolean;
     }
     
+    class EdGraphSchemaAction_NewStateComment extends UE.EdGraphSchemaAction {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_EdGraphSchemaAction_NewStateComment_0__: boolean;
+    }
+    
+    class EdGraphSchemaAction_NewStateNode extends UE.EdGraphSchemaAction {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_EdGraphSchemaAction_NewStateNode_0__: boolean;
+    }
+    
+    enum EDisplayOnCompile { DoC_ErrorsOrWarnings, DoC_ErrorsOnly, DoC_WarningsOnly, DoC_Never, DoC_MAX, __typeKeyDoNoAccess}
     class EditableTextStyle extends UE.SlateWidgetStyle {
         constructor();
         constructor(Font: UE.SlateFontInfo, ColorAndOpacity: UE.SlateColor, BackgroundImageSelected: UE.SlateBrush, BackgroundImageComposing: UE.SlateBrush, CaretImage: UE.SlateBrush);
@@ -44518,51 +48347,6 @@ declare module "ue" {
         __tid_EditorUtilityWidgetBlueprintFactory_0__: boolean;
     }
     
-    enum EPropertyBindingPermissionLevel { Allow, Prevent, PreventAndWarn, PreventAndError, EPropertyBindingPermissionLevel_MAX, __typeKeyDoNoAccess}
-    class WidgetCompilerOptions {
-        constructor();
-        constructor(bAllowBlueprintTick: boolean, bAllowBlueprintPaint: boolean, PropertyBindingRule: UE.EPropertyBindingPermissionLevel, Rules: TArray<TSoftClassPtr<UE.WidgetCompilerRule>>);
-        bAllowBlueprintTick: boolean;
-        bAllowBlueprintPaint: boolean;
-        PropertyBindingRule: UE.EPropertyBindingPermissionLevel;
-        Rules: TArray<TSoftClassPtr<UE.WidgetCompilerRule>>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_WidgetCompilerOptions_0__: boolean;
-    }
-    
-    class DirectoryWidgetCompilerOptions {
-        constructor();
-        constructor(Directory: UE.DirectoryPath, IgnoredWidgets: TArray<TSoftObjectPtr<UE.WidgetBlueprint>>, Options: UE.WidgetCompilerOptions);
-        Directory: UE.DirectoryPath;
-        IgnoredWidgets: TArray<TSoftObjectPtr<UE.WidgetBlueprint>>;
-        Options: UE.WidgetCompilerOptions;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_DirectoryWidgetCompilerOptions_0__: boolean;
-    }
-    
-    class DebugResolution {
-        constructor();
-        constructor(Width: number, Height: number, Description: string, Color: UE.LinearColor);
-        Width: number;
-        Height: number;
-        Description: string;
-        Color: UE.LinearColor;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_DebugResolution_0__: boolean;
-    }
-    
     class WidgetEditingProjectSettings extends UE.DeveloperSettings {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         DefaultCompilerOptions: UE.WidgetCompilerOptions;
@@ -44677,6 +48461,7 @@ declare module "ue" {
     enum EFontLayoutMethod { Metrics, BoundingBox, EFontLayoutMethod_MAX, __typeKeyDoNoAccess}
     enum EFontRasterizationMode { Bitmap, Msdf, Sdf, SdfApproximation, EFontRasterizationMode_MAX, __typeKeyDoNoAccess}
     enum EFormatArgumentType { Int, UInt, Float, Double, Text, Gender, EFormatArgumentType_MAX, __typeKeyDoNoAccess}
+    enum EFOVScalingType { Standard, UE4_BackCompat, EFOVScalingType_MAX, __typeKeyDoNoAccess}
     enum EFullyLoadPackageType { FULLYLOAD_Map, FULLYLOAD_Game_PreLoadClass, FULLYLOAD_Game_PostLoadClass, FULLYLOAD_Always, FULLYLOAD_Mutator, FULLYLOAD_MAX, __typeKeyDoNoAccess}
     enum EGainParamMode { Linear, Decibels, EGainParamMode_MAX, __typeKeyDoNoAccess}
     enum EGBufferFormat { Force8BitsPerChannel, Default, HighPrecisionNormals, Force16BitsPerChannel, EGBufferFormat_MAX, __typeKeyDoNoAccess}
@@ -44692,7 +48477,9 @@ declare module "ue" {
     enum EInertializationBoneState { Invalid, Valid, Excluded, EInertializationBoneState_MAX, __typeKeyDoNoAccess}
     enum EInertializationSpace { Default, WorldSpace, WorldRotation, EInertializationSpace_MAX, __typeKeyDoNoAccess}
     enum EInertializationState { Inactive, Pending, Active, EInertializationState_MAX, __typeKeyDoNoAccess}
+    enum EInputAxisSwizzle { YXZ, ZYX, XZY, YZX, ZXY, EInputAxisSwizzle_MAX, __typeKeyDoNoAccess}
     enum EInputDeviceAnalogStickMask { None, Left, Right, EInputDeviceAnalogStickMask_MAX, __typeKeyDoNoAccess}
+    enum EInputMappingRebuildType { None, Rebuild, RebuildWithFlush, EInputMappingRebuildType_MAX, __typeKeyDoNoAccess}
     enum EInputPreProcessorType { Overlay, PreEngine, Engine, PreEditor, Editor, PreGame, Game, Count, EInputPreProcessorType_MAX, __typeKeyDoNoAccess}
     enum EInterpToBehaviourType { OneShot, OneShot_Reverse, Loop_Reset, PingPong, EInterpToBehaviourType_MAX, __typeKeyDoNoAccess}
     enum ELabelAnchorMode { LabelAnchorMode_TopLeft, LabelAnchorMode_TopCenter, LabelAnchorMode_TopRight, LabelAnchorMode_CenterLeft, LabelAnchorMode_Centered, LabelAnchorMode_CenterRight, LabelAnchorMode_BottomLeft, LabelAnchorMode_BottomCenter, LabelAnchorMode_BottomRight, LabelAnchorMode_MAX, __typeKeyDoNoAccess}
@@ -44720,6 +48507,8 @@ declare module "ue" {
     enum ELumenScreenTracingSource { SceneColor, AntialiasedSceneColorWithTranslucency, ELumenScreenTracingSource_MAX, __typeKeyDoNoAccess}
     enum ELumenSoftwareTracingMode { DetailTracing, GlobalTracing, ELumenSoftwareTracingMode_MAX, __typeKeyDoNoAccess}
     enum ELWCFunctionKind { Constructor, Promote, Demote, Add, Subtract, Divide, MultiplyVectorVector, MultiplyVectorMatrix, MultiplyMatrixMatrix, Other, Max, ELWCFunctionKind_MAX, __typeKeyDoNoAccess}
+    enum EMappingQueryIssue { NoIssue, ReservedByAction, HidesExistingMapping, HiddenByExistingMapping, CollisionWithMappingInSameContext, ForcesTypePromotion, ForcesTypeDemotion, EMappingQueryIssue_MAX, __typeKeyDoNoAccess}
+    enum EMappingQueryResult { Error_EnhancedInputNotEnabled, Error_InputContextNotInActiveContexts, Error_InvalidAction, NotMappable, MappingAvailable, EMappingQueryResult_MAX, __typeKeyDoNoAccess}
     enum EMapSetBrushFlags { MSB_BrushColor, MSB_Group, MSB_PolyFlags, MSB_BrushType, MSB_MAX, __typeKeyDoNoAccess}
     enum EMaterialAttributeBlend { Blend, UseA, UseB, EMaterialAttributeBlend_MAX, __typeKeyDoNoAccess}
     enum EMaterialAttributeBlendFunction { Horizontal, Vertical, EMaterialAttributeBlendFunction_MAX, __typeKeyDoNoAccess}
@@ -45116,18 +48905,999 @@ declare module "ue" {
         __tid_EngineTypes_0__: boolean;
     }
     
-    enum ENodeTitleType { FullTitle, ListView, EditableTitle, MenuTitle, MAX_TitleTypes, ENodeTitleType_MAX, __typeKeyDoNoAccess}
-    enum ENoiseFunction { NOISEFUNCTION_SimplexTex, NOISEFUNCTION_GradientTex, NOISEFUNCTION_GradientTex3D, NOISEFUNCTION_GradientALU, NOISEFUNCTION_ValueALU, NOISEFUNCTION_VoronoiALU, NOISEFUNCTION_MAX, __typeKeyDoNoAccess}
-    enum ENormalMode { NM_PreserveSmoothingGroups, NM_RecalculateNormals, NM_RecalculateNormalsSmooth, NM_RecalculateNormalsHard, TEMP_BROKEN, ENormalMode_MAX, __typeKeyDoNoAccess}
-    class Enum extends UE.Field {
+    class InputDelegateBinding extends UE.DynamicBlueprintBinding {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): Enum;
-        static Load(InName: string): Enum;
+        static Find(OrigInName: string, Outer?: Object): InputDelegateBinding;
+        static Load(InName: string): InputDelegateBinding;
     
-        __tid_Enum_0__: boolean;
+        __tid_InputDelegateBinding_0__: boolean;
     }
     
+    class EnhancedInputActionDelegateBinding extends UE.InputDelegateBinding {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        InputActionDelegateBindings: TArray<UE.BlueprintEnhancedInputActionBinding>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputActionDelegateBinding;
+        static Load(InName: string): EnhancedInputActionDelegateBinding;
+    
+        __tid_EnhancedInputActionDelegateBinding_0__: boolean;
+    }
+    
+    class EnhancedInputActionValueBinding extends UE.InputDelegateBinding {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        InputActionValueBindings: TArray<UE.BlueprintEnhancedInputActionBinding>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputActionValueBinding;
+        static Load(InName: string): EnhancedInputActionValueBinding;
+    
+        __tid_EnhancedInputActionValueBinding_0__: boolean;
+    }
+    
+    class EnhancedInputComponent extends UE.InputComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Helper function to pull the action value for a bound action value.
+         */
+        GetBoundActionValue(Action: $Nullable<UE.InputAction>) : UE.InputActionValue;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputComponent;
+        static Load(InName: string): EnhancedInputComponent;
+    
+        __tid_EnhancedInputComponent_0__: boolean;
+    }
+    
+    class DeveloperSettingsBackedByCVars extends UE.DeveloperSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DeveloperSettingsBackedByCVars;
+        static Load(InName: string): DeveloperSettingsBackedByCVars;
+    
+        __tid_DeveloperSettingsBackedByCVars_0__: boolean;
+    }
+    
+    class PlatformSettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PlatformSettings;
+        static Load(InName: string): PlatformSettings;
+    
+        __tid_PlatformSettings_0__: boolean;
+    }
+    
+    class PerPlatformSettings {
+        constructor();
+        constructor(Settings: TArray<UE.PlatformSettings>);
+        Settings: TArray<UE.PlatformSettings>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PerPlatformSettings_0__: boolean;
+    }
+    
+    class EnhancedInputDeveloperSettings extends UE.DeveloperSettingsBackedByCVars {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        DefaultMappingContexts: TArray<UE.DefaultContextSetting>;
+        DefaultWorldSubsystemMappingContexts: TArray<UE.DefaultContextSetting>;
+        PlatformSettings: UE.PerPlatformSettings;
+        UserSettingsClass: TSoftClassPtr<UE.EnhancedInputUserSettings>;
+        DefaultPlayerMappableKeyProfileClass: TSoftClassPtr<UE.EnhancedPlayerMappableKeyProfile>;
+        DefaultWorldInputClass: TSoftClassPtr<UE.EnhancedPlayerInput>;
+        bSendTriggeredEventsWhenInputIsFlushed: boolean;
+        bEnableUserSettings: boolean;
+        bEnableDefaultMappingContexts: boolean;
+        bShouldOnlyTriggerLastActionInChord: boolean;
+        bLogOnDeprecatedConfigUsed: boolean;
+        bEnableWorldSubsystem: boolean;
+        bShouldLogAllWorldSubsystemInputs: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputDeveloperSettings;
+        static Load(InName: string): EnhancedInputDeveloperSettings;
+    
+        __tid_EnhancedInputDeveloperSettings_0__: boolean;
+    }
+    
+    class PlayerMappableKeySlot {
+        constructor();
+        constructor(SlotNumber: number);
+        SlotNumber: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayerMappableKeySlot_0__: boolean;
+    }
+    
+    class EnhancedInputLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Breaks an ActionValue into X, Y, Z. Axes not supported by value type will be 0.
+         */
+        static BreakInputActionValue(InActionValue: UE.InputActionValue, X: $Ref<number>, Y: $Ref<number>, Z: $Ref<number>, Type: $Ref<UE.EInputActionValueType>) : void;
+        /*
+         *Interpret an InputActionValue as a 1D axis (double) input
+         */
+        static Conv_InputActionValueToAxis1D(InValue: UE.InputActionValue) : number;
+        /*
+         *Interpret an InputActionValue as a 2D axis (Vector2D) input
+         */
+        static Conv_InputActionValueToAxis2D(InValue: UE.InputActionValue) : UE.Vector2D;
+        /*
+         *Interpret an InputActionValue as a 3D axis (Vector) input
+         */
+        static Conv_InputActionValueToAxis3D(ActionValue: UE.InputActionValue) : UE.Vector;
+        /*
+         *Interpret an InputActionValue as a boolean input
+         */
+        static Conv_InputActionValueToBool(InValue: UE.InputActionValue) : boolean;
+        /*
+         *Converts a FInputActionValue to a string
+         */
+        static Conv_InputActionValueToString(ActionValue: UE.InputActionValue) : string;
+        /*
+         *Converts an ETriggerEvent to a string
+         */
+        static Conv_TriggerEventValueToString(TriggerEvent: UE.ETriggerEvent) : string;
+        /*
+         *Flushes the player controller's pressed keys
+         *
+         *@see APlayerController::FlushPressedKeys
+         */
+        static FlushPlayerInput(PlayerController: $Nullable<UE.PlayerController>) : void;
+        /*
+         *GetInputActionvalue internal accessor function for actions that have been bound to from a UEnhancedInputComponent
+         */
+        static GetBoundActionValue(Actor: $Nullable<UE.Actor>, Action: $Nullable<UE.InputAction>) : UE.InputActionValue;
+        static GetFirstPlayerMappableKeySlot() : UE.PlayerMappableKeySlot;
+        static GetFourthPlayerMappableKeySlot() : UE.PlayerMappableKeySlot;
+        /*
+         *Returns the name of the mapping based on setting behavior used. If no name is found in the Mappable Key Settings it will return the name set in Player Mappable Options if bIsPlayerMappable is true.
+         */
+        static GetMappingName(ActionKeyMapping: UE.EnhancedActionKeyMapping) : string;
+        /*
+         *Returns the Player Mappable Key Settings owned by the Action Key Mapping or by the referenced Input Action, or nothing based of the Setting Behavior.
+         */
+        static GetPlayerMappableKeySettings(ActionKeyMapping: UE.EnhancedActionKeyMapping) : UE.PlayerMappableKeySettings;
+        static GetSecondPlayerMappableKeySlot() : UE.PlayerMappableKeySlot;
+        static GetThirdPlayerMappableKeySlot() : UE.PlayerMappableKeySlot;
+        /*
+         *Returns true if this Action Key Mapping either holds a Player Mappable Key Settings or is set bIsPlayerMappable.
+         */
+        static IsActionKeyMappingPlayerMappable(ActionKeyMapping: UE.EnhancedActionKeyMapping) : boolean;
+        static MakeInputActionValue(X: number, Y: number, Z: number, MatchValueType: UE.InputActionValue) : UE.InputActionValue;
+        /*
+         *Builds an ActionValue from X, Y, Z. Inherits type from an existing ActionValue. Ignores axis values unused by the provided value type.
+         *@note Intended for use in Input Modifier Modify Raw overloads to modify an existing Input Action Value.
+         */
+        static MakeInputActionValueOfType(X: number, Y: number, Z: number, ValueType: UE.EInputActionValueType) : UE.InputActionValue;
+        /*
+         *Flag all enhanced input subsystems making use of the mapping context for reapplication of all control mappings at the end of this frame.
+         *@param Context                               Mappings will be rebuilt for all subsystems utilizing this context.
+         *@param bForceImmediately             The mapping changes will be applied synchronously, rather than at the end of the frame, making them available to the input system on the same frame.
+         */
+        static RequestRebuildControlMappingsUsingContext(Context: $Nullable<UE.InputMappingContext>, bForceImmediately?: boolean /* = false */) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputLibrary;
+        static Load(InName: string): EnhancedInputLibrary;
+    
+        __tid_EnhancedInputLibrary_0__: boolean;
+    }
+    
+    class LocalPlayerSubsystem extends UE.Subsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LocalPlayerSubsystem;
+        static Load(InName: string): LocalPlayerSubsystem;
+    
+        __tid_LocalPlayerSubsystem_0__: boolean;
+    }
+    
+    enum EPlayerMappableKeySlot { First, Second, Third, Fourth, Fifth, Sixth, Seventh, Unspecified, Max, EPlayerMappableKeySlot_MAX, __typeKeyDoNoAccess}
+    class HardwareDeviceIdentifier {
+        constructor();
+        constructor(InputClassName: string, HardwareDeviceIdentifier: string, PrimaryDeviceType: UE.EHardwareDevicePrimaryType, SupportedFeaturesMask: number);
+        InputClassName: string;
+        HardwareDeviceIdentifier: string;
+        PrimaryDeviceType: UE.EHardwareDevicePrimaryType;
+        SupportedFeaturesMask: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_HardwareDeviceIdentifier_0__: boolean;
+    }
+    
+    class PlayerKeyMapping {
+        constructor();
+        constructor(MappingName: string, DisplayName: string, DisplayCategory: string, Slot: UE.EPlayerMappableKeySlot, bIsDirty: boolean, DefaultKey: UE.Key, CurrentKey: UE.Key, HardwareDeviceId: UE.HardwareDeviceIdentifier, AssociatedInputAction: UE.InputAction);
+        MappingName: string;
+        DisplayName: string;
+        DisplayCategory: string;
+        Slot: UE.EPlayerMappableKeySlot;
+        bIsDirty: boolean;
+        DefaultKey: UE.Key;
+        CurrentKey: UE.Key;
+        HardwareDeviceId: UE.HardwareDeviceIdentifier;
+        AssociatedInputAction: UE.InputAction;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayerKeyMapping_0__: boolean;
+    }
+    
+    class KeyMappingRow {
+        constructor();
+        constructor(Mappings: TSet<UE.PlayerKeyMapping>);
+        Mappings: TSet<UE.PlayerKeyMapping>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_KeyMappingRow_0__: boolean;
+    }
+    
+    class PlayerMappableKeyQueryOptions {
+        constructor();
+        constructor(MappingName: string, KeyToMatch: UE.Key, SlotToMatch: UE.EPlayerMappableKeySlot, bMatchBasicKeyTypes: boolean, bMatchKeyAxisType: boolean, RequiredDeviceType: UE.EHardwareDevicePrimaryType, RequiredDeviceFlags: number);
+        MappingName: string;
+        KeyToMatch: UE.Key;
+        SlotToMatch: UE.EPlayerMappableKeySlot;
+        bMatchBasicKeyTypes: boolean;
+        bMatchKeyAxisType: boolean;
+        RequiredDeviceType: UE.EHardwareDevicePrimaryType;
+        RequiredDeviceFlags: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayerMappableKeyQueryOptions_0__: boolean;
+    }
+    
+    class MapPlayerKeyArgs {
+        constructor();
+        constructor(MappingName: string, Slot: UE.EPlayerMappableKeySlot, NewKey: UE.Key, HardwareDeviceId: string, ProfileId: UE.GameplayTag, bCreateMatchingSlotIfNeeded: boolean, bDeferOnSettingsChangedBroadcast: boolean);
+        MappingName: string;
+        Slot: UE.EPlayerMappableKeySlot;
+        NewKey: UE.Key;
+        HardwareDeviceId: string;
+        ProfileId: UE.GameplayTag;
+        bCreateMatchingSlotIfNeeded: boolean;
+        bDeferOnSettingsChangedBroadcast: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MapPlayerKeyArgs_0__: boolean;
+    }
+    
+    class EnhancedPlayerMappableKeyProfile extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ProfileIdentifier: UE.GameplayTag;
+        OwningUserId: UE.PlatformUserId;
+        DisplayName: string;
+        PlayerMappedKeys: TMap<string, UE.KeyMappingRow>;
+        /*
+         *Returns true if the given player key mapping passes the query filter provided.
+         */
+        DoesMappingPassQueryOptions(PlayerMapping: UE.PlayerKeyMapping, Options: UE.PlayerMappableKeyQueryOptions) : boolean;
+        /*
+         *A helper function to print out all the current profile settings to the log.
+         */
+        DumpProfileToLog() : void;
+        /*
+         *OUT
+         */
+        GetMappedKeysInRow(MappingName: string, OutKeys: $Ref<TArray<UE.Key>>) : number;
+        /*
+         *OUT
+         */
+        GetMappingNamesForKey(InKey: UE.Key, OutMappingNames: $Ref<TArray<string>>) : number;
+        /*
+         *Get all known key mappings for this profile.
+         *
+         *This returns a map of "Mapping Name" -> Player Mappings to that name
+         */
+        GetPlayerMappingRows() : TMap<string, UE.KeyMappingRow>;
+        /*
+         *Get the localized display name for this profile
+         */
+        GetProfileDisplayName() : string;
+        GetProfileIdentifer() : UE.GameplayTag;
+        K2_FindKeyMapping(OutKeyMapping: $Ref<UE.PlayerKeyMapping>, InArgs: UE.MapPlayerKeyArgs) : void;
+        /*
+         *OUT
+         */
+        QueryPlayerMappedKeys(Options: UE.PlayerMappableKeyQueryOptions, OutKeys: $Ref<TArray<UE.Key>>) : number;
+        /*
+         *Resets every player key mapping to this mapping back to it's default value
+         */
+        ResetMappingToDefault(InMappingName: string) : void;
+        /*
+         *Resets all the key mappings in this profile to their default value from their Input Mapping Context.
+         */
+        ResetToDefault() : void;
+        SetDisplayName(NewDisplayName: string) : void;
+        /*
+         *Returns a string that can be used to debug the current key mappings.
+         */
+        ToString() : string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedPlayerMappableKeyProfile;
+        static Load(InName: string): EnhancedPlayerMappableKeyProfile;
+    
+        __tid_EnhancedPlayerMappableKeyProfile_0__: boolean;
+    }
+    
+    class PlayerMappableKeyProfileCreationArgs {
+        constructor();
+        constructor(ProfileType: UE.Class, ProfileIdentifier: UE.GameplayTag, UserId: UE.PlatformUserId, DisplayName: string, bSetAsCurrentProfile: boolean);
+        ProfileType: UE.Class;
+        ProfileIdentifier: UE.GameplayTag;
+        UserId: UE.PlatformUserId;
+        DisplayName: string;
+        bSetAsCurrentProfile: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayerMappableKeyProfileCreationArgs_0__: boolean;
+    }
+    
+    class EnhancedInputUserSettings extends UE.SaveGame {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnSettingsChanged: $MulticastDelegate<(Settings: $Nullable<UE.EnhancedInputUserSettings>) => void>;
+        OnSettingsApplied: $MulticastDelegate<() => void>;
+        CurrentProfileIdentifier: UE.GameplayTag;
+        SavedKeyProfiles: TMap<UE.GameplayTag, UE.EnhancedPlayerMappableKeyProfile>;
+        OwningLocalPlayer: TWeakObjectPtr<UE.LocalPlayer>;
+        RegisteredMappingContexts: TSet<UE.InputMappingContext>;
+        /*
+         *Apply any custom input settings to your user. By default, this will just broadcast the OnSettingsApplied delegate
+         *which is a useful hook to maybe rebuild some UI or do other user facing updates.
+         */
+        ApplySettings() : void;
+        /*
+         *Asynchronously save the settings to a hardcoded save game slot. This will work for simple games,
+         *but if you need to integrate it into an advanced save system you should Serialize this object out with the rest of your save data.
+         *
+         *OnAsyncSaveComplete will be called upon save completion.
+         */
+        AsyncSaveSettings() : void;
+        /*
+         *Creates a new profile with this name and type.
+         */
+        CreateNewKeyProfile(InArgs: UE.PlayerMappableKeyProfileCreationArgs) : UE.EnhancedPlayerMappableKeyProfile;
+        /*
+         *Called after the settings have been applied from the ApplySettings call.
+         */
+        EnhancedInputUserSettingsApplied__DelegateSignature() : void;
+        /*
+         *Fired when the user settings have changed, such as their key mappings.
+         */
+        EnhancedInputUserSettingsChanged__DelegateSignature(Settings: $Nullable<UE.EnhancedInputUserSettings>) : void;
+        /*
+         *Returns a set of all player key mappings for the given mapping name.
+         */
+        FindMappingsInRow(MappingName: string) : TSet<UE.PlayerKeyMapping>;
+        /*
+         *Get the current key profile that the user has set
+         */
+        GetCurrentKeyProfile() : UE.EnhancedPlayerMappableKeyProfile;
+        /*
+         *Gets the currently selected key profile
+         */
+        GetCurrentKeyProfileIdentifier() : UE.GameplayTag;
+        /*
+         *Returns the key profile with the given name if one exists. Null if one doesn't exist
+         */
+        GetKeyProfileWithIdentifier(ProfileId: UE.GameplayTag) : UE.EnhancedPlayerMappableKeyProfile;
+        /*
+         *Returns true if this mapping context is currently registered with the settings
+         */
+        IsMappingContextRegistered(IMC: $Nullable<UE.InputMappingContext>) : boolean;
+        /*
+         *Fired when you equip a different key profile
+         */
+        MappableKeyProfileChanged__DelegateSignature(NewProfile: $Nullable<UE.EnhancedPlayerMappableKeyProfile>) : void;
+        /*
+         *Fired when a new input mapping context is registered. Useful if you need to update your UI
+         */
+        MappingContextRegisteredWithSettings__DelegateSignature(IMC: $Nullable<UE.InputMappingContext>) : void;
+        /*
+         *Sets the player mapped key on the current key profile.
+         */
+        MapPlayerKey(InArgs: UE.MapPlayerKeyArgs, FailureReason: $Ref<UE.GameplayTagContainer>) : void;
+        /*
+         *Registers this mapping context with the user settings. This will iterate all the key mappings
+         *in the context and create an initial Player Mappable Key for every mapping that is marked as mappable.
+         */
+        RegisterInputMappingContext(IMC: $Nullable<UE.InputMappingContext>) : boolean;
+        /*
+         *Registers multiple mapping contexts with the settings
+         */
+        RegisterInputMappingContexts(MappingContexts: TSet<UE.InputMappingContext>) : boolean;
+        /*
+         *Resets each player mapped key to it's default value from the Input Mapping Context that it was registered from.
+         *If a key did not come from an IMC (i.e. it was added additionally by the player) then it will be reset to EKeys::Invalid.
+         *
+         *@param InArgs                         Arguments that contain the mapping name and profile ID to find the mapping to reset.
+         *@param FailureReason          Populated with failure reasons if the operation fails.
+         */
+        ResetAllPlayerKeysInRow(InArgs: UE.MapPlayerKeyArgs, FailureReason: $Ref<UE.GameplayTagContainer>) : void;
+        /*
+         *Resets the given key profile to default key mappings
+         *
+         *@param ProfileId             The ID of the key profile to reset
+         *@param FailureReason Populated with failure reasons if the operation fails.
+         */
+        ResetKeyProfileToDefault(ProfileId: UE.GameplayTag, FailureReason: $Ref<UE.GameplayTagContainer>) : void;
+        /*
+         *Synchronously save the settings to a hardcoded save game slot. This will work for simple games,
+         *but if you need to integrate it into an advanced save system you should Serialize this object out with the rest of your save data.
+         */
+        SaveSettings() : void;
+        /*
+         *Changes the currently active key profile to the one with the given name. Returns true if the operation was successful.
+         */
+        SetKeyProfile(InProfileId: UE.GameplayTag) : boolean;
+        /*
+         *Unmaps a single player mapping that matches the given Mapping name, slot, and hardware device.
+         */
+        UnMapPlayerKey(InArgs: UE.MapPlayerKeyArgs, FailureReason: $Ref<UE.GameplayTagContainer>) : void;
+        /*
+         *Removes this mapping context from the registered mapping contexts
+         */
+        UnregisterInputMappingContext(IMC: $Nullable<UE.InputMappingContext>) : boolean;
+        /*
+         *Removes multiple mapping contexts from the registered mapping contexts
+         */
+        UnregisterInputMappingContexts(MappingContexts: TSet<UE.InputMappingContext>) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputUserSettings;
+        static Load(InName: string): EnhancedInputUserSettings;
+    
+        __tid_EnhancedInputUserSettings_0__: boolean;
+    }
+    
+    class ModifyContextOptions {
+        constructor();
+        constructor(bIgnoreAllPressedKeysUntilRelease: boolean, bForceImmediately: boolean, bNotifyUserSettings: boolean);
+        bIgnoreAllPressedKeysUntilRelease: boolean;
+        bForceImmediately: boolean;
+        bNotifyUserSettings: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ModifyContextOptions_0__: boolean;
+    }
+    
+    class MappingQueryIssue {
+        constructor();
+        constructor(Issue: UE.EMappingQueryIssue, BlockingContext: UE.InputMappingContext, BlockingAction: UE.InputAction);
+        Issue: UE.EMappingQueryIssue;
+        BlockingContext: UE.InputMappingContext;
+        BlockingAction: UE.InputAction;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MappingQueryIssue_0__: boolean;
+    }
+    
+    class EnhancedInputLocalPlayerSubsystem extends UE.LocalPlayerSubsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ControlMappingsRebuiltDelegate: $MulticastDelegate<() => void>;
+        UserSettings: UE.EnhancedInputUserSettings;
+        ContinuouslyInjectedInputs: TMap<UE.InputAction, UE.InjectedInput>;
+        /*
+         *Add a control mapping context.
+         *@param MappingContext                A set of key to action mappings to apply to this player
+         *@param Priority                              Higher priority mappings will be applied first and, if they consume input, will block lower priority mappings.
+         *@param Options                               Options to consider when adding this mapping context.
+         */
+        AddMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Priority: number, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Remove all applied mapping contexts.
+         */
+        ClearAllMappings() : void;
+        /*
+         *Get an array of the currently applied key mappings that are marked as Player Mappable.
+         */
+        GetAllPlayerMappableActionKeyMappings() : TArray<UE.EnhancedActionKeyMapping>;
+        GetUserSettings() : UE.EnhancedInputUserSettings;
+        /*
+         *Check if a mapping context is applied to this subsystem's owner.
+         *
+         *@param MappingContext                The mapping context to search for on the subsystem's owner.
+         *@param OutFoundPriority              The priority of the mapping context if it is applied. -1 if the context is not applied
+         *@return      True if the mapping context is applied
+         */
+        HasMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, OutFoundPriority: $Ref<number>) : boolean;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param Value                 The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputVectorForAction(Action: $Nullable<UE.InputAction>, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param Value                         The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputVectorForPlayerMapping(MappingName: string, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *A delegate that will be called when control mappings have been rebuilt this frame.
+         */
+        OnControlMappingsRebuilt__DelegateSignature() : void;
+        /*
+         *A callback for when the user has applied a new mappable key profile.
+         */
+        OnUserKeyProfileChanged(InNewProfile: $Nullable<UE.EnhancedPlayerMappableKeyProfile>) : void;
+        /*
+         *Callback for when any Enhanced Input user settings have been changed (a new key mapping for example)
+         */
+        OnUserSettingsChanged(Settings: $Nullable<UE.EnhancedInputUserSettings>) : void;
+        /*
+         *Returns the keys mapped to the given action in the active input mapping contexts.
+         */
+        QueryKeysMappedToAction(Action: $Nullable<UE.InputAction>) : TArray<UE.Key>;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInActiveContextSet(InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInContextSet(PrioritizedActiveContexts: TArray<UE.InputMappingContext>, InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *Remove a specific control context.
+         *This is safe to call even if the context is not applied.
+         *@param MappingContext         Context to remove from the player
+         *@param Options                        Options to consider when removing this input mapping context
+         */
+        RemoveMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Flag player for reapplication of all mapping contexts at the end of this frame.
+         *This is called automatically when adding or removing mappings contexts.
+         *
+         *@param Options                Options to consider when removing this input mapping context
+         */
+        RequestRebuildControlMappings(Options?: UE.ModifyContextOptions /* = () */, RebuildType?: UE.EInputMappingRebuildType /* = Rebuild */) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Stops continuous input injection for the given action.
+         *
+         *@param Action                The action to stop injecting input for
+         */
+        StopContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>) : void;
+        /*
+         *Stops continuous input injection for the given player mapping name.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         */
+        StopContinuousInputInjectionForPlayerMapping(MappingName: string) : void;
+        /*
+         *Update the value of a continuous input injection, preserving the state of triggers and modifiers.
+         *
+         *@param Action        The Input Action to set inject input for
+         *@param RawValue      The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue) : void;
+        /*
+         *Update the value of a continuous input injection for the given player mapping name, preserving the state of triggers and modifiers.
+         *
+         *@param MappingName   The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputLocalPlayerSubsystem;
+        static Load(InName: string): EnhancedInputLocalPlayerSubsystem;
+    
+        __tid_EnhancedInputLocalPlayerSubsystem_0__: boolean;
+    }
+    
+    class EnhancedInputPlatformData extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MappingContextRedirects: TMap<UE.InputMappingContext, UE.InputMappingContext>;
+        /*
+         *Returns a pointer to the desired redirect mapping context. If there isn't one, then this returns InContext.
+         */
+        GetContextRedirect(InContext: $Nullable<UE.InputMappingContext>) : UE.InputMappingContext;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputPlatformData;
+        static Load(InName: string): EnhancedInputPlatformData;
+    
+        __tid_EnhancedInputPlatformData_0__: boolean;
+    }
+    
+    class EnhancedInputPlatformSettings extends UE.PlatformSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        InputData: TArray<TSoftClassPtr<UE.EnhancedInputPlatformData>>;
+        InputDataClasses: TArray<UE.Class>;
+        bShouldLogMappingContextRedirects: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputPlatformSettings;
+        static Load(InName: string): EnhancedInputPlatformSettings;
+    
+        __tid_EnhancedInputPlatformSettings_0__: boolean;
+    }
+    
+    class EnhancedInputSubsystemInterface extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Add a control mapping context.
+         *@param MappingContext                A set of key to action mappings to apply to this player
+         *@param Priority                              Higher priority mappings will be applied first and, if they consume input, will block lower priority mappings.
+         *@param Options                               Options to consider when adding this mapping context.
+         */
+        AddMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Priority: number, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Remove all applied mapping contexts.
+         */
+        ClearAllMappings() : void;
+        /*
+         *Get an array of the currently applied key mappings that are marked as Player Mappable.
+         */
+        GetAllPlayerMappableActionKeyMappings() : TArray<UE.EnhancedActionKeyMapping>;
+        GetUserSettings() : UE.EnhancedInputUserSettings;
+        /*
+         *Check if a mapping context is applied to this subsystem's owner.
+         *
+         *@param MappingContext                The mapping context to search for on the subsystem's owner.
+         *@param OutFoundPriority              The priority of the mapping context if it is applied. -1 if the context is not applied
+         *@return      True if the mapping context is applied
+         */
+        HasMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, OutFoundPriority: $Ref<number>) : boolean;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param Value                 The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputVectorForAction(Action: $Nullable<UE.InputAction>, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param Value                         The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputVectorForPlayerMapping(MappingName: string, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *A callback for when the user has applied a new mappable key profile.
+         */
+        OnUserKeyProfileChanged(InNewProfile: $Nullable<UE.EnhancedPlayerMappableKeyProfile>) : void;
+        /*
+         *Callback for when any Enhanced Input user settings have been changed (a new key mapping for example)
+         */
+        OnUserSettingsChanged(Settings: $Nullable<UE.EnhancedInputUserSettings>) : void;
+        /*
+         *Returns the keys mapped to the given action in the active input mapping contexts.
+         */
+        QueryKeysMappedToAction(Action: $Nullable<UE.InputAction>) : TArray<UE.Key>;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInActiveContextSet(InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInContextSet(PrioritizedActiveContexts: TArray<UE.InputMappingContext>, InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *Remove a specific control context.
+         *This is safe to call even if the context is not applied.
+         *@param MappingContext         Context to remove from the player
+         *@param Options                        Options to consider when removing this input mapping context
+         */
+        RemoveMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Flag player for reapplication of all mapping contexts at the end of this frame.
+         *This is called automatically when adding or removing mappings contexts.
+         *
+         *@param Options                Options to consider when removing this input mapping context
+         */
+        RequestRebuildControlMappings(Options?: UE.ModifyContextOptions /* = () */, RebuildType?: UE.EInputMappingRebuildType /* = Rebuild */) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Stops continuous input injection for the given action.
+         *
+         *@param Action                The action to stop injecting input for
+         */
+        StopContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>) : void;
+        /*
+         *Stops continuous input injection for the given player mapping name.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         */
+        StopContinuousInputInjectionForPlayerMapping(MappingName: string) : void;
+        /*
+         *Update the value of a continuous input injection, preserving the state of triggers and modifiers.
+         *
+         *@param Action        The Input Action to set inject input for
+         *@param RawValue      The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue) : void;
+        /*
+         *Update the value of a continuous input injection for the given player mapping name, preserving the state of triggers and modifiers.
+         *
+         *@param MappingName   The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputSubsystemInterface;
+        static Load(InName: string): EnhancedInputSubsystemInterface;
+    
+        __tid_EnhancedInputSubsystemInterface_0__: boolean;
+    }
+    
+    class EnhancedInputWorldSubsystem extends UE.WorldSubsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PlayerInput: UE.EnhancedPlayerInput;
+        CurrentInputStack: TArray<TWeakObjectPtr<UE.InputComponent>>;
+        ContinuouslyInjectedInputs: TMap<UE.InputAction, UE.InjectedInput>;
+        /*
+         *Adds this Actor's input component onto the stack to be processed by this subsystem's tick function
+         */
+        AddActorInputComponent(Actor: $Nullable<UE.Actor>) : void;
+        /*
+         *Add a control mapping context.
+         *@param MappingContext                A set of key to action mappings to apply to this player
+         *@param Priority                              Higher priority mappings will be applied first and, if they consume input, will block lower priority mappings.
+         *@param Options                               Options to consider when adding this mapping context.
+         */
+        AddMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Priority: number, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Remove all applied mapping contexts.
+         */
+        ClearAllMappings() : void;
+        /*
+         *Get an array of the currently applied key mappings that are marked as Player Mappable.
+         */
+        GetAllPlayerMappableActionKeyMappings() : TArray<UE.EnhancedActionKeyMapping>;
+        GetUserSettings() : UE.EnhancedInputUserSettings;
+        /*
+         *Check if a mapping context is applied to this subsystem's owner.
+         *
+         *@param MappingContext                The mapping context to search for on the subsystem's owner.
+         *@param OutFoundPriority              The priority of the mapping context if it is applied. -1 if the context is not applied
+         *@return      True if the mapping context is applied
+         */
+        HasMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, OutFoundPriority: $Ref<number>) : boolean;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param Value                 The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        InjectInputVectorForAction(Action: $Nullable<UE.InputAction>, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Input simulation via injection. Runs modifiers and triggers delegates as if the input had come through the underlying input system as FKeys.
+         *Applies action modifiers and triggers on top.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param Value                         The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        InjectInputVectorForPlayerMapping(MappingName: string, Value: UE.Vector, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *A callback for when the user has applied a new mappable key profile.
+         */
+        OnUserKeyProfileChanged(InNewProfile: $Nullable<UE.EnhancedPlayerMappableKeyProfile>) : void;
+        /*
+         *Callback for when any Enhanced Input user settings have been changed (a new key mapping for example)
+         */
+        OnUserSettingsChanged(Settings: $Nullable<UE.EnhancedInputUserSettings>) : void;
+        /*
+         *Returns the keys mapped to the given action in the active input mapping contexts.
+         */
+        QueryKeysMappedToAction(Action: $Nullable<UE.InputAction>) : TArray<UE.Key>;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInActiveContextSet(InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *= DefaultMappingIssues::StandardFatal
+         */
+        QueryMapKeyInContextSet(PrioritizedActiveContexts: TArray<UE.InputMappingContext>, InputContext: $Nullable<UE.InputMappingContext>, Action: $Nullable<UE.InputAction>, Key: UE.Key, OutIssues: $Ref<TArray<UE.MappingQueryIssue>>, BlockingIssues: UE.EMappingQueryIssue) : UE.EMappingQueryResult;
+        /*
+         *Removes this Actor's input component from the stack to be processed by this subsystem's tick function
+         */
+        RemoveActorInputComponent(Actor: $Nullable<UE.Actor>) : boolean;
+        /*
+         *Remove a specific control context.
+         *This is safe to call even if the context is not applied.
+         *@param MappingContext         Context to remove from the player
+         *@param Options                        Options to consider when removing this input mapping context
+         */
+        RemoveMappingContext(MappingContext: $Nullable<UE.InputMappingContext>, Options?: UE.ModifyContextOptions /* = () */) : void;
+        /*
+         *Flag player for reapplication of all mapping contexts at the end of this frame.
+         *This is called automatically when adding or removing mappings contexts.
+         *
+         *@param Options                Options to consider when removing this input mapping context
+         */
+        RequestRebuildControlMappings(Options?: UE.ModifyContextOptions /* = () */, RebuildType?: UE.EInputMappingRebuildType /* = Rebuild */) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param Action                The Input Action to set inject input for
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers             The modifiers to apply to the injected input.
+         *@param Triggers              The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Starts simulation of input via injection. This injects the given input every tick until it is stopped with StopContinuousInputInjectionForAction.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue                      The value to set the action to (the type will be controlled by the Action)
+         *@param Modifiers                     The modifiers to apply to the injected input.
+         *@param Triggers                      The triggers to apply to the injected input.
+         */
+        StartContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue, Modifiers: TArray<UE.InputModifier>, Triggers: TArray<UE.InputTrigger>) : void;
+        /*
+         *Stops continuous input injection for the given action.
+         *
+         *@param Action                The action to stop injecting input for
+         */
+        StopContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>) : void;
+        /*
+         *Stops continuous input injection for the given player mapping name.
+         *
+         *@param MappingName           The name of the player mapping that can be used for look up an associated UInputAction object.
+         */
+        StopContinuousInputInjectionForPlayerMapping(MappingName: string) : void;
+        /*
+         *Update the value of a continuous input injection, preserving the state of triggers and modifiers.
+         *
+         *@param Action        The Input Action to set inject input for
+         *@param RawValue      The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForAction(Action: $Nullable<UE.InputAction>, RawValue: UE.InputActionValue) : void;
+        /*
+         *Update the value of a continuous input injection for the given player mapping name, preserving the state of triggers and modifiers.
+         *
+         *@param MappingName   The name of the player mapping that can be used for look up an associated UInputAction object.
+         *@param RawValue              The value to set the action to (the type will be controlled by the Action)
+         */
+        UpdateValueOfContinuousInputInjectionForPlayerMapping(MappingName: string, RawValue: UE.InputActionValue) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnhancedInputWorldSubsystem;
+        static Load(InName: string): EnhancedInputWorldSubsystem;
+    
+        __tid_EnhancedInputWorldSubsystem_0__: boolean;
+    }
+    
+    enum ENodeTitleType { FullTitle, ListView, EditableTitle, MenuTitle, MAX_TitleTypes, ENodeTitleType_MAX, __typeKeyDoNoAccess}
+    enum ENoiseFunction { NOISEFUNCTION_SimplexTex, NOISEFUNCTION_GradientTex, NOISEFUNCTION_GradientTex3D, NOISEFUNCTION_GradientALU, NOISEFUNCTION_ValueALU, NOISEFUNCTION_VoronoiALU, NOISEFUNCTION_MAX, __typeKeyDoNoAccess}
+    enum ENormalizeInputSmoothingType { None, Lerp, Interp_To, Interp_Constant_To, Interp_Circular_In, Interp_Circular_Out, Interp_Circular_In_Out, Interp_Ease_In, Interp_Ease_Out, Interp_Ease_In_Out, Interp_Expo_In, Interp_Expo_Out, Interp_Expo_In_Out, Interp_Sin_In, Interp_Sin_Out, Interp_Sin_In_Out, ENormalizeInputSmoothingType_MAX, __typeKeyDoNoAccess}
+    enum ENormalMode { NM_PreserveSmoothingGroups, NM_RecalculateNormals, NM_RecalculateNormalsSmooth, NM_RecalculateNormalsHard, TEMP_BROKEN, ENormalMode_MAX, __typeKeyDoNoAccess}
     class EnumCookedMetaData extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         EnumMetaData: UE.ObjectCookedMetaDataStore;
@@ -45232,6 +50002,7 @@ declare module "ue" {
     enum ERootMotionFinishVelocityMode { MaintainLastRootMotionVelocity, SetVelocity, ClampVelocity, ERootMotionFinishVelocityMode_MAX, __typeKeyDoNoAccess}
     enum ERootMotionSourceSettingsFlags { UseSensitiveLiftoffCheck, DisablePartialEndTick, IgnoreZAccumulate, ERootMotionSourceSettingsFlags_MAX, __typeKeyDoNoAccess}
     enum ERootMotionSourceStatusFlags { Prepared, Finished, MarkedForRemoval, ERootMotionSourceStatusFlags_MAX, __typeKeyDoNoAccess}
+    enum ERootSelectionMode { Disabled, Enabled, Self, ERootSelectionMode_MAX, __typeKeyDoNoAccess}
     enum ERotationGridMode { GridMode_DivisionsOf360, GridMode_Common, GridMode_MAX, __typeKeyDoNoAccess}
     enum ERoundingMode { HalfToEven, HalfFromZero, HalfToZero, FromZero, ToZero, ToNegativeInfinity, ToPositiveInfinity, ERoundingMode_MAX, __typeKeyDoNoAccess}
     enum ERuntimePartitionCellBoundsMethod { UseContent, UseCellBounds, UseMinContentCellBounds, ERuntimePartitionCellBoundsMethod_MAX, __typeKeyDoNoAccess}
@@ -45278,6 +50049,7 @@ declare module "ue" {
     enum EStructViewerDeveloperType { SVDT_None, SVDT_CurrentUser, SVDT_All, SVDT_Max, SVDT_MAX, __typeKeyDoNoAccess}
     enum EStyleColor { Black, Background, Title, WindowBorder, Foldout, Input, InputOutline, Recessed, Panel, Header, Dropdown, DropdownOutline, Hover, Hover2, White, White25, Highlight, Primary, PrimaryHover, PrimaryPress, Secondary, Foreground, ForegroundHover, ForegroundInverted, ForegroundHeader, Select, SelectInactive, SelectParent, SelectHover, Notifications, AccentBlue, AccentPurple, AccentPink, AccentRed, AccentOrange, AccentYellow, AccentGreen, AccentBrown, AccentBlack, AccentGray, AccentWhite, AccentFolder, Warning, Error, Success, User1, User2, User3, User4, User5, User6, User7, User8, User9, User10, User11, User12, User13, User14, User15, User16, MAX, __typeKeyDoNoAccess}
     enum ESuggestProjVelocityTraceOption { DoNotTrace, TraceFullPath, OnlyTraceWhileAscending, ESuggestProjVelocityTraceOption_MAX, __typeKeyDoNoAccess}
+    enum ESwapRootBone { SwapRootBone_Component, SwapRootBone_Actor, SwapRootBone_None, SwapRootBone_MAX, __typeKeyDoNoAccess}
     enum ESwitchMaterialOutputType { TMMOT_Float1, TMMOT_Float2, TMMOT_Float3, TMMOT_Float4, TMMOT_MAX, __typeKeyDoNoAccess}
     enum ETableViewMode { List, Tile, Tree, ETableViewMode_MAX, __typeKeyDoNoAccess}
     enum ETestEnumFlags { None, One, Two, Four, ETestEnumFlags_MAX, __typeKeyDoNoAccess}
@@ -45314,8 +50086,9 @@ declare module "ue" {
     enum ETouchType { Began, Moved, Stationary, ForceChanged, FirstMove, Ended, NumTypes, ETouchType_MAX, __typeKeyDoNoAccess}
     enum ETrail2SourceMethod { PET2SRCM_Default, PET2SRCM_Particle, PET2SRCM_Actor, PET2SRCM_MAX, __typeKeyDoNoAccess}
     enum ETrailsRenderAxisOption { Trails_CameraUp, Trails_SourceUp, Trails_WorldUp, Trails_MAX, __typeKeyDoNoAccess}
-    enum ETransitionBlendMode { TBM_Linear, TBM_Cubic, TBM_MAX, __typeKeyDoNoAccess}
+    enum ETransitionGetter { AnimationAsset_GetCurrentTime, AnimationAsset_GetLength, AnimationAsset_GetCurrentTimeFraction, AnimationAsset_GetTimeFromEnd, AnimationAsset_GetTimeFromEndFraction, CurrentState_ElapsedTime, CurrentState_GetBlendWeight, CurrentTransitionDuration, ArbitraryState_GetBlendWeight, ETransitionGetter_MAX, __typeKeyDoNoAccess}
     enum ETranslucentSortPolicy { SortByDistance, SortByProjectedZ, SortAlongAxis, ETranslucentSortPolicy_MAX, __typeKeyDoNoAccess}
+    enum ETriggerEventsSupported { None, Instant, Uninterruptible, Ongoing, All, ETriggerEventsSupported_MAX, __typeKeyDoNoAccess}
     enum ETwitterIntegrationDelegate { TID_AuthorizeComplete, TID_TweetUIComplete, TID_RequestComplete, TID_MAX, __typeKeyDoNoAccess}
     enum ETwitterRequestMethod { TRM_Get, TRM_Post, TRM_Delete, TRM_MAX, __typeKeyDoNoAccess}
     enum ETypeAdvanceAnim { ETAA_Default, ETAA_Finished, ETAA_Looped, ETAA_MAX, __typeKeyDoNoAccess}
@@ -45338,12 +50111,15 @@ declare module "ue" {
     enum EViewTargetBlendOrder { VTBlendOrder_Base, VTBlendOrder_Override, VTBlendOrder_MAX, __typeKeyDoNoAccess}
     enum EVoiceBlockReasons { None, Muted, Gameplay, Blocked, BlockedBy, EVoiceBlockReasons_MAX, __typeKeyDoNoAccess}
     enum EVolumetricCloudTracingMaxDistanceMode { DistanceFromCloudLayerEntryPoint, DistanceFromPointOfView, EVolumetricCloudTracingMaxDistanceMode_MAX, __typeKeyDoNoAccess}
+    enum EWarpingEvaluationMode { Manual, Graph, EWarpingEvaluationMode_MAX, __typeKeyDoNoAccess}
+    enum EWarpingVectorMode { ComponentSpaceVector, ActorSpaceVector, WorldSpaceVector, IKFootRootLocalSpaceVector, EWarpingVectorMode_MAX, __typeKeyDoNoAccess}
     enum EWASDType { WASD_Always, WASD_RMBOnly, WASD_Never, WASD_MAX, __typeKeyDoNoAccess}
     enum EWidgetBlendMode { Opaque, Masked, Transparent, EWidgetBlendMode_MAX, __typeKeyDoNoAccess}
     enum EWidgetDesignFlags { None, Designing, ShowOutline, ExecutePreConstruct, Previewing, EWidgetDesignFlags_MAX, __typeKeyDoNoAccess}
     enum EWidgetGeometryMode { Plane, Cylinder, EWidgetGeometryMode_MAX, __typeKeyDoNoAccess}
     enum EWidgetInteractionSource { World, Mouse, CenterScreen, Custom, EWidgetInteractionSource_MAX, __typeKeyDoNoAccess}
     enum EWidgetSpace { World, Screen, EWidgetSpace_MAX, __typeKeyDoNoAccess}
+    enum EWidgetSupportsDynamicCreation { Default, Yes, No, EWidgetSupportsDynamicCreation_MAX, __typeKeyDoNoAccess}
     enum EWidgetTimingPolicy { RealTime, GameTime, EWidgetTimingPolicy_MAX, __typeKeyDoNoAccess}
     enum EWindowTitleBarMode { Overlay, VerticalBox, EWindowTitleBarMode_MAX, __typeKeyDoNoAccess}
     enum EWindowVisibility { Visible, SelfHitTestInvisible, EWindowVisibility_MAX, __typeKeyDoNoAccess}
@@ -48474,21 +53250,6 @@ declare module "ue" {
         __tid_HardwareCursorReference_0__: boolean;
     }
     
-    class HardwareDeviceIdentifier {
-        constructor();
-        constructor(InputClassName: string, HardwareDeviceIdentifier: string, PrimaryDeviceType: UE.EHardwareDevicePrimaryType, SupportedFeaturesMask: number);
-        InputClassName: string;
-        HardwareDeviceIdentifier: string;
-        PrimaryDeviceType: UE.EHardwareDevicePrimaryType;
-        SupportedFeaturesMask: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_HardwareDeviceIdentifier_0__: boolean;
-    }
-    
     class TableColumnHeaderStyle extends UE.SlateWidgetStyle {
         constructor();
         constructor(SortPrimaryAscendingImage: UE.SlateBrush, SortPrimaryDescendingImage: UE.SlateBrush, SortSecondaryAscendingImage: UE.SlateBrush, SortSecondaryDescendingImage: UE.SlateBrush, NormalBrush: UE.SlateBrush, HoveredBrush: UE.SlateBrush, MenuDropdownImage: UE.SlateBrush, MenuDropdownNormalBorderBrush: UE.SlateBrush, MenuDropdownHoveredBorderBrush: UE.SlateBrush);
@@ -48910,6 +53671,55 @@ declare module "ue" {
         __tid_HyperlinkStyle_0__: boolean;
     }
     
+    class IKChain {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_IKChain_0__: boolean;
+    }
+    
+    class IKChainLink {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_IKChainLink_0__: boolean;
+    }
+    
+    class VectorRK4SpringInterpolator {
+        constructor();
+        constructor(StiffnessConstant: number, DampeningRatio: number);
+        StiffnessConstant: number;
+        DampeningRatio: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_VectorRK4SpringInterpolator_0__: boolean;
+    }
+    
+    class IKFootPelvisPullDownSolver {
+        constructor();
+        constructor(PelvisAdjustmentInterp: UE.VectorRK4SpringInterpolator, PelvisAdjustmentInterpAlpha: number, PelvisAdjustmentMaxDistance: number, PelvisAdjustmentErrorTolerance: number, PelvisAdjustmentMaxIter: number);
+        PelvisAdjustmentInterp: UE.VectorRK4SpringInterpolator;
+        PelvisAdjustmentInterpAlpha: number;
+        PelvisAdjustmentMaxDistance: number;
+        PelvisAdjustmentErrorTolerance: number;
+        PelvisAdjustmentMaxIter: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_IKFootPelvisPullDownSolver_0__: boolean;
+    }
+    
     class SlateTextureAtlasInterface extends UE.Interface {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -49204,15 +54014,6 @@ declare module "ue" {
         __tid_InlineTextImageStyle_0__: boolean;
     }
     
-    class InputDelegateBinding extends UE.DynamicBlueprintBinding {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): InputDelegateBinding;
-        static Load(InName: string): InputDelegateBinding;
-    
-        __tid_InputDelegateBinding_0__: boolean;
-    }
-    
     class InputActionDelegateBinding extends UE.InputDelegateBinding {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         InputActionDelegateBindings: TArray<UE.BlueprintInputActionDelegateBinding>;
@@ -49315,6 +54116,19 @@ declare module "ue" {
         __tid_InputAxisKeyMapping_0__: boolean;
     }
     
+    class InputCancelAction {
+        constructor();
+        constructor(CancelAction: UE.InputAction, CancellationStates: number);
+        CancelAction: UE.InputAction;
+        CancellationStates: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputCancelAction_0__: boolean;
+    }
+    
     class InputClampConstants {
         constructor();
         constructor(bClampResult: boolean, bInterpResult: boolean, ClampMin: number, ClampMax: number, InterpSpeedIncreasing: number, InterpSpeedDecreasing: number);
@@ -49342,6 +54156,20 @@ declare module "ue" {
         __tid_InputClampState_0__: boolean;
     }
     
+    class InputComboStepData {
+        constructor();
+        constructor(ComboStepAction: UE.InputAction, ComboStepCompletionStates: number, TimeToPressKey: number);
+        ComboStepAction: UE.InputAction;
+        ComboStepCompletionStates: number;
+        TimeToPressKey: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_InputComboStepData_0__: boolean;
+    }
+    
     class InputCoreTypes extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -49349,6 +54177,16 @@ declare module "ue" {
         static Load(InName: string): InputCoreTypes;
     
         __tid_InputCoreTypes_0__: boolean;
+    }
+    
+    class InputDebugKeyDelegateBinding extends UE.InputDelegateBinding {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        InputDebugKeyDelegateBindings: TArray<UE.BlueprintInputDebugKeyDelegateBinding>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputDebugKeyDelegateBinding;
+        static Load(InName: string): InputDebugKeyDelegateBinding;
+    
+        __tid_InputDebugKeyDelegateBinding_0__: boolean;
     }
     
     class InputDeviceAudioBasedVibrationProperty extends UE.InputDeviceProperty {
@@ -49595,13 +54433,120 @@ declare module "ue" {
         __tid_InputKeyDelegateBinding_0__: boolean;
     }
     
-    class PlatformSettings extends UE.Object {
+    class InputModifierDeadZone extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        LowerThreshold: number;
+        UpperThreshold: number;
+        Type: UE.EDeadZoneType;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierDeadZone;
+        static Load(InName: string): InputModifierDeadZone;
+    
+        __tid_InputModifierDeadZone_0__: boolean;
+    }
+    
+    class InputModifierFOVScaling extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        FOVScale: number;
+        FOVScalingType: UE.EFOVScalingType;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierFOVScaling;
+        static Load(InName: string): InputModifierFOVScaling;
+    
+        __tid_InputModifierFOVScaling_0__: boolean;
+    }
+    
+    class InputModifierNegate extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bX: boolean;
+        bY: boolean;
+        bZ: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierNegate;
+        static Load(InName: string): InputModifierNegate;
+    
+        __tid_InputModifierNegate_0__: boolean;
+    }
+    
+    class InputModifierResponseCurveExponential extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        CurveExponent: UE.Vector;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierResponseCurveExponential;
+        static Load(InName: string): InputModifierResponseCurveExponential;
+    
+        __tid_InputModifierResponseCurveExponential_0__: boolean;
+    }
+    
+    class InputModifierResponseCurveUser extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ResponseX: UE.CurveFloat;
+        ResponseY: UE.CurveFloat;
+        ResponseZ: UE.CurveFloat;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierResponseCurveUser;
+        static Load(InName: string): InputModifierResponseCurveUser;
+    
+        __tid_InputModifierResponseCurveUser_0__: boolean;
+    }
+    
+    class InputModifierScalar extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Scalar: UE.Vector;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierScalar;
+        static Load(InName: string): InputModifierScalar;
+    
+        __tid_InputModifierScalar_0__: boolean;
+    }
+    
+    class InputModifierScaleByDeltaTime extends UE.InputModifier {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): PlatformSettings;
-        static Load(InName: string): PlatformSettings;
+        static Find(OrigInName: string, Outer?: Object): InputModifierScaleByDeltaTime;
+        static Load(InName: string): InputModifierScaleByDeltaTime;
     
-        __tid_PlatformSettings_0__: boolean;
+        __tid_InputModifierScaleByDeltaTime_0__: boolean;
+    }
+    
+    class InputModifierSmooth extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierSmooth;
+        static Load(InName: string): InputModifierSmooth;
+    
+        __tid_InputModifierSmooth_0__: boolean;
+    }
+    
+    class InputModifierSmoothDelta extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SmoothingMethod: UE.ENormalizeInputSmoothingType;
+        Speed: number;
+        EasingExponent: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierSmoothDelta;
+        static Load(InName: string): InputModifierSmoothDelta;
+    
+        __tid_InputModifierSmoothDelta_0__: boolean;
+    }
+    
+    class InputModifierSwizzleAxis extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Order: UE.EInputAxisSwizzle;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierSwizzleAxis;
+        static Load(InName: string): InputModifierSwizzleAxis;
+    
+        __tid_InputModifierSwizzleAxis_0__: boolean;
+    }
+    
+    class InputModifierToWorldSpace extends UE.InputModifier {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputModifierToWorldSpace;
+        static Load(InName: string): InputModifierToWorldSpace;
+    
+        __tid_InputModifierToWorldSpace_0__: boolean;
     }
     
     class InputPlatformSettings extends UE.PlatformSettings {
@@ -49643,18 +54588,6 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_InputPreprocessorRegistrationKey_0__: boolean;
-    }
-    
-    class PerPlatformSettings {
-        constructor();
-        constructor(Settings: TArray<UE.PlatformSettings>);
-        Settings: TArray<UE.PlatformSettings>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PerPlatformSettings_0__: boolean;
     }
     
     class InputSettings extends UE.Object {
@@ -49756,6 +54689,119 @@ declare module "ue" {
         static Load(InName: string): InputTouchDelegateBinding;
     
         __tid_InputTouchDelegateBinding_0__: boolean;
+    }
+    
+    class InputTriggerChordAction extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ChordAction: UE.InputAction;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerChordAction;
+        static Load(InName: string): InputTriggerChordAction;
+    
+        __tid_InputTriggerChordAction_0__: boolean;
+    }
+    
+    class InputTriggerChordBlocker extends UE.InputTriggerChordAction {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerChordBlocker;
+        static Load(InName: string): InputTriggerChordBlocker;
+    
+        __tid_InputTriggerChordBlocker_0__: boolean;
+    }
+    
+    class InputTriggerCombo extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        CurrentComboStepIndex: number;
+        CurrentTimeBetweenComboSteps: number;
+        ComboActions: TArray<UE.InputComboStepData>;
+        InputCancelActions: TArray<UE.InputCancelAction>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerCombo;
+        static Load(InName: string): InputTriggerCombo;
+    
+        __tid_InputTriggerCombo_0__: boolean;
+    }
+    
+    class InputTriggerDown extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerDown;
+        static Load(InName: string): InputTriggerDown;
+    
+        __tid_InputTriggerDown_0__: boolean;
+    }
+    
+    class InputTriggerTimedBase extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        HeldDuration: number;
+        bAffectedByTimeDilation: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerTimedBase;
+        static Load(InName: string): InputTriggerTimedBase;
+    
+        __tid_InputTriggerTimedBase_0__: boolean;
+    }
+    
+    class InputTriggerHold extends UE.InputTriggerTimedBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        HoldTimeThreshold: number;
+        bIsOneShot: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerHold;
+        static Load(InName: string): InputTriggerHold;
+    
+        __tid_InputTriggerHold_0__: boolean;
+    }
+    
+    class InputTriggerHoldAndRelease extends UE.InputTriggerTimedBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        HoldTimeThreshold: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerHoldAndRelease;
+        static Load(InName: string): InputTriggerHoldAndRelease;
+    
+        __tid_InputTriggerHoldAndRelease_0__: boolean;
+    }
+    
+    class InputTriggerPressed extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerPressed;
+        static Load(InName: string): InputTriggerPressed;
+    
+        __tid_InputTriggerPressed_0__: boolean;
+    }
+    
+    class InputTriggerPulse extends UE.InputTriggerTimedBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bTriggerOnStart: boolean;
+        Interval: number;
+        TriggerLimit: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerPulse;
+        static Load(InName: string): InputTriggerPulse;
+    
+        __tid_InputTriggerPulse_0__: boolean;
+    }
+    
+    class InputTriggerReleased extends UE.InputTrigger {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerReleased;
+        static Load(InName: string): InputTriggerReleased;
+    
+        __tid_InputTriggerReleased_0__: boolean;
+    }
+    
+    class InputTriggerTap extends UE.InputTriggerTimedBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        TapReleaseTimeThreshold: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): InputTriggerTap;
+        static Load(InName: string): InputTriggerTap;
+    
+        __tid_InputTriggerTap_0__: boolean;
     }
     
     class InputVectorAxisDelegateBinding extends UE.InputAxisKeyDelegateBinding {
@@ -50525,6 +55571,149 @@ declare module "ue" {
         __tid_JSWidgetGeneratedClass_0__: boolean;
     }
     
+    class K2Node_AnimGetter extends UE.K2Node_CallFunction {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SourceNode: UE.AnimGraphNode_Base;
+        SourceStateNode: UE.AnimStateNodeBase;
+        GetterClass: UE.Class;
+        SourceAnimBlueprint: UE.AnimBlueprint;
+        CachedTitle: string;
+        Contexts: TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_AnimGetter;
+        static Load(InName: string): K2Node_AnimGetter;
+    
+        __tid_K2Node_AnimGetter_0__: boolean;
+    }
+    
+    class K2Node_AnimNodeReference extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Tag: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_AnimNodeReference;
+        static Load(InName: string): K2Node_AnimNodeReference;
+    
+        __tid_K2Node_AnimNodeReference_0__: boolean;
+    }
+    
+    class K2Node_ConstructObjectFromClass extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_ConstructObjectFromClass;
+        static Load(InName: string): K2Node_ConstructObjectFromClass;
+    
+        __tid_K2Node_ConstructObjectFromClass_0__: boolean;
+    }
+    
+    class K2Node_CreateDragDropOperation extends UE.K2Node_ConstructObjectFromClass {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_CreateDragDropOperation;
+        static Load(InName: string): K2Node_CreateDragDropOperation;
+    
+        __tid_K2Node_CreateDragDropOperation_0__: boolean;
+    }
+    
+    class K2Node_CreateWidget extends UE.K2Node_ConstructObjectFromClass {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_CreateWidget;
+        static Load(InName: string): K2Node_CreateWidget;
+    
+        __tid_K2Node_CreateWidget_0__: boolean;
+    }
+    
+    class K2Node_BaseAsyncTask extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ProxyFactoryFunctionName: string;
+        ProxyFactoryClass: UE.Class;
+        ProxyClass: UE.Class;
+        ProxyActivateFunctionName: string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_BaseAsyncTask;
+        static Load(InName: string): K2Node_BaseAsyncTask;
+    
+        __tid_K2Node_BaseAsyncTask_0__: boolean;
+    }
+    
+    class K2Node_PlayAnimation extends UE.K2Node_BaseAsyncTask {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_PlayAnimation;
+        static Load(InName: string): K2Node_PlayAnimation;
+    
+        __tid_K2Node_PlayAnimation_0__: boolean;
+    }
+    
+    class K2Node_PlayAnimationTimeRange extends UE.K2Node_BaseAsyncTask {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_PlayAnimationTimeRange;
+        static Load(InName: string): K2Node_PlayAnimationTimeRange;
+    
+        __tid_K2Node_PlayAnimationTimeRange_0__: boolean;
+    }
+    
+    class K2Node_PlayMontage extends UE.K2Node_BaseAsyncTask {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_PlayMontage;
+        static Load(InName: string): K2Node_PlayMontage;
+    
+        __tid_K2Node_PlayMontage_0__: boolean;
+    }
+    
+    class K2Node_TransitionRuleGetter extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GetterType: UE.ETransitionGetter;
+        AssociatedAnimAssetPlayerNode: UE.AnimGraphNode_Base;
+        AssociatedStateNode: UE.AnimStateNode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_TransitionRuleGetter;
+        static Load(InName: string): K2Node_TransitionRuleGetter;
+    
+        __tid_K2Node_TransitionRuleGetter_0__: boolean;
+    }
+    
+    class K2Node_EditablePinBase extends UE.K2Node {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bIsEditable: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_EditablePinBase;
+        static Load(InName: string): K2Node_EditablePinBase;
+    
+        __tid_K2Node_EditablePinBase_0__: boolean;
+    }
+    
+    class K2Node_Event extends UE.K2Node_EditablePinBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        EventSignatureName: string;
+        EventSignatureClass: UE.Class;
+        EventReference: UE.MemberReference;
+        bOverrideFunction: boolean;
+        bInternalEvent: boolean;
+        CustomFunctionName: string;
+        FunctionFlags: number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_Event;
+        static Load(InName: string): K2Node_Event;
+    
+        __tid_K2Node_Event_0__: boolean;
+    }
+    
+    class K2Node_WidgetAnimationEvent extends UE.K2Node_Event {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Action: UE.EWidgetAnimationEvent;
+        AnimationPropertyName: string;
+        UserTag: string;
+        SourceWidgetBlueprint: UE.WidgetBlueprint;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): K2Node_WidgetAnimationEvent;
+        static Load(InName: string): K2Node_WidgetAnimationEvent;
+    
+        __tid_K2Node_WidgetAnimationEvent_0__: boolean;
+    }
+    
     class KeyHandleLookupTable {
         constructor();
         /**
@@ -50542,6 +55731,149 @@ declare module "ue" {
         static Load(InName: string): KillZVolume;
     
         __tid_KillZVolume_0__: boolean;
+    }
+    
+    class PositionHistory {
+        constructor();
+        constructor(Positions: TArray<UE.Vector>, Range: number);
+        Positions: TArray<UE.Vector>;
+        Range: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PositionHistory_0__: boolean;
+    }
+    
+    class KismetAnimationLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Returns degree of the angle between Velocity and Rotation forward vector
+         *The range of return will be from [-180, 180]. Useful for feeding directional blendspaces.
+         *@param       Velocity                The velocity to use as direction relative to BaseRotation
+         *@param       BaseRotation    The base rotation, e.g. of a pawn
+         */
+        static CalculateDirection(Velocity: UE.Vector, BaseRotation: UE.Rotator) : number;
+        /*
+         *This function calculates the velocity of a position changing over time.
+         *You need to hook up a valid PositionHistory variable to this for storage.
+         *
+         *@param DeltaSeconds The time passed in seconds
+         *@param Position The position to track over time.
+         *@param History The history to use for storage.
+         *@param NumberOfSamples The number of samples to use for the history. The higher the number of samples - the smoother the velocity changes.
+         *@param VelocityMin The minimum velocity to use for normalization (if both min and max are set to 0, normalization is turned off)
+         *@param VelocityMax The maximum velocity to use for normalization (if both min and max are set to 0, normalization is turned off)
+         */
+        static K2_CalculateVelocityFromPositionHistory(DeltaSeconds: number, Position: UE.Vector, History: $Ref<UE.PositionHistory>, NumberOfSamples: number, VelocityMin: number, VelocityMax: number) : number;
+        /*
+         *This function calculates the velocity of an offset position on a bone _ socket over time.
+         *The bone's _ socket's motion can be expressed within a reference frame (another bone _ socket).
+         *You need to hook up a valid PositionHistory variable to this for storage.
+         *
+         *@param DeltaSeconds The time passed in seconds
+         *@param Component The skeletal component to look for the bones _ sockets
+         *@param SocketOrBoneName The name of the bone _ socket to track.
+         *@param ReferenceSocketOrBone The name of the bone _ socket to use as a frame of reference (or None if no frame of reference == world space).
+         *@param SocketSpace The space to use for the two sockets _ bones
+         *@param OffsetInBoneSpace The relative position in the space of the bone _ socket to track over time.
+         *@param History The history to use for storage.
+         *@param NumberOfSamples The number of samples to use for the history. The higher the number of samples - the smoother the velocity changes.
+         *@param VelocityMin The minimum velocity to use for normalization (if both min and max are set to 0, normalization is turned off)
+         *@param VelocityMax The maximum velocity to use for normalization (if both min and max are set to 0, normalization is turned off)
+         *@param EasingType The easing function to use
+         *@param CustomCurve The curve to use if the easing type is "Custom"
+         */
+        static K2_CalculateVelocityFromSockets(DeltaSeconds: number, Component: $Nullable<UE.SkeletalMeshComponent>, SocketOrBoneName: string, ReferenceSocketOrBone: string, SocketSpace: UE.ERelativeTransformSpace, OffsetInBoneSpace: UE.Vector, History: $Ref<UE.PositionHistory>, NumberOfSamples: number, VelocityMin: number, VelocityMax: number, EasingType: UE.EEasingFuncType, CustomCurve: UE.RuntimeFloatCurve) : number;
+        /*
+         *Computes the direction between two bones _ sockets.
+         *
+         *@param Component The skeletal component to look for the sockets _ bones within
+         *@param SocketOrBoneNameFrom The name of the first socket _ bone
+         *@param SocketOrBoneNameTo The name of the second socket _ bone
+         */
+        static K2_DirectionBetweenSockets(Component: $Nullable<UE.SkeletalMeshComponent>, SocketOrBoneNameFrom: string, SocketOrBoneNameTo: string) : UE.Vector;
+        /*
+         *Computes the distance between two bones _ sockets and can remap the range.
+         *
+         *@param Component The skeletal component to look for the sockets _ bones within
+         *@param SocketOrBoneNameA The name of the first socket _ bone
+         *@param SocketSpaceA The space for the first socket _ bone
+         *@param SocketOrBoneNameB The name of the second socket _ bone
+         *@param SocketSpaceB The space for the second socket _ bone
+         *@param bRemapRange If set to true, the distance will be remapped using the range parameters
+         *@param InRangeMin The minimum for the input range (commonly == 0.0)
+         *@param InRangeMax The maximum for the input range (the max expected distance)
+         *@param OutRangeMin The minimum for the output range (commonly == 0.0)
+         *@param OutRangeMax The maximum for the output range (commonly == 1.0)
+         */
+        static K2_DistanceBetweenTwoSocketsAndMapRange(Component: $Nullable<UE.SkeletalMeshComponent>, SocketOrBoneNameA: string, SocketSpaceA: UE.ERelativeTransformSpace, SocketOrBoneNameB: string, SocketSpaceB: UE.ERelativeTransformSpace, bRemapRange: boolean, InRangeMin: number, InRangeMax: number, OutRangeMin: number, OutRangeMax: number) : number;
+        /*
+         *This function ends measuring a profiling bracket and optionally logs the result
+         *
+         *@param bLog If set to true the result is logged to the OutputLog
+         *@param LogPrefix A prefix to use for the log
+         *@result The time spent in milliseconds
+         */
+        static K2_EndProfilingTimer(bLog?: boolean /* = true */, LogPrefix?: string /* = "" */) : number;
+        /*
+         *Computes the transform which is "looking" at target position with a local axis.
+         *
+         *@param CurrentTransform The input transform to modify
+         *@param TargetPosition The position this transform should look at
+         *@param LookAtVector The local vector to align with the target
+         *@param bUseUpVector If set to true the lookat will also perform a twist rotation
+         *@param UpVector The position to use for the upvector target (only used is bUseUpVector is turned on)
+         *@param ClampConeInDegree A limit for only allowing the lookat to rotate as much as defined by the float value
+         */
+        static K2_LookAt(CurrentTransform: UE.Transform, TargetPosition: UE.Vector, LookAtVector: UE.Vector, bUseUpVector: boolean, UpVector: UE.Vector, ClampConeInDegree: number) : UE.Transform;
+        /*
+         *This function creates perlin noise for a single float and then range map to RangeOut
+         *
+         *@param Value The input value for the noise function
+         *@param RangeOutMin The minimum for the output range
+         *@param RangeOutMax The maximum for the output range
+         */
+        static K2_MakePerlinNoiseAndRemap(Value: number, RangeOutMin: number, RangeOutMax: number) : number;
+        /*
+         *This function creates perlin noise from input X, Y, Z, and then range map to RangeOut, and out put to OutX, OutY, OutZ
+         *
+         *@param X The x component for the input position of the noise
+         *@param Y The y component for the input position of the noise
+         *@param Z The z component for the input position of the noise
+         *@param RangeOutMinX The minimum for the output range for the x component
+         *@param RangeOutMaxX The maximum for the output range for the x component
+         *@param RangeOutMinY The minimum for the output range for the y component
+         *@param RangeOutMaxY The maximum for the output range for the y component
+         *@param RangeOutMinZ The minimum for the output range for the z component
+         *@param RangeOutMaxZ The maximum for the output range for the z component
+         */
+        static K2_MakePerlinNoiseVectorAndRemap(X: number, Y: number, Z: number, RangeOutMinX: number, RangeOutMaxX: number, RangeOutMinY: number, RangeOutMaxY: number, RangeOutMinZ: number, RangeOutMaxZ: number) : UE.Vector;
+        /*
+         *This function starts measuring the time for a profiling bracket
+         */
+        static K2_StartProfilingTimer() : void;
+        /*
+         *Computes the transform for two bones using inverse kinematics.
+         *
+         *@param RootPos The input root position of the two bone chain
+         *@param JointPos The input center (elbow) position of the two bone chain
+         *@param EndPos The input end (wrist) position of the two bone chain
+         *@param JointTarget The IK target for the write to reach
+         *@param Effector The position of the target effector for the IK Chain.
+         *@param OutJointPos The resulting position for the center (elbow)
+         *@param OutEndPos The resulting position for the end (wrist)
+         *@param bAllowStretching If set to true the bones are allowed to stretch
+         *@param StartStretchRatio The ratio at which the bones should start to stretch. The higher the value, the later the stretching wil start.
+         *@param MaxStretchScale The maximum multiplier for the stretch to reach.
+         */
+        static K2_TwoBoneIK(RootPos: UE.Vector, JointPos: UE.Vector, EndPos: UE.Vector, JointTarget: UE.Vector, Effector: UE.Vector, OutJointPos: $Ref<UE.Vector>, OutEndPos: $Ref<UE.Vector>, bAllowStretching: boolean, StartStretchRatio: number, MaxStretchScale: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): KismetAnimationLibrary;
+        static Load(InName: string): KismetAnimationLibrary;
+    
+        __tid_KismetAnimationLibrary_0__: boolean;
     }
     
     class RandomStream {
@@ -57795,6 +63127,45 @@ declare module "ue" {
         __tid_LatentActionState_0__: boolean;
     }
     
+    class LayeredBoneBlendReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LayeredBoneBlendReference_0__: boolean;
+    }
+    
+    class LayeredBoneBlendLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a layered bone blend context from an anim node context (pure).
+         */
+        static ConvertToLayeredBlendPerBonePure(Node: UE.AnimNodeReference, LayeredBoneBlend: $Ref<UE.LayeredBoneBlendReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get a layered bone blend context from an anim node context.
+         */
+        static ConvertToLayeredBoneBlend(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.LayeredBoneBlendReference;
+        /*
+         *Get the number of poses that a layered bone blend node has (this does not include the base pose)
+         */
+        static GetNumPoses(LayeredBoneBlend: UE.LayeredBoneBlendReference) : number;
+        /*
+         *Sets the currently-used blend mask for a blended input pose by name.
+         *@param       UpdateContext           The update context to use. This is used to extract the current skeleton to derive the blend mask from
+         *@param       LayeredBoneBlend        A reference to the node
+         *@param       PoseIndex                       The pose index to set the blend mask for
+         *@param       BlendMaskName   The name of the blend mask to use
+         */
+        static SetBlendMask(UpdateContext: UE.AnimUpdateContext, LayeredBoneBlend: UE.LayeredBoneBlendReference, PoseIndex: number, BlendMaskName: string) : UE.LayeredBoneBlendReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LayeredBoneBlendLibrary;
+        static Load(InName: string): LayeredBoneBlendLibrary;
+    
+        __tid_LayeredBoneBlendLibrary_0__: boolean;
+    }
+    
     class LayersSubsystem extends UE.EditorSubsystem {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
@@ -59236,6 +64607,41 @@ declare module "ue" {
         __tid_LinearStairBuilder_0__: boolean;
     }
     
+    class LinkedAnimGraphReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LinkedAnimGraphReference_0__: boolean;
+    }
+    
+    class LinkedAnimGraphLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a linked anim graph reference from an anim node reference
+         */
+        static ConvertToLinkedAnimGraph(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.LinkedAnimGraphReference;
+        /*
+         *Get a linked anim graph reference from an anim node reference (pure)
+         */
+        static ConvertToLinkedAnimGraphPure(Node: UE.AnimNodeReference, LinkedAnimGraph: $Ref<UE.LinkedAnimGraphReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get the linked instance is hosted by this node. If the node does not host an instance then HasLinkedAnimInstance will return false
+         */
+        static GetLinkedAnimInstance(Node: UE.LinkedAnimGraphReference) : UE.AnimInstance;
+        /*
+         *Returns whether the node hosts an instance (e.g. linked anim graph or layer)
+         */
+        static HasLinkedAnimInstance(Node: UE.LinkedAnimGraphReference) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LinkedAnimGraphLibrary;
+        static Load(InName: string): LinkedAnimGraphLibrary;
+    
+        __tid_LinkedAnimGraphLibrary_0__: boolean;
+    }
+    
     class LinkerPlaceholderClass extends UE.Class {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -59431,15 +64837,6 @@ declare module "ue" {
         static Load(InName: string): LocalPlayerSaveGame;
     
         __tid_LocalPlayerSaveGame_0__: boolean;
-    }
-    
-    class LocalPlayerSubsystem extends UE.Subsystem {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): LocalPlayerSubsystem;
-        static Load(InName: string): LocalPlayerSubsystem;
-    
-        __tid_LocalPlayerSubsystem_0__: boolean;
     }
     
     class LocalSpacePose {
@@ -63885,23 +69282,6 @@ declare module "ue" {
         __tid_Matrix44f_0__: boolean;
     }
     
-    class MemberReference {
-        constructor();
-        constructor(MemberParent: UE.Object, MemberScope: string, MemberName: string, MemberGuid: UE.Guid, bSelfContext: boolean, bWasDeprecated: boolean);
-        MemberParent: UE.Object;
-        MemberScope: string;
-        MemberName: string;
-        MemberGuid: UE.Guid;
-        bSelfContext: boolean;
-        bWasDeprecated: boolean;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_MemberReference_0__: boolean;
-    }
-    
     class MenuAnchor extends UE.ContentWidget {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         MenuClass: UE.Class;
@@ -64134,6 +69514,53 @@ declare module "ue" {
         __tid_MicroTransactionBase_0__: boolean;
     }
     
+    class MirrorAnimNodeReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MirrorAnimNodeReference_0__: boolean;
+    }
+    
+    class MirrorAnimLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a mirror node context from an anim node context
+         */
+        static ConvertToMirrorNode(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.MirrorAnimNodeReference;
+        /*
+         *Get a mirror context from an anim node context (pure)
+         */
+        static ConvertToMirrorNodePure(Node: UE.AnimNodeReference, MirrorNode: $Ref<UE.MirrorAnimNodeReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get the mirror state
+         */
+        static GetMirror(MirrorNode: UE.MirrorAnimNodeReference) : boolean;
+        /*
+         *Get MirrorDataTable used to perform mirroring
+         */
+        static GetMirrorDataTable(MirrorNode: UE.MirrorAnimNodeReference) : UE.MirrorDataTable;
+        /*
+         *Get how long to blend using inertialization when switching mirrored state
+         */
+        static GetMirrorTransitionBlendTime(MirrorNode: UE.MirrorAnimNodeReference) : number;
+        /*
+         *Set the mirror state
+         */
+        static SetMirror(MirrorNode: UE.MirrorAnimNodeReference, bInMirror: boolean) : UE.MirrorAnimNodeReference;
+        /*
+         *Set how long to blend using inertialization when switching mirrored state
+         */
+        static SetMirrorTransitionBlendTime(MirrorNode: UE.MirrorAnimNodeReference, InBlendTime: number) : UE.MirrorAnimNodeReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MirrorAnimLibrary;
+        static Load(InName: string): MirrorAnimLibrary;
+    
+        __tid_MirrorAnimLibrary_0__: boolean;
+    }
+    
     class MirrorTableFindReplaceExpressions extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         FindReplaceExpressions: TArray<UE.MirrorFindReplaceExpression>;
@@ -64186,6 +69613,38 @@ declare module "ue" {
         static Load(InName: string): ModelFactory;
     
         __tid_ModelFactory_0__: boolean;
+    }
+    
+    class ModifyCurveAnimNodeReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ModifyCurveAnimNodeReference_0__: boolean;
+    }
+    
+    class ModifyCurveAnimLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a modify curve node context from an anim node context
+         */
+        static ConvertToModifyCurveNode(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.ModifyCurveAnimNodeReference;
+        /*
+         *Get a modify curve context from an anim node context (pure)
+         */
+        static ConvertToModifyCurveNodePure(Node: UE.AnimNodeReference, ModifyCurveNode: $Ref<UE.ModifyCurveAnimNodeReference>, Result: $Ref<boolean>) : void;
+        static GetAlpha(ModifyCurveNode: UE.ModifyCurveAnimNodeReference) : number;
+        static GetApplyMode(ModifyCurveNode: UE.ModifyCurveAnimNodeReference) : UE.EModifyCurveApplyMode;
+        static SetAlpha(ModifyCurveNode: UE.ModifyCurveAnimNodeReference, InAlpha: number) : UE.ModifyCurveAnimNodeReference;
+        static SetApplyMode(ModifyCurveNode: UE.ModifyCurveAnimNodeReference, InMode: UE.EModifyCurveApplyMode) : UE.ModifyCurveAnimNodeReference;
+        static SetCurveMap(ModifyCurveNode: UE.ModifyCurveAnimNodeReference, InCurveMap: TMap<string, number>) : UE.ModifyCurveAnimNodeReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ModifyCurveAnimLibrary;
+        static Load(InName: string): ModifyCurveAnimLibrary;
+    
+        __tid_ModifyCurveAnimLibrary_0__: boolean;
     }
     
     enum ModulationParamMode { MPM_Normal, MPM_Abs, MPM_Direct, MPM_MAX, __typeKeyDoNoAccess}
@@ -64844,6 +70303,22 @@ declare module "ue" {
         __tid_NavigationSegmentLink_0__: boolean;
     }
     
+    class NavigationSimulationArguments {
+        constructor();
+        constructor(UserIndex: number, NavigationGenesis: UE.ENavigationGenesis, UINavigation: UE.EUINavigation, bOverrideUINavigation: boolean, bShowPreview: boolean);
+        UserIndex: number;
+        NavigationGenesis: UE.ENavigationGenesis;
+        UINavigation: UE.EUINavigation;
+        bOverrideUINavigation: boolean;
+        bShowPreview: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_NavigationSimulationArguments_0__: boolean;
+    }
+    
     class NavLinkAuxiliaryId {
         constructor();
         constructor(Id: bigint);
@@ -65439,6 +70914,24 @@ declare module "ue" {
         static Load(InName: string): NodeMappingProviderInterface;
     
         __tid_NodeMappingProviderInterface_0__: boolean;
+    }
+    
+    class NodeSpawnData {
+        constructor();
+        constructor(CachedTitle: string, SourceNode: UE.AnimGraphNode_Base, SourceStateNode: UE.AnimStateNodeBase, AnimInstanceClass: UE.Class, SourceBlueprint: UE.AnimBlueprint, Getter: UE.Field, GetterContextString: string);
+        CachedTitle: string;
+        SourceNode: UE.AnimGraphNode_Base;
+        SourceStateNode: UE.AnimStateNodeBase;
+        AnimInstanceClass: UE.Class;
+        SourceBlueprint: UE.AnimBlueprint;
+        Getter: UE.Field;
+        GetterContextString: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_NodeSpawnData_0__: boolean;
     }
     
     class NodeToCodeAssociation {
@@ -67515,19 +73008,6 @@ declare module "ue" {
         __tid_PawnNoiseEmitterComponent_0__: boolean;
     }
     
-    class PerBoneBlendWeight {
-        constructor();
-        constructor(SourceIndex: number, BlendWeight: number);
-        SourceIndex: number;
-        BlendWeight: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_PerBoneBlendWeight_0__: boolean;
-    }
-    
     class PerBoneBlendWeights {
         constructor();
         constructor(BoneBlendWeights: TArray<UE.PerBoneBlendWeight>);
@@ -68732,6 +74212,57 @@ declare module "ue" {
         __tid_PlatformInterfaceWebResponse_0__: boolean;
     }
     
+    class PrimaryDataAsset extends UE.DataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AssetBundleData: UE.AssetBundleData;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PrimaryDataAsset;
+        static Load(InName: string): PrimaryDataAsset;
+    
+        __tid_PrimaryDataAsset_0__: boolean;
+    }
+    
+    class PlayerMappableInputConfig extends UE.PrimaryDataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ConfigName: string;
+        ConfigDisplayName: string;
+        bIsDeprecated: boolean;
+        Metadata: UE.Object;
+        Contexts: TMap<UE.InputMappingContext, number>;
+        GetConfigName() : string;
+        GetDisplayName() : string;
+        /*
+         *Returns all the keys mapped to a specific Input Action in this mapping config.
+         */
+        GetKeysBoundToAction(InAction: $Nullable<UE.InputAction>) : TArray<UE.EnhancedActionKeyMapping>;
+        /*
+         *Returns the action key mapping for the mapping that matches the given name
+         */
+        GetMappingByName(MappingName: string) : UE.EnhancedActionKeyMapping;
+        /*
+         *Return all the Input Mapping contexts that
+         */
+        GetMappingContexts() : TMap<UE.InputMappingContext, number>;
+        /*
+         *Get all the player mappable keys in this config.
+         */
+        GetMetadata() : UE.Object;
+        /*
+         *Get all the player mappable keys in this config.
+         */
+        GetPlayerMappableKeys() : TArray<UE.EnhancedActionKeyMapping>;
+        IsDeprecated() : boolean;
+        /*
+         *Resets this mappable config to use the keys
+         */
+        ResetToDefault() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PlayerMappableInputConfig;
+        static Load(InName: string): PlayerMappableInputConfig;
+    
+        __tid_PlayerMappableInputConfig_0__: boolean;
+    }
+    
     class PlayerMuteList {
         constructor();
         constructor(bHasVoiceHandshakeCompleted: boolean, VoiceChannelIdx: number);
@@ -68796,6 +74327,28 @@ declare module "ue" {
         static Load(InName: string): PlayerStateCountLimiterConfig;
     
         __tid_PlayerStateCountLimiterConfig_0__: boolean;
+    }
+    
+    class PlayMontageCallbackProxy extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnCompleted: $MulticastDelegate<(NotifyName: string) => void>;
+        OnBlendOut: $MulticastDelegate<(NotifyName: string) => void>;
+        OnInterrupted: $MulticastDelegate<(NotifyName: string) => void>;
+        OnNotifyBegin: $MulticastDelegate<(NotifyName: string) => void>;
+        OnNotifyEnd: $MulticastDelegate<(NotifyName: string) => void>;
+        OnMontageBlendingOut(Montage: $Nullable<UE.AnimMontage>, bInterrupted: boolean) : void;
+        OnMontageEnded(Montage: $Nullable<UE.AnimMontage>, bInterrupted: boolean) : void;
+        OnNotifyBeginReceived(NotifyName: string, BranchingPointNotifyPayload: UE.BranchingPointNotifyPayload) : void;
+        OnNotifyEndReceived(NotifyName: string, BranchingPointNotifyPayload: UE.BranchingPointNotifyPayload) : void;
+        /*
+         *Called to perform the query internally
+         */
+        static CreateProxyObjectForPlayMontage(InSkeletalMeshComponent: $Nullable<UE.SkeletalMeshComponent>, MontageToPlay: $Nullable<UE.AnimMontage>, PlayRate?: number /* = 1.000000 */, StartingPosition?: number /* = 0.000000 */, StartingSection?: string /* = "None" */, bShouldStopAllMontages?: boolean /* = true */) : UE.PlayMontageCallbackProxy;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PlayMontageCallbackProxy;
+        static Load(InName: string): PlayMontageCallbackProxy;
+    
+        __tid_PlayMontageCallbackProxy_0__: boolean;
     }
     
     class PluginBlueprintLibrary extends UE.BlueprintFunctionLibrary {
@@ -69260,16 +74813,6 @@ declare module "ue" {
         static Load(InName: string): PreviewMeshCollectionFactory;
     
         __tid_PreviewMeshCollectionFactory_0__: boolean;
-    }
-    
-    class PrimaryDataAsset extends UE.DataAsset {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        AssetBundleData: UE.AssetBundleData;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): PrimaryDataAsset;
-        static Load(InName: string): PrimaryDataAsset;
-    
-        __tid_PrimaryDataAsset_0__: boolean;
     }
     
     class PrimaryAssetLabel extends UE.PrimaryDataAsset {
@@ -70064,6 +75607,34 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_Ray3f_0__: boolean;
+    }
+    
+    class RBFEntry {
+        constructor();
+        constructor(Values: TArray<number>);
+        Values: TArray<number>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RBFEntry_0__: boolean;
+    }
+    
+    class RBFTarget extends UE.RBFEntry {
+        constructor();
+        constructor(ScaleFactor: number, bApplyCustomCurve: boolean, CustomCurve: UE.RichCurve, DistanceMethod: UE.ERBFDistanceMethod, FunctionType: UE.ERBFFunctionType);
+        ScaleFactor: number;
+        bApplyCustomCurve: boolean;
+        CustomCurve: UE.RichCurve;
+        DistanceMethod: UE.ERBFDistanceMethod;
+        FunctionType: UE.ERBFFunctionType;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_RBFTarget_0__: boolean;
     }
     
     class RectLightComponent extends UE.LocalLightComponent {
@@ -71670,6 +77241,61 @@ declare module "ue" {
         __tid_SelectionStateOfLevel_0__: boolean;
     }
     
+    class SequenceEvaluatorReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SequenceEvaluatorReference_0__: boolean;
+    }
+    
+    class SequenceEvaluatorLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Advance the current accumulated time of the sequence evaluator
+         */
+        static AdvanceTime(UpdateContext: UE.AnimUpdateContext, SequenceEvaluator: UE.SequenceEvaluatorReference, PlayRate?: number /* = 1.000000 */) : UE.SequenceEvaluatorReference;
+        /*
+         *Get a sequence evaluator context from an anim node context
+         */
+        static ConvertToSequenceEvaluator(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.SequenceEvaluatorReference;
+        /*
+         *Get a sequence evaluator context from an anim node context (pure)
+         */
+        static ConvertToSequenceEvaluatorPure(Node: UE.AnimNodeReference, SequenceEvaluator: $Ref<UE.SequenceEvaluatorReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Gets the current accumulated time of the sequence evaluator
+         */
+        static GetAccumulatedTime(SequenceEvaluator: UE.SequenceEvaluatorReference) : number;
+        /*
+         *Gets the current sequence of the sequence evaluator
+         */
+        static GetSequence(SequenceEvaluator: UE.SequenceEvaluatorReference) : UE.AnimSequenceBase;
+        /*
+         *Set the current accumulated time, using a frame number, of the sequence evaluator
+         */
+        static SetExplicitFrame(SequenceEvaluator: UE.SequenceEvaluatorReference, Frame: number) : UE.SequenceEvaluatorReference;
+        /*
+         *Set the current accumulated time of the sequence evaluator
+         */
+        static SetExplicitTime(SequenceEvaluator: UE.SequenceEvaluatorReference, Time: number) : UE.SequenceEvaluatorReference;
+        /*
+         *Set the current sequence of the sequence evaluator
+         */
+        static SetSequence(SequenceEvaluator: UE.SequenceEvaluatorReference, Sequence: $Nullable<UE.AnimSequenceBase>) : UE.SequenceEvaluatorReference;
+        /*
+         *Set the current sequence of the sequence evaluator with an inertial blend time
+         */
+        static SetSequenceWithInertialBlending(UpdateContext: UE.AnimUpdateContext, SequenceEvaluator: UE.SequenceEvaluatorReference, Sequence: $Nullable<UE.AnimSequenceBase>, BlendTime?: number /* = 0.200000 */) : UE.SequenceEvaluatorReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SequenceEvaluatorLibrary;
+        static Load(InName: string): SequenceEvaluatorLibrary;
+    
+        __tid_SequenceEvaluatorLibrary_0__: boolean;
+    }
+    
     class SequenceExporterT3D extends UE.Exporter {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -71694,6 +77320,111 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_SequenceLengthChangedPayload_0__: boolean;
+    }
+    
+    class SequencePlayerReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SequencePlayerReference_0__: boolean;
+    }
+    
+    class SequencePlayerLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Returns the Play Rate to provide when playing this animation if a specific animation duration is desired
+         */
+        static ComputePlayRateFromDuration(SequencePlayer: UE.SequencePlayerReference, Duration?: number /* = 1.000000 */) : number;
+        /*
+         *Get a sequence player context from an anim node context
+         */
+        static ConvertToSequencePlayer(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.SequencePlayerReference;
+        /*
+         *Get a sequence player context from an anim node context (pure)
+         */
+        static ConvertToSequencePlayerPure(Node: UE.AnimNodeReference, SequencePlayer: $Ref<UE.SequencePlayerReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Gets the current accumulated time of the sequence player
+         */
+        static GetAccumulatedTime(SequencePlayer: UE.SequencePlayerReference) : number;
+        /*
+         *Get the looping state of the sequence player
+         */
+        static GetLoopAnimation(SequencePlayer: UE.SequencePlayerReference) : boolean;
+        /*
+         *Get the play rate of the sequence player
+         */
+        static GetPlayRate(SequencePlayer: UE.SequencePlayerReference) : number;
+        /*
+         *Get the current sequence of the sequence player - DEPRECATED, please use pure version
+         */
+        static GetSequence(SequencePlayer: UE.SequencePlayerReference, SequenceBase: $Ref<UE.AnimSequenceBase>) : UE.SequencePlayerReference;
+        /*
+         *Get the current sequence of the sequence player
+         */
+        static GetSequencePure(SequencePlayer: UE.SequencePlayerReference) : UE.AnimSequenceBase;
+        /*
+         *Get the start position of the sequence player
+         */
+        static GetStartPosition(SequencePlayer: UE.SequencePlayerReference) : number;
+        /*
+         *Set the current accumulated time of the sequence player
+         */
+        static SetAccumulatedTime(SequencePlayer: UE.SequencePlayerReference, Time: number) : UE.SequencePlayerReference;
+        /*
+         *Set the play rate of the sequence player
+         */
+        static SetPlayRate(SequencePlayer: UE.SequencePlayerReference, PlayRate: number) : UE.SequencePlayerReference;
+        /*
+         *Set the current sequence of the sequence player
+         */
+        static SetSequence(SequencePlayer: UE.SequencePlayerReference, Sequence: $Nullable<UE.AnimSequenceBase>) : UE.SequencePlayerReference;
+        /*
+         *Set the current sequence of the sequence player with an inertial blend time
+         */
+        static SetSequenceWithInertialBlending(UpdateContext: UE.AnimUpdateContext, SequencePlayer: UE.SequencePlayerReference, Sequence: $Nullable<UE.AnimSequenceBase>, BlendTime?: number /* = 0.200000 */) : UE.SequencePlayerReference;
+        /*
+         *Set the start position of the sequence player.
+         *If this is called from On Become Relevant or On Initial Update then it should be accompanied by a call to
+         *SetAccumulatedTime to achieve the desired effect of resetting the play time of a sequence player.
+         */
+        static SetStartPosition(SequencePlayer: UE.SequencePlayerReference, StartPosition: number) : UE.SequencePlayerReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SequencePlayerLibrary;
+        static Load(InName: string): SequencePlayerLibrary;
+    
+        __tid_SequencePlayerLibrary_0__: boolean;
+    }
+    
+    class SequencerAnimationOverride extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Whether this animation blueprint allows Sequencer to nuke this anim instance and replace it during Sequencer playback.
+         */
+        AllowsCinematicOverride() : boolean;
+        /*
+         *Should return a list of valid slot names for Sequencer to output to in the case that Sequencer is not permitted to nuke the anim instance.
+         *Will be chosen by the user in drop down on the skeletal animation section properties. Should be named descriptively, as in some contexts (UEFN), the user
+         *will not be able to view the animation blueprint itself to determine the mixing behavior of the slot.
+         */
+        GetSequencerAnimSlotNames() : TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SequencerAnimationOverride;
+        static Load(InName: string): SequencerAnimationOverride;
+    
+        __tid_SequencerAnimationOverride_0__: boolean;
+    }
+    
+    class SequencerAnimationSupport extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SequencerAnimationSupport;
+        static Load(InName: string): SequencerAnimationSupport;
+    
+        __tid_SequencerAnimationSupport_0__: boolean;
     }
     
     class SetProperty extends UE.Property {
@@ -71959,6 +77690,41 @@ declare module "ue" {
         static Load(InName: string): SizeBoxSlot;
     
         __tid_SizeBoxSlot_0__: boolean;
+    }
+    
+    class SkeletalControlReference extends UE.AnimNodeReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SkeletalControlReference_0__: boolean;
+    }
+    
+    class SkeletalControlLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Get a skeletal control from an anim node
+         */
+        static ConvertToSkeletalControl(Node: UE.AnimNodeReference, Result: $Ref<UE.EAnimNodeReferenceConversionResult>) : UE.SkeletalControlReference;
+        /*
+         *Get a skeletal control from an anim node (pure)
+         */
+        static ConvertToSkeletalControlPure(Node: UE.AnimNodeReference, SkeletalControl: $Ref<UE.SkeletalControlReference>, Result: $Ref<boolean>) : void;
+        /*
+         *Get the alpha value of this skeletal control
+         */
+        static GetAlpha(SkeletalControl: UE.SkeletalControlReference) : number;
+        /*
+         *Set the alpha value of this skeletal control
+         */
+        static SetAlpha(SkeletalControl: UE.SkeletalControlReference, Alpha: number) : UE.SkeletalControlReference;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SkeletalControlLibrary;
+        static Load(InName: string): SkeletalControlLibrary;
+    
+        __tid_SkeletalControlLibrary_0__: boolean;
     }
     
     class SkeletalMeshClothBuildParams {
@@ -72417,6 +78183,15 @@ declare module "ue" {
         static Load(InName: string): SlateVectorArtData;
     
         __tid_SlateVectorArtData_0__: boolean;
+    }
+    
+    class SlateVectorArtDataFactory extends UE.Factory {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SlateVectorArtDataFactory;
+        static Load(InName: string): SlateVectorArtDataFactory;
+    
+        __tid_SlateVectorArtDataFactory_0__: boolean;
     }
     
     class SlateWidgetStyleAsset extends UE.Object {
@@ -74091,6 +79866,19 @@ declare module "ue" {
         static Load(InName: string): SplineComponent;
     
         __tid_SplineComponent_0__: boolean;
+    }
+    
+    class SplineIKCachedBoneData {
+        constructor();
+        constructor(Bone: UE.BoneReference, RefSkeletonIndex: number);
+        Bone: UE.BoneReference;
+        RefSkeletonIndex: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SplineIKCachedBoneData_0__: boolean;
     }
     
     class SplineInstanceData extends UE.SceneComponentInstanceData {
@@ -76930,6 +82718,15 @@ declare module "ue" {
         __tid_UintVector4_0__: boolean;
     }
     
+    class UMGEditorProjectSettings extends UE.WidgetEditingProjectSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): UMGEditorProjectSettings;
+        static Load(InName: string): UMGEditorProjectSettings;
+    
+        __tid_UMGEditorProjectSettings_0__: boolean;
+    }
+    
     class UndoableResolveHandler extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         bShouldBeResolved: boolean;
@@ -77461,19 +83258,6 @@ declare module "ue" {
         static Load(InName: string): VectorFieldVolume;
     
         __tid_VectorFieldVolume_0__: boolean;
-    }
-    
-    class VectorRK4SpringInterpolator {
-        constructor();
-        constructor(StiffnessConstant: number, DampeningRatio: number);
-        StiffnessConstant: number;
-        DampeningRatio: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_VectorRK4SpringInterpolator_0__: boolean;
     }
     
     class VersePersistentVar {
@@ -78105,6 +83889,19 @@ declare module "ue" {
         __tid_VolumetricLightMapGridDesc_0__: boolean;
     }
     
+    class WarpingVectorValue {
+        constructor();
+        constructor(Mode: UE.EWarpingVectorMode, Value: UE.Vector);
+        Mode: UE.EWarpingVectorMode;
+        Value: UE.Vector;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_WarpingVectorValue_0__: boolean;
+    }
+    
     class WeakObjectProperty extends UE.ObjectPropertyBase {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -78172,6 +83969,27 @@ declare module "ue" {
         static Load(InName: string): WidgetBinding;
     
         __tid_WidgetBinding_0__: boolean;
+    }
+    
+    class WidgetBlueprintExtension extends UE.BlueprintExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetBlueprintExtension;
+        static Load(InName: string): WidgetBlueprintExtension;
+    
+        __tid_WidgetBlueprintExtension_0__: boolean;
+    }
+    
+    class WidgetBlueprintFactory extends UE.Factory {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BlueprintType: UE.EBlueprintType;
+        ParentClass: UE.Class;
+        RootWidgetClass: UE.Class;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetBlueprintFactory;
+        static Load(InName: string): WidgetBlueprintFactory;
+    
+        __tid_WidgetBlueprintFactory_0__: boolean;
     }
     
     class WidgetBlueprintLibrary extends UE.BlueprintFunctionLibrary {
@@ -78411,6 +84229,24 @@ declare module "ue" {
         __tid_WidgetBlueprintLibrary_0__: boolean;
     }
     
+    class WidgetBlueprintThumbnailRenderer extends UE.DefaultSizedThumbnailRenderer {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetBlueprintThumbnailRenderer;
+        static Load(InName: string): WidgetBlueprintThumbnailRenderer;
+    
+        __tid_WidgetBlueprintThumbnailRenderer_0__: boolean;
+    }
+    
+    class WidgetBlueprintToolMenuContext extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetBlueprintToolMenuContext;
+        static Load(InName: string): WidgetBlueprintToolMenuContext;
+    
+        __tid_WidgetBlueprintToolMenuContext_0__: boolean;
+    }
+    
     class WidgetEnumStateRegistration extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -78427,6 +84263,15 @@ declare module "ue" {
         static Load(InName: string): WidgetCheckedStateRegistration;
     
         __tid_WidgetCheckedStateRegistration_0__: boolean;
+    }
+    
+    class WidgetCompilerRule extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetCompilerRule;
+        static Load(InName: string): WidgetCompilerRule;
+    
+        __tid_WidgetCompilerRule_0__: boolean;
     }
     
     class WidgetComponent extends UE.MeshComponent {
@@ -78618,6 +84463,35 @@ declare module "ue" {
         __tid_WidgetComponentInstanceData_0__: boolean;
     }
     
+    class WidgetPaletteFavorites extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Favorites: TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetPaletteFavorites;
+        static Load(InName: string): WidgetPaletteFavorites;
+    
+        __tid_WidgetPaletteFavorites_0__: boolean;
+    }
+    
+    class WidgetDesignerSettings extends UE.DeveloperSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GridSnapEnabled: boolean;
+        GridSnapSize: number;
+        bLockToPanelOnDragByDefault: boolean;
+        DefaultPreviewResolution: UE.UintVector2;
+        bShowOutlines: boolean;
+        bExecutePreConstructEvent: boolean;
+        bRespectLocks: boolean;
+        CreateOnCompile: UE.EDisplayOnCompile;
+        DismissOnCompile: UE.EDisplayOnCompile;
+        Favorites: UE.WidgetPaletteFavorites;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetDesignerSettings;
+        static Load(InName: string): WidgetDesignerSettings;
+    
+        __tid_WidgetDesignerSettings_0__: boolean;
+    }
+    
     class WidgetDisabledStateRegistration extends UE.WidgetBinaryStateRegistration {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -78625,6 +84499,24 @@ declare module "ue" {
         static Load(InName: string): WidgetDisabledStateRegistration;
     
         __tid_WidgetDisabledStateRegistration_0__: boolean;
+    }
+    
+    class AssetEditorUISubsystem extends UE.EditorSubsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AssetEditorUISubsystem;
+        static Load(InName: string): AssetEditorUISubsystem;
+    
+        __tid_AssetEditorUISubsystem_0__: boolean;
+    }
+    
+    class WidgetEditorModeUISubsystem extends UE.AssetEditorUISubsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetEditorModeUISubsystem;
+        static Load(InName: string): WidgetEditorModeUISubsystem;
+    
+        __tid_WidgetEditorModeUISubsystem_0__: boolean;
     }
     
     class WidgetEventField {
@@ -78644,6 +84536,15 @@ declare module "ue" {
         static Load(InName: string): WidgetFieldNotificationExtension;
     
         __tid_WidgetFieldNotificationExtension_0__: boolean;
+    }
+    
+    class WidgetGraphSchema extends UE.EdGraphSchema_K2 {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetGraphSchema;
+        static Load(InName: string): WidgetGraphSchema;
+    
+        __tid_WidgetGraphSchema_0__: boolean;
     }
     
     class WidgetHoveredStateRegistration extends UE.WidgetBinaryStateRegistration {
@@ -78930,6 +84831,18 @@ declare module "ue" {
         static Load(InName: string): WidgetSelectedStateRegistration;
     
         __tid_WidgetSelectedStateRegistration_0__: boolean;
+    }
+    
+    class WidgetSlotPair extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetName: string;
+        SlotPropertyNames: TArray<string>;
+        SlotPropertyValues: TArray<string>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetSlotPair;
+        static Load(InName: string): WidgetSlotPair;
+    
+        __tid_WidgetSlotPair_0__: boolean;
     }
     
     class WidgetStateBitfield {
@@ -80024,40 +85937,6 @@ declare module "ue" {
         
     }
 
-    class AnimNode_BlendSpacePlayerBase extends UE.AnimNode_AssetPlayerBase {
-        constructor();
-        constructor(PreviousBlendSpace: UE.BlendSpace);
-        PreviousBlendSpace: UE.BlendSpace;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_BlendSpacePlayerBase_0__: boolean;
-    }
-    
-    class AnimNode_BlendSpacePlayer extends UE.AnimNode_BlendSpacePlayerBase {
-        constructor();
-        constructor(GroupName: string, GroupRole: UE.EAnimGroupRole, Method: UE.EAnimSyncMethod, bIgnoreForRelevancyTest: boolean, X: number, Y: number, PlayRate: number, bLoop: boolean, bResetPlayTimeWhenBlendSpaceChanges: boolean, StartPosition: number, BlendSpace: UE.BlendSpace);
-        GroupName: string;
-        GroupRole: UE.EAnimGroupRole;
-        Method: UE.EAnimSyncMethod;
-        bIgnoreForRelevancyTest: boolean;
-        X: number;
-        Y: number;
-        PlayRate: number;
-        bLoop: boolean;
-        bResetPlayTimeWhenBlendSpaceChanges: boolean;
-        StartPosition: number;
-        BlendSpace: UE.BlendSpace;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_AnimNode_BlendSpacePlayer_0__: boolean;
-    }
-    
     namespace Engine.Tutorial.SubEditors.TutorialAssets.Character.TutorialTPP_AnimBlueprint {
         class TutorialTPP_AnimBlueprint_C extends UE.AnimInstance {
             constructor(Outer?: Object, Name?: string, ObjectFlags?: number);

@@ -99,8 +99,11 @@ function basicTest() {
         console.log(i, u8a1[i]);
     }
     obj.ArrayBufferTest(ab);
-    obj.ArrayBufferTest(new Uint8Array(ab));
-    const ab2 = obj.ArrayBufferTest(new Uint8Array(ab, 5));
+    const fullView = new Uint8Array(ab);
+    obj.ArrayBufferTest(fullView.buffer);
+    const partialView = new Uint8Array(ab, 5);
+    const partialBuffer = partialView.buffer.slice(partialView.byteOffset, partialView.byteOffset + partialView.byteLength);
+    const ab2 = obj.ArrayBufferTest(partialBuffer);
     const u8a2 = new Uint8Array(ab2);
     console.log(u8a2.length);
     for (let i = 0; i < u8a2.length; i++) {
@@ -118,29 +121,29 @@ function basicTest() {
     //UE.Class.Load方式
     //let bpClass = UE.Class.Load('/Game/StarterContent/TestBlueprint.TestBlueprint_C')
     //let bpActor = UE.GameplayStatics.BeginDeferredActorSpawnFromClass(gameInstance, bpClass, undefined) as UE.Game.StarterContent.TestBlueprint.TestBlueprint_C;
-    puerts_1.blueprint.load(UE.Game.StarterContent.TestBlueprint.TestBlueprint_C);
-    const TestBlueprint_C = UE.Game.StarterContent.TestBlueprint.TestBlueprint_C; //别名
-    const bpActor = UE.GameplayStatics.BeginDeferredActorSpawnFromClass(gameInstance, TestBlueprint_C.StaticClass(), undefined);
-    UE.GameplayStatics.FinishSpawningActor(bpActor, undefined);
-    bpActor.Foo(false, 8000, 9000);
-    //如果确定后续不需要使用TestBlueprint_C了，应该unload节省内存
-    puerts_1.blueprint.unload(TestBlueprint_C);
-    //蓝图结构体加载
-    //UE.UserDefinedStruct.Load方式
-    //let TestStruct = UE.UserDefinedStruct.Load("UserDefinedStruct'/Game/StarterContent/TestStruct.TestStruct'");
-    //let testStruct = UE.NewStruct(TestStruct) as UE.Game.StarterContent.TestStruct.TestStruct;
-    puerts_1.blueprint.load(UE.Game.StarterContent.TestStruct.TestStruct);
-    const TestStruct = UE.Game.StarterContent.TestStruct.TestStruct;
-    const testStruct = new TestStruct();
-    testStruct.age = 10;
-    testStruct.speed = 5;
-    bpActor.Bar(testStruct);
-    puerts_1.blueprint.unload(TestStruct);
-    //蓝图枚举
-    console.log('-------------------------15---------------------------');
-    console.log(UE.Game.StarterContent.TestEnum.TestEnum.Blue);
-    console.log(UE.Game.StarterContent.TestEnum.TestEnum.Red);
-    console.log(UE.Game.StarterContent.TestEnum.TestEnum.Green);
+    // blueprint.load(UE.Game.StarterContent.TestBlueprint.TestBlueprint_C);
+    // const TestBlueprint_C = UE.Game.StarterContent.TestBlueprint.TestBlueprint_C; //别名
+    // const bpActor = UE.GameplayStatics.BeginDeferredActorSpawnFromClass(gameInstance, TestBlueprint_C.StaticClass(), undefined) as UE.Game.StarterContent.TestBlueprint.TestBlueprint_C;
+    // UE.GameplayStatics.FinishSpawningActor(bpActor, undefined);
+    // bpActor.Foo(false, 8000, 9000);
+    // //如果确定后续不需要使用TestBlueprint_C了，应该unload节省内存
+    // blueprint.unload(TestBlueprint_C);
+    // //蓝图结构体加载
+    // //UE.UserDefinedStruct.Load方式
+    // //let TestStruct = UE.UserDefinedStruct.Load("UserDefinedStruct'/Game/StarterContent/TestStruct.TestStruct'");
+    // //let testStruct = UE.NewStruct(TestStruct) as UE.Game.StarterContent.TestStruct.TestStruct;
+    // blueprint.load(UE.Game.StarterContent.TestStruct.TestStruct);
+    // const TestStruct = UE.Game.StarterContent.TestStruct.TestStruct;
+    // const testStruct = new TestStruct();
+    // testStruct.age = 10;
+    // testStruct.speed = 5;
+    // bpActor.Bar(testStruct);
+    // blueprint.unload(TestStruct);
+    // //蓝图枚举
+    // console.log('-------------------------15---------------------------');
+    // console.log(UE.Game.StarterContent.TestEnum.TestEnum.Blue);
+    // console.log(UE.Game.StarterContent.TestEnum.TestEnum.Red);
+    // console.log(UE.Game.StarterContent.TestEnum.TestEnum.Green);
     //Delegate
     console.log('--------------------------16--------------------------');
     function MutiCast1(i) {
