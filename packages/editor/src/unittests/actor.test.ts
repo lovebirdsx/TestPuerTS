@@ -4,7 +4,7 @@ import * as ue from 'ue';
 
 suite('Actor', () => {
 	test('basic', () => {
-		ue.EditorCommonLibrary.TempWorldTest_EditorOnly(
+		ue.EditorCommonLibrary.TempWorldTest(
 			toDelegate(undefined, (world: $Nullable<ue.World>) => {
 				const actor = ue.GameplayStatics.BeginDeferredActorSpawnFromClass(world, ue.MainActor.StaticClass(), undefined);
 				ue.GameplayStatics.FinishSpawningActor(actor, undefined);

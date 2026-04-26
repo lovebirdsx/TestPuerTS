@@ -5,10 +5,10 @@ import { runUnitTests } from './tests/runTest';
 
 function startWatch() {
 	const watcher = watch(__dirname, () => {
-		const editor = TsEditorLibrary.GetTsEditor_EditorOnly();
+		const editor = TsEditorLibrary.GetTsEditor();
 		if (editor) {
 			console.log('Restarting editor...');
-			editor.Restart_EditorOnly();
+			editor.Restart();
 		}
 	});
 
@@ -20,24 +20,24 @@ function showMainEUW() {
 	let tabId: string | undefined = undefined;
 	let unBind: () => void;
 
-	if (EditorCommonLibrary.IsMainFrameCreationFinished_EditorOnly()) {
+	if (EditorCommonLibrary.IsMainFrameCreationFinished()) {
 		const path = '/Game/Editor/W_Main.W_Main';
 		unBind = bindMainEUWClass(path + '_C');
-		tabId = EditorCommonLibrary.ShowEditorWidget_EditorOnly(EditorUtilityWidgetBlueprint.Load(path));
+		tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
 	} else {
-		const editorEvent = EditorCommonLibrary.GetEditorEvent_EditorOnly();
+		const editorEvent = EditorCommonLibrary.GetEditorEvent();
 		editorEvent.OnOnMainFrameCreationFinished.Add(() => {
 			const path = '/Game/Editor/W_Main.W_Main';
 			unBind = bindMainEUWClass(path + '_C');
-			tabId = EditorCommonLibrary.ShowEditorWidget_EditorOnly(EditorUtilityWidgetBlueprint.Load(path));
-			EditorCommonLibrary.CloseEditorWidget_EditorOnly(tabId);
-			tabId = EditorCommonLibrary.ShowEditorWidget_EditorOnly(EditorUtilityWidgetBlueprint.Load(path));
+			tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
+			EditorCommonLibrary.CloseEditorWidget(tabId);
+			tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
 		});
 	}
 
-	TsEditorLibrary.GetTsEditor_EditorOnly().OnStopped.Add(() => {
+	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
 		if (tabId) {
-			EditorCommonLibrary.CloseEditorWidget_EditorOnly(tabId);
+			EditorCommonLibrary.CloseEditorWidget(tabId);
 		}
 		unBind?.();
 	});
@@ -47,7 +47,7 @@ function main() {
 	startWatch();
 	showMainEUW();
 
-	const editorSettings = TsEditorLibrary.GetTsEditorSettings_EditorOnly();
+	const editorSettings = TsEditorLibrary.GetTsEditorSettings();
 	if (editorSettings.bAutoRunUnitTests) {
 		runUnitTests();
 	}

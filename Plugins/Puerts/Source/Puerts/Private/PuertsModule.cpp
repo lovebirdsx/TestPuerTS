@@ -253,6 +253,11 @@ public:
         return GetDefault<UPuertsSetting>()->IgnoreStructListOnDTS;
     }
 
+    virtual const TArray<FString>& GetModuleWhiteListOnDTS()
+    {
+        return GetDefault<UPuertsSetting>()->ModuleWhiteListOnDTS;
+    }
+
 private:
     TSharedPtr<PUERTS_NAMESPACE::FJsEnv> JsEnv;
 

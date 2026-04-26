@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "UE5.5-Souce",
+	"EngineAssociation": "5.5",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -11,6 +11,11 @@
 		},
 		{
 			"Name": "TestPuerTSEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "TsEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}

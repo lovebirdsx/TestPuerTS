@@ -54,4 +54,9 @@ public:
 
     UPROPERTY(config, EditAnywhere, Category = "Declaration Generator", meta = (DisplayName = "D.ts Ignore Struct Name List"))
     TArray<FString> IgnoreStructListOnDTS;
+
+    UPROPERTY(config, EditAnywhere, Category = "Declaration Generator",
+        meta = (DisplayName = "D.ts Module Whitelist (empty = export all)",
+        Tooltip = "Only export types from these modules. Use UE module names like CoreUObject, Engine, etc. Leave empty to export all."))
+    TArray<FString> ModuleWhiteListOnDTS;
 };

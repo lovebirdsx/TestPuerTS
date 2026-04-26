@@ -5,7 +5,7 @@ const puerts_1 = require("puerts");
 const ue = require("ue");
 suite('Actor', () => {
     test('basic', () => {
-        ue.EditorCommonLibrary.TempWorldTest_EditorOnly((0, puerts_1.toDelegate)(undefined, (world) => {
+        ue.EditorCommonLibrary.TempWorldTest((0, puerts_1.toDelegate)(undefined, (world) => {
             const actor = ue.GameplayStatics.BeginDeferredActorSpawnFromClass(world, ue.MainActor.StaticClass(), undefined);
             ue.GameplayStatics.FinishSpawningActor(actor, undefined);
             assert.ok(actor != undefined);

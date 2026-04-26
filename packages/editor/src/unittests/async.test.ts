@@ -28,7 +28,7 @@ export function asyncLoad(path: string): Promise<ue.Class> {
 suite('Async', () => {
 	test('latent action', async () => {
 		const actionState = new ue.LatentActionState();
-		const world = ue.EditorCommonLibrary.GetWorld_EditorOnly();
+		const world = ue.EditorCommonLibrary.GetWorld();
 		assert.ok(world !== undefined);
 		ue.KismetSystemLibrary.Delay(world, 0.001, actionState.GetLatentActionInfo());
 		await waitLatentActionState(actionState);

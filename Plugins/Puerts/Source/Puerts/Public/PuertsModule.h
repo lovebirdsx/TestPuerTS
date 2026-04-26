@@ -50,6 +50,8 @@ public:
 
     virtual const TArray<FString>& GetIgnoreStructListOnDTS() = 0;
 
+    virtual const TArray<FString>& GetModuleWhiteListOnDTS() = 0;
+
 #if WITH_EDITOR
     virtual bool IsInPIE() = 0;
 #endif

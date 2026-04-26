@@ -357,6 +357,26 @@ void FTypeScriptDeclarationGenerator::GenTypeScriptDeclaration(bool InGenStruct,
     {
         UObject* Class = SortedClasses[i];
         checkfSlow(Class != nullptr, TEXT("Class name corruption!"));
+        const TArray<FString>& ModuleWhiteList = IPuertsModule::Get().GetModuleWhiteListOnDTS();
+        if (ModuleWhiteList.Num() > 0)
+        {
+            FString PkgName = Class->GetPackage()->GetName();
+            {
+                bool bInWhiteList = false;
+                for (const FString& AllowedModule : ModuleWhiteList)
+                {
+                    if (PkgName.Equals(FString::Printf(TEXT("/Script/%s"), *AllowedModule), ESearchCase::IgnoreCase))
+                    {
+                        bInWhiteList = true;
+                        break;
+                    }
+                }
+                if (!bInWhiteList)
+                {
+                    continue;
+                }
+            }
+        }
         const TArray<FString>& IgnoreClassListOnDTS = IPuertsModule::Get().GetIgnoreClassListOnDTS();
         if (IgnoreClassListOnDTS.Contains(Class->GetName()))
         {
