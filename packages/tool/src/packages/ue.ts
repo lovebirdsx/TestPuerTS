@@ -43,8 +43,7 @@ function getEngineRoot(): string {
 	if (!entry) {
 		throw new Error(`Engine version ${engineVersion} not found in LauncherInstalled.dat`);
 	}
-
-	info(green(`[ue] Engine found: ${entry.InstallLocation} (${engineVersion})`));
+	
 	return entry.InstallLocation;
 }
 
@@ -89,6 +88,33 @@ gulp.task('ue:test', async () => {
 		originalLog: true,
 	});
 	info(green('[ue:test] Tests completed'));
+});
+
+gulp.task('ue:build:watch', async () => {
+	const sourceDir = path.join(projectRoot, 'Source');
+	const pluginsDir = path.join(projectRoot, 'Plugins');
+	const watchGlobs = [
+		// C++ source files
+		path.join(sourceDir, '**/*.h'),
+		path.join(sourceDir, '**/*.cpp'),
+		path.join(pluginsDir, '**/*.h'),
+		path.join(pluginsDir, '**/*.cpp'),
+		// Build configuration files
+		path.join(sourceDir, '**/*.cs'),
+		path.join(pluginsDir, '**/*.cs'),
+		path.join(pluginsDir, '**/*.uplugin'),
+		uprojectPath,
+	];
+	const ignored = [
+		'**/Intermediate/**',
+		'**/Binaries/**',
+	];
+
+	info(green('[ue:build:watch] Watching C++ sources for changes...'));
+	gulp.watch(watchGlobs, { ignored }, gulp.series('ue:build', 'ue:test')).on('change', (filePath: string) => {
+		const relative = path.relative(projectRoot, filePath);
+		info(`[ue:build:watch] File ${relative} was changed, rebuilding...`);
+	});
 });
 
 gulp.task('ue:build:clean', async () => {
