@@ -1,5 +1,4 @@
-import { beforeEach, afterEach } from 'vitest';
-import * as assert from 'assert';
+import { describe, it, beforeEach, afterEach, expect } from 'vitest';
 import { timeout } from '../../../../common/async';
 import { VSBuffer } from '../../../../common/buffer';
 import { CancellationToken, CancellationTokenSource } from '../../../../common/cancellation';
@@ -198,8 +197,8 @@ class TestChannelClient implements ITestService {
 	}
 }
 
-suite('Base IPC', () => {
-	test('createProtocolPair', async () => {
+describe('Base IPC', () => {
+	it('createProtocolPair', async () => {
 		const [clientProtocol, serverProtocol] = createProtocolPair();
 
 		const b1 = VSBuffer.alloc(0);
@@ -211,11 +210,11 @@ suite('Base IPC', () => {
 		const b2 = await Event.toPromise(serverProtocol.onMessage);
 		const b4 = await Event.toPromise(clientProtocol.onMessage);
 
-		assert.strictEqual(b1, b2);
-		assert.strictEqual(b3, b4);
+		expect(b1).toBe(b2);
+		expect(b3).toBe(b4);
 	});
 
-	suite('one to one', () => {
+	describe('one to one', () => {
 		let server: IPCServer;
 		let client: IPCClient;
 		let service: TestService;
@@ -237,34 +236,34 @@ suite('Base IPC', () => {
 			server.dispose();
 		});
 
-		test('call success', async () => {
+		it('call success', async () => {
 			const r = await ipcService.marco();
-			return assert.strictEqual(r, 'polo');
+			return expect(r).toBe('polo');
 		});
 
-		test('call error', async () => {
+		it('call error', async () => {
 			try {
 				await ipcService.error('nice error');
-				return assert.fail('should not reach here');
+				return expect.unreachable('should not reach here');
 			} catch (err) {
-				return assert.strictEqual((err as Error).message, 'nice error');
+				return expect((err as Error).message).toBe('nice error');
 			}
 		});
 
-		test('cancel call with cancelled cancellation token', async () => {
+		it('cancel call with cancelled cancellation token', async () => {
 			try {
 				await ipcService.neverCompleteCT(CancellationToken.Cancelled);
-				return assert.fail('should not reach here');
+				return expect.unreachable('should not reach here');
 			} catch (err) {
-				return assert.ok(isCancellationError(err));
+				return expect(isCancellationError(err)).toBeTruthy();
 			}
 		});
 
-		test('cancel call with cancellation token (sync)', () => {
+		it('cancel call with cancellation token (sync)', () => {
 			const cts = new CancellationTokenSource();
 			const promise = ipcService.neverCompleteCT(cts.token).then(
-				(_) => assert.fail('should not reach here'),
-				(err) => assert.strictEqual(err.message, 'Canceled'),
+				(_) => expect.unreachable('should not reach here'),
+				(err) => expect(err.message).toBe('Canceled'),
 			);
 
 			cts.cancel();
@@ -272,11 +271,11 @@ suite('Base IPC', () => {
 			return promise;
 		});
 
-		test('cancel call with cancellation token (async)', () => {
+		it('cancel call with cancellation token (async)', () => {
 			const cts = new CancellationTokenSource();
 			const promise = ipcService.neverCompleteCT(cts.token).then(
-				(_) => assert.fail('should not reach here'),
-				(err) => assert.strictEqual(err.message, 'Canceled'),
+				(_) => expect.unreachable('should not reach here'),
+				(err) => expect(err.message).toBe('Canceled'),
 			);
 
 			setTimeout(() => cts.cancel());
@@ -284,38 +283,38 @@ suite('Base IPC', () => {
 			return promise;
 		});
 
-		test('listen to events', async () => {
+		it('listen to events', async () => {
 			const messages: string[] = [];
 
 			ipcService.onPong((msg) => messages.push(msg));
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, []);
+			expect(messages).toEqual([]);
 			service.ping('hello');
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, ['hello']);
+			expect(messages).toEqual(['hello']);
 			service.ping('world');
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, ['hello', 'world']);
+			expect(messages).toEqual(['hello', 'world']);
 		});
 
-		test('buffers in arrays', async () => {
+		it('buffers in arrays', async () => {
 			const r = await ipcService.buffersLength([VSBuffer.alloc(2), VSBuffer.alloc(3)]);
-			return assert.strictEqual(r, 5);
+			return expect(r).toBe(5);
 		});
 
-		test('round trips numbers', () => {
+		it('round trips numbers', () => {
 			const input = [0, 1, -1, 12345, -12345, 42.6, 123412341234];
 
 			const writer = new BufferWriter();
 			serialize(writer, input);
-			assert.deepStrictEqual(deserialize(new BufferReader(writer.buffer)), input);
+			expect(deserialize(new BufferReader(writer.buffer))).toEqual(input);
 		});
 	});
 
-	suite('one to one (proxy)', () => {
+	describe('one to one (proxy)', () => {
 		let server: IPCServer;
 		let client: IPCClient;
 		let service: TestService;
@@ -337,44 +336,44 @@ suite('Base IPC', () => {
 			server.dispose();
 		});
 
-		test('call success', async () => {
+		it('call success', async () => {
 			const r = await ipcService.marco();
-			return assert.strictEqual(r, 'polo');
+			return expect(r).toBe('polo');
 		});
 
-		test('call error', async () => {
+		it('call error', async () => {
 			try {
 				await ipcService.error('nice error');
-				return assert.fail('should not reach here');
+				return expect.unreachable('should not reach here');
 			} catch (err) {
-				return assert.strictEqual((err as Error).message, 'nice error');
+				return expect((err as Error).message).toBe('nice error');
 			}
 		});
 
-		test('listen to events', async () => {
+		it('listen to events', async () => {
 			const messages: string[] = [];
 
 			ipcService.onPong((msg) => messages.push(msg));
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, []);
+			expect(messages).toEqual([]);
 			service.ping('hello');
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, ['hello']);
+			expect(messages).toEqual(['hello']);
 			service.ping('world');
 			await timeout(0);
 
-			assert.deepStrictEqual(messages, ['hello', 'world']);
+			expect(messages).toEqual(['hello', 'world']);
 		});
 
-		test('buffers in arrays', async () => {
+		it('buffers in arrays', async () => {
 			const r = await ipcService.buffersLength([VSBuffer.alloc(2), VSBuffer.alloc(3)]);
-			return assert.strictEqual(r, 5);
+			return expect(r).toBe(5);
 		});
 	});
 
-	suite('one to one (proxy, extra context)', () => {
+	describe('one to one (proxy, extra context)', () => {
 		let server: IPCServer;
 		let client: IPCClient;
 		let service: TestService;
@@ -396,14 +395,14 @@ suite('Base IPC', () => {
 			server.dispose();
 		});
 
-		test('call extra context', async () => {
+		it('call extra context', async () => {
 			const r = await ipcService.context();
-			return assert.strictEqual(r, 'Super Context');
+			return expect(r).toBe('Super Context');
 		});
 	});
 
-	suite('one to many', () => {
-		test('all clients get pinged', async () => {
+	describe('one to many', () => {
+		it('all clients get pinged', async () => {
 			const service = new TestService();
 			const channel = new TestChannel(service);
 			const server = new TestIPCServer();
@@ -423,15 +422,15 @@ suite('Base IPC', () => {
 			service.ping('hello');
 
 			await timeout(1);
-			assert.ok(client1GotPinged, 'client 1 got pinged');
-			assert.ok(client2GotPinged, 'client 2 got pinged');
+			expect(client1GotPinged).toBeTruthy();
+			expect(client2GotPinged).toBeTruthy();
 
 			client1.dispose();
 			client2.dispose();
 			server.dispose();
 		});
 
-		test('server gets pings from all clients (broadcast channel)', async () => {
+		it('server gets pings from all clients (broadcast channel)', async () => {
 			const server = new TestIPCServer();
 
 			const client1 = server.createConnection('client1');
@@ -448,7 +447,7 @@ suite('Base IPC', () => {
 			clientService1.ping('hello 1');
 
 			await timeout(1);
-			assert.deepStrictEqual(pings, ['hello 1']);
+			expect(pings).toEqual(['hello 1']);
 
 			const client2 = server.createConnection('client2');
 			const clientService2 = new TestService();
@@ -459,19 +458,19 @@ suite('Base IPC', () => {
 			clientService2.ping('hello 2');
 
 			await timeout(1);
-			assert.deepStrictEqual(pings, ['hello 1', 'hello 2']);
+			expect(pings).toEqual(['hello 1', 'hello 2']);
 
 			client1.dispose();
 			clientService1.ping('hello 1');
 
 			await timeout(1);
-			assert.deepStrictEqual(pings, ['hello 1', 'hello 2']);
+			expect(pings).toEqual(['hello 1', 'hello 2']);
 
 			await timeout(1);
 			clientService2.ping('hello again 2');
 
 			await timeout(1);
-			assert.deepStrictEqual(pings, ['hello 1', 'hello 2', 'hello again 2']);
+			expect(pings).toEqual(['hello 1', 'hello 2', 'hello again 2']);
 
 			client2.dispose();
 			server.dispose();

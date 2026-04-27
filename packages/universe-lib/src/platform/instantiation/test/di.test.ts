@@ -1,5 +1,4 @@
-import { beforeEach } from 'vitest';
-import * as assert from 'assert';
+import { describe, it, beforeEach, expect } from 'vitest';
 import { createDecorator } from '../instantiation';
 import { ServiceIdentifier } from '../serviceCollection';
 import { InstantiationService } from '../instantiationService';
@@ -128,7 +127,7 @@ registerSingleton(IFileSystem, FileSystem, true);
 registerSingleton(ISaver, Saver, true);
 registerSingleton(ILoader, Loader, true);
 
-suite('Dependency Injection', () => {
+describe('Dependency Injection', () => {
 	beforeEach(() => {
 		Logger.constructorCallCount = 0;
 		FileSystem.constructorCallCount = 0;
@@ -136,13 +135,13 @@ suite('Dependency Injection', () => {
 	});
 
 	// 服务没有注册时会报错
-	test('service not registered', () => {
+	it('service not registered', () => {
 		const instantiationService = new InstantiationService();
-		assert.throws(() => instantiationService.createInstance(Saver, 'error'));
+		expect(() => instantiationService.createInstance(Saver, 'error')).toThrow();
 	});
 
 	// 通过InstantiationService来创建服务
-	test('inject by InstantiationService', () => {
+	it('inject by InstantiationService', () => {
 		const services = new ServiceCollection();
 		for (const [id, descriptor] of getSingletonServiceDescriptors()) {
 			services.set(id, descriptor);
@@ -151,11 +150,11 @@ suite('Dependency Injection', () => {
 		const instantiationService = new InstantiationService(services);
 		const saver = instantiationService.createInstance(Saver, 'test');
 		saver.save('test.txt', 'hello');
-		assert.equal(FileSystem.getFile('test.txt'), '"hello"');
+		expect(FileSystem.getFile('test.txt')).toBe('"hello"');
 	});
 
 	// 服务在后台会自动创建
-	test('service background instantiation', async () => {
+	it('service background instantiation', async () => {
 		const services = new ServiceCollection();
 		for (const [id, descriptor] of getSingletonServiceDescriptors()) {
 			services.set(id, descriptor);
@@ -166,17 +165,17 @@ suite('Dependency Injection', () => {
 
 		// 虽然Saver依赖FileSystem，但因为没有调用FileSystem的方法，所以FileSystem不会被创建
 		// 这个是因为FileSystem配置成可以延迟创建
-		assert.equal(FileSystem.constructorCallCount, 0);
+		expect(FileSystem.constructorCallCount).toBe(0);
 
 		// Logger不是延迟创建，所以会被创建
-		assert.equal(Logger.constructorCallCount, 1);
+		expect(Logger.constructorCallCount).toBe(1);
 
 		saver.save('test.txt', 'hello');
-		assert.equal(FileSystem.constructorCallCount, 1);
+		expect(FileSystem.constructorCallCount).toBe(1);
 	});
 
 	// 构造函数延迟调用
-	test('constructor lazy call', async () => {
+	it('constructor lazy call', async () => {
 		interface ILazyConstructService {
 			readonly _serviceBrand: undefined;
 		}
@@ -222,7 +221,7 @@ suite('Dependency Injection', () => {
 			});
 		});
 
-		assert.equal(InstantConstructService.constructorCallCount, 1);
-		assert.equal(LazyConstructService.constructorCallCount, 0);
+		expect(InstantConstructService.constructorCallCount).toBe(1);
+		expect(LazyConstructService.constructorCallCount).toBe(0);
 	});
 });

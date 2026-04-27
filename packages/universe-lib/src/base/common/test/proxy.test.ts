@@ -1,7 +1,7 @@
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
-suite('Proxy', () => {
-	test('observe prop modification', () => {
+describe('Proxy', () => {
+	it('observe prop modification', () => {
 		let setCallCount = 0;
 
 		const data = {};
@@ -14,7 +14,7 @@ suite('Proxy', () => {
 		};
 		const proxy = new Proxy(data, handler);
 		proxy.foo = 'bar';
-		assert.strictEqual(proxy.foo, 'bar');
-		assert.strictEqual(setCallCount, 1);
+		expect(proxy.foo).toBe('bar');
+		expect(setCallCount).toBe(1);
 	});
 });

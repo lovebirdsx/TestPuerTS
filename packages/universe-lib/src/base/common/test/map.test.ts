@@ -1,80 +1,80 @@
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 import { BidirectionalMap, LinkedMap, LRUCache, mapsStrictEqualIgnoreOrder, MRUCache, ResourceMap, SetMap, Touch } from '../map';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../test/utils';
 import { URI } from '../uri';
 import { extUriIgnorePathCase } from '../resources';
 
-suite('Map', () => {
+describe('Map', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	test('LinkedMap - Simple', () => {
+	it('LinkedMap - Simple', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
-		assert.deepStrictEqual([...map.keys()], ['ak', 'bk']);
-		assert.deepStrictEqual([...map.values()], ['av', 'bv']);
-		assert.strictEqual(map.first, 'av');
-		assert.strictEqual(map.last, 'bv');
+		expect([...map.keys()]).toEqual(['ak', 'bk']);
+		expect([...map.values()]).toEqual(['av', 'bv']);
+		expect(map.first).toBe('av');
+		expect(map.last).toBe('bv');
 	});
 
-	test('LinkedMap - Touch Old one', () => {
+	it('LinkedMap - Touch Old one', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('ak', 'av', Touch.AsOld);
-		assert.deepStrictEqual([...map.keys()], ['ak']);
-		assert.deepStrictEqual([...map.values()], ['av']);
+		expect([...map.keys()]).toEqual(['ak']);
+		expect([...map.values()]).toEqual(['av']);
 	});
 
-	test('LinkedMap - Touch New one', () => {
+	it('LinkedMap - Touch New one', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('ak', 'av', Touch.AsNew);
-		assert.deepStrictEqual([...map.keys()], ['ak']);
-		assert.deepStrictEqual([...map.values()], ['av']);
+		expect([...map.keys()]).toEqual(['ak']);
+		expect([...map.values()]).toEqual(['av']);
 	});
 
-	test('LinkedMap - Touch Old two', () => {
+	it('LinkedMap - Touch Old two', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
 		map.set('bk', 'bv', Touch.AsOld);
-		assert.deepStrictEqual([...map.keys()], ['bk', 'ak']);
-		assert.deepStrictEqual([...map.values()], ['bv', 'av']);
+		expect([...map.keys()]).toEqual(['bk', 'ak']);
+		expect([...map.values()]).toEqual(['bv', 'av']);
 	});
 
-	test('LinkedMap - Touch New two', () => {
+	it('LinkedMap - Touch New two', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
 		map.set('ak', 'av', Touch.AsNew);
-		assert.deepStrictEqual([...map.keys()], ['bk', 'ak']);
-		assert.deepStrictEqual([...map.values()], ['bv', 'av']);
+		expect([...map.keys()]).toEqual(['bk', 'ak']);
+		expect([...map.values()]).toEqual(['bv', 'av']);
 	});
 
-	test('LinkedMap - Touch Old from middle', () => {
+	it('LinkedMap - Touch Old from middle', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
 		map.set('ck', 'cv');
 		map.set('bk', 'bv', Touch.AsOld);
-		assert.deepStrictEqual([...map.keys()], ['bk', 'ak', 'ck']);
-		assert.deepStrictEqual([...map.values()], ['bv', 'av', 'cv']);
+		expect([...map.keys()]).toEqual(['bk', 'ak', 'ck']);
+		expect([...map.values()]).toEqual(['bv', 'av', 'cv']);
 	});
 
-	test('LinkedMap - Touch New from middle', () => {
+	it('LinkedMap - Touch New from middle', () => {
 		const map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
 		map.set('ck', 'cv');
 		map.set('bk', 'bv', Touch.AsNew);
-		assert.deepStrictEqual([...map.keys()], ['ak', 'ck', 'bk']);
-		assert.deepStrictEqual([...map.values()], ['av', 'cv', 'bv']);
+		expect([...map.keys()]).toEqual(['ak', 'ck', 'bk']);
+		expect([...map.values()]).toEqual(['av', 'cv', 'bv']);
 	});
 
-	test('LinkedMap - basics', function () {
+	it('LinkedMap - basics', function () {
 		const map = new LinkedMap<string, any>();
 
-		assert.strictEqual(map.size, 0);
+		expect(map.size).toBe(0);
 
 		map.set('1', 1);
 		map.set('2', '2');
@@ -86,63 +86,63 @@ suite('Map', () => {
 		const date = Date.now();
 		map.set('5', date);
 
-		assert.strictEqual(map.size, 5);
-		assert.strictEqual(map.get('1'), 1);
-		assert.strictEqual(map.get('2'), '2');
-		assert.strictEqual(map.get('3'), true);
-		assert.strictEqual(map.get('4'), obj);
-		assert.strictEqual(map.get('5'), date);
-		assert.ok(!map.get('6'));
+		expect(map.size).toBe(5);
+		expect(map.get('1')).toBe(1);
+		expect(map.get('2')).toBe('2');
+		expect(map.get('3')).toBe(true);
+		expect(map.get('4')).toBe(obj);
+		expect(map.get('5')).toBe(date);
+		expect(map.get('6')).toBeFalsy();
 
 		map.delete('6');
-		assert.strictEqual(map.size, 5);
-		assert.strictEqual(map.delete('1'), true);
-		assert.strictEqual(map.delete('2'), true);
-		assert.strictEqual(map.delete('3'), true);
-		assert.strictEqual(map.delete('4'), true);
-		assert.strictEqual(map.delete('5'), true);
+		expect(map.size).toBe(5);
+		expect(map.delete('1')).toBe(true);
+		expect(map.delete('2')).toBe(true);
+		expect(map.delete('3')).toBe(true);
+		expect(map.delete('4')).toBe(true);
+		expect(map.delete('5')).toBe(true);
 
-		assert.strictEqual(map.size, 0);
-		assert.ok(!map.get('5'));
-		assert.ok(!map.get('4'));
-		assert.ok(!map.get('3'));
-		assert.ok(!map.get('2'));
-		assert.ok(!map.get('1'));
+		expect(map.size).toBe(0);
+		expect(map.get('5')).toBeFalsy();
+		expect(map.get('4')).toBeFalsy();
+		expect(map.get('3')).toBeFalsy();
+		expect(map.get('2')).toBeFalsy();
+		expect(map.get('1')).toBeFalsy();
 
 		map.set('1', 1);
 		map.set('2', '2');
 		map.set('3', true);
 
-		assert.ok(map.has('1'));
-		assert.strictEqual(map.get('1'), 1);
-		assert.strictEqual(map.get('2'), '2');
-		assert.strictEqual(map.get('3'), true);
+		expect(map.has('1')).toBeTruthy();
+		expect(map.get('1')).toBe(1);
+		expect(map.get('2')).toBe('2');
+		expect(map.get('3')).toBe(true);
 
 		map.clear();
 
-		assert.strictEqual(map.size, 0);
-		assert.ok(!map.get('1'));
-		assert.ok(!map.get('2'));
-		assert.ok(!map.get('3'));
-		assert.ok(!map.has('1'));
+		expect(map.size).toBe(0);
+		expect(map.get('1')).toBeFalsy();
+		expect(map.get('2')).toBeFalsy();
+		expect(map.get('3')).toBeFalsy();
+		expect(map.has('1')).toBeFalsy();
 	});
 
-	test('LinkedMap - Iterators', () => {
+	it('LinkedMap - Iterators', () => {
 		const map = new LinkedMap<number, any>();
 		map.set(1, 1);
 		map.set(2, 2);
 		map.set(3, 3);
 
 		for (const elem of map.keys()) {
-			assert.ok(elem);
+			expect(elem).toBeTruthy();
 		}
 
 		for (const elem of map.values()) {
-			assert.ok(elem);
+			expect(elem).toBeTruthy();
 		}
 
 		for (const elem of map.entries()) {
-			assert.ok(elem);
+			expect(elem).toBeTruthy();
 		}
 
 		{
@@ -178,129 +178,129 @@ suite('Map', () => {
 				exceptions++;
 			}
 
-			assert.strictEqual(exceptions, 3);
+			expect(exceptions).toBe(3);
 		}
 	});
 
-	test('LinkedMap - LRU Cache simple', () => {
+	it('LinkedMap - LRU Cache simple', () => {
 		const cache = new LRUCache<number, number>(5);
 
 		[1, 2, 3, 4, 5].forEach((value) => cache.set(value, value));
-		assert.strictEqual(cache.size, 5);
+		expect(cache.size).toBe(5);
 		cache.set(6, 6);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [2, 3, 4, 5, 6]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([2, 3, 4, 5, 6]);
 		cache.set(7, 7);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [3, 4, 5, 6, 7]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([3, 4, 5, 6, 7]);
 		const values: number[] = [];
 		[3, 4, 5, 6, 7].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [3, 4, 5, 6, 7]);
+		expect(values).toEqual([3, 4, 5, 6, 7]);
 	});
 
-	test('LinkedMap - LRU Cache get', () => {
+	it('LinkedMap - LRU Cache get', () => {
 		const cache = new LRUCache<number, number>(5);
 
 		[1, 2, 3, 4, 5].forEach((value) => cache.set(value, value));
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 3, 4, 5]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([1, 2, 3, 4, 5]);
 		cache.get(3);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 4, 5, 3]);
+		expect([...cache.keys()]).toEqual([1, 2, 4, 5, 3]);
 		cache.peek(4);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 4, 5, 3]);
+		expect([...cache.keys()]).toEqual([1, 2, 4, 5, 3]);
 		const values: number[] = [];
 		[1, 2, 3, 4, 5].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [1, 2, 3, 4, 5]);
+		expect(values).toEqual([1, 2, 3, 4, 5]);
 	});
 
-	test('LinkedMap - LRU Cache limit', () => {
+	it('LinkedMap - LRU Cache limit', () => {
 		const cache = new LRUCache<number, number>(10);
 
 		for (let i = 1; i <= 10; i++) {
 			cache.set(i, i);
 		}
-		assert.strictEqual(cache.size, 10);
+		expect(cache.size).toBe(10);
 		cache.limit = 5;
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [6, 7, 8, 9, 10]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([6, 7, 8, 9, 10]);
 		cache.limit = 20;
-		assert.strictEqual(cache.size, 5);
+		expect(cache.size).toBe(5);
 		for (let i = 11; i <= 20; i++) {
 			cache.set(i, i);
 		}
-		assert.deepStrictEqual(cache.size, 15);
+		expect(cache.size).toEqual(15);
 		const values: number[] = [];
 		for (let i = 6; i <= 20; i++) {
 			values.push(cache.get(i)!);
-			assert.strictEqual(cache.get(i), i);
+			expect(cache.get(i)).toBe(i);
 		}
-		assert.deepStrictEqual([...cache.values()], values);
+		expect([...cache.values()]).toEqual(values);
 	});
 
-	test('LinkedMap - LRU Cache limit with ratio', () => {
+	it('LinkedMap - LRU Cache limit with ratio', () => {
 		const cache = new LRUCache<number, number>(10, 0.5);
 
 		for (let i = 1; i <= 10; i++) {
 			cache.set(i, i);
 		}
-		assert.strictEqual(cache.size, 10);
+		expect(cache.size).toBe(10);
 		cache.set(11, 11);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [7, 8, 9, 10, 11]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([7, 8, 9, 10, 11]);
 		const values: number[] = [];
 		[...cache.keys()].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [7, 8, 9, 10, 11]);
-		assert.deepStrictEqual([...cache.values()], values);
+		expect(values).toEqual([7, 8, 9, 10, 11]);
+		expect([...cache.values()]).toEqual(values);
 	});
 
-	test('LinkedMap - MRU Cache simple', () => {
+	it('LinkedMap - MRU Cache simple', () => {
 		const cache = new MRUCache<number, number>(5);
 
 		[1, 2, 3, 4, 5].forEach((value) => cache.set(value, value));
-		assert.strictEqual(cache.size, 5);
+		expect(cache.size).toBe(5);
 		cache.set(6, 6);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 3, 4, 6]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([1, 2, 3, 4, 6]);
 		cache.set(7, 7);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 3, 4, 7]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([1, 2, 3, 4, 7]);
 		const values: number[] = [];
 		[1, 2, 3, 4, 7].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [1, 2, 3, 4, 7]);
+		expect(values).toEqual([1, 2, 3, 4, 7]);
 	});
 
-	test('LinkedMap - MRU Cache get', () => {
+	it('LinkedMap - MRU Cache get', () => {
 		const cache = new MRUCache<number, number>(5);
 
 		[1, 2, 3, 4, 5].forEach((value) => cache.set(value, value));
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 3, 4, 5]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([1, 2, 3, 4, 5]);
 		cache.get(3);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 4, 5, 3]);
+		expect([...cache.keys()]).toEqual([1, 2, 4, 5, 3]);
 		cache.peek(4);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 4, 5, 3]);
+		expect([...cache.keys()]).toEqual([1, 2, 4, 5, 3]);
 		const values: number[] = [];
 		[1, 2, 3, 4, 5].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [1, 2, 3, 4, 5]);
+		expect(values).toEqual([1, 2, 3, 4, 5]);
 	});
 
-	test('LinkedMap - MRU Cache limit with ratio', () => {
+	it('LinkedMap - MRU Cache limit with ratio', () => {
 		const cache = new MRUCache<number, number>(10, 0.5);
 
 		for (let i = 1; i <= 10; i++) {
 			cache.set(i, i);
 		}
-		assert.strictEqual(cache.size, 10);
+		expect(cache.size).toBe(10);
 		cache.set(11, 11);
-		assert.strictEqual(cache.size, 5);
-		assert.deepStrictEqual([...cache.keys()], [1, 2, 3, 4, 11]);
+		expect(cache.size).toBe(5);
+		expect([...cache.keys()]).toEqual([1, 2, 3, 4, 11]);
 		const values: number[] = [];
 		[...cache.keys()].forEach((key) => values.push(cache.get(key)!));
-		assert.deepStrictEqual(values, [1, 2, 3, 4, 11]);
-		assert.deepStrictEqual([...cache.values()], values);
+		expect(values).toEqual([1, 2, 3, 4, 11]);
+		expect([...cache.values()]).toEqual(values);
 	});
 
-	test('LinkedMap - toJSON / fromJSON', () => {
+	it('LinkedMap - toJSON / fromJSON', () => {
 		let map = new LinkedMap<string, string>();
 		map.set('ak', 'av');
 		map.set('bk', 'bv');
@@ -313,63 +313,63 @@ suite('Map', () => {
 		let i = 0;
 		map.forEach((value, key) => {
 			if (i === 0) {
-				assert.strictEqual(key, 'ak');
-				assert.strictEqual(value, 'av');
+				expect(key).toBe('ak');
+				expect(value).toBe('av');
 			} else if (i === 1) {
-				assert.strictEqual(key, 'bk');
-				assert.strictEqual(value, 'bv');
+				expect(key).toBe('bk');
+				expect(value).toBe('bv');
 			} else if (i === 2) {
-				assert.strictEqual(key, 'ck');
-				assert.strictEqual(value, 'cv');
+				expect(key).toBe('ck');
+				expect(value).toBe('cv');
 			}
 			i++;
 		});
 	});
 
-	test('LinkedMap - delete Head and Tail', function () {
+	it('LinkedMap - delete Head and Tail', function () {
 		const map = new LinkedMap<string, number>();
 
-		assert.strictEqual(map.size, 0);
+		expect(map.size).toBe(0);
 
 		map.set('1', 1);
-		assert.strictEqual(map.size, 1);
+		expect(map.size).toBe(1);
 		map.delete('1');
-		assert.strictEqual(map.get('1'), undefined);
-		assert.strictEqual(map.size, 0);
-		assert.strictEqual([...map.keys()].length, 0);
+		expect(map.get('1')).toBe(undefined);
+		expect(map.size).toBe(0);
+		expect([...map.keys()].length).toBe(0);
 	});
 
-	test('LinkedMap - delete Head', function () {
+	it('LinkedMap - delete Head', function () {
 		const map = new LinkedMap<string, number>();
 
-		assert.strictEqual(map.size, 0);
+		expect(map.size).toBe(0);
 
 		map.set('1', 1);
 		map.set('2', 2);
-		assert.strictEqual(map.size, 2);
+		expect(map.size).toBe(2);
 		map.delete('1');
-		assert.strictEqual(map.get('2'), 2);
-		assert.strictEqual(map.size, 1);
-		assert.strictEqual([...map.keys()].length, 1);
-		assert.strictEqual([...map.keys()][0], '2');
+		expect(map.get('2')).toBe(2);
+		expect(map.size).toBe(1);
+		expect([...map.keys()].length).toBe(1);
+		expect([...map.keys()][0]).toBe('2');
 	});
 
-	test('LinkedMap - delete Tail', function () {
+	it('LinkedMap - delete Tail', function () {
 		const map = new LinkedMap<string, number>();
 
-		assert.strictEqual(map.size, 0);
+		expect(map.size).toBe(0);
 
 		map.set('1', 1);
 		map.set('2', 2);
-		assert.strictEqual(map.size, 2);
+		expect(map.size).toBe(2);
 		map.delete('2');
-		assert.strictEqual(map.get('1'), 1);
-		assert.strictEqual(map.size, 1);
-		assert.strictEqual([...map.keys()].length, 1);
-		assert.strictEqual([...map.keys()][0], '1');
+		expect(map.get('1')).toBe(1);
+		expect(map.size).toBe(1);
+		expect([...map.keys()].length).toBe(1);
+		expect([...map.keys()][0]).toBe('1');
 	});
 
-	test('ResourceMap - basics', function () {
+	it('ResourceMap - basics', function () {
 		const map = new ResourceMap<any>();
 
 		const resource1 = URI.parse('some://1');
@@ -379,23 +379,23 @@ suite('Map', () => {
 		const resource5 = URI.parse('some://5');
 		const resource6 = URI.parse('some://6');
 
-		assert.strictEqual(map.size, 0);
+		expect(map.size).toBe(0);
 
 		const res = map.set(resource1, 1);
-		assert.ok(res === map);
+		expect(res).toBe(map);
 		map.set(resource2, '2');
 		map.set(resource3, true);
 
 		const values = [...map.values()];
-		assert.strictEqual(values[0], 1);
-		assert.strictEqual(values[1], '2');
-		assert.strictEqual(values[2], true);
+		expect(values[0]).toBe(1);
+		expect(values[1]).toBe('2');
+		expect(values[2]).toBe(true);
 
 		let counter = 0;
 		map.forEach((value, key, mapObj) => {
-			assert.strictEqual(value, values[counter++]);
-			assert.ok(URI.isUri(key));
-			assert.ok(map === mapObj);
+			expect(value).toBe(values[counter++]);
+			expect(URI.isUri(key)).toBeTruthy();
+			expect(map).toBe(mapObj);
 		});
 
 		const obj = Object.create(null);
@@ -404,54 +404,54 @@ suite('Map', () => {
 		const date = Date.now();
 		map.set(resource5, date);
 
-		assert.strictEqual(map.size, 5);
-		assert.strictEqual(map.get(resource1), 1);
-		assert.strictEqual(map.get(resource2), '2');
-		assert.strictEqual(map.get(resource3), true);
-		assert.strictEqual(map.get(resource4), obj);
-		assert.strictEqual(map.get(resource5), date);
-		assert.ok(!map.get(resource6));
+		expect(map.size).toBe(5);
+		expect(map.get(resource1)).toBe(1);
+		expect(map.get(resource2)).toBe('2');
+		expect(map.get(resource3)).toBe(true);
+		expect(map.get(resource4)).toBe(obj);
+		expect(map.get(resource5)).toBe(date);
+		expect(map.get(resource6)).toBeFalsy();
 
 		map.delete(resource6);
-		assert.strictEqual(map.size, 5);
-		assert.ok(map.delete(resource1));
-		assert.ok(map.delete(resource2));
-		assert.ok(map.delete(resource3));
-		assert.ok(map.delete(resource4));
-		assert.ok(map.delete(resource5));
+		expect(map.size).toBe(5);
+		expect(map.delete(resource1)).toBeTruthy();
+		expect(map.delete(resource2)).toBeTruthy();
+		expect(map.delete(resource3)).toBeTruthy();
+		expect(map.delete(resource4)).toBeTruthy();
+		expect(map.delete(resource5)).toBeTruthy();
 
-		assert.strictEqual(map.size, 0);
-		assert.ok(!map.get(resource5));
-		assert.ok(!map.get(resource4));
-		assert.ok(!map.get(resource3));
-		assert.ok(!map.get(resource2));
-		assert.ok(!map.get(resource1));
+		expect(map.size).toBe(0);
+		expect(map.get(resource5)).toBeFalsy();
+		expect(map.get(resource4)).toBeFalsy();
+		expect(map.get(resource3)).toBeFalsy();
+		expect(map.get(resource2)).toBeFalsy();
+		expect(map.get(resource1)).toBeFalsy();
 
 		map.set(resource1, 1);
 		map.set(resource2, '2');
 		map.set(resource3, true);
 
-		assert.ok(map.has(resource1));
-		assert.strictEqual(map.get(resource1), 1);
-		assert.strictEqual(map.get(resource2), '2');
-		assert.strictEqual(map.get(resource3), true);
+		expect(map.has(resource1)).toBeTruthy();
+		expect(map.get(resource1)).toBe(1);
+		expect(map.get(resource2)).toBe('2');
+		expect(map.get(resource3)).toBe(true);
 
 		map.clear();
 
-		assert.strictEqual(map.size, 0);
-		assert.ok(!map.get(resource1));
-		assert.ok(!map.get(resource2));
-		assert.ok(!map.get(resource3));
-		assert.ok(!map.has(resource1));
+		expect(map.size).toBe(0);
+		expect(map.get(resource1)).toBeFalsy();
+		expect(map.get(resource2)).toBeFalsy();
+		expect(map.get(resource3)).toBeFalsy();
+		expect(map.has(resource1)).toBeFalsy();
 
 		map.set(resource1, false);
 		map.set(resource2, 0);
 
-		assert.ok(map.has(resource1));
-		assert.ok(map.has(resource2));
+		expect(map.has(resource1)).toBeTruthy();
+		expect(map.has(resource2)).toBeTruthy();
 	});
 
-	test('ResourceMap - files (do NOT ignorecase)', function () {
+	it('ResourceMap - files (do NOT ignorecase)', function () {
 		const map = new ResourceMap<any>();
 
 		const fileA = URI.parse('file://some/filea');
@@ -459,16 +459,16 @@ suite('Map', () => {
 		const fileAUpper = URI.parse('file://SOME/FILEA');
 
 		map.set(fileA, 'true');
-		assert.strictEqual(map.get(fileA), 'true');
+		expect(map.get(fileA)).toBe('true');
 
-		assert.ok(!map.get(fileAUpper));
+		expect(map.get(fileAUpper)).toBeFalsy();
 
-		assert.ok(!map.get(fileB));
+		expect(map.get(fileB)).toBeFalsy();
 
 		map.set(fileAUpper, 'false');
-		assert.strictEqual(map.get(fileAUpper), 'false');
+		expect(map.get(fileAUpper)).toBe('false');
 
-		assert.strictEqual(map.get(fileA), 'true');
+		expect(map.get(fileA)).toBe('true');
 
 		const windowsFile = URI.file('c:\\test with %25\\c#code');
 		const uncFile = URI.file('\\\\shäres\\path\\c#\\plugin.json');
@@ -476,11 +476,11 @@ suite('Map', () => {
 		map.set(windowsFile, 'true');
 		map.set(uncFile, 'true');
 
-		assert.strictEqual(map.get(windowsFile), 'true');
-		assert.strictEqual(map.get(uncFile), 'true');
+		expect(map.get(windowsFile)).toBe('true');
+		expect(map.get(uncFile)).toBe('true');
 	});
 
-	test('ResourceMap - files (ignorecase)', function () {
+	it('ResourceMap - files (ignorecase)', function () {
 		const map = new ResourceMap<any>((uri) => extUriIgnorePathCase.getComparisonKey(uri));
 
 		const fileA = URI.parse('file://some/filea');
@@ -488,16 +488,16 @@ suite('Map', () => {
 		const fileAUpper = URI.parse('file://SOME/FILEA');
 
 		map.set(fileA, 'true');
-		assert.strictEqual(map.get(fileA), 'true');
+		expect(map.get(fileA)).toBe('true');
 
-		assert.strictEqual(map.get(fileAUpper), 'true');
+		expect(map.get(fileAUpper)).toBe('true');
 
-		assert.ok(!map.get(fileB));
+		expect(map.get(fileB)).toBeFalsy();
 
 		map.set(fileAUpper, 'false');
-		assert.strictEqual(map.get(fileAUpper), 'false');
+		expect(map.get(fileAUpper)).toBe('false');
 
-		assert.strictEqual(map.get(fileA), 'false');
+		expect(map.get(fileA)).toBe('false');
 
 		const windowsFile = URI.file('c:\\test with %25\\c#code');
 		const uncFile = URI.file('\\\\shäres\\path\\c#\\plugin.json');
@@ -505,105 +505,105 @@ suite('Map', () => {
 		map.set(windowsFile, 'true');
 		map.set(uncFile, 'true');
 
-		assert.strictEqual(map.get(windowsFile), 'true');
-		assert.strictEqual(map.get(uncFile), 'true');
+		expect(map.get(windowsFile)).toBe('true');
+		expect(map.get(uncFile)).toBe('true');
 	});
 
-	test('ResourceMap - files (ignorecase, BUT preservecase)', function () {
+	it('ResourceMap - files (ignorecase, BUT preservecase)', function () {
 		const map = new ResourceMap<number>((uri) => extUriIgnorePathCase.getComparisonKey(uri));
 
 		const fileA = URI.parse('file://some/filea');
 		const fileAUpper = URI.parse('file://SOME/FILEA');
 
 		map.set(fileA, 1);
-		assert.strictEqual(map.get(fileA), 1);
-		assert.strictEqual(map.get(fileAUpper), 1);
-		assert.deepStrictEqual(Array.from(map.keys()).map(String), [fileA].map(String));
-		assert.deepStrictEqual(Array.from(map), [[fileA, 1]]);
+		expect(map.get(fileA)).toBe(1);
+		expect(map.get(fileAUpper)).toBe(1);
+		expect(Array.from(map.keys()).map(String)).toEqual([fileA].map(String));
+		expect(Array.from(map)).toEqual([[fileA, 1]]);
 
 		map.set(fileAUpper, 1);
-		assert.strictEqual(map.get(fileA), 1);
-		assert.strictEqual(map.get(fileAUpper), 1);
-		assert.deepStrictEqual(Array.from(map.keys()).map(String), [fileAUpper].map(String));
-		assert.deepStrictEqual(Array.from(map), [[fileAUpper, 1]]);
+		expect(map.get(fileA)).toBe(1);
+		expect(map.get(fileAUpper)).toBe(1);
+		expect(Array.from(map.keys()).map(String)).toEqual([fileAUpper].map(String));
+		expect(Array.from(map)).toEqual([[fileAUpper, 1]]);
 	});
 
-	test('mapsStrictEqualIgnoreOrder', () => {
+	it('mapsStrictEqualIgnoreOrder', () => {
 		const map1 = new Map();
 		const map2 = new Map();
 
-		assert.strictEqual(mapsStrictEqualIgnoreOrder(map1, map2), true);
+		expect(mapsStrictEqualIgnoreOrder(map1, map2)).toBe(true);
 
 		map1.set('foo', 'bar');
-		assert.strictEqual(mapsStrictEqualIgnoreOrder(map1, map2), false);
+		expect(mapsStrictEqualIgnoreOrder(map1, map2)).toBe(false);
 
 		map2.set('foo', 'bar');
-		assert.strictEqual(mapsStrictEqualIgnoreOrder(map1, map2), true);
+		expect(mapsStrictEqualIgnoreOrder(map1, map2)).toBe(true);
 
 		map2.set('bar', 'foo');
-		assert.strictEqual(mapsStrictEqualIgnoreOrder(map1, map2), false);
+		expect(mapsStrictEqualIgnoreOrder(map1, map2)).toBe(false);
 
 		map1.set('bar', 'foo');
-		assert.strictEqual(mapsStrictEqualIgnoreOrder(map1, map2), true);
+		expect(mapsStrictEqualIgnoreOrder(map1, map2)).toBe(true);
 	});
 });
 
-suite('BidirectionalMap', () => {
+describe('BidirectionalMap', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	test('should set and get values correctly', () => {
+	it('should set and get values correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
 		map.set('three', 3);
 
-		assert.strictEqual(map.get('one'), 1);
-		assert.strictEqual(map.get('two'), 2);
-		assert.strictEqual(map.get('three'), 3);
+		expect(map.get('one')).toBe(1);
+		expect(map.get('two')).toBe(2);
+		expect(map.get('three')).toBe(3);
 	});
 
-	test('should get keys by value correctly', () => {
+	it('should get keys by value correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
 		map.set('three', 3);
 
-		assert.strictEqual(map.getKey(1), 'one');
-		assert.strictEqual(map.getKey(2), 'two');
-		assert.strictEqual(map.getKey(3), 'three');
+		expect(map.getKey(1)).toBe('one');
+		expect(map.getKey(2)).toBe('two');
+		expect(map.getKey(3)).toBe('three');
 	});
 
-	test('should delete values correctly', () => {
+	it('should delete values correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
 		map.set('three', 3);
 
-		assert.strictEqual(map.delete('one'), true);
-		assert.strictEqual(map.get('one'), undefined);
-		assert.strictEqual(map.getKey(1), undefined);
+		expect(map.delete('one')).toBe(true);
+		expect(map.get('one')).toBe(undefined);
+		expect(map.getKey(1)).toBe(undefined);
 
-		assert.strictEqual(map.delete('two'), true);
-		assert.strictEqual(map.get('two'), undefined);
-		assert.strictEqual(map.getKey(2), undefined);
+		expect(map.delete('two')).toBe(true);
+		expect(map.get('two')).toBe(undefined);
+		expect(map.getKey(2)).toBe(undefined);
 
-		assert.strictEqual(map.delete('three'), true);
-		assert.strictEqual(map.get('three'), undefined);
-		assert.strictEqual(map.getKey(3), undefined);
+		expect(map.delete('three')).toBe(true);
+		expect(map.get('three')).toBe(undefined);
+		expect(map.getKey(3)).toBe(undefined);
 	});
 
-	test('should handle non-existent keys correctly', () => {
+	it('should handle non-existent keys correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
 		map.set('three', 3);
 
-		assert.strictEqual(map.get('four'), undefined);
-		assert.strictEqual(map.getKey(4), undefined);
-		assert.strictEqual(map.delete('four'), false);
+		expect(map.get('four')).toBe(undefined);
+		expect(map.getKey(4)).toBe(undefined);
+		expect(map.delete('four')).toBe(false);
 	});
 
-	test('should handle forEach correctly', () => {
+	it('should handle forEach correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
@@ -616,11 +616,11 @@ suite('BidirectionalMap', () => {
 			values.push(value);
 		});
 
-		assert.deepStrictEqual(keys, ['one', 'two', 'three']);
-		assert.deepStrictEqual(values, [1, 2, 3]);
+		expect(keys).toEqual(['one', 'two', 'three']);
+		expect(values).toEqual([1, 2, 3]);
 	});
 
-	test('should handle clear correctly', () => {
+	it('should handle clear correctly', () => {
 		const map = new BidirectionalMap<string, number>();
 		map.set('one', 1);
 		map.set('two', 2);
@@ -628,50 +628,50 @@ suite('BidirectionalMap', () => {
 
 		map.clear();
 
-		assert.strictEqual(map.get('one'), undefined);
-		assert.strictEqual(map.get('two'), undefined);
-		assert.strictEqual(map.get('three'), undefined);
-		assert.strictEqual(map.getKey(1), undefined);
-		assert.strictEqual(map.getKey(2), undefined);
-		assert.strictEqual(map.getKey(3), undefined);
+		expect(map.get('one')).toBe(undefined);
+		expect(map.get('two')).toBe(undefined);
+		expect(map.get('three')).toBe(undefined);
+		expect(map.getKey(1)).toBe(undefined);
+		expect(map.getKey(2)).toBe(undefined);
+		expect(map.getKey(3)).toBe(undefined);
 	});
 });
 
-suite('SetMap', () => {
+describe('SetMap', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	test('add and get', () => {
+	it('add and get', () => {
 		const setMap = new SetMap<string, number>();
 		setMap.add('a', 1);
 		setMap.add('a', 2);
 		setMap.add('b', 3);
-		assert.deepStrictEqual([...setMap.get('a')], [1, 2]);
-		assert.deepStrictEqual([...setMap.get('b')], [3]);
+		expect([...setMap.get('a')]).toEqual([1, 2]);
+		expect([...setMap.get('b')]).toEqual([3]);
 	});
 
-	test('delete', () => {
+	it('delete', () => {
 		const setMap = new SetMap<string, number>();
 		setMap.add('a', 1);
 		setMap.add('a', 2);
 		setMap.add('b', 3);
 		setMap.delete('a', 1);
-		assert.deepStrictEqual([...setMap.get('a')], [2]);
+		expect([...setMap.get('a')]).toEqual([2]);
 		setMap.delete('a', 2);
-		assert.deepStrictEqual([...setMap.get('a')], []);
+		expect([...setMap.get('a')]).toEqual([]);
 	});
 
-	test('forEach', () => {
+	it('forEach', () => {
 		const setMap = new SetMap<string, number>();
 		setMap.add('a', 1);
 		setMap.add('a', 2);
 		setMap.add('b', 3);
 		let sum = 0;
 		setMap.forEach('a', (value) => (sum += value));
-		assert.strictEqual(sum, 3);
+		expect(sum).toBe(3);
 	});
 
-	test('get empty set', () => {
+	it('get empty set', () => {
 		const setMap = new SetMap<string, number>();
-		assert.deepStrictEqual([...setMap.get('a')], []);
+		expect([...setMap.get('a')]).toEqual([]);
 	});
 });

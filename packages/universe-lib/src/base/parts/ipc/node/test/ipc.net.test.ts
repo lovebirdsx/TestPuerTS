@@ -1,5 +1,4 @@
-import { beforeEach } from 'vitest';
-import * as assert from 'assert';
+import { describe, it, beforeEach, expect } from 'vitest';
 import { EventEmitter } from 'events';
 import { AddressInfo, connect, createServer, Server, Socket } from 'net';
 import { tmpdir } from 'os';
@@ -127,7 +126,7 @@ class Ether {
 	}
 }
 
-suite('IPC, Socket Protocol', () => {
+describe('IPC, Socket Protocol', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
 	let ether: Ether;
@@ -136,27 +135,27 @@ suite('IPC, Socket Protocol', () => {
 		ether = new Ether();
 	});
 
-	test('read/write', async () => {
+	it('read/write', async () => {
 		const a = new Protocol(new NodeSocket(ether.a));
 		const b = new Protocol(new NodeSocket(ether.b));
 		const bMessages = new MessageStream(b);
 
 		a.send(VSBuffer.fromString('foobarfarboo'));
 		const msg1 = await bMessages.waitForOne();
-		assert.strictEqual(msg1.toString(), 'foobarfarboo');
+		expect(msg1.toString()).toBe('foobarfarboo');
 
 		const buffer = VSBuffer.alloc(1);
 		buffer.writeUInt8(123, 0);
 		a.send(buffer);
 		const msg2 = await bMessages.waitForOne();
-		assert.strictEqual(msg2.readUInt8(0), 123);
+		expect(msg2.readUInt8(0)).toBe(123);
 
 		bMessages.dispose();
 		a.dispose();
 		b.dispose();
 	});
 
-	test('read/write, object data', async () => {
+	it('read/write, object data', async () => {
 		const a = new Protocol(new NodeSocket(ether.a));
 		const b = new Protocol(new NodeSocket(ether.b));
 		const bMessages = new MessageStream(b);
@@ -170,7 +169,7 @@ suite('IPC, Socket Protocol', () => {
 
 		a.send(VSBuffer.fromString(JSON.stringify(data)));
 		const msg = await bMessages.waitForOne();
-		assert.deepStrictEqual(JSON.parse(msg.toString()), data);
+		expect(JSON.parse(msg.toString())).toEqual(data);
 
 		bMessages.dispose();
 		a.dispose();
@@ -178,10 +177,10 @@ suite('IPC, Socket Protocol', () => {
 	});
 });
 
-suite('PersistentProtocol reconnection', () => {
+describe('PersistentProtocol reconnection', () => {
 	ensureNoDisposablesAreLeakedInTestSuite();
 
-	test('acks get piggybacked with messages', async () => {
+	it('acks get piggybacked with messages', async () => {
 		// 加入自定义的负载估算器，如果使用默认的负载估算器，会导致没有释放的定时器
 		const loadEstimator: ILoadEstimator = {
 			hasHighLoad: () => false,
@@ -194,49 +193,49 @@ suite('PersistentProtocol reconnection', () => {
 		const bMessages = new MessageStream(b);
 
 		a.send(VSBuffer.fromString('a1'));
-		assert.strictEqual(a.unacknowledgedCount, 1);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a.unacknowledgedCount).toBe(1);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		a.send(VSBuffer.fromString('a2'));
-		assert.strictEqual(a.unacknowledgedCount, 2);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a.unacknowledgedCount).toBe(2);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		a.send(VSBuffer.fromString('a3'));
-		assert.strictEqual(a.unacknowledgedCount, 3);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a.unacknowledgedCount).toBe(3);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		const a1 = await bMessages.waitForOne();
-		assert.strictEqual(a1.toString(), 'a1');
-		assert.strictEqual(a.unacknowledgedCount, 3);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a1.toString()).toBe('a1');
+		expect(a.unacknowledgedCount).toBe(3);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		const a2 = await bMessages.waitForOne();
-		assert.strictEqual(a2.toString(), 'a2');
-		assert.strictEqual(a.unacknowledgedCount, 3);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a2.toString()).toBe('a2');
+		expect(a.unacknowledgedCount).toBe(3);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		const a3 = await bMessages.waitForOne();
-		assert.strictEqual(a3.toString(), 'a3');
-		assert.strictEqual(a.unacknowledgedCount, 3);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(a3.toString()).toBe('a3');
+		expect(a.unacknowledgedCount).toBe(3);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		b.send(VSBuffer.fromString('b1'));
-		assert.strictEqual(a.unacknowledgedCount, 3);
-		assert.strictEqual(b.unacknowledgedCount, 1);
+		expect(a.unacknowledgedCount).toBe(3);
+		expect(b.unacknowledgedCount).toBe(1);
 
 		const b1 = await aMessages.waitForOne();
-		assert.strictEqual(b1.toString(), 'b1');
-		assert.strictEqual(a.unacknowledgedCount, 0);
-		assert.strictEqual(b.unacknowledgedCount, 1);
+		expect(b1.toString()).toBe('b1');
+		expect(a.unacknowledgedCount).toBe(0);
+		expect(b.unacknowledgedCount).toBe(1);
 
 		a.send(VSBuffer.fromString('a4'));
-		assert.strictEqual(a.unacknowledgedCount, 1);
-		assert.strictEqual(b.unacknowledgedCount, 1);
+		expect(a.unacknowledgedCount).toBe(1);
+		expect(b.unacknowledgedCount).toBe(1);
 
 		const b2 = await bMessages.waitForOne();
-		assert.strictEqual(b2.toString(), 'a4');
-		assert.strictEqual(a.unacknowledgedCount, 1);
-		assert.strictEqual(b.unacknowledgedCount, 0);
+		expect(b2.toString()).toBe('a4');
+		expect(a.unacknowledgedCount).toBe(1);
+		expect(b.unacknowledgedCount).toBe(0);
 
 		aMessages.dispose();
 		bMessages.dispose();
@@ -244,7 +243,7 @@ suite('PersistentProtocol reconnection', () => {
 		b.dispose();
 	});
 
-	test('ack gets sent after a while', async () => {
+	it('ack gets sent after a while', async () => {
 		await runWithFakedTimers({ useFakeTimers: true, maxTaskCount: 100 }, async () => {
 			const loadEstimator: ILoadEstimator = {
 				hasHighLoad: () => false,
@@ -259,17 +258,17 @@ suite('PersistentProtocol reconnection', () => {
 
 			// send one message A -> B
 			a.send(VSBuffer.fromString('a1'));
-			assert.strictEqual(a.unacknowledgedCount, 1);
-			assert.strictEqual(b.unacknowledgedCount, 0);
+			expect(a.unacknowledgedCount).toBe(1);
+			expect(b.unacknowledgedCount).toBe(0);
 			const a1 = await bMessages.waitForOne();
-			assert.strictEqual(a1.toString(), 'a1');
-			assert.strictEqual(a.unacknowledgedCount, 1);
-			assert.strictEqual(b.unacknowledgedCount, 0);
+			expect(a1.toString()).toBe('a1');
+			expect(a.unacknowledgedCount).toBe(1);
+			expect(b.unacknowledgedCount).toBe(0);
 
 			// wait for ack to arrive B -> A
 			await timeout(2 * ProtocolConstants.AcknowledgeTime);
-			assert.strictEqual(a.unacknowledgedCount, 0);
-			assert.strictEqual(b.unacknowledgedCount, 0);
+			expect(a.unacknowledgedCount).toBe(0);
+			expect(b.unacknowledgedCount).toBe(0);
 
 			aMessages.dispose();
 			bMessages.dispose();
@@ -278,7 +277,7 @@ suite('PersistentProtocol reconnection', () => {
 		});
 	});
 
-	test('messages that are never written to a socket should not cause an ack timeout', async () => {
+	it('messages that are never written to a socket should not cause an ack timeout', async () => {
 		await runWithFakedTimers(
 			{
 				useFakeTimers: true,
@@ -304,25 +303,25 @@ suite('PersistentProtocol reconnection', () => {
 
 				// send message a1 before reconnection to get _recvAckCheck() scheduled
 				a.send(VSBuffer.fromString('a1'));
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				// read message a1 at B
 				const a1 = await bMessages.waitForOne();
-				assert.strictEqual(a1.toString(), 'a1');
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a1.toString()).toBe('a1');
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				// send message b1 to send the ack for a1
 				b.send(VSBuffer.fromString('b1'));
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 1);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(1);
 
 				// read message b1 at A to receive the ack for a1
 				const b1 = await aMessages.waitForOne();
-				assert.strictEqual(b1.toString(), 'b1');
-				assert.strictEqual(a.unacknowledgedCount, 0);
-				assert.strictEqual(b.unacknowledgedCount, 1);
+				expect(b1.toString()).toBe('b1');
+				expect(a.unacknowledgedCount).toBe(0);
+				expect(b.unacknowledgedCount).toBe(1);
 
 				// begin reconnection
 				aSocket.dispose();
@@ -336,23 +335,23 @@ suite('PersistentProtocol reconnection', () => {
 
 				// send message 2 during reconnection
 				a.send(VSBuffer.fromString('a2'));
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 1);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(1);
 
 				// wait for scheduled _recvAckCheck() to execute
 				await timeout(2 * ProtocolConstants.TimeoutTime);
 
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 1);
-				assert.strictEqual(timeoutListenerCalled, false);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(1);
+				expect(timeoutListenerCalled).toBe(false);
 
 				a.endAcceptReconnection();
-				assert.strictEqual(timeoutListenerCalled, false);
+				expect(timeoutListenerCalled).toBe(false);
 
 				await timeout(2 * ProtocolConstants.TimeoutTime);
-				assert.strictEqual(a.unacknowledgedCount, 0);
-				assert.strictEqual(b.unacknowledgedCount, 0);
-				assert.strictEqual(timeoutListenerCalled, false);
+				expect(a.unacknowledgedCount).toBe(0);
+				expect(b.unacknowledgedCount).toBe(0);
+				expect(timeoutListenerCalled).toBe(false);
 
 				socketTimeoutListener.dispose();
 				aMessages.dispose();
@@ -363,7 +362,7 @@ suite('PersistentProtocol reconnection', () => {
 		);
 	});
 
-	test('acks are always sent after a reconnection', async () => {
+	it('acks are always sent after a reconnection', async () => {
 		await runWithFakedTimers(
 			{
 				useFakeTimers: true,
@@ -385,20 +384,20 @@ suite('PersistentProtocol reconnection', () => {
 
 				// send message a1 to have something unacknowledged
 				a.send(VSBuffer.fromString('a1'));
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				// read message a1 at B
 				const a1 = await bMessages.waitForOne();
-				assert.strictEqual(a1.toString(), 'a1');
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a1.toString()).toBe('a1');
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				// wait for B to send an ACK message,
 				// but resume before A receives it
 				await timeout(ProtocolConstants.AcknowledgeTime + wireLatency / 2);
-				assert.strictEqual(a.unacknowledgedCount, 1);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a.unacknowledgedCount).toBe(1);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				// simulate complete reconnection
 				aSocket.dispose();
@@ -413,8 +412,8 @@ suite('PersistentProtocol reconnection', () => {
 
 				// wait for quite some time
 				await timeout(2 * ProtocolConstants.AcknowledgeTime + wireLatency);
-				assert.strictEqual(a.unacknowledgedCount, 0);
-				assert.strictEqual(b.unacknowledgedCount, 0);
+				expect(a.unacknowledgedCount).toBe(0);
+				expect(b.unacknowledgedCount).toBe(0);
 
 				aMessages.dispose();
 				bMessages.dispose();
@@ -424,7 +423,7 @@ suite('PersistentProtocol reconnection', () => {
 		);
 	});
 
-	test('onSocketTimeout is emitted at most once every 20s', async () => {
+	it('onSocketTimeout is emitted at most once every 20s', async () => {
 		await runWithFakedTimers(
 			{
 				useFakeTimers: true,
@@ -464,7 +463,7 @@ suite('PersistentProtocol reconnection', () => {
 				// wait for 10s
 				await timeout(ProtocolConstants.TimeoutTime / 2);
 
-				assert.strictEqual(timeoutFiredAgain, false);
+				expect(timeoutFiredAgain).toBe(false);
 
 				timeoutListener.dispose();
 				aMessages.dispose();
@@ -475,7 +474,7 @@ suite('PersistentProtocol reconnection', () => {
 		);
 	});
 
-	test('writing can be paused', async () => {
+	it('writing can be paused', async () => {
 		await runWithFakedTimers({ useFakeTimers: true, maxTaskCount: 100 }, async () => {
 			const loadEstimator: ILoadEstimator = {
 				hasHighLoad: () => false,
@@ -491,7 +490,7 @@ suite('PersistentProtocol reconnection', () => {
 			// send one message A -> B
 			a.send(VSBuffer.fromString('a1'));
 			const a1 = await bMessages.waitForOne();
-			assert.strictEqual(a1.toString(), 'a1');
+			expect(a1.toString()).toBe('a1');
 
 			// ask A to pause writing
 			b.sendPause();
@@ -499,27 +498,27 @@ suite('PersistentProtocol reconnection', () => {
 			// send a message B -> A
 			b.send(VSBuffer.fromString('b1'));
 			const b1 = await aMessages.waitForOne();
-			assert.strictEqual(b1.toString(), 'b1');
+			expect(b1.toString()).toBe('b1');
 
 			// send a message A -> B (this should be blocked at A)
 			a.send(VSBuffer.fromString('a2'));
 
 			// wait a long time and check that not even acks are written
 			await timeout(2 * ProtocolConstants.AcknowledgeTime);
-			assert.strictEqual(a.unacknowledgedCount, 1);
-			assert.strictEqual(b.unacknowledgedCount, 1);
+			expect(a.unacknowledgedCount).toBe(1);
+			expect(b.unacknowledgedCount).toBe(1);
 
 			// ask A to resume writing
 			b.sendResume();
 
 			// check that B receives message
 			const a2 = await bMessages.waitForOne();
-			assert.strictEqual(a2.toString(), 'a2');
+			expect(a2.toString()).toBe('a2');
 
 			// wait a long time and check that acks are written
 			await timeout(2 * ProtocolConstants.AcknowledgeTime);
-			assert.strictEqual(a.unacknowledgedCount, 0);
-			assert.strictEqual(b.unacknowledgedCount, 0);
+			expect(a.unacknowledgedCount).toBe(0);
+			expect(b.unacknowledgedCount).toBe(0);
 
 			aMessages.dispose();
 			bMessages.dispose();
@@ -530,11 +529,11 @@ suite('PersistentProtocol reconnection', () => {
 });
 
 flakySuite('IPC, create handle', () => {
-	test('createRandomIPCHandle', async () => {
+	it('createRandomIPCHandle', async () => {
 		return testIPCHandle(createRandomIPCHandle());
 	});
 
-	test('createStaticIPCHandle', async () => {
+	it('createStaticIPCHandle', async () => {
 		return testIPCHandle(createStaticIPCHandle(tmpdir(), 'test', '1.64.0'));
 	});
 
@@ -559,7 +558,7 @@ flakySuite('IPC, create handle', () => {
 	}
 });
 
-suite('WebSocketNodeSocket', () => {
+describe('WebSocketNodeSocket', () => {
 	function toUint8Array(data: number[]): Uint8Array {
 		const result = new Uint8Array(data.length);
 		for (let i = 0; i < data.length; i++) {
@@ -632,43 +631,43 @@ suite('WebSocketNodeSocket', () => {
 		return receivedData;
 	}
 
-	test('A single-frame unmasked text message', async () => {
+	it('A single-frame unmasked text message', async () => {
 		const frames = [
 			[0x81, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f], // contains "Hello"
 		];
 		const actual = await testReading(frames, false);
-		assert.deepStrictEqual(actual, 'Hello');
+		expect(actual).toEqual('Hello');
 	});
 
-	test('A single-frame masked text message', async () => {
+	it('A single-frame masked text message', async () => {
 		const frames = [
 			[0x81, 0x85, 0x37, 0xfa, 0x21, 0x3d, 0x7f, 0x9f, 0x4d, 0x51, 0x58], // contains "Hello"
 		];
 		const actual = await testReading(frames, false);
-		assert.deepStrictEqual(actual, 'Hello');
+		expect(actual).toEqual('Hello');
 	});
 
-	test('A fragmented unmasked text message', async () => {
+	it('A fragmented unmasked text message', async () => {
 		// contains "Hello"
 		const frames = [
 			[0x01, 0x03, 0x48, 0x65, 0x6c], // contains "Hel"
 			[0x80, 0x02, 0x6c, 0x6f], // contains "lo"
 		];
 		const actual = await testReading(frames, false);
-		assert.deepStrictEqual(actual, 'Hello');
+		expect(actual).toEqual('Hello');
 	});
 
-	suite('compression', () => {
-		test('A single-frame compressed text message', async () => {
+	describe('compression', () => {
+		it('A single-frame compressed text message', async () => {
 			// contains "Hello"
 			const frames = [
 				[0xc1, 0x07, 0xf2, 0x48, 0xcd, 0xc9, 0xc9, 0x07, 0x00], // contains "Hello"
 			];
 			const actual = await testReading(frames, true);
-			assert.deepStrictEqual(actual, 'Hello');
+			expect(actual).toEqual('Hello');
 		});
 
-		test('A fragmented compressed text message', async () => {
+		it('A fragmented compressed text message', async () => {
 			// contains "Hello"
 			const frames = [
 				// contains "Hello"
@@ -676,28 +675,28 @@ suite('WebSocketNodeSocket', () => {
 				[0x80, 0x04, 0xc9, 0xc9, 0x07, 0x00],
 			];
 			const actual = await testReading(frames, true);
-			assert.deepStrictEqual(actual, 'Hello');
+			expect(actual).toEqual('Hello');
 		});
 
-		test('A single-frame non-compressed text message', async () => {
+		it('A single-frame non-compressed text message', async () => {
 			const frames = [
 				[0x81, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f], // contains "Hello"
 			];
 			const actual = await testReading(frames, true);
-			assert.deepStrictEqual(actual, 'Hello');
+			expect(actual).toEqual('Hello');
 		});
 
-		test('A single-frame compressed text message followed by a single-frame non-compressed text message', async () => {
+		it('A single-frame compressed text message followed by a single-frame non-compressed text message', async () => {
 			const frames = [
 				[0xc1, 0x07, 0xf2, 0x48, 0xcd, 0xc9, 0xc9, 0x07, 0x00], // contains "Hello"
 				[0x81, 0x05, 0x77, 0x6f, 0x72, 0x6c, 0x64], // contains "world"
 			];
 			const actual = await testReading(frames, true);
-			assert.deepStrictEqual(actual, 'Helloworld');
+			expect(actual).toEqual('Helloworld');
 		});
 	});
 
-	test('Large buffers are split and sent in chunks', async () => {
+	it('Large buffers are split and sent in chunks', async () => {
 		let receivingSideOnDataCallCount = 0;
 		let receivingSideTotalBytes = 0;
 		const receivingSideSocketClosedBarrier = new Barrier();
@@ -731,8 +730,8 @@ suite('WebSocketNodeSocket', () => {
 		webSocketNodeSocket.dispose();
 		await receivingSideSocketClosedBarrier.wait();
 
-		assert.strictEqual(receivingSideTotalBytes, buff.byteLength);
-		assert.strictEqual(receivingSideOnDataCallCount, 4);
+		expect(receivingSideTotalBytes).toBe(buff.byteLength);
+		expect(receivingSideOnDataCallCount).toBe(4);
 	});
 
 	function generateRandomBuffer(size: number): VSBuffer {
@@ -756,7 +755,7 @@ suite('WebSocketNodeSocket', () => {
 	}
 });
 
-suite('Node ipc', () => {
+describe('Node ipc', () => {
 	class TestService implements ITestService {
 		private readonly _onPong = new Emitter<string>();
 		readonly onPong = this._onPong.event;
@@ -847,7 +846,7 @@ suite('Node ipc', () => {
 		}
 	}
 
-	test('simple', async () => {
+	it('simple', async () => {
 		const pipeName = createRandomIPCHandle();
 		const server = await ipcServe(pipeName);
 		const service = new TestService();
@@ -857,13 +856,13 @@ suite('Node ipc', () => {
 		const proxy = client.getChannel('test');
 
 		const pong = proxy.call('marco');
-		assert.strictEqual(await pong, 'polo');
+		expect(await pong).toBe('polo');
 
 		client.dispose();
 		server.dispose();
 	});
 
-	test('proxy', async () => {
+	it('proxy', async () => {
 		const pipeName = createRandomIPCHandle();
 		const server = await ipcServe(pipeName);
 		const service = new TestService();
@@ -875,28 +874,28 @@ suite('Node ipc', () => {
 
 		// 调用服务端的方法
 		const pong = await clService.marco();
-		assert.strictEqual(pong, 'polo');
+		expect(pong).toBe('polo');
 
 		// 等待服务端的事件
 		const waitPong = Event.toPromise(clService.onPong);
 		service.ping('hello');
 		const msg = await waitPong;
-		assert.strictEqual(msg, 'hello');
+		expect(msg).toBe('hello');
 
 		// 获取URI
 		const uri = await clService.getUri();
-		assert.strictEqual(uri.toString(), 'file:///test');
+		expect(uri.toString()).toBe('file:///test');
 
 		// 设置URI
 		await clService.setUri(URI.file('/new'));
-		assert.strictEqual(service.uri.toString(), 'file:///new');
+		expect(service.uri.toString()).toBe('file:///new');
 
 		client.dispose();
 		server.dispose();
 	});
 
 	// 代理到代理
-	test('proxy to proxy', async () => {
+	it('proxy to proxy', async () => {
 		// 服务端
 		const pipeServer = createRandomIPCHandle();
 		const server = await ipcServe(pipeServer);
@@ -916,13 +915,13 @@ suite('Node ipc', () => {
 
 		// 调用服务端的方法
 		const pong = await clService.marco();
-		assert.strictEqual(pong, 'polo');
+		expect(pong).toBe('polo');
 
 		// 等待服务端的事件
 		const waitPong = Event.toPromise(clService.onPong);
 		service.ping('hello');
 		const msg = await waitPong;
-		assert.strictEqual(msg, 'hello');
+		expect(msg).toBe('hello');
 
 		server.dispose();
 		middleClient.dispose();
