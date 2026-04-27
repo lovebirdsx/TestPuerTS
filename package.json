@@ -10,9 +10,10 @@
     "packages/*"
   ],
   "scripts": {
+    "postinstall": "cd packages/tool && tsc",
     "tool:build": "cd packages/tool && tsc",
-    "postinstall": "yarn tool:build",
-    "watch": "nodemon -w packages/tool/src -e ts -x \"gulp tool:build && gulp watch\""
+    "dev": "gulp dev --verbose",
+    "watch": "gulp watch --verbose"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
@@ -25,6 +26,6 @@
     "mocha": "^10.7.0",
     "nodemon": "^3.1.9",
     "prettier": "^3.3.3",
-    "typescript-eslint": "^7.17.0"
+    "typescript-eslint": "^8.0.0"
   }
 }

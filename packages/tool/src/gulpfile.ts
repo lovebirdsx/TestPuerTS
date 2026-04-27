@@ -8,3 +8,4 @@ import './packages/tests';
 gulp.task('test', gulp.parallel('tool:test', 'editor:test'));
 gulp.task('test:watch', gulp.parallel('tool:test:watch', 'editor:test:watch'));
 gulp.task('watch', gulp.parallel('tool:watch', 'editor:watch', 'tests:watch', 'ue:build:watch'));
+gulp.task('dev', gulp.series('ue:build','watch'));
