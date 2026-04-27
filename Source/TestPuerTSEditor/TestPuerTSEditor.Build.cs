@@ -10,7 +10,8 @@ public class TestPuerTSEditor : ModuleRules
         {
             "LiveCoding",
             "SessionFrontend",
-            "JsEnv"
+            "JsEnv",
+            "DeclarationGenerator"
         });
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 

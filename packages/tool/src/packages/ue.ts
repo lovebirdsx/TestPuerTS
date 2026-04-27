@@ -79,6 +79,17 @@ function getEditorCmdPath(): string {
 	return editorCmd;
 }
 
+gulp.task('ue:gen_typing', async () => {
+	const editorCmd = getEditorCmdPath();
+	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsGenTyping -FULL -unattended -nopause`;
+	info(`[ue:gen_typing] ${cmd}`);
+	await exec(cmd, {
+		workingDir: projectRoot,
+		originalLog: true,
+	});
+	info(green('[ue:gen_typing] Typing generation completed'));
+});
+
 gulp.task('ue:test', async () => {
 	const editorCmd = getEditorCmdPath();
 	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
@@ -93,28 +104,33 @@ gulp.task('ue:test', async () => {
 gulp.task('ue:build:watch', async () => {
 	const sourceDir = path.join(projectRoot, 'Source');
 	const pluginsDir = path.join(projectRoot, 'Plugins');
-	const watchGlobs = [
-		// C++ source files
+	const ignored = ['**/Intermediate/**', '**/Binaries/**'];
+
+	// Header files → build + gen_typing
+	const headerGlobs = [
 		path.join(sourceDir, '**/*.h'),
-		path.join(sourceDir, '**/*.cpp'),
 		path.join(pluginsDir, '**/*.h'),
+	];
+	gulp.watch(headerGlobs, { ignored }, gulp.series('ue:build', 'ue:gen_typing'))
+		.on('change', (filePath: string) => {
+			info(`[ue:build:watch] Header ${path.relative(projectRoot, filePath)} changed, rebuilding + generating typings...`);
+		});
+
+	// Non-header files → build only
+	const otherGlobs = [
+		path.join(sourceDir, '**/*.cpp'),
 		path.join(pluginsDir, '**/*.cpp'),
-		// Build configuration files
 		path.join(sourceDir, '**/*.cs'),
 		path.join(pluginsDir, '**/*.cs'),
 		path.join(pluginsDir, '**/*.uplugin'),
 		uprojectPath,
 	];
-	const ignored = [
-		'**/Intermediate/**',
-		'**/Binaries/**',
-	];
+	gulp.watch(otherGlobs, { ignored }, gulp.series('ue:build'))
+		.on('change', (filePath: string) => {
+			info(`[ue:build:watch] File ${path.relative(projectRoot, filePath)} changed, rebuilding...`);
+		});
 
 	info(green('[ue:build:watch] Watching C++ sources for changes...'));
-	gulp.watch(watchGlobs, { ignored }, gulp.series('ue:build', 'ue:test')).on('change', (filePath: string) => {
-		const relative = path.relative(projectRoot, filePath);
-		info(`[ue:build:watch] File ${relative} was changed, rebuilding...`);
-	});
 });
 
 gulp.task('ue:build:clean', async () => {
