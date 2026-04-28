@@ -50,7 +50,11 @@ int32 UPuertsTestCommandlet::Main(const FString& Params)
 			std::make_shared<puerts::DefaultJSModuleLoader>(TEXT("JavaScript")),
 			std::make_shared<puerts::FDefaultLogger>(), -1);
 
-		JsEnv.Start(ModuleName);
+		if (!JsEnv.Start(ModuleName))
+		{
+			UE_LOG(LogPuertsTest, Error, TEXT("PuertsTest: Failed to start module '%s'"), *ModuleName);
+			return 1;
+		}
 
 		// Tick 循环：驱动 PuerTS 的 libuv 事件循环和 UE ticker，等待 JS 调用 MarkTestDone
 		const double StartTime = FPlatformTime::Seconds();

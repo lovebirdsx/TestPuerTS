@@ -3485,7 +3485,7 @@ void FJsEnvImpl::NewContainer(const v8::FunctionCallbackInfo<v8::Value>& Info)
     }
 }
 
-void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FString, UObject*>>& Arguments)
+bool FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FString, UObject*>>& Arguments)
 {
 #ifdef SINGLE_THREAD_VERIFY
     ensureMsgf(BoundThreadId == FPlatformTLS::GetCurrentThreadId(), TEXT("Access by illegal thread!"));
@@ -3493,7 +3493,7 @@ void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FSt
     if (Started)
     {
         Logger->Error("Started yet!");
-        return;
+        return false;
     }
 
     auto Isolate = MainIsolate;
@@ -3510,7 +3510,7 @@ void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FSt
     if (MaybeTGameTGJS.IsEmpty() || !MaybeTGameTGJS.ToLocalChecked()->IsObject())
     {
         Logger->Error("global.puerts not found!");
-        return;
+        return false;
     }
 
     auto TGJS = MaybeTGameTGJS.ToLocalChecked()->ToObject(Context).ToLocalChecked();
@@ -3520,7 +3520,7 @@ void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FSt
     if (MaybeArgv.IsEmpty() || !MaybeArgv.ToLocalChecked()->IsObject())
     {
         Logger->Error("global.puerts.argv not found!");
-        return;
+        return false;
     }
 
     auto Argv = MaybeArgv.ToLocalChecked()->ToObject(Context).ToLocalChecked();
@@ -3530,7 +3530,7 @@ void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FSt
     if (MaybeArgvAdd.IsEmpty() || !MaybeArgvAdd.ToLocalChecked()->IsFunction())
     {
         Logger->Error("global.puerts.argv.add not found!");
-        return;
+        return false;
     }
 
     auto ArgvAdd = MaybeArgvAdd.ToLocalChecked().As<v8::Function>();
@@ -3549,9 +3549,11 @@ void FJsEnvImpl::Start(const FString& ModuleNameOrScript, const TArray<TPair<FSt
     if (TryCatch.HasCaught())
     {
         Logger->Error(FV8Utils::TryCatchToString(Isolate, &TryCatch));
+        return false;
     }
 
     Started = true;
+    return true;
 }
 
 bool FJsEnvImpl::LoadFile(const FString& RequiringDir, const FString& ModuleName, FString& OutPath, FString& OutDebugPath,

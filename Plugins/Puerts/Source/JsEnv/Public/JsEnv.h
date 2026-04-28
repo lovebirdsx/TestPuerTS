@@ -25,7 +25,7 @@ namespace PUERTS_NAMESPACE
 class JSENV_API IJsEnv
 {
 public:
-    virtual void Start(const FString& ModuleName, const TArray<TPair<FString, UObject*>>& Arguments) = 0;
+    virtual bool Start(const FString& ModuleName, const TArray<TPair<FString, UObject*>>& Arguments) = 0;
 
     virtual bool IdleNotificationDeadline(double DeadlineInSeconds) = 0;
 
@@ -67,7 +67,7 @@ public:
         std::function<void(const FString&)> InOnSourceLoadedCallback = nullptr, const FString InFlags = FString(),
         void* InExternalRuntime = nullptr, void* InExternalContext = nullptr);
 
-    void Start(const FString& ModuleName, const TArray<TPair<FString, UObject*>>& Arguments = TArray<TPair<FString, UObject*>>());
+    bool Start(const FString& ModuleName, const TArray<TPair<FString, UObject*>>& Arguments = TArray<TPair<FString, UObject*>>());
 
     bool IdleNotificationDeadline(double DeadlineInSeconds);
 

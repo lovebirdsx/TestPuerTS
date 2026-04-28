@@ -86,7 +86,7 @@ public:
 
     virtual ~FJsEnvImpl() override;
 
-    virtual void Start(const FString& ModuleNameOrScript, const TArray<TPair<FString, UObject*>>& Arguments) override;
+    virtual bool Start(const FString& ModuleNameOrScript, const TArray<TPair<FString, UObject*>>& Arguments) override;
 
     virtual bool IdleNotificationDeadline(double DeadlineInSeconds) override;
 
