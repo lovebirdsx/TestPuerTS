@@ -26,7 +26,7 @@ interface UProject {
 	EngineAssociation: string;
 }
 
-function getEngineRoot(): string {
+export function getEngineRoot(): string {
 	const uproject = readJsonFile<UProject>(uprojectPath);
 	if (!uproject) {
 		throw new Error(`Cannot read .uproject: ${uprojectPath}`);
@@ -69,7 +69,7 @@ gulp.task('ue:build', async () => {
 	info(green('[ue:build] Build completed successfully'));
 });
 
-function getEditorCmdPath(): string {
+export function getEditorCmdPath(): string {
 	const engineRoot = getEngineRoot();
 	const editorCmd = path.join(engineRoot, 'Engine', 'Binaries', 'Win64', 'UnrealEditor-Cmd.exe');
 	if (!fs.existsSync(editorCmd)) {

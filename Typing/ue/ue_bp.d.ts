@@ -208,7 +208,6 @@ declare module "ue" {
             BndEvt__W_Main_ButtonUnitTest_K2Node_ComponentBoundEvent_4_OnButtonClickedEvent__DelegateSignature() : void;
             ExecuteUbergraph_W_Main(EntryPoint: number) : void;
             OnClick(EventType: string) : void;
-            OnClick__puerts_mixin__(EventType: string) : void;
             static StaticClass(): Class;
             static Find(OrigInName: string, Outer?: Object): W_Main_C;
             static Load(InName: string): W_Main_C;

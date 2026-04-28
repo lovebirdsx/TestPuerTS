@@ -1,1 +1,7 @@
-{"version":3,"file":"main.js","sourceRoot":"","sources":["../../../packages/tests/src/main.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,uCAAuC,CAAC,CAAC"}
+{
+  "version": 3,
+  "sources": ["../../../packages/tests/src/main.ts"],
+  "sourcesContent": ["import * as UE from 'ue';\n\nconsole.log('=== PuerTS Commandlet Test Runner ===');\nconsole.log('\u53EF\u7528\u7684\u6D4B\u8BD5\u6A21\u5757:');\nconsole.log('  -module=tests/rpcClientMain  \u2192 PuerTS \u4F5C\u4E3A Client\uFF0CNode.js \u4F5C\u4E3A Server');\nconsole.log('  -module=tests/rpcServerMain  \u2192 PuerTS \u4F5C\u4E3A Server\uFF0CNode.js \u4F5C\u4E3A Client');\n\nUE.PuertsTestHelper.MarkTestDone(0);\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;AAAA,SAAoB;AAEpB,QAAQ,IAAI,uCAAuC;AACnD,QAAQ,IAAI,6CAAU;AACtB,QAAQ,IAAI,mGAAqE;AACjF,QAAQ,IAAI,mGAAqE;AAE9E,oBAAiB,aAAa,CAAC;",
+  "names": []
+}

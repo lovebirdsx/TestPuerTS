@@ -1,5 +1,8 @@
 #include "PuertsTestCommandlet.h"
+#include "PuertsTestHelper.h"
 #include "JsEnv.h"
+#include "Containers/Ticker.h"
+#include "Tasks/Pipe.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPuertsTest, Log, All);
 
@@ -25,7 +28,15 @@ int32 UPuertsTestCommandlet::Main(const FString& Params)
 		ModuleName = ParamMap[TEXT("module")];
 	}
 
-	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Running module '%s'"), *ModuleName);
+	double TimeoutSeconds = 30.0;
+	if (ParamMap.Contains(TEXT("timeout")))
+	{
+		TimeoutSeconds = FCString::Atod(*ParamMap[TEXT("timeout")]);
+	}
+
+	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Running module '%s' (timeout=%.0fs)"), *ModuleName, TimeoutSeconds);
+
+	UPuertsTestHelper::Reset();
 
 	{
 		puerts::FJsEnv JsEnv(
@@ -33,8 +44,28 @@ int32 UPuertsTestCommandlet::Main(const FString& Params)
 			std::make_shared<puerts::FDefaultLogger>(), -1);
 
 		JsEnv.Start(ModuleName);
+
+		// Tick 循环：驱动 PuerTS 的 libuv 事件循环和 UE ticker，等待 JS 调用 MarkTestDone
+		const double StartTime = FPlatformTime::Seconds();
+
+		while (!UPuertsTestHelper::bTestDone)
+		{
+			// 处理 GameThread 任务队列（PuerTS 的 UvRunOnce 通过此机制调度）
+			FTaskGraphInterface::Get().ProcessThreadUntilIdle(ENamedThreads::GameThread);
+
+			// 处理 UE ticker 回调（setTimeout/setInterval 等）
+			FTSTicker::GetCoreTicker().Tick(FApp::GetDeltaTime());
+
+			FPlatformProcess::Sleep(0.01f);
+
+			if (FPlatformTime::Seconds() - StartTime > TimeoutSeconds)
+			{
+				UE_LOG(LogPuertsTest, Error, TEXT("PuertsTest: Timed out after %.0f seconds"), TimeoutSeconds);
+				return 1;
+			}
+		}
 	}
 
-	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Completed"));
-	return 0;
+	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Completed with exit code %d"), UPuertsTestHelper::TestExitCode);
+	return UPuertsTestHelper::TestExitCode;
 }
