@@ -1,5 +1,5 @@
 import * as UE from 'ue';
-import { IPCServer, Protocol, Emitter, type ClientConnectionEvent } from '@universe/lib';
+import { IPCServer, Protocol, Emitter, type ClientConnectionEvent } from 'universe-lib';
 import { describe, it, expect, beforeAll, afterAll } from '../testRunner';
 import { UeIpcSocket } from './ueIpcSocket';
 import { PIPE_NAME, CHANNEL_NAME, CalculatorService, createCalculatorServerChannel } from './testService';

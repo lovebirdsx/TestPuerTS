@@ -1,5 +1,5 @@
-import type { IChannel, IServerChannel, Event } from '@universe/lib';
-import { Emitter, ProxyChannel } from '@universe/lib';
+import type { IChannel, IServerChannel, Event } from 'universe-lib';
+import { Emitter, ProxyChannel } from 'universe-lib';
 
 // ===== 测试用 RPC 服务定义 =====
 

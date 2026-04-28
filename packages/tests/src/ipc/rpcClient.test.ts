@@ -1,5 +1,5 @@
 import * as UE from 'ue';
-import { NetIPCClient, Protocol } from '@universe/lib';
+import { NetIPCClient, Protocol } from 'universe-lib';
 import { describe, it, expect, beforeAll, afterAll } from '../testRunner';
 import { connectUeIpc } from './ueIpcSocket';
 import { PIPE_NAME, CHANNEL_NAME, createCalculatorProxy, type ICalculatorService } from './testService';

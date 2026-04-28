@@ -1,5 +1,5 @@
-import type { ISocket, SocketCloseEvent, IDisposable } from '@universe/lib';
-import { Emitter, VSBuffer, SocketDiagnosticsEventType } from '@universe/lib';
+import type { ISocket, SocketCloseEvent, IDisposable } from 'universe-lib';
+import { Emitter, VSBuffer, SocketDiagnosticsEventType } from 'universe-lib';
 import * as UE from 'ue';
 
 /**

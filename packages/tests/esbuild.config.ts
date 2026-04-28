@@ -3,7 +3,7 @@ import * as module from 'module';
 
 const nodeBuiltins = module.builtinModules.flatMap((m) => [m, `node:${m}`]);
 
-// PuerTS 入口：bundle @universe/lib，external ue/puerts/node builtins
+// PuerTS 入口：bundle universe-lib，external ue/puerts/node builtins
 export const puertsConfig: esbuild.BuildOptions = {
 	entryPoints: ['src/main.ts'],
 	bundle: true,
@@ -16,7 +16,7 @@ export const puertsConfig: esbuild.BuildOptions = {
 	logLevel: 'info',
 };
 
-// Node.js 独立脚本入口：bundle @universe/lib，external node builtins
+// Node.js 独立脚本入口：bundle universe-lib，external node builtins
 export const standaloneConfig: esbuild.BuildOptions = {
 	entryPoints: ['src/standalone/nodeServer.ts', 'src/standalone/nodeClient.ts'],
 	bundle: true,

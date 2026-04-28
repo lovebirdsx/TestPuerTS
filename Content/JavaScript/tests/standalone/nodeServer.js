@@ -1,4 +1,4 @@
-// ../universe-lib/dist/chunk-N3IVOO64.mjs
+// ../../node_modules/universe-lib/dist/chunk-OPPA4JO2.mjs
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -228,7 +228,11 @@ var DisposableStore = class _DisposableStore {
     setParentOfDisposable(t, this);
     if (this._isDisposed) {
       if (!_DisposableStore.DISABLE_DISPOSED_WARNING) {
-        console.warn(new Error("Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!").stack);
+        console.warn(
+          new Error(
+            "Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!"
+          ).stack
+        );
       }
     } else {
       this._toDispose.add(t);
@@ -316,7 +320,9 @@ var Event;
       let count = 0;
       options.onDidAddListener = () => {
         if (++count === 2) {
-          console.warn("snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here");
+          console.warn(
+            "snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here"
+          );
           stack.print();
         }
         origListenerDidAdd?.();
@@ -370,7 +376,10 @@ var Event;
     return emitter.event;
   }
   function filter(event, filter2, disposable) {
-    return snapshot((listener, thisArgs = null, disposables) => event((e) => filter2(e) && listener.call(thisArgs, e), null, disposables), disposable);
+    return snapshot(
+      (listener, thisArgs = null, disposables) => event((e) => filter2(e) && listener.call(thisArgs, e), null, disposables),
+      disposable
+    );
   }
   Event2.filter = filter;
   function buffer(event, flushAfterTimeout = false, _buffer = []) {
@@ -412,14 +421,20 @@ var Event;
   }
   Event2.buffer = buffer;
   function map(event, map2, disposable) {
-    return snapshot((listener, thisArgs = null, disposables) => event((i) => listener.call(thisArgs, map2(i)), null, disposables), disposable);
+    return snapshot(
+      (listener, thisArgs = null, disposables) => event((i) => listener.call(thisArgs, map2(i)), null, disposables),
+      disposable
+    );
   }
   Event2.map = map;
   function fromNodeEventEmitter(emitter, eventName, map2 = (id2) => id2) {
     const fn = (...args) => result.fire(map2(...args));
     const onFirstListenerAdd = () => emitter.on(eventName, fn);
     const onLastListenerRemove = () => emitter.removeListener(eventName, fn);
-    const result = new Emitter({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
+    const result = new Emitter({
+      onWillAddFirstListener: onFirstListenerAdd,
+      onDidRemoveLastListener: onLastListenerRemove
+    });
     return result.event;
   }
   Event2.fromNodeEventEmitter = fromNodeEventEmitter;
@@ -485,7 +500,9 @@ var LeakageMonitor = class {
           topCount = count2;
         }
       }
-      console.warn(`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`);
+      console.warn(
+        `[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`
+      );
       console.warn(topStack);
     }
     return () => {
@@ -621,7 +638,9 @@ var Emitter = class {
   get event() {
     this._event ??= (callback, thisArgs, disposables) => {
       if (this._leakageMon && this._size > this._leakageMon.threshold * 3) {
-        console.warn(`[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`);
+        console.warn(
+          `[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`
+        );
         return Disposable.None;
       }
       if (this._disposed) {
@@ -956,7 +975,7 @@ function createCancelablePromise(callback) {
   }();
 }
 
-// ../universe-lib/dist/chunk-4BUUG3DV.mjs
+// ../../node_modules/universe-lib/dist/chunk-LNONI3PV.mjs
 var LANGUAGE_DEFAULT = "en";
 var _isWindows = false;
 var _isMacintosh = false;
@@ -2198,7 +2217,9 @@ var _singleSlashStart = /^\//;
 var _doubleSlashStart = /^\/\//;
 function _validateUri(ret, _strict) {
   if (!ret.scheme && _strict) {
-    throw new Error(`[UriError]: Scheme is missing: {scheme: "", authority: "${ret.authority}", path: "${ret.path}", query: "${ret.query}", fragment: "${ret.fragment}"}`);
+    throw new Error(
+      `[UriError]: Scheme is missing: {scheme: "", authority: "${ret.authority}", path: "${ret.path}", query: "${ret.query}", fragment: "${ret.fragment}"}`
+    );
   }
   if (ret.scheme && !_schemePattern.test(ret.scheme)) {
     throw new Error("[UriError]: Scheme contains illegal characters.");
@@ -2206,11 +2227,15 @@ function _validateUri(ret, _strict) {
   if (ret.path) {
     if (ret.authority) {
       if (!_singleSlashStart.test(ret.path)) {
-        throw new Error('[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character');
+        throw new Error(
+          '[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character'
+        );
       }
     } else {
       if (_doubleSlashStart.test(ret.path)) {
-        throw new Error('[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")');
+        throw new Error(
+          '[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")'
+        );
       }
     }
   }
@@ -2365,7 +2390,14 @@ var URI = class _URI {
     if (!match) {
       return new Uri(_empty, _empty, _empty, _empty, _empty);
     }
-    return new Uri(match[2] || _empty, percentDecode(match[4] || _empty), percentDecode(match[5] || _empty), percentDecode(match[7] || _empty), percentDecode(match[9] || _empty), _strict);
+    return new Uri(
+      match[2] || _empty,
+      percentDecode(match[4] || _empty),
+      percentDecode(match[5] || _empty),
+      percentDecode(match[7] || _empty),
+      percentDecode(match[9] || _empty),
+      _strict
+    );
   }
   /**
    * Creates a new URI from a file system path, e.g. `c:\my\files`,
@@ -2413,7 +2445,14 @@ var URI = class _URI {
    * user input, command arguments etc
    */
   static from(components, strict) {
-    const result = new Uri(components.scheme, components.authority, components.path, components.query, components.fragment, strict);
+    const result = new Uri(
+      components.scheme,
+      components.authority,
+      components.path,
+      components.query,
+      components.fragment,
+      strict
+    );
     return result;
   }
   /**
@@ -3339,7 +3378,13 @@ var ChannelServer = class {
       case 204:
       case 203: {
         const msgLength = this.send([response.type, response.id], response.data);
-        this.logger?.logOutgoing(msgLength, response.id, 1, responseTypeToStr(response.type), response.data);
+        this.logger?.logOutgoing(
+          msgLength,
+          response.id,
+          1,
+          responseTypeToStr(response.type),
+          response.data
+        );
         return;
       }
     }
@@ -3365,16 +3410,38 @@ var ChannelServer = class {
     const type = header[0];
     switch (type) {
       case 100:
-        this.logger?.logIncoming(message.byteLength, header[1], 1, `${requestTypeToStr(type)}: ${header[2]}.${header[3]}`, body);
+        this.logger?.logIncoming(
+          message.byteLength,
+          header[1],
+          1,
+          `${requestTypeToStr(type)}: ${header[2]}.${header[3]}`,
+          body
+        );
         return this.onPromise({ type, id: header[1], channelName: header[2], name: header[3], arg: body });
       case 102:
-        this.logger?.logIncoming(message.byteLength, header[1], 1, `${requestTypeToStr(type)}: ${header[2]}.${header[3]}`, body);
+        this.logger?.logIncoming(
+          message.byteLength,
+          header[1],
+          1,
+          `${requestTypeToStr(type)}: ${header[2]}.${header[3]}`,
+          body
+        );
         return this.onEventListen({ type, id: header[1], channelName: header[2], name: header[3], arg: body });
       case 101:
-        this.logger?.logIncoming(message.byteLength, header[1], 1, `${requestTypeToStr(type)}`);
+        this.logger?.logIncoming(
+          message.byteLength,
+          header[1],
+          1,
+          `${requestTypeToStr(type)}`
+        );
         return this.disposeActiveRequest({ type, id: header[1] });
       case 103:
-        this.logger?.logIncoming(message.byteLength, header[1], 1, `${requestTypeToStr(type)}`);
+        this.logger?.logIncoming(
+          message.byteLength,
+          header[1],
+          1,
+          `${requestTypeToStr(type)}`
+        );
         return this.disposeActiveRequest({ type, id: header[1] });
     }
   }
@@ -3462,7 +3529,11 @@ var ChannelServer = class {
       if (request.type === 100) {
         this.sendResponse({
           id: request.id,
-          data: { name: "Unknown channel", message: `Channel name '${request.channelName}' timed out after ${this.timeoutDelay}ms`, stack: void 0 },
+          data: {
+            name: "Unknown channel",
+            message: `Channel name '${request.channelName}' timed out after ${this.timeoutDelay}ms`,
+            stack: void 0
+          },
           type: 202
           /* PromiseError */
         });
@@ -3633,13 +3704,24 @@ var ChannelClient = class {
       case 100:
       case 102: {
         const msgLength = this.send([request.type, request.id, request.channelName, request.name], request.arg);
-        this.logger?.logOutgoing(msgLength, request.id, 0, `${requestTypeToStr(request.type)}: ${request.channelName}.${request.name}`, request.arg);
+        this.logger?.logOutgoing(
+          msgLength,
+          request.id,
+          0,
+          `${requestTypeToStr(request.type)}: ${request.channelName}.${request.name}`,
+          request.arg
+        );
         return;
       }
       case 101:
       case 103: {
         const msgLength = this.send([request.type, request.id]);
-        this.logger?.logOutgoing(msgLength, request.id, 0, requestTypeToStr(request.type));
+        this.logger?.logOutgoing(
+          msgLength,
+          request.id,
+          0,
+          requestTypeToStr(request.type)
+        );
         return;
       }
     }
@@ -3671,7 +3753,13 @@ var ChannelClient = class {
       case 202:
       case 204:
       case 203:
-        this.logger?.logIncoming(message.byteLength, header[1], 0, responseTypeToStr(type), body);
+        this.logger?.logIncoming(
+          message.byteLength,
+          header[1],
+          0,
+          responseTypeToStr(type),
+          body
+        );
         return this.onResponse({ type: header[0], id: header[1], data: body });
     }
   }
@@ -3758,7 +3846,9 @@ var IPCServer = class {
         } else {
           connectionPromise = routerOrClientFilter.routeCall(that, command, arg);
         }
-        const channelPromise = connectionPromise.then((connection) => connection.channelClient.getChannel(channelName));
+        const channelPromise = connectionPromise.then(
+          (connection) => connection.channelClient.getChannel(channelName)
+        );
         return getDelayedChannel(channelPromise).call(command, arg, cancellationToken);
       },
       listen(event, arg) {
@@ -3860,7 +3950,10 @@ var ProxyChannel;
           }
         }
         if (isProxyService) {
-          handler[event] = mapEventNameToEvent.set(event, Event.buffer(handler[event], true));
+          handler[event] = mapEventNameToEvent.set(
+            event,
+            Event.buffer(handler[event], true)
+          );
           return handler[event];
         }
         throw new ErrorNoTelemetry(`Event not found: ${event}`);
@@ -4101,7 +4194,12 @@ var ProtocolReader = class extends Disposable {
         this._state.messageType = buff.readUInt8(0);
         this._state.id = buff.readUInt32BE(1);
         this._state.ack = buff.readUInt32BE(5);
-        this._socket.traceSocketEvent("protocolHeaderRead", { messageType: protocolMessageTypeToString(this._state.messageType), id: this._state.id, ack: this._state.ack, messageSize: this._state.readLen });
+        this._socket.traceSocketEvent("protocolHeaderRead", {
+          messageType: protocolMessageTypeToString(this._state.messageType),
+          id: this._state.id,
+          ack: this._state.ack,
+          messageSize: this._state.readLen
+        });
       } else {
         const messageType = this._state.messageType;
         const id2 = this._state.id;
@@ -4177,7 +4275,12 @@ var ProtocolWriter = class {
     header.writeUInt32BE(msg.id, 1);
     header.writeUInt32BE(msg.ack, 5);
     header.writeUInt32BE(msg.data.byteLength, 9);
-    this._socket.traceSocketEvent("protocolHeaderWrite", { messageType: protocolMessageTypeToString(msg.type), id: msg.id, ack: msg.ack, messageSize: msg.data.byteLength });
+    this._socket.traceSocketEvent("protocolHeaderWrite", {
+      messageType: protocolMessageTypeToString(msg.type),
+      id: msg.id,
+      ack: msg.ack,
+      messageSize: msg.data.byteLength
+    });
     this._socket.traceSocketEvent("protocolMessageWrite", msg.data);
     this._writeSoon(header, msg.data);
   }
@@ -4255,7 +4358,7 @@ var Protocol = class extends Disposable {
   }
 };
 
-// ../universe-lib/dist/node.mjs
+// ../../node_modules/universe-lib/dist/node.mjs
 var import_crypto = require("crypto");
 var import_net = require("net");
 var import_os = require("os");
