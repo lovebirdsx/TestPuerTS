@@ -8,6 +8,7 @@ import { getConfig } from '../config';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 import { blue, green, red } from '../common/util';
 import { getEditorCmdPath } from './ue';
+import { withCache } from '../common/taskCache';
 
 const config = getConfig();
 const workingDir = path.join(config.packagesPath, 'tests');
@@ -20,24 +21,43 @@ gulp.task('tests:clean', async () => {
 	await cleanDirAsync(outDir);
 });
 
-gulp.task('tests:build', async () => {
-	await exec('tsc', {
-		workingDir,
-		logPrefix: '[tests:build] ',
-	});
-});
+gulp.task(
+	'tests:build',
+	withCache(
+		{ taskName: 'tests:build', inputGlobs: ['packages/tests/src/**/*.ts', 'packages/tests/tsconfig.json'] },
+		async () => {
+			await exec('tsc', {
+				workingDir,
+				logPrefix: '[tests:build] ',
+			});
+		},
+	),
+);
 
-gulp.task('tests:typecheck', async () => {
-	await exec('tsc --noEmit', { workingDir, logPrefix: '[tests:typecheck] ', formatText: formatTscCheckOutput });
-});
+gulp.task(
+	'tests:typecheck',
+	withCache(
+		{ taskName: 'tests:typecheck', inputGlobs: ['packages/tests/src/**/*.ts', 'packages/tests/tsconfig.json'] },
+		async () => {
+			await exec('tsc --noEmit', {
+				workingDir,
+				logPrefix: '[tests:typecheck] ',
+				formatText: formatTscCheckOutput,
+			});
+		},
+	),
+);
 
-gulp.task('tests:lint', async () => {
-	await exec('eslint src', {
-		workingDir,
-		logPrefix: '[tests:lint] ',
-		formatText: formatLintOutput,
-	});
-});
+gulp.task(
+	'tests:lint',
+	withCache({ taskName: 'tests:lint', inputGlobs: ['packages/tests/src/**/*.ts', 'eslint.config.mjs'] }, async () => {
+		await exec('eslint src', {
+			workingDir,
+			logPrefix: '[tests:lint] ',
+			formatText: formatLintOutput,
+		});
+	}),
+);
 
 gulp.task('tests:lint:fix', async () => {
 	await exec('eslint src --fix', {

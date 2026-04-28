@@ -7,6 +7,7 @@ import { exec, formatCSharpOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { readJsonFile } from '../common/util';
 import { green } from '../common/util';
+import { withCache } from '../common/taskCache';
 
 const config = getConfig();
 const projectRoot = path.resolve(config.packagesPath, '..');
@@ -117,14 +118,29 @@ gulp.task('ue:gen_typing', async () => {
 	info(green('[ue:gen_typing] Typing generation completed'));
 });
 
-gulp.task('ue:test', async () => {
-	const editorCmd = getEditorCmdPath();
-	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
-	await exec(cmd, {
-		workingDir: projectRoot,
-		originalLog: true,
-	});
-});
+gulp.task(
+	'ue:test',
+	withCache(
+		{
+			taskName: 'ue:test',
+			inputGlobs: [
+				'packages/tests/src/**/*.{ts,tsx}',
+				'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
+				'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
+				'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
+				'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
+			],
+		},
+		async () => {
+			const editorCmd = getEditorCmdPath();
+			const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
+			await exec(cmd, {
+				workingDir: projectRoot,
+				originalLog: true,
+			});
+		},
+	),
+);
 
 gulp.task('ue:build:watch', async () => {
 	const sourceDir = path.join(projectRoot, 'Source');

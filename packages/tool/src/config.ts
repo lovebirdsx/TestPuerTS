@@ -10,6 +10,7 @@ interface IConfig extends ICmdArgs {
 const config: IConfig = {
 	noClear: true,
 	verbose: false,
+	noCache: false,
 	localJsEnvPorts: [9229, 9230],
 	packagesPath: path.resolve(__dirname, '../../'),
 };

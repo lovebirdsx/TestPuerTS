@@ -7,6 +7,7 @@ import { getConfig } from '../config';
 import { formatLintOutput } from '../common/exec';
 import { formatVitestOutput } from '../common/exec';
 import { cleanDirAsync } from '../common/util';
+import { withCache } from '../common/taskCache';
 
 const config = getConfig();
 const workingDir = path.join(config.packagesPath, 'tool');
@@ -16,13 +17,22 @@ gulp.task('tool:clean', async () => {
 	await cleanDirAsync(path.join(workingDir, 'out'));
 });
 
-gulp.task('tool:build', async () => {
-	await exec('tsc', { workingDir, logPrefix: '[tool:build] ' });
-});
+gulp.task(
+	'tool:build',
+	withCache(
+		{ taskName: 'tool:build', inputGlobs: ['packages/tool/src/**/*.ts', 'packages/tool/tsconfig.json'] },
+		async () => {
+			await exec('tsc', { workingDir, logPrefix: '[tool:build] ' });
+		},
+	),
+);
 
-gulp.task('tool:test', async () => {
-	await exec('npx vitest run', { workingDir, logPrefix: '[tool:test] ', formatText: formatVitestOutput });
-});
+gulp.task(
+	'tool:test',
+	withCache({ taskName: 'tool:test', inputGlobs: ['packages/tool/src/**/*.ts'] }, async () => {
+		await exec('npx vitest run', { workingDir, logPrefix: '[tool:test] ', formatText: formatVitestOutput });
+	}),
+);
 
 gulp.task('tool:test:watch', async () => {
 	gulp.series('tool:test')(() => {
@@ -37,22 +47,35 @@ gulp.task('tool:watch', async () => {
 	await exec('tsc -w', { workingDir, logPrefix: '[tool:watch] ', formatText: formatTscCheckOutput });
 });
 
-gulp.task('tool:typecheck', async () => {
-	await exec('tsc --noEmit', { workingDir, logPrefix: '[tool:typecheck] ', formatText: formatTscCheckOutput });
-	await exec('madge -c --extensions ts,tsx ./src', {
-		workingDir,
-		logPrefix: '[tool:madge] ',
-		formatText: formatCheckCircularText,
-	});
-});
+gulp.task(
+	'tool:typecheck',
+	withCache(
+		{ taskName: 'tool:typecheck', inputGlobs: ['packages/tool/src/**/*.ts', 'packages/tool/tsconfig.json'] },
+		async () => {
+			await exec('tsc --noEmit', {
+				workingDir,
+				logPrefix: '[tool:typecheck] ',
+				formatText: formatTscCheckOutput,
+			});
+			await exec('madge -c --extensions ts,tsx ./src', {
+				workingDir,
+				logPrefix: '[tool:madge] ',
+				formatText: formatCheckCircularText,
+			});
+		},
+	),
+);
 
-gulp.task('tool:lint', async () => {
-	await exec('eslint src', {
-		workingDir,
-		logPrefix: '[tool:lint] ',
-		formatText: formatLintOutput,
-	});
-});
+gulp.task(
+	'tool:lint',
+	withCache({ taskName: 'tool:lint', inputGlobs: ['packages/tool/src/**/*.ts', 'eslint.config.mjs'] }, async () => {
+		await exec('eslint src', {
+			workingDir,
+			logPrefix: '[tool:lint] ',
+			formatText: formatLintOutput,
+		});
+	}),
+);
 
 gulp.task('tool:lint:fix', async () => {
 	await exec('eslint src --fix', {

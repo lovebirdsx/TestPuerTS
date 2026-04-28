@@ -3,6 +3,7 @@ import { info } from 'gulplog';
 export interface ICmdArgs {
 	verbose: boolean;
 	noClear: boolean;
+	noCache: boolean;
 }
 
 let cmdArgs: ICmdArgs | undefined;
@@ -15,6 +16,7 @@ export function getCmdArgs(): ICmdArgs {
 	cmdArgs = {
 		verbose: argv.includes('--verbose') || argv.includes('-v'),
 		noClear: argv.includes('--no-clear') || argv.includes('-n'),
+		noCache: argv.includes('--no-cache'),
 	};
 
 	if (cmdArgs.verbose) {

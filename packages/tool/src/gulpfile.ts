@@ -1,9 +1,14 @@
 import * as gulp from 'gulp';
+import * as path from 'path';
+import { info } from 'gulplog';
 
 import './packages/tool';
 import './packages/editor';
 import './packages/ue';
 import './packages/tests';
+
+import { getConfig } from './config';
+import { cleanDirAsync, green } from './common/util';
 
 // 统一组合任务
 gulp.task('build', gulp.parallel('tool:build', 'editor:build', 'tests:build', 'ue:build'));
@@ -20,3 +25,10 @@ gulp.task('test:watch', gulp.parallel('tool:test:watch', 'editor:test:watch'));
 // 开发任务
 gulp.task('watch', gulp.parallel('editor:watch', 'tests:watch', 'ue:build:watch'));
 gulp.task('dev', gulp.series('ue:build', 'watch'));
+
+// 缓存管理
+gulp.task('cache:clear', async () => {
+	const projectRoot = path.resolve(getConfig().packagesPath, '..');
+	await cleanDirAsync(path.join(projectRoot, '.gulp-cache'));
+	info(green('[cache:clear] Cache cleared'));
+});
