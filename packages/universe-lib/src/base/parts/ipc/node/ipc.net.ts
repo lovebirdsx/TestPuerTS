@@ -15,7 +15,16 @@ import { join } from '../../../common/path';
 import { Platform, platform } from '../../../common/platform';
 import { generateUuid } from '../../../common/uuid';
 import { ClientConnectionEvent, IPCServer } from '../common/ipc';
-import { ChunkStream, NetIPCClient, ISocket, Protocol, SocketCloseEvent, SocketCloseEventType, SocketDiagnostics, SocketDiagnosticsEventType } from '../common/ipc.net';
+import {
+	ChunkStream,
+	NetIPCClient,
+	ISocket,
+	Protocol,
+	SocketCloseEvent,
+	SocketCloseEventType,
+	SocketDiagnostics,
+	SocketDiagnosticsEventType,
+} from '../common/ipc.net';
 
 export class NodeSocket implements ISocket {
 	public readonly debugLabel: string;
@@ -25,7 +34,10 @@ export class NodeSocket implements ISocket {
 	private readonly _endListener: () => void;
 	private _canWrite = true;
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
+	public traceSocketEvent(
+		type: SocketDiagnosticsEventType,
+		data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+	): void {
 		SocketDiagnostics.traceSocketEvent(this.socket, this.debugLabel, type, data);
 	}
 
@@ -197,7 +209,10 @@ const enum ReadState {
 }
 
 interface ISocketTracer {
-	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void;
+	traceSocketEvent(
+		type: SocketDiagnosticsEventType,
+		data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+	): void;
 }
 
 /**
@@ -228,7 +243,10 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 		return this._flowManager.recordedInflateBytes;
 	}
 
-	public traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
+	public traceSocketEvent(
+		type: SocketDiagnosticsEventType,
+		data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+	): void {
 		this.socket.traceSocketEvent(type, data);
 	}
 
@@ -244,11 +262,30 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 	 * @param inflateBytes "Seed" zlib inflate with these bytes.
 	 * @param recordInflateBytes Record all bytes sent to inflate
 	 */
-	constructor(socket: NodeSocket, permessageDeflate: boolean, inflateBytes: VSBuffer | null, recordInflateBytes: boolean) {
+	constructor(
+		socket: NodeSocket,
+		permessageDeflate: boolean,
+		inflateBytes: VSBuffer | null,
+		recordInflateBytes: boolean,
+	) {
 		super();
 		this.socket = socket;
-		this.traceSocketEvent(SocketDiagnosticsEventType.Created, { type: 'WebSocketNodeSocket', permessageDeflate, inflateBytesLength: inflateBytes?.byteLength || 0, recordInflateBytes });
-		this._flowManager = this._register(new WebSocketFlowManager(this, permessageDeflate, inflateBytes, recordInflateBytes, this._onData, (data, compressed) => this._write(data, compressed)));
+		this.traceSocketEvent(SocketDiagnosticsEventType.Created, {
+			type: 'WebSocketNodeSocket',
+			permessageDeflate,
+			inflateBytesLength: inflateBytes?.byteLength || 0,
+			recordInflateBytes,
+		});
+		this._flowManager = this._register(
+			new WebSocketFlowManager(
+				this,
+				permessageDeflate,
+				inflateBytes,
+				recordInflateBytes,
+				this._onData,
+				(data, compressed) => this._write(data, compressed),
+			),
+		);
 		this._register(
 			this._flowManager.onError((err) => {
 				// zlib errors are fatal, since we have no idea how to recover
@@ -316,7 +353,9 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 
 		let start = 0;
 		while (start < buffer.byteLength) {
-			this._flowManager.writeMessage(buffer.slice(start, Math.min(start + Constants.MaxWebSocketMessageLength, buffer.byteLength)));
+			this._flowManager.writeMessage(
+				buffer.slice(start, Math.min(start + Constants.MaxWebSocketMessageLength, buffer.byteLength)),
+			);
 			start += Constants.MaxWebSocketMessageLength;
 		}
 	}
@@ -391,7 +430,8 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 				const len = secondByte & 0b01111111;
 
 				this._state.state = ReadState.ReadHeader;
-				this._state.readLen = Constants.MinHeaderByteSize + (hasMask ? 4 : 0) + (len === 126 ? 2 : 0) + (len === 127 ? 8 : 0);
+				this._state.readLen =
+					Constants.MinHeaderByteSize + (hasMask ? 4 : 0) + (len === 126 ? 2 : 0) + (len === 127 ? 8 : 0);
 				this._state.fin = finBit;
 				if (this._state.firstFrameOfMessage) {
 					// if the frame is compressed, the RSV1 bit is set only for the first frame of the message
@@ -400,7 +440,11 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 				this._state.firstFrameOfMessage = Boolean(finBit);
 				this._state.mask = 0;
 
-				this.traceSocketEvent(SocketDiagnosticsEventType.WebSocketNodeSocketPeekedHeader, { headerSize: this._state.readLen, compressed: this._state.compressed, fin: this._state.fin });
+				this.traceSocketEvent(SocketDiagnosticsEventType.WebSocketNodeSocketPeekedHeader, {
+					headerSize: this._state.readLen,
+					compressed: this._state.compressed,
+					fin: this._state.fin,
+				});
 			} else if (this._state.state === ReadState.ReadHeader) {
 				// read entire header
 				const header = this._incomingData.read(this._state.readLen);
@@ -425,14 +469,23 @@ export class WebSocketNodeSocket extends Disposable implements ISocket, ISocketT
 
 				let mask = 0;
 				if (hasMask) {
-					mask = header.readUInt8(++offset) * 2 ** 24 + header.readUInt8(++offset) * 2 ** 16 + header.readUInt8(++offset) * 2 ** 8 + header.readUInt8(++offset);
+					mask =
+						header.readUInt8(++offset) * 2 ** 24 +
+						header.readUInt8(++offset) * 2 ** 16 +
+						header.readUInt8(++offset) * 2 ** 8 +
+						header.readUInt8(++offset);
 				}
 
 				this._state.state = ReadState.ReadBody;
 				this._state.readLen = len;
 				this._state.mask = mask;
 
-				this.traceSocketEvent(SocketDiagnosticsEventType.WebSocketNodeSocketPeekedHeader, { bodySize: this._state.readLen, compressed: this._state.compressed, fin: this._state.fin, mask: this._state.mask });
+				this.traceSocketEvent(SocketDiagnosticsEventType.WebSocketNodeSocketPeekedHeader, {
+					bodySize: this._state.readLen,
+					compressed: this._state.compressed,
+					fin: this._state.fin,
+					mask: this._state.mask,
+				});
 			} else if (this._state.state === ReadState.ReadBody) {
 				// read body
 
@@ -500,7 +553,9 @@ class WebSocketFlowManager extends Disposable {
 			// See https://tools.ietf.org/html/rfc7692#page-16
 			// To simplify our logic, we don't negotiate the window size
 			// and simply dedicate (2^15) / 32kb per web socket
-			this._zlibInflateStream = this._register(new ZlibInflateStream(this._tracer, recordInflateBytes, inflateBytes, { windowBits: 15 }));
+			this._zlibInflateStream = this._register(
+				new ZlibInflateStream(this._tracer, recordInflateBytes, inflateBytes, { windowBits: 15 }),
+			);
 			this._zlibDeflateStream = this._register(new ZlibDeflateStream(this._tracer, { windowBits: 15 }));
 			this._register(this._zlibInflateStream.onError((err) => this._onError.fire(err)));
 			this._register(this._zlibDeflateStream.onError((err) => this._onError.fire(err)));
@@ -566,7 +621,11 @@ class WebSocketFlowManager extends Disposable {
 				// Even if permessageDeflate is negotiated, it is possible
 				// that the other side might decide to send uncompressed messages
 				// So only decompress messages that have the RSV 1 bit set
-				const data = await this._inflateFrame(this._zlibInflateStream, frameInfo.data, frameInfo.isLastFrameOfMessage);
+				const data = await this._inflateFrame(
+					this._zlibInflateStream,
+					frameInfo.data,
+					frameInfo.isLastFrameOfMessage,
+				);
 				this._onData.fire(data);
 			} else {
 				this._onData.fire(frameInfo.data);
@@ -583,7 +642,11 @@ class WebSocketFlowManager extends Disposable {
 	/**
 	 * Subsequent calls should wait for the previous `transformRead` call to complete.
 	 */
-	private _inflateFrame(zlibInflateStream: ZlibInflateStream, buffer: VSBuffer, isLastFrameOfMessage: boolean): Promise<VSBuffer> {
+	private _inflateFrame(
+		zlibInflateStream: ZlibInflateStream,
+		buffer: VSBuffer,
+		isLastFrameOfMessage: boolean,
+	): Promise<VSBuffer> {
 		return new Promise<VSBuffer>((resolve, _reject) => {
 			// See https://tools.ietf.org/html/rfc7692#section-7.2.2
 			zlibInflateStream.write(buffer);
@@ -619,7 +682,10 @@ class ZlibInflateStream extends Disposable {
 		super();
 		this._zlibInflate = createInflateRaw(options);
 		this._zlibInflate.on('error', (err) => {
-			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibInflateError, { message: err?.message, code: (<any>err)?.code });
+			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibInflateError, {
+				message: err?.message,
+				code: (<any>err)?.code,
+			});
 			this._onError.fire(err);
 		});
 		this._zlibInflate.on('data', (data: Buffer) => {
@@ -671,7 +737,10 @@ class ZlibDeflateStream extends Disposable {
 			windowBits: 15,
 		});
 		this._zlibDeflate.on('error', (err) => {
-			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibDeflateError, { message: err?.message, code: (<any>err)?.code });
+			this._tracer.traceSocketEvent(SocketDiagnosticsEventType.zlibDeflateError, {
+				message: err?.message,
+				code: (<any>err)?.code,
+			});
 			this._onError.fire(err);
 		});
 		this._zlibDeflate.on('data', (data: Buffer) => {

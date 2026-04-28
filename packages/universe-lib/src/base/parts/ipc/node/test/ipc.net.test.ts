@@ -6,8 +6,22 @@ import { Barrier, timeout } from '../../../../common/async';
 import { VSBuffer } from '../../../../common/buffer';
 import { Emitter, Event } from '../../../../common/event';
 import { Disposable, DisposableStore } from '../../../../common/lifecycle';
-import { ILoadEstimator, PersistentProtocol, Protocol, ProtocolConstants, SocketCloseEvent, SocketDiagnosticsEventType } from '../../common/ipc.net';
-import { createRandomIPCHandle, createStaticIPCHandle, connect as ipcConnect, NodeSocket, serve as ipcServe, WebSocketNodeSocket } from '../ipc.net';
+import {
+	ILoadEstimator,
+	PersistentProtocol,
+	Protocol,
+	ProtocolConstants,
+	SocketCloseEvent,
+	SocketDiagnosticsEventType,
+} from '../../common/ipc.net';
+import {
+	createRandomIPCHandle,
+	createStaticIPCHandle,
+	connect as ipcConnect,
+	NodeSocket,
+	serve as ipcServe,
+	WebSocketNodeSocket,
+} from '../ipc.net';
 import { runWithFakedTimers } from '../../../../test/timeTravelScheduler';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../../../test/utils';
 import { flakySuite } from '../../../../test/testUtils';
@@ -590,7 +604,10 @@ describe('WebSocketNodeSocket', () => {
 		private readonly _onClose = new Emitter<SocketCloseEvent>();
 		public readonly onClose = this._onClose.event;
 
-		public traceSocketEvent(_type: SocketDiagnosticsEventType, _data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {}
+		public traceSocketEvent(
+			_type: SocketDiagnosticsEventType,
+			_data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+		): void {}
 
 		constructor() {
 			super();

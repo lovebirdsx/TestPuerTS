@@ -174,7 +174,11 @@ export class DisposableStore implements IDisposable {
 		setParentOfDisposable(t, this);
 		if (this._isDisposed) {
 			if (!DisposableStore.DISABLE_DISPOSED_WARNING) {
-				console.warn(new Error('Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!').stack);
+				console.warn(
+					new Error(
+						'Trying to add a disposable to a DisposableStore that has already been disposed of. The added object will be leaked!',
+					).stack,
+				);
 			}
 		} else {
 			this._toDispose.add(t);

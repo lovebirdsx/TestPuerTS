@@ -162,7 +162,11 @@ export function safeWrap<T extends (...args: any[]) => void | Promise<void>>(fn:
 /**
  * 安全运行方法的装饰器，类方法调用时，如果发生异常，会被捕获并记录日志
  */
-export function safe(_target: Object, _propertyKey: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor {
+export function safe(
+	_target: Object,
+	_propertyKey: string | symbol,
+	descriptor: PropertyDescriptor,
+): PropertyDescriptor {
 	if (typeof descriptor.value !== 'function') {
 		throw new Error('@safe 装饰器只能用于类的方法上');
 	}

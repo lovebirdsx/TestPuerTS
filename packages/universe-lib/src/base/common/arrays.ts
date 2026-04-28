@@ -39,7 +39,10 @@ export namespace CompareResult {
  */
 export type Comparator<T> = (a: T, b: T) => CompareResult;
 
-export function compareBy<TItem, TCompareBy>(selector: (item: TItem) => TCompareBy, comparator: Comparator<TCompareBy>): Comparator<TItem> {
+export function compareBy<TItem, TCompareBy>(
+	selector: (item: TItem) => TCompareBy,
+	comparator: Comparator<TCompareBy>,
+): Comparator<TItem> {
 	return (a, b) => comparator(selector(a), selector(b));
 }
 
@@ -72,7 +75,10 @@ export function coalesce<T>(array: readonly (T | undefined | null)[]): T[] {
  * @param count 解析的元素个数
  * @returns 返回前缀和最大的后缀值
  */
-export function parseArrayMaxIdAndPrefx<T extends { id?: string }>(array: T[], count: number): { prefix: string; maxSuffix: number } {
+export function parseArrayMaxIdAndPrefx<T extends { id?: string }>(
+	array: T[],
+	count: number,
+): { prefix: string; maxSuffix: number } {
 	if (array.length === 0 || count === 0) {
 		return { prefix: 'id', maxSuffix: 0 };
 	}

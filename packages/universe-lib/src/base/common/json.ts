@@ -80,7 +80,11 @@ export interface IModifyObjectEdit extends IModifyInObject {
 	type: 'modify';
 }
 
-export type JsonEditInObject<T extends TObject = TObject> = IDeleteObjectEdit | ICreateObjectEdit<T> | IModifyObjectEdit | ISetObjectEdit<T>;
+export type JsonEditInObject<T extends TObject = TObject> =
+	| IDeleteObjectEdit
+	| ICreateObjectEdit<T>
+	| IModifyObjectEdit
+	| ISetObjectEdit<T>;
 
 export interface WorkspaceJsonEdit<T extends TObject = IVsPlayObjectBase> {
 	// key => uri.path;

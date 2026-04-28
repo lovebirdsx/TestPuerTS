@@ -36,7 +36,10 @@ export class InstantiationService implements IInstantiationService {
 	}
 
 	createInstance<T>(descriptor: SyncDescriptor0<T>): T;
-	createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: GetLeadingNonServiceArgs<ConstructorParameters<Ctor>>): R;
+	createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(
+		ctor: Ctor,
+		...args: GetLeadingNonServiceArgs<ConstructorParameters<Ctor>>
+	): R;
 	createInstance(ctorOrDescriptor: any | SyncDescriptor<any>, ...rest: any[]): any {
 		let _trace: Trace;
 		let result: any;
@@ -64,7 +67,9 @@ export class InstantiationService implements IInstantiationService {
 
 		const firstServiceArgPos = serviceDependencies.length > 0 ? serviceDependencies[0].index : args.length;
 		if (args.length !== firstServiceArgPos) {
-			console.trace(`[createInstance] First service dependency of ${ctor.name} at position ${firstServiceArgPos + 1} conflicts with ${args.length} static arguments`);
+			console.trace(
+				`[createInstance] First service dependency of ${ctor.name} at position ${firstServiceArgPos + 1} conflicts with ${args.length} static arguments`,
+			);
 
 			const delta = firstServiceArgPos - args.length;
 			if (delta > 0) {
@@ -146,7 +151,11 @@ export class InstantiationService implements IInstantiationService {
 
 				this._globalGraph?.insertEdge(String(item.id), String(dependency.id));
 				if (instanceOrDesc instanceof SyncDescriptor) {
-					const d = { id: dependency.id, desc: instanceOrDesc, _trace: item._trace.branch(dependency.id, true) };
+					const d = {
+						id: dependency.id,
+						desc: instanceOrDesc,
+						_trace: item._trace.branch(dependency.id, true),
+					};
 					graph.insertEdge(item, d);
 					stack.push(d);
 				}
@@ -165,7 +174,13 @@ export class InstantiationService implements IInstantiationService {
 			for (const { data } of leafs) {
 				const instanceOrDesc = this._getServiceInstanceOrDescriptor(data.id);
 				if (instanceOrDesc instanceof SyncDescriptor) {
-					const instance = this._createServiceInstanceWithOwner(data.id, data.desc.ctor, data.desc.staticArguments, data.desc.supportsDelayedInstantiation, data._trace);
+					const instance = this._createServiceInstanceWithOwner(
+						data.id,
+						data.desc.ctor,
+						data.desc.staticArguments,
+						data.desc.supportsDelayedInstantiation,
+						data._trace,
+					);
 					this._setServiceInstance(data.id, instance);
 				}
 				graph.removeNode(data);
@@ -175,7 +190,13 @@ export class InstantiationService implements IInstantiationService {
 		return <T>this._getServiceInstanceOrDescriptor(id);
 	}
 
-	private _createServiceInstanceWithOwner<T>(id: ServiceIdentifier<T>, ctor: any, args: any[], supportsDelayedInstantiation: boolean, _trace: Trace): T {
+	private _createServiceInstanceWithOwner<T>(
+		id: ServiceIdentifier<T>,
+		ctor: any,
+		args: any[],
+		supportsDelayedInstantiation: boolean,
+		_trace: Trace,
+	): T {
 		if (this._services.get(id) instanceof SyncDescriptor) {
 			return this._createServiceInstance(id, ctor, args, supportsDelayedInstantiation, _trace);
 		}
@@ -187,7 +208,13 @@ export class InstantiationService implements IInstantiationService {
 		throw new Error(`illegalState - creating UNKNOWN service ${ctor.name}`);
 	}
 
-	private _createServiceInstance<T>(_id: ServiceIdentifier<T>, ctor: any, args: any[], supportsDelayedInstantiation: boolean, _trace: Trace): T {
+	private _createServiceInstance<T>(
+		_id: ServiceIdentifier<T>,
+		ctor: any,
+		args: any[],
+		supportsDelayedInstantiation: boolean,
+		_trace: Trace,
+	): T {
 		// 不支持延迟初始化则直接创建实例
 		if (!supportsDelayedInstantiation) {
 			return this._createInstance(ctor, args, _trace);
@@ -297,7 +324,9 @@ export class Trace {
 	})();
 
 	static traceInvocation(_enableTracing: boolean, ctor: any): Trace {
-		return !_enableTracing ? Trace._None : new Trace(TraceType.Invocation, ctor.name || new Error().stack!.split('\n').slice(3, 4).join('\n'));
+		return !_enableTracing
+			? Trace._None
+			: new Trace(TraceType.Invocation, ctor.name || new Error().stack!.split('\n').slice(3, 4).join('\n'));
 	}
 
 	static traceCreation(_enableTracing: boolean, ctor: any): Trace {
@@ -343,7 +372,11 @@ export class Trace {
 			return res.join('\n');
 		}
 
-		const lines = [`${this.type === TraceType.Creation ? 'CREATE' : 'CALL'} ${this.name}`, `${printChild(1, this)}`, `DONE, took ${dur.toFixed(2)}ms (grand total ${Trace._totals.toFixed(2)}ms)`];
+		const lines = [
+			`${this.type === TraceType.Creation ? 'CREATE' : 'CALL'} ${this.name}`,
+			`${printChild(1, this)}`,
+			`DONE, took ${dur.toFixed(2)}ms (grand total ${Trace._totals.toFixed(2)}ms)`,
+		];
 
 		if (dur > 2 || causedCreation) {
 			Trace.all.add(lines.join('\n'));

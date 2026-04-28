@@ -38,10 +38,15 @@ export function createCancelablePromise<T>(callback: (token: CancellationToken) 
 		cancel() {
 			source.cancel();
 		}
-		then<TResult1 = T, TResult2 = never>(resolve?: ((value: T) => TResult1 | Promise<TResult1>) | undefined | null, reject?: ((reason: any) => TResult2 | Promise<TResult2>) | undefined | null): Promise<TResult1 | TResult2> {
+		then<
+			TResult1 = T,
+			TResult2 = never,
+		>(resolve?: ((value: T) => TResult1 | Promise<TResult1>) | undefined | null, reject?: ((reason: any) => TResult2 | Promise<TResult2>) | undefined | null): Promise<TResult1 | TResult2> {
 			return promise.then(resolve, reject);
 		}
-		catch<TResult = never>(reject?: ((reason: any) => TResult | Promise<TResult>) | undefined | null): Promise<T | TResult> {
+		catch<
+			TResult = never,
+		>(reject?: ((reason: any) => TResult | Promise<TResult>) | undefined | null): Promise<T | TResult> {
 			return this.then(undefined, reject);
 		}
 		finally(onfinally?: (() => void) | undefined | null): Promise<T> {
@@ -62,7 +67,11 @@ export function raceCancellation<T>(promise: Promise<T>, token: CancellationToke
  */
 export function raceCancellation<T>(promise: Promise<T>, token: CancellationToken, defaultValue: T): Promise<T>;
 
-export function raceCancellation<T>(promise: Promise<T>, token: CancellationToken, defaultValue?: T): Promise<T | undefined> {
+export function raceCancellation<T>(
+	promise: Promise<T>,
+	token: CancellationToken,
+	defaultValue?: T,
+): Promise<T | undefined> {
 	return new Promise((resolve, reject) => {
 		const ref = token.onCancellationRequested(() => {
 			ref.dispose();
@@ -117,7 +126,10 @@ export function raceTimeout<T>(promise: Promise<T>, timeout: number, onTimeout?:
 		onTimeout?.();
 	}, timeout);
 
-	return Promise.race([promise.finally(() => clearTimeout(timer)), new Promise<T | undefined>((resolve) => (promiseResolve = resolve))]);
+	return Promise.race([
+		promise.finally(() => clearTimeout(timer)),
+		new Promise<T | undefined>((resolve) => (promiseResolve = resolve)),
+	]);
 }
 
 export interface IPromiseWithStatus<T> {

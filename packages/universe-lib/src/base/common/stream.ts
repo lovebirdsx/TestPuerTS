@@ -156,7 +156,9 @@ export function isReadableBufferedStream<T>(obj: unknown): obj is ReadableBuffer
 		return false;
 	}
 
-	return isReadableStream(candidate.stream) && Array.isArray(candidate.buffer) && typeof candidate.ended === 'boolean';
+	return (
+		isReadableStream(candidate.stream) && Array.isArray(candidate.buffer) && typeof candidate.ended === 'boolean'
+	);
 }
 
 export interface IReducer<T, R = T> {
@@ -252,7 +254,10 @@ class WriteableStreamImpl<T> implements WriteableStream<T> {
 			this.buffer.data.push(data);
 
 			// highWaterMark: if configured, signal back when buffer reached limits
-			if (typeof this.options?.highWaterMark === 'number' && this.buffer.data.length > this.options.highWaterMark) {
+			if (
+				typeof this.options?.highWaterMark === 'number' &&
+				this.buffer.data.length > this.options.highWaterMark
+			) {
 				return new Promise((resolve) => this.pendingWritePromises.push(resolve));
 			}
 		}
@@ -506,7 +511,10 @@ export function peekReadable<T>(readable: Readable<T>, reducer: IReducer<T>, max
  */
 export function consumeStream<T, R = T>(stream: ReadableStreamEvents<T>, reducer: IReducer<T, R>): Promise<R>;
 export function consumeStream(stream: ReadableStreamEvents<unknown>): Promise<undefined>;
-export function consumeStream<T, R = T>(stream: ReadableStreamEvents<T>, reducer?: IReducer<T, R>): Promise<R | undefined> {
+export function consumeStream<T, R = T>(
+	stream: ReadableStreamEvents<T>,
+	reducer?: IReducer<T, R>,
+): Promise<R | undefined> {
 	return new Promise((resolve, reject) => {
 		const chunks: T[] = [];
 
@@ -557,7 +565,11 @@ export interface IStreamListener<T> {
 /**
  * Helper to listen to all events of a T stream in proper order.
  */
-export function listenStream<T>(stream: ReadableStreamEvents<T>, listener: IStreamListener<T>, token?: CancellationToken): void {
+export function listenStream<T>(
+	stream: ReadableStreamEvents<T>,
+	listener: IStreamListener<T>,
+	token?: CancellationToken,
+): void {
 	stream.on('error', (error) => {
 		if (!token?.isCancellationRequested) {
 			listener.onError(error);
@@ -679,7 +691,11 @@ export function toReadable<T>(t: T): Readable<T> {
 /**
  * Helper to transform a readable stream into another stream.
  */
-export function transform<Original, Transformed>(stream: ReadableStreamEvents<Original>, transformer: ITransformer<Original, Transformed>, reducer: IReducer<Transformed>): ReadableStream<Transformed> {
+export function transform<Original, Transformed>(
+	stream: ReadableStreamEvents<Original>,
+	transformer: ITransformer<Original, Transformed>,
+	reducer: IReducer<Transformed>,
+): ReadableStream<Transformed> {
 	const target = newWriteableStream<Transformed>(reducer);
 
 	listenStream(stream, {

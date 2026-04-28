@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest';
-import { BidirectionalMap, LinkedMap, LRUCache, mapsStrictEqualIgnoreOrder, MRUCache, ResourceMap, SetMap, Touch } from '../map';
+import {
+	BidirectionalMap,
+	LinkedMap,
+	LRUCache,
+	mapsStrictEqualIgnoreOrder,
+	MRUCache,
+	ResourceMap,
+	SetMap,
+	Touch,
+} from '../map';
 import { ensureNoDisposablesAreLeakedInTestSuite } from '../../test/utils';
 import { URI } from '../uri';
 import { extUriIgnorePathCase } from '../resources';

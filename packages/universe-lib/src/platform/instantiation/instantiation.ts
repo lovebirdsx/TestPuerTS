@@ -18,7 +18,11 @@ export interface ServicesAccessor {
 	get<T>(id: ServiceIdentifier<T>): T;
 }
 
-export type GetLeadingNonServiceArgs<TArgs extends any[]> = TArgs extends [] ? [] : TArgs extends [...infer TFirst, BrandedService] ? GetLeadingNonServiceArgs<TFirst> : TArgs;
+export type GetLeadingNonServiceArgs<TArgs extends any[]> = TArgs extends []
+	? []
+	: TArgs extends [...infer TFirst, BrandedService]
+		? GetLeadingNonServiceArgs<TFirst>
+		: TArgs;
 
 export interface IInstantiationService {
 	readonly _serviceBrand: undefined;
@@ -27,7 +31,10 @@ export interface IInstantiationService {
 	 * 同步创建一个实例
 	 */
 	createInstance<T>(descriptor: SyncDescriptor0<T>): T;
-	createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: GetLeadingNonServiceArgs<ConstructorParameters<Ctor>>): R;
+	createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(
+		ctor: Ctor,
+		...args: GetLeadingNonServiceArgs<ConstructorParameters<Ctor>>
+	): R;
 
 	/**
 	 * 在accessor中获得服务实例，并进行相关操作

@@ -114,7 +114,11 @@ class Loader implements ILoader {
 }
 
 const _registry: [ServiceIdentifier<any>, SyncDescriptor<any>][] = [];
-function registerSingleton<T>(id: ServiceIdentifier<T>, ctor: { new (...args: any[]): T }, supportsDelayedInstantiation: boolean): void {
+function registerSingleton<T>(
+	id: ServiceIdentifier<T>,
+	ctor: { new (...args: any[]): T },
+	supportsDelayedInstantiation: boolean,
+): void {
 	_registry.push([id, new SyncDescriptor(ctor, [], supportsDelayedInstantiation)]);
 }
 

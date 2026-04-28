@@ -18,7 +18,10 @@ export function testRepeat(n: number, description: string, callback: (this: any)
 	}
 }
 
-export async function assertThrowsAsync(block: () => any, message: string | Error = 'Missing expected exception'): Promise<void> {
+export async function assertThrowsAsync(
+	block: () => any,
+	message: string | Error = 'Missing expected exception',
+): Promise<void> {
 	try {
 		await block();
 	} catch {
@@ -96,7 +99,9 @@ export class DisposableTracker implements IDisposableTracker {
 	ensureNoLeakingDisposables() {
 		const rootParentCache = new Map<DisposableInfo, DisposableInfo>();
 
-		const leakingObjects = [...this.livingDisposables.values()].filter((info) => info.source !== null && !this.getRootParent(info, rootParentCache).isSingleton);
+		const leakingObjects = [...this.livingDisposables.values()].filter(
+			(info) => info.source !== null && !this.getRootParent(info, rootParentCache).isSingleton,
+		);
 
 		if (leakingObjects.length === 0) {
 			return;
@@ -114,7 +119,12 @@ export class DisposableTracker implements IDisposableTracker {
 
 		function getStackTracePath(leaking: DisposableInfo): string[] {
 			function removePrefix(array: string[], linesToRemove: (string | RegExp)[]) {
-				while (array.length > 0 && linesToRemove.some((regexp) => (typeof regexp === 'string' ? regexp === array[0] : array[0].match(regexp)))) {
+				while (
+					array.length > 0 &&
+					linesToRemove.some((regexp) =>
+						typeof regexp === 'string' ? regexp === array[0] : array[0].match(regexp),
+					)
+				) {
 					array.shift();
 				}
 			}
@@ -160,7 +170,9 @@ export class DisposableTracker implements IDisposableTracker {
 				);
 				delete continuations[stackTracePath[i]];
 				for (const [cont, set] of Object.entries(continuations)) {
-					stackTraceFormattedLines.unshift(`    - stacktraces of ${set.length} other leaks continue with ${cont}`);
+					stackTraceFormattedLines.unshift(
+						`    - stacktraces of ${set.length} other leaks continue with ${cont}`,
+					);
 				}
 
 				stackTraceFormattedLines.unshift(line);

@@ -70,7 +70,9 @@ export class Graph<T> {
 	toString(): string {
 		const data: string[] = [];
 		this._nodes.forEach((value, key) => {
-			data.push(`${key}\n\t(-> incoming)[${[...value.incoming.keys()].join(', ')}]\n\t(outgoing ->)[${[...value.outgoing.keys()].join(',')}]\n`);
+			data.push(
+				`${key}\n\t(-> incoming)[${[...value.incoming.keys()].join(', ')}]\n\t(outgoing ->)[${[...value.outgoing.keys()].join(',')}]\n`,
+			);
 		});
 		return data.join('\n');
 	}

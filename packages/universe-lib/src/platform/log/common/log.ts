@@ -577,7 +577,9 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 
 	private readonly _loggers = new ResourceMap<LoggerEntry>();
 
-	private _onDidChangeLoggers = this._register(new Emitter<{ added: ILoggerResource[]; removed: ILoggerResource[] }>());
+	private _onDidChangeLoggers = this._register(
+		new Emitter<{ added: ILoggerResource[]; removed: ILoggerResource[] }>(),
+	);
 	readonly onDidChangeLoggers = this._onDidChangeLoggers.event;
 
 	private _onDidChangeLogLevel = this._register(new Emitter<LogLevel | [URI, LogLevel]>());
@@ -616,11 +618,22 @@ export abstract class AbstractLoggerService extends Disposable implements ILogge
 		let logger = this._loggers.get(resource)?.logger;
 		const logLevel = options?.logLevel === 'always' ? LogLevel.Trace : options?.logLevel;
 		if (!logger) {
-			logger = this.doCreateLogger(resource, logLevel ?? this.getLogLevel(resource) ?? this.logLevel, { ...options, id });
+			logger = this.doCreateLogger(resource, logLevel ?? this.getLogLevel(resource) ?? this.logLevel, {
+				...options,
+				id,
+			});
 		}
 		const loggerEntry: LoggerEntry = {
 			logger,
-			info: { resource, id, logLevel, name: options?.name, hidden: options?.hidden, extensionId: options?.extensionId, when: options?.when },
+			info: {
+				resource,
+				id,
+				logLevel,
+				name: options?.name,
+				hidden: options?.hidden,
+				extensionId: options?.extensionId,
+				when: options?.when,
+			},
 		};
 		this.registerLogger(loggerEntry.info);
 		// TODO: @sandy081 Remove this once registerLogger can take ILogger

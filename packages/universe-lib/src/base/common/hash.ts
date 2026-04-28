@@ -245,7 +245,13 @@ export class StringSHA1 {
 			this._wrapUp();
 		}
 
-		return toHexString(this._h0) + toHexString(this._h1) + toHexString(this._h2) + toHexString(this._h3) + toHexString(this._h4);
+		return (
+			toHexString(this._h0) +
+			toHexString(this._h1) +
+			toHexString(this._h2) +
+			toHexString(this._h3) +
+			toHexString(this._h4)
+		);
 	}
 
 	private _wrapUp(): void {
@@ -275,7 +281,17 @@ export class StringSHA1 {
 		}
 
 		for (let j = 64; j < 320 /* 80*4 */; j += 4) {
-			bigBlock32.setUint32(j, leftRotate(bigBlock32.getUint32(j - 12, false) ^ bigBlock32.getUint32(j - 32, false) ^ bigBlock32.getUint32(j - 56, false) ^ bigBlock32.getUint32(j - 64, false), 1), false);
+			bigBlock32.setUint32(
+				j,
+				leftRotate(
+					bigBlock32.getUint32(j - 12, false) ^
+						bigBlock32.getUint32(j - 32, false) ^
+						bigBlock32.getUint32(j - 56, false) ^
+						bigBlock32.getUint32(j - 64, false),
+					1,
+				),
+				false,
+			);
 		}
 
 		let a = this._h0;

@@ -2,12 +2,47 @@
   "name": "@universe/lib",
   "version": "1.0.0",
   "description": "Universe Editor shared library",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.cjs"
+    },
+    "./common": {
+      "types": "./dist/common.d.ts",
+      "import": "./dist/common.mjs",
+      "require": "./dist/common.cjs",
+      "default": "./dist/common.cjs"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.mjs",
+      "require": "./dist/node.cjs",
+      "default": "./dist/node.cjs"
+    },
+    "./platform": {
+      "types": "./dist/platform.d.ts",
+      "import": "./dist/platform.mjs",
+      "require": "./dist/platform.cjs",
+      "default": "./dist/platform.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "common": [
+        "./dist/common.d.ts"
+      ],
+      "node": [
+        "./dist/node.d.ts"
+      ],
+      "platform": [
+        "./dist/platform.d.ts"
+      ]
     }
   },
   "files": [
@@ -20,7 +55,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

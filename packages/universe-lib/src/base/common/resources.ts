@@ -166,10 +166,22 @@ export class ExtUri implements IExtUri {
 	isEqualOrParent(base: URI, parentCandidate: URI, ignoreFragment: boolean = false): boolean {
 		if (base.scheme === parentCandidate.scheme) {
 			if (base.scheme === Schemas.file) {
-				return extpath.isEqualOrParent(originalFSPath(base), originalFSPath(parentCandidate), this._ignorePathCasing(base)) && base.query === parentCandidate.query && (ignoreFragment || base.fragment === parentCandidate.fragment);
+				return (
+					extpath.isEqualOrParent(
+						originalFSPath(base),
+						originalFSPath(parentCandidate),
+						this._ignorePathCasing(base),
+					) &&
+					base.query === parentCandidate.query &&
+					(ignoreFragment || base.fragment === parentCandidate.fragment)
+				);
 			}
 			if (isEqualAuthority(base.authority, parentCandidate.authority)) {
-				return extpath.isEqualOrParent(base.path, parentCandidate.path, this._ignorePathCasing(base), '/') && base.query === parentCandidate.query && (ignoreFragment || base.fragment === parentCandidate.fragment);
+				return (
+					extpath.isEqualOrParent(base.path, parentCandidate.path, this._ignorePathCasing(base), '/') &&
+					base.query === parentCandidate.query &&
+					(ignoreFragment || base.fragment === parentCandidate.fragment)
+				);
 			}
 		}
 		return false;
@@ -282,7 +294,11 @@ export class ExtUri implements IExtUri {
 			return fsp.length > extpath.getRoot(fsp).length && fsp[fsp.length - 1] === sep;
 		} else {
 			const p = resource.path;
-			return p.length > 1 && p.charCodeAt(p.length - 1) === CharCode.Slash && !/^[a-zA-Z]:(\/$|\\$)/.test(resource.fsPath); // ignore the slash at offset 0
+			return (
+				p.length > 1 &&
+				p.charCodeAt(p.length - 1) === CharCode.Slash &&
+				!/^[a-zA-Z]:(\/$|\\$)/.test(resource.fsPath)
+			); // ignore the slash at offset 0
 		}
 	}
 

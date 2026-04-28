@@ -244,7 +244,12 @@ export function writeUInt32BE(destination: Uint8Array, value: number, offset: nu
 }
 
 export function readUInt32LE(source: Uint8Array, offset: number): number {
-	return ((source[offset + 0] << 0) >>> 0) | ((source[offset + 1] << 8) >>> 0) | ((source[offset + 2] << 16) >>> 0) | ((source[offset + 3] << 24) >>> 0);
+	return (
+		((source[offset + 0] << 0) >>> 0) |
+		((source[offset + 1] << 8) >>> 0) |
+		((source[offset + 2] << 16) >>> 0) |
+		((source[offset + 3] << 24) >>> 0)
+	);
 }
 
 export function writeUInt32LE(destination: Uint8Array, value: number, offset: number): void {
@@ -285,7 +290,9 @@ export function streamToBuffer(stream: streams.ReadableStream<VSBuffer>): Promis
 	return streams.consumeStream<VSBuffer>(stream, (chunks) => VSBuffer.concat(chunks));
 }
 
-export async function bufferedStreamToBuffer(bufferedStream: streams.ReadableBufferedStream<VSBuffer>): Promise<VSBuffer> {
+export async function bufferedStreamToBuffer(
+	bufferedStream: streams.ReadableBufferedStream<VSBuffer>,
+): Promise<VSBuffer> {
 	if (bufferedStream.ended) {
 		return VSBuffer.concat(bufferedStream.buffer);
 	}
@@ -303,8 +310,14 @@ export function bufferToStream(buffer: VSBuffer): streams.ReadableStream<VSBuffe
 	return streams.toStream<VSBuffer>(buffer, (chunks) => VSBuffer.concat(chunks));
 }
 
-export function streamToBufferReadableStream(stream: streams.ReadableStreamEvents<Uint8Array | string>): streams.ReadableStream<VSBuffer> {
-	return streams.transform<Uint8Array | string, VSBuffer>(stream, { data: (data) => (typeof data === 'string' ? VSBuffer.fromString(data) : VSBuffer.wrap(data)) }, (chunks) => VSBuffer.concat(chunks));
+export function streamToBufferReadableStream(
+	stream: streams.ReadableStreamEvents<Uint8Array | string>,
+): streams.ReadableStream<VSBuffer> {
+	return streams.transform<Uint8Array | string, VSBuffer>(
+		stream,
+		{ data: (data) => (typeof data === 'string' ? VSBuffer.fromString(data) : VSBuffer.wrap(data)) },
+		(chunks) => VSBuffer.concat(chunks),
+	);
 }
 
 export function newWriteableBufferStream(options?: streams.WriteableStreamOptions): streams.WriteableStream<VSBuffer> {

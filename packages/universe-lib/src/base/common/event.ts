@@ -32,7 +32,9 @@ export namespace Event {
 			let count = 0;
 			options.onDidAddListener = () => {
 				if (++count === 2) {
-					console.warn('snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here');
+					console.warn(
+						'snapshotted emitter LIKELY used public and SHOULD HAVE BEEN created with DisposableStore. snapshotted here',
+					);
 					stack.print();
 				}
 				origListenerDidAdd?.();
@@ -116,11 +118,23 @@ export namespace Event {
 	 * returns true.
 	 * @param disposable A disposable store to add the new EventEmitter to.
 	 */
-	export function filter<T, U>(event: Event<T | U>, filter: (e: T | U) => e is T, disposable?: DisposableStore): Event<T>;
+	export function filter<T, U>(
+		event: Event<T | U>,
+		filter: (e: T | U) => e is T,
+		disposable?: DisposableStore,
+	): Event<T>;
 	export function filter<T>(event: Event<T>, filter: (e: T) => boolean, disposable?: DisposableStore): Event<T>;
-	export function filter<T, R>(event: Event<T | R>, filter: (e: T | R) => e is R, disposable?: DisposableStore): Event<R>;
+	export function filter<T, R>(
+		event: Event<T | R>,
+		filter: (e: T | R) => e is R,
+		disposable?: DisposableStore,
+	): Event<R>;
 	export function filter<T>(event: Event<T>, filter: (e: T) => boolean, disposable?: DisposableStore): Event<T> {
-		return snapshot((listener, thisArgs = null, disposables?) => event((e) => filter(e) && listener.call(thisArgs, e), null, disposables), disposable);
+		return snapshot(
+			(listener, thisArgs = null, disposables?) =>
+				event((e) => filter(e) && listener.call(thisArgs, e), null, disposables),
+			disposable,
+		);
 	}
 
 	/**
@@ -200,7 +214,11 @@ export namespace Event {
 	 * @param disposable A disposable store to add the new EventEmitter to.
 	 */
 	export function map<I, O>(event: Event<I>, map: (i: I) => O, disposable?: DisposableStore): Event<O> {
-		return snapshot((listener, thisArgs = null, disposables?) => event((i) => listener.call(thisArgs, map(i)), null, disposables), disposable);
+		return snapshot(
+			(listener, thisArgs = null, disposables?) =>
+				event((i) => listener.call(thisArgs, map(i)), null, disposables),
+			disposable,
+		);
 	}
 
 	export interface NodeEventEmitter {
@@ -211,11 +229,18 @@ export namespace Event {
 	/**
 	 * Creates an {@link Event} from a node event emitter.
 	 */
-	export function fromNodeEventEmitter<T>(emitter: NodeEventEmitter, eventName: string, map: (...args: any[]) => T = (id) => id): Event<T> {
+	export function fromNodeEventEmitter<T>(
+		emitter: NodeEventEmitter,
+		eventName: string,
+		map: (...args: any[]) => T = (id) => id,
+	): Event<T> {
 		const fn = (...args: any[]) => result.fire(map(...args));
 		const onFirstListenerAdd = () => emitter.on(eventName, fn);
 		const onLastListenerRemove = () => emitter.removeListener(eventName, fn);
-		const result = new Emitter<T>({ onWillAddFirstListener: onFirstListenerAdd, onDidRemoveLastListener: onLastListenerRemove });
+		const result = new Emitter<T>({
+			onWillAddFirstListener: onFirstListenerAdd,
+			onDidRemoveLastListener: onLastListenerRemove,
+		});
 
 		return result.event;
 	}
@@ -307,7 +332,9 @@ class LeakageMonitor {
 				}
 			}
 
-			console.warn(`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`);
+			console.warn(
+				`[${this.name}] potential listener LEAK detected, having ${listenerCount} listeners already. MOST frequent listener (${topCount}):`,
+			);
 			console.warn(topStack!);
 		}
 
@@ -501,7 +528,10 @@ export class Emitter<T> {
 
 	constructor(options?: EmitterOptions) {
 		this._options = options;
-		this._leakageMon = _globalLeakWarningThreshold > 0 || this._options?.leakWarningThreshold ? new LeakageMonitor(this._options?.leakWarningThreshold ?? _globalLeakWarningThreshold) : undefined;
+		this._leakageMon =
+			_globalLeakWarningThreshold > 0 || this._options?.leakWarningThreshold
+				? new LeakageMonitor(this._options?.leakWarningThreshold ?? _globalLeakWarningThreshold)
+				: undefined;
 		this._perfMon = this._options?._profName ? new EventProfiling(this._options._profName) : undefined;
 		this._deliveryQueue = this._options?.deliveryQueue as EventDeliveryQueuePrivate | undefined;
 	}
@@ -546,7 +576,9 @@ export class Emitter<T> {
 	get event(): Event<T> {
 		this._event ??= (callback: (e: T) => any, thisArgs?: any, disposables?: IDisposable[] | DisposableStore) => {
 			if (this._leakageMon && this._size > this._leakageMon.threshold * 3) {
-				console.warn(`[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`);
+				console.warn(
+					`[${this._leakageMon.name}] REFUSES to accept new listeners because it exceeded its threshold by far`,
+				);
 				return Disposable.None;
 			}
 

@@ -15,7 +15,11 @@ export interface CancellationToken {
 	 *
 	 * @event
 	 */
-	readonly onCancellationRequested: (listener: (e: any) => any, thisArgs?: any, disposables?: IDisposable[]) => IDisposable;
+	readonly onCancellationRequested: (
+		listener: (e: any) => any,
+		thisArgs?: any,
+		disposables?: IDisposable[],
+	) => IDisposable;
 }
 
 const shortcutEvent: Event<any> = Object.freeze(function (callback, context?): IDisposable {
@@ -38,7 +42,10 @@ export namespace CancellationToken {
 		if (!thing || typeof thing !== 'object') {
 			return false;
 		}
-		return typeof (thing as CancellationToken).isCancellationRequested === 'boolean' && typeof (thing as CancellationToken).onCancellationRequested === 'function';
+		return (
+			typeof (thing as CancellationToken).isCancellationRequested === 'boolean' &&
+			typeof (thing as CancellationToken).onCancellationRequested === 'function'
+		);
 	}
 
 	export const None = Object.freeze<CancellationToken>({

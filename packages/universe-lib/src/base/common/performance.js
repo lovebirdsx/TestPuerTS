@@ -52,7 +52,10 @@
 						if (typeof timeOrigin !== 'number') {
 							// safari: there is no timerOrigin but in renderers there is the timing-property
 							// see https://bugs.webkit.org/show_bug.cgi?id=174862
-							timeOrigin = performance.timing.navigationStart || performance.timing.redirectStart || performance.timing.fetchStart;
+							timeOrigin =
+								performance.timing.navigationStart ||
+								performance.timing.redirectStart ||
+								performance.timing.fetchStart;
 						}
 						const result = [{ name: 'code/timeOrigin', startTime: Math.round(timeOrigin) }];
 						for (const entry of performance.getEntriesByType('mark')) {
@@ -68,7 +71,9 @@
 		} else if (typeof process === 'object') {
 			// node.js: use the normal polyfill but add the timeOrigin
 			// from the node perf_hooks API as very first mark
-			const timeOrigin = performance?.timeOrigin ?? Math.round((require.__$__nodeRequire || require)('perf_hooks').performance.timeOrigin);
+			const timeOrigin =
+				performance?.timeOrigin ??
+				Math.round((require.__$__nodeRequire || require)('perf_hooks').performance.timeOrigin);
 			return _definePolyfillMarks(timeOrigin);
 		} else {
 			// unknown environment

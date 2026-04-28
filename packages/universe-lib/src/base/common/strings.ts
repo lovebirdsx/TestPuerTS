@@ -1,6 +1,13 @@
 import { CharCode } from './charCode';
 
-export function compareSubstring(a: string, b: string, aStart: number = 0, aEnd: number = a.length, bStart: number = 0, bEnd: number = b.length): number {
+export function compareSubstring(
+	a: string,
+	b: string,
+	aStart: number = 0,
+	aEnd: number = a.length,
+	bStart: number = 0,
+	bEnd: number = b.length,
+): number {
 	for (; aStart < aEnd && bStart < bEnd; aStart++, bStart++) {
 		const codeA = a.charCodeAt(aStart);
 		const codeB = b.charCodeAt(bStart);
@@ -24,7 +31,14 @@ export function compareIgnoreCase(a: string, b: string): number {
 	return compareSubstringIgnoreCase(a, b, 0, a.length, 0, b.length);
 }
 
-export function compareSubstringIgnoreCase(a: string, b: string, aStart: number = 0, aEnd: number = a.length, bStart: number = 0, bEnd: number = b.length): number {
+export function compareSubstringIgnoreCase(
+	a: string,
+	b: string,
+	aStart: number = 0,
+	aEnd: number = a.length,
+	bStart: number = 0,
+	bEnd: number = b.length,
+): number {
 	for (; aStart < aEnd && bStart < bEnd; aStart++, bStart++) {
 		let codeA = a.charCodeAt(aStart);
 		let codeB = b.charCodeAt(bStart);

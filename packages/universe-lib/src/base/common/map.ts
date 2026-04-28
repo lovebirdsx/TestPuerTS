@@ -44,7 +44,9 @@ class ResourceMapEntry<T> {
 	) {}
 }
 
-function isEntries<T>(arg: ResourceMap<T> | ResourceMapKeyFn | readonly (readonly [URI, T])[] | undefined): arg is readonly (readonly [URI, T])[] {
+function isEntries<T>(
+	arg: ResourceMap<T> | ResourceMapKeyFn | readonly (readonly [URI, T])[] | undefined,
+): arg is readonly (readonly [URI, T])[] {
 	return Array.isArray(arg);
 }
 

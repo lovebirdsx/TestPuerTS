@@ -24,7 +24,11 @@ function detectSystemErrorMessage(exception: any): string {
 	}
 
 	// See https://nodejs.org/api/errors.html#errors_class_system_error
-	if (typeof exception.code === 'string' && typeof exception.errno === 'number' && typeof exception.syscall === 'string') {
+	if (
+		typeof exception.code === 'string' &&
+		typeof exception.errno === 'number' &&
+		typeof exception.syscall === 'string'
+	) {
 		return `A system error occurred (${exception.message})`;
 	}
 

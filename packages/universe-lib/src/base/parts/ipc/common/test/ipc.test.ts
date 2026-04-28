@@ -4,7 +4,19 @@ import { VSBuffer } from '../../../../common/buffer';
 import { CancellationToken, CancellationTokenSource } from '../../../../common/cancellation';
 import { CancellationError, isCancellationError } from '../../../../common/errors';
 import { Emitter, Event } from '../../../../common/event';
-import { BufferReader, BufferWriter, ClientConnectionEvent, deserialize, IChannel, IMessagePassingProtocol, IPCClient, IPCServer, IServerChannel, ProxyChannel, serialize } from '../ipc';
+import {
+	BufferReader,
+	BufferWriter,
+	ClientConnectionEvent,
+	deserialize,
+	IChannel,
+	IMessagePassingProtocol,
+	IPCClient,
+	IPCServer,
+	IServerChannel,
+	ProxyChannel,
+	serialize,
+} from '../ipc';
 
 class QueueProtocol implements IMessagePassingProtocol {
 	private buffering = true;

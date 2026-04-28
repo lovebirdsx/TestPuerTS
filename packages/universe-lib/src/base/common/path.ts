@@ -86,11 +86,18 @@ function isPosixPathSeparator(code: number | undefined) {
 }
 
 function isWindowsDeviceRoot(code: number) {
-	return (code >= CHAR_UPPERCASE_A && code <= CHAR_UPPERCASE_Z) || (code >= CHAR_LOWERCASE_A && code <= CHAR_LOWERCASE_Z);
+	return (
+		(code >= CHAR_UPPERCASE_A && code <= CHAR_UPPERCASE_Z) || (code >= CHAR_LOWERCASE_A && code <= CHAR_LOWERCASE_Z)
+	);
 }
 
 // Resolves . and .. elements in a path with directory names
-function normalizeString(path: string, allowAboveRoot: boolean, separator: string, isPathSeparator: (code?: number) => boolean) {
+function normalizeString(
+	path: string,
+	allowAboveRoot: boolean,
+	separator: string,
+	isPathSeparator: (code?: number) => boolean,
+) {
 	let res = '';
 	let lastSegmentLength = 0;
 	let lastSlash = -1;
@@ -109,7 +116,12 @@ function normalizeString(path: string, allowAboveRoot: boolean, separator: strin
 			if (lastSlash === i - 1 || dots === 1) {
 				// NOOP
 			} else if (dots === 2) {
-				if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== CHAR_DOT || res.charCodeAt(res.length - 2) !== CHAR_DOT) {
+				if (
+					res.length < 2 ||
+					lastSegmentLength !== 2 ||
+					res.charCodeAt(res.length - 1) !== CHAR_DOT ||
+					res.charCodeAt(res.length - 2) !== CHAR_DOT
+				) {
 					if (res.length > 2) {
 						const lastSlashIndex = res.lastIndexOf(separator);
 						if (lastSlashIndex === -1) {
@@ -218,7 +230,11 @@ export const win32: IPath = {
 
 				// Verify that a cwd was found and that it actually points
 				// to our drive. If not, default to the drive's root.
-				if (path === undefined || (path.slice(0, 2).toLowerCase() !== resolvedDevice.toLowerCase() && path.charCodeAt(2) === CHAR_BACKWARD_SLASH)) {
+				if (
+					path === undefined ||
+					(path.slice(0, 2).toLowerCase() !== resolvedDevice.toLowerCase() &&
+						path.charCodeAt(2) === CHAR_BACKWARD_SLASH)
+				) {
 					path = `${resolvedDevice}\\`;
 				}
 			}
@@ -421,7 +437,10 @@ export const win32: IPath = {
 		return (
 			isPathSeparator(code) ||
 			// Possible device root
-			(len > 2 && isWindowsDeviceRoot(code) && path.charCodeAt(1) === CHAR_COLON && isPathSeparator(path.charCodeAt(2)))
+			(len > 2 &&
+				isWindowsDeviceRoot(code) &&
+				path.charCodeAt(1) === CHAR_COLON &&
+				isPathSeparator(path.charCodeAt(2)))
 		);
 	},
 
@@ -636,7 +655,11 @@ export const win32: IPath = {
 					return `\\\\?\\UNC\\${resolvedPath.slice(2)}`;
 				}
 			}
-		} else if (isWindowsDeviceRoot(resolvedPath.charCodeAt(0)) && resolvedPath.charCodeAt(1) === CHAR_COLON && resolvedPath.charCodeAt(2) === CHAR_BACKWARD_SLASH) {
+		} else if (
+			isWindowsDeviceRoot(resolvedPath.charCodeAt(0)) &&
+			resolvedPath.charCodeAt(1) === CHAR_COLON &&
+			resolvedPath.charCodeAt(2) === CHAR_BACKWARD_SLASH
+		) {
 			// Matched device root, convert the path to a long UNC path
 			return `\\\\?\\${resolvedPath}`;
 		}

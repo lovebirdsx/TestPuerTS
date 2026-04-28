@@ -68,13 +68,23 @@ export namespace SocketDiagnostics {
 		return socketIds.get(nativeObject)!;
 	}
 
-	export function traceSocketEvent(nativeObject: any, socketDebugLabel: string, type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void {
+	export function traceSocketEvent(
+		nativeObject: any,
+		socketDebugLabel: string,
+		type: SocketDiagnosticsEventType,
+		data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+	): void {
 		if (!enableDiagnostics) {
 			return;
 		}
 		const id = getSocketId(nativeObject, socketDebugLabel);
 
-		if (data instanceof VSBuffer || data instanceof Uint8Array || data instanceof ArrayBuffer || ArrayBuffer.isView(data)) {
+		if (
+			data instanceof VSBuffer ||
+			data instanceof Uint8Array ||
+			data instanceof ArrayBuffer ||
+			ArrayBuffer.isView(data)
+		) {
 			const copiedData = VSBuffer.alloc(data.byteLength);
 			copiedData.set(data);
 			records.push({ timestamp: Date.now(), id, label: socketDebugLabel, type, buff: copiedData });
@@ -144,7 +154,10 @@ export interface ISocket extends IDisposable {
 	end(): void;
 	drain(): Promise<void>;
 
-	traceSocketEvent(type: SocketDiagnosticsEventType, data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any): void;
+	traceSocketEvent(
+		type: SocketDiagnosticsEventType,
+		data?: VSBuffer | Uint8Array | ArrayBuffer | ArrayBufferView | any,
+	): void;
 }
 
 let emptyBuffer: VSBuffer | null = null;
@@ -372,7 +385,12 @@ class ProtocolReader extends Disposable {
 				this._state.id = buff.readUInt32BE(1);
 				this._state.ack = buff.readUInt32BE(5);
 
-				this._socket.traceSocketEvent(SocketDiagnosticsEventType.ProtocolHeaderRead, { messageType: protocolMessageTypeToString(this._state.messageType), id: this._state.id, ack: this._state.ack, messageSize: this._state.readLen });
+				this._socket.traceSocketEvent(SocketDiagnosticsEventType.ProtocolHeaderRead, {
+					messageType: protocolMessageTypeToString(this._state.messageType),
+					id: this._state.id,
+					ack: this._state.ack,
+					messageSize: this._state.readLen,
+				});
 			} else {
 				// buff is the body
 				const messageType = this._state.messageType;
@@ -467,7 +485,12 @@ class ProtocolWriter {
 		header.writeUInt32BE(msg.ack, 5);
 		header.writeUInt32BE(msg.data.byteLength, 9);
 
-		this._socket.traceSocketEvent(SocketDiagnosticsEventType.ProtocolHeaderWrite, { messageType: protocolMessageTypeToString(msg.type), id: msg.id, ack: msg.ack, messageSize: msg.data.byteLength });
+		this._socket.traceSocketEvent(SocketDiagnosticsEventType.ProtocolHeaderWrite, {
+			messageType: protocolMessageTypeToString(msg.type),
+			id: msg.id,
+			ack: msg.ack,
+			messageSize: msg.data.byteLength,
+		});
 		this._socket.traceSocketEvent(SocketDiagnosticsEventType.ProtocolMessageWrite, msg.data);
 
 		this._writeSoon(header, msg.data);
@@ -1005,7 +1028,9 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 						if (now - this._lastReplayRequestTime > 10000) {
 							// send a replay request at most once every 10s
 							this._lastReplayRequestTime = now;
-							this._socketWriter.write(new ProtocolMessage(ProtocolMessageType.ReplayRequest, 0, 0, getEmptyBuffer()));
+							this._socketWriter.write(
+								new ProtocolMessage(ProtocolMessageType.ReplayRequest, 0, 0, getEmptyBuffer()),
+							);
 						}
 					} else {
 						this._incomingMsgId = msg.id;
@@ -1131,7 +1156,11 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 		const timeSinceLastReceivedSomeData = Date.now() - this._socketReader.lastReadTime;
 		const timeSinceLastTimeout = Date.now() - this._lastSocketTimeoutTime;
 
-		if (timeSinceOldestUnacknowledgedMsg >= ProtocolConstants.TimeoutTime && timeSinceLastReceivedSomeData >= ProtocolConstants.TimeoutTime && timeSinceLastTimeout >= ProtocolConstants.TimeoutTime) {
+		if (
+			timeSinceOldestUnacknowledgedMsg >= ProtocolConstants.TimeoutTime &&
+			timeSinceLastReceivedSomeData >= ProtocolConstants.TimeoutTime &&
+			timeSinceLastTimeout >= ProtocolConstants.TimeoutTime
+		) {
 			// It's been a long time since our sent message was acknowledged
 			// and a long time since we received some data
 
@@ -1148,7 +1177,12 @@ export class PersistentProtocol implements IMessagePassingProtocol {
 			}
 		}
 
-		const minimumTimeUntilTimeout = Math.max(ProtocolConstants.TimeoutTime - timeSinceOldestUnacknowledgedMsg, ProtocolConstants.TimeoutTime - timeSinceLastReceivedSomeData, ProtocolConstants.TimeoutTime - timeSinceLastTimeout, 500);
+		const minimumTimeUntilTimeout = Math.max(
+			ProtocolConstants.TimeoutTime - timeSinceOldestUnacknowledgedMsg,
+			ProtocolConstants.TimeoutTime - timeSinceLastReceivedSomeData,
+			ProtocolConstants.TimeoutTime - timeSinceLastTimeout,
+			500,
+		);
 
 		this._outgoingAckTimeout = setTimeout(() => {
 			this._outgoingAckTimeout = null;

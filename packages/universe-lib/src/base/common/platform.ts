@@ -83,7 +83,12 @@ if (typeof navigator === 'object' && !isElectronRenderer) {
 	_userAgent = navigator.userAgent;
 	_isWindows = _userAgent.indexOf('Windows') >= 0;
 	_isMacintosh = _userAgent.indexOf('Macintosh') >= 0;
-	_isIOS = (_userAgent.indexOf('Macintosh') >= 0 || _userAgent.indexOf('iPad') >= 0 || _userAgent.indexOf('iPhone') >= 0) && !!navigator.maxTouchPoints && navigator.maxTouchPoints > 0;
+	_isIOS =
+		(_userAgent.indexOf('Macintosh') >= 0 ||
+			_userAgent.indexOf('iPad') >= 0 ||
+			_userAgent.indexOf('iPhone') >= 0) &&
+		!!navigator.maxTouchPoints &&
+		navigator.maxTouchPoints > 0;
 	_isLinux = _userAgent.indexOf('Linux') >= 0;
 	_isMobile = _userAgent?.indexOf('Mobi') >= 0;
 	_isWeb = true;
@@ -271,7 +276,8 @@ export const enum OperatingSystem {
 	Macintosh = 2,
 	Linux = 3,
 }
-export const OS = _isMacintosh || _isIOS ? OperatingSystem.Macintosh : _isWindows ? OperatingSystem.Windows : OperatingSystem.Linux;
+export const OS =
+	_isMacintosh || _isIOS ? OperatingSystem.Macintosh : _isWindows ? OperatingSystem.Windows : OperatingSystem.Linux;
 
 let _isLittleEndian = true;
 let _isLittleEndianComputed = false;

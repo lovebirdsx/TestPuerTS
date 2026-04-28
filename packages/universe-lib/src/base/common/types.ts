@@ -26,7 +26,13 @@ export function isObject(obj: unknown): obj is Object {
 	// The method can't do a type cast since there are type (like strings) which
 	// are subclasses of any put not positvely matched by the function. Hence type
 	// narrowing results in wrong results.
-	return typeof obj === 'object' && obj !== null && !Array.isArray(obj) && !(obj instanceof RegExp) && !(obj instanceof Date);
+	return (
+		typeof obj === 'object' &&
+		obj !== null &&
+		!Array.isArray(obj) &&
+		!(obj instanceof RegExp) &&
+		!(obj instanceof Date)
+	);
 }
 
 /**
@@ -101,8 +107,17 @@ export function assertIsDefined<T>(arg: T | null | undefined): T {
  * Asserts that each argument passed in is neither undefined nor null.
  */
 export function assertAllDefined<T1, T2>(t1: T1 | null | undefined, t2: T2 | null | undefined): [T1, T2];
-export function assertAllDefined<T1, T2, T3>(t1: T1 | null | undefined, t2: T2 | null | undefined, t3: T3 | null | undefined): [T1, T2, T3];
-export function assertAllDefined<T1, T2, T3, T4>(t1: T1 | null | undefined, t2: T2 | null | undefined, t3: T3 | null | undefined, t4: T4 | null | undefined): [T1, T2, T3, T4];
+export function assertAllDefined<T1, T2, T3>(
+	t1: T1 | null | undefined,
+	t2: T2 | null | undefined,
+	t3: T3 | null | undefined,
+): [T1, T2, T3];
+export function assertAllDefined<T1, T2, T3, T4>(
+	t1: T1 | null | undefined,
+	t2: T2 | null | undefined,
+	t3: T3 | null | undefined,
+	t4: T4 | null | undefined,
+): [T1, T2, T3, T4];
 export function assertAllDefined(...args: (unknown | null | undefined)[]): unknown[] {
 	const result = [];
 
@@ -180,11 +195,15 @@ export function validateConstraint(arg: unknown, constraint: TypeConstraint | un
 		if (constraint.length === 1 && constraint.call(undefined, arg) === true) {
 			return;
 		}
-		throw new Error(`argument does not match one of these constraints: arg instanceof constraint, arg.constructor === constraint, nor constraint(arg) === true`);
+		throw new Error(
+			`argument does not match one of these constraints: arg instanceof constraint, arg.constructor === constraint, nor constraint(arg) === true`,
+		);
 	}
 }
 
-type AddFirstParameterToFunction<T, TargetFunctionsReturnType, FirstParameter> = T extends (...args: any[]) => TargetFunctionsReturnType
+type AddFirstParameterToFunction<T, TargetFunctionsReturnType, FirstParameter> = T extends (
+	...args: any[]
+) => TargetFunctionsReturnType
 	? // Function: add param to function
 		(firstArg: FirstParameter, ...args: Parameters<T>) => ReturnType<T>
 	: // Else: just leave as is

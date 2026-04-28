@@ -10,7 +10,9 @@ const _doubleSlashStart = /^\/\//;
 function _validateUri(ret: URI, _strict?: boolean): void {
 	// scheme, must be set
 	if (!ret.scheme && _strict) {
-		throw new Error(`[UriError]: Scheme is missing: {scheme: "", authority: "${ret.authority}", path: "${ret.path}", query: "${ret.query}", fragment: "${ret.fragment}"}`);
+		throw new Error(
+			`[UriError]: Scheme is missing: {scheme: "", authority: "${ret.authority}", path: "${ret.path}", query: "${ret.query}", fragment: "${ret.fragment}"}`,
+		);
 	}
 
 	// scheme, https://tools.ietf.org/html/rfc3986#section-3.1
@@ -27,11 +29,15 @@ function _validateUri(ret: URI, _strict?: boolean): void {
 	if (ret.path) {
 		if (ret.authority) {
 			if (!_singleSlashStart.test(ret.path)) {
-				throw new Error('[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character');
+				throw new Error(
+					'[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character',
+				);
 			}
 		} else {
 			if (_doubleSlashStart.test(ret.path)) {
-				throw new Error('[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")');
+				throw new Error(
+					'[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")',
+				);
 			}
 		}
 	}
@@ -138,7 +144,14 @@ export class URI implements UriComponents {
 	/**
 	 * @internal
 	 */
-	protected constructor(scheme: string, authority?: string, path?: string, query?: string, fragment?: string, _strict?: boolean);
+	protected constructor(
+		scheme: string,
+		authority?: string,
+		path?: string,
+		query?: string,
+		fragment?: string,
+		_strict?: boolean,
+	);
 
 	/**
 	 * @internal
@@ -148,7 +161,14 @@ export class URI implements UriComponents {
 	/**
 	 * @internal
 	 */
-	protected constructor(schemeOrData: string | UriComponents, authority?: string, path?: string, query?: string, fragment?: string, _strict: boolean = false) {
+	protected constructor(
+		schemeOrData: string | UriComponents,
+		authority?: string,
+		path?: string,
+		query?: string,
+		fragment?: string,
+		_strict: boolean = false,
+	) {
 		if (typeof schemeOrData === 'object') {
 			this.scheme = schemeOrData.scheme || _empty;
 			this.authority = schemeOrData.authority || _empty;
@@ -204,7 +224,13 @@ export class URI implements UriComponents {
 
 	// ---- modify to new -------------------------
 
-	with(change: { scheme?: string; authority?: string | null; path?: string | null; query?: string | null; fragment?: string | null }): URI {
+	with(change: {
+		scheme?: string;
+		authority?: string | null;
+		path?: string | null;
+		query?: string | null;
+		fragment?: string | null;
+	}): URI {
 		if (!change) {
 			return this;
 		}
@@ -236,7 +262,13 @@ export class URI implements UriComponents {
 			fragment = _empty;
 		}
 
-		if (scheme === this.scheme && authority === this.authority && path === this.path && query === this.query && fragment === this.fragment) {
+		if (
+			scheme === this.scheme &&
+			authority === this.authority &&
+			path === this.path &&
+			query === this.query &&
+			fragment === this.fragment
+		) {
 			return this;
 		}
 
@@ -256,7 +288,14 @@ export class URI implements UriComponents {
 		if (!match) {
 			return new Uri(_empty, _empty, _empty, _empty, _empty);
 		}
-		return new Uri(match[2] || _empty, percentDecode(match[4] || _empty), percentDecode(match[5] || _empty), percentDecode(match[7] || _empty), percentDecode(match[9] || _empty), _strict);
+		return new Uri(
+			match[2] || _empty,
+			percentDecode(match[4] || _empty),
+			percentDecode(match[5] || _empty),
+			percentDecode(match[7] || _empty),
+			percentDecode(match[9] || _empty),
+			_strict,
+		);
 	}
 
 	/**
@@ -314,7 +353,14 @@ export class URI implements UriComponents {
 	 * user input, command arguments etc
 	 */
 	static from(components: UriComponents, strict?: boolean): URI {
-		const result = new Uri(components.scheme, components.authority, components.path, components.query, components.fragment, strict);
+		const result = new Uri(
+			components.scheme,
+			components.authority,
+			components.path,
+			components.query,
+			components.fragment,
+			strict,
+		);
 		return result;
 	}
 
@@ -401,7 +447,8 @@ export function isUriComponents(thing: any): thing is UriComponents {
 	}
 	return (
 		typeof (<UriComponents>thing).scheme === 'string' &&
-		(typeof (<UriComponents>thing).authority === 'string' || typeof (<UriComponents>thing).authority === 'undefined') &&
+		(typeof (<UriComponents>thing).authority === 'string' ||
+			typeof (<UriComponents>thing).authority === 'undefined') &&
 		(typeof (<UriComponents>thing).path === 'string' || typeof (<UriComponents>thing).path === 'undefined') &&
 		(typeof (<UriComponents>thing).query === 'string' || typeof (<UriComponents>thing).query === 'undefined') &&
 		(typeof (<UriComponents>thing).fragment === 'string' || typeof (<UriComponents>thing).fragment === 'undefined')
@@ -591,7 +638,8 @@ export function uriToFsPath(uri: URI, keepDriveLetterCasing: boolean): string {
 		value = `//${uri.authority}${uri.path}`;
 	} else if (
 		uri.path.charCodeAt(0) === CharCode.Slash &&
-		((uri.path.charCodeAt(1) >= CharCode.A && uri.path.charCodeAt(1) <= CharCode.Z) || (uri.path.charCodeAt(1) >= CharCode.a && uri.path.charCodeAt(1) <= CharCode.z)) &&
+		((uri.path.charCodeAt(1) >= CharCode.A && uri.path.charCodeAt(1) <= CharCode.Z) ||
+			(uri.path.charCodeAt(1) >= CharCode.a && uri.path.charCodeAt(1) <= CharCode.z)) &&
 		uri.path.charCodeAt(2) === CharCode.Colon
 	) {
 		if (!keepDriveLetterCasing) {

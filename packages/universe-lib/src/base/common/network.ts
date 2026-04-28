@@ -241,7 +241,11 @@ export namespace COI {
 	 * Add the `vscode-coi` query attribute based on wanting `COOP` and `COEP`. Will be a noop when `crossOriginIsolated`
 	 * isn't enabled the current context
 	 */
-	export function addSearchParam(urlOrSearch: URLSearchParams | Record<string, string>, coop: boolean, coep: boolean): void {
+	export function addSearchParam(
+		urlOrSearch: URLSearchParams | Record<string, string>,
+		coop: boolean,
+		coep: boolean,
+	): void {
 		if (!(<any>globalThis).crossOriginIsolated) {
 			// depends on the current context being COI
 			return;

@@ -20,7 +20,10 @@ npm run check          # typecheck + lint + test
 
 ### 模块导出结构
 
-- `src/index.ts` — 统一入口，合并 base（Node 版）和 platform 的全部导出
+- `src/index.ts` — 根入口，只导出稳定的 common API
+- `src/common.ts` — 显式 common 入口
+- `src/node.ts` — Node 入口，导出 common + node IPC
+- `src/platform.ts` — 平台服务入口
 - `src/base/` — 基础工具层：
   - `index.common.ts` — 跨平台公共导出（uri、event、async、lifecycle、ipc 等）
   - `index.browser.ts` — 浏览器环境（= common）

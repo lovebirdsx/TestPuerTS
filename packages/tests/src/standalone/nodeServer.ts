@@ -2,7 +2,8 @@
  * Node.js 独立进程：启动命名管道 RPC Server。
  * 等待 PuerTS 端 (rpcClientMain) 作为 Client 连接并调用 RPC。
  */
-import { serve, ProxyChannel } from '@universe/lib';
+import { ProxyChannel } from '@universe/lib';
+import { serve } from '@universe/lib/node';
 import { PIPE_NAME, CHANNEL_NAME } from './shared';
 import { CalculatorService } from '../ipc/testService';
 

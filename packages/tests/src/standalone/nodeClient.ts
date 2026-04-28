@@ -2,7 +2,8 @@
  * Node.js 独立进程：作为 RPC Client 连接到 PuerTS 端的 Server。
  * PuerTS 端由 rpcServerMain 运行。
  */
-import { connect, ProxyChannel } from '@universe/lib';
+import { ProxyChannel } from '@universe/lib';
+import { connect } from '@universe/lib/node';
 import { PIPE_NAME, CHANNEL_NAME } from './shared';
 import type { ICalculatorService } from '../ipc/testService';
 
