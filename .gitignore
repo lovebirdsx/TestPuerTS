@@ -1,3 +1,11 @@
+# Ignore Unreal VsCode files
+.vscode/compileCommands_Default
+.vscode/compileCommands_TestPuerTS
+.vscode/c_cpp_properties.json
+.vscode/compileCommands_Default.json
+.vscode/compileCommands_TestPuerTS.json
+TestPuerTS.code-workspace
+
 # Ignore binary files
 *.exe
 *.dll

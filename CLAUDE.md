@@ -39,7 +39,7 @@ packages/                     # npm 工作区（yarn/npm）
       common/exec.ts          # exec 辅助函数，带输出格式化
       common/util.ts          # 文件工具函数、颜色辅助函数
       packages/               # 按包定义的 gulp 任务
-        ue.ts                 # ue:build, ue:test, ue:gen_typing, ue:build:watch, ue:build:clean
+        ue.ts                 # ue:build, ue:gen_vscode_settings, ue:test, ue:gen_typing, ue:build:watch, ue:build:clean
         editor.ts             # editor:build, editor:watch, editor:test, editor:lint
         tests.ts              # tests:build, tests:watch, tests:rpc-server-test, tests:rpc-client-test
         tool.ts               # tool:build, tool:watch, tool:test, tool:lint
@@ -48,10 +48,12 @@ packages/                     # npm 工作区（yarn/npm）
 ## 常用命令
 
 ```bash
-npm run dev                     # = gulp dev：构建 C++ 和测试，然后启动所有监听器
-npm run watch                   # = gulp watch：启动所有监听器，不进行初始构建
+npm ci                          # 安装依赖；postinstall 会编译 tool、构建 UE，并生成 VS Code C++ 配置
+npm run dev                     # 监听 tool 源码变更，自动重编译后执行 gulp dev
+npx gulp watch                  # 启动所有监听器，不进行初始构建
 
 # 单独的 gulp 任务
+npx gulp ue:gen_vscode_settings # 通过 UnrealBuildTool 生成 .vscode/c_cpp_properties.json 和 compileCommands_*.json
 npx gulp ue:build               # 通过 Build.bat 编译 C++
 npx gulp ue:test                # 通过 PuertsTestCommandlet 运行 JS 测试（无需编辑器）
 npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts 类型定义
@@ -75,7 +77,7 @@ npx gulp tool:tsc-check         # 类型检查 + 循环依赖检查（madge）
 ## 架构说明
 
 - **Gulp 任务编排**：任务按包定义在 `packages/tool/src/packages/` 中，在 `gulpfile.ts` 中组合。
-- **`dev` 任务**解决冷启动问题：并行运行 `ue:build` + `tests:build`，然后启动 `watch`。
+- **根目录启动流程**：`npm run dev` 通过 `nodemon` 监听 `packages/tool/src`，变更后先执行 `gulp tool:build`，再执行 `gulp dev --verbose`；`gulp dev` 本身会先运行 `ue:build`，随后启动 `watch`。
 - **`ue:build:watch`** 使用两个独立的 `gulp.watch` 实例：头文件（`.h`）触发构建 + gen_typing；其他文件（`.cpp`、`.cs`、`.uplugin`、`.uproject`）仅触发构建。排除 `**/Intermediate/**` 和 `**/Binaries/**`。
 - **`tests:watch`** 启动 `tsc -w`，解析 stdout 中的 "Found 0 errors"，然后自动触发 `ue:test`。
 - **引擎路径解析**：`ue.ts` 中的 `getEngineRoot()` 读取 `.uproject` 的 EngineAssociation，从 `LauncherInstalled.dat` 查找安装路径。

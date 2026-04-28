@@ -10,7 +10,7 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "cd packages/tool && tsc",
+    "postinstall": "cd packages/tool && tsc && gulp ue:build --verbose && gulp ue:gen_vscode_settings --verbose",
     "tool:build": "cd packages/tool && tsc",
     "dev": "nodemon -w packages/tool/src -e ts -x \"gulp tool:build && gulp dev --verbose\""
   },

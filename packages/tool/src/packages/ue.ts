@@ -47,6 +47,16 @@ export function getEngineRoot(): string {
 	return entry.InstallLocation;
 }
 
+function getUnrealBuildToolPath(): string {
+	const engineRoot = getEngineRoot();
+	const unrealBuildTool = path.join(engineRoot, 'Engine', 'Binaries', 'DotNET', 'UnrealBuildTool', 'UnrealBuildTool.exe');
+	if (!fs.existsSync(unrealBuildTool)) {
+		throw new Error(`UnrealBuildTool.exe not found: ${unrealBuildTool}`);
+	}
+
+	return unrealBuildTool;
+}
+
 function getBuildBatPath(): string {
 	const engineRoot = getEngineRoot();
 	const buildBat = path.join(engineRoot, 'Engine', 'Build', 'BatchFiles', 'Build.bat');
@@ -67,6 +77,18 @@ gulp.task('ue:build', async () => {
 		formatText: formatCSharpOutput,
 	});
 	info(green('[ue:build] Build completed successfully'));
+});
+
+gulp.task('ue:gen_vscode_settings', async () => {
+	const unrealBuildTool = getUnrealBuildToolPath();
+	const cmd = `"${unrealBuildTool}" -ProjectFiles -VSCode -Project="${uprojectPath}" -Game -Engine`;
+	info(`[ue:gen_vscode_settings] ${cmd}`);
+	await exec(cmd, {
+		workingDir: projectRoot,
+		originalLog: true,
+		formatText: formatCSharpOutput,
+	});
+	info(green('[ue:gen_vscode_settings] VS Code settings generated successfully'));
 });
 
 export function getEditorCmdPath(): string {
