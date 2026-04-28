@@ -1,8 +1,17 @@
+import './puertsPolyfill';
 import * as UE from 'ue';
+import { runTests } from './testRunner';
 
-console.log('=== PuerTS Commandlet Test Runner ===');
-console.log('可用的测试模块:');
-console.log('  -module=tests/rpcClientMain  → PuerTS 作为 Client，Node.js 作为 Server');
-console.log('  -module=tests/rpcServerMain  → PuerTS 作为 Server，Node.js 作为 Client');
+// 导入测试文件（describe 在导入时注册）
+import './ipc/rpcClient.test';
+import './ipc/rpcServer.test';
 
-UE.PuertsTestHelper.MarkTestDone(0);
+async function main() {
+	const filter = UE.PuertsTestHelper.GetTestFilter() || undefined;
+	const exitCode = await runTests(filter);
+
+	console.log(`=== 测试结束，退出码: ${exitCode} ===`);
+	UE.PuertsTestHelper.MarkTestDone(exitCode);
+}
+
+main();

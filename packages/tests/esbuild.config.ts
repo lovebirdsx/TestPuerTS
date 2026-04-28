@@ -5,7 +5,7 @@ const nodeBuiltins = module.builtinModules.flatMap((m) => [m, `node:${m}`]);
 
 // PuerTS 入口：bundle @universe/lib，external ue/puerts/node builtins
 export const puertsConfig: esbuild.BuildOptions = {
-	entryPoints: ['src/main.ts', 'src/rpcClientMain.ts', 'src/rpcServerMain.ts'],
+	entryPoints: ['src/main.ts'],
 	bundle: true,
 	platform: 'node',
 	target: 'es2022',

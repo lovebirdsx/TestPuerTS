@@ -82,31 +82,46 @@ export class UeIpcSocket implements ISocket {
 
 /**
  * 创建 UIPCTransport 并连接到指定管道（客户端模式）。
+ * 支持重试，等待服务端就绪。
  */
-export function connectUeIpc(pipeName: string): Promise<UeIpcSocket> {
+export function connectUeIpc(pipeName: string, timeoutMs = 15000): Promise<UeIpcSocket> {
 	return new Promise<UeIpcSocket>((resolve, reject) => {
-		const transport = new UE.IPCTransport();
 		let resolved = false;
+		const startTime = Date.now();
 
-		transport.OnConnected.Add(() => {
-			if (!resolved) {
+		const tryConnect = () => {
+			if (resolved) return;
+
+			if (Date.now() - startTime > timeoutMs) {
+				reject(new Error(`Connect to ${pipeName} timed out`));
+				return;
+			}
+
+			const transport = new UE.IPCTransport();
+
+			transport.OnConnected.Add(() => {
+				if (!resolved) {
+					resolved = true;
+					resolve(new UeIpcSocket(transport));
+				}
+			});
+
+			transport.Connect(pipeName);
+
+			if (!resolved && transport.IsConnected()) {
 				resolved = true;
 				resolve(new UeIpcSocket(transport));
+				return;
 			}
-		});
 
-		transport.Connect(pipeName);
-
-		if (!resolved && transport.IsConnected()) {
-			resolved = true;
-			resolve(new UeIpcSocket(transport));
-		}
-
-		setTimeout(() => {
+			// 如果连接未建立，短暂等待后重试
 			if (!resolved) {
-				reject(new Error(`Connect to ${pipeName} timed out`));
+				transport.Close();
+				setTimeout(() => tryConnect(), 500);
 			}
-		}, 10000);
+		};
+
+		tryConnect();
 	});
 }
 

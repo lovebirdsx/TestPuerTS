@@ -34,9 +34,16 @@ int32 UPuertsTestCommandlet::Main(const FString& Params)
 		TimeoutSeconds = FCString::Atod(*ParamMap[TEXT("timeout")]);
 	}
 
-	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Running module '%s' (timeout=%.0fs)"), *ModuleName, TimeoutSeconds);
+	FString TestFilter;
+	if (ParamMap.Contains(TEXT("test")))
+	{
+		TestFilter = ParamMap[TEXT("test")];
+	}
+
+	UE_LOG(LogPuertsTest, Display, TEXT("PuertsTest: Running module '%s' (timeout=%.0fs, test='%s')"), *ModuleName, TimeoutSeconds, *TestFilter);
 
 	UPuertsTestHelper::Reset();
+	UPuertsTestHelper::TestFilter = TestFilter;
 
 	{
 		puerts::FJsEnv JsEnv(

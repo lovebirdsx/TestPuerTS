@@ -75481,6 +75481,26 @@ declare module "ue" {
          *JS 测试完成时调用此方法，Commandlet 的 tick 循环会检测此标志
          */
         static MarkTestDone(ExitCode?: number /* = 0 */) : void;
+        /*
+         *获取测试过滤器（通过 -test=X 命令行参数设置）
+         */
+        static GetTestFilter() : string;
+        /*
+         *启动外部进程，返回进程 ID（失败返回 -1）
+         */
+        static SpawnProcess(Executable: string, Args: string, WorkingDir: string) : number;
+        /*
+         *检查进程是否仍在运行
+         */
+        static IsProcessRunning(ProcessId: number) : boolean;
+        /*
+         *终止进程
+         */
+        static KillProcess(ProcessId: number) : void;
+        /*
+         *获取 UE 项目根目录绝对路径
+         */
+        static GetProjectDir() : string;
         static StaticClass(): Class;
         static Find(OrigInName: string, Outer?: Object): PuertsTestHelper;
         static Load(InName: string): PuertsTestHelper;
