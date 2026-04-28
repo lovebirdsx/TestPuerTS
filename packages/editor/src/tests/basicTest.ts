@@ -1,5 +1,5 @@
 import * as UE from 'ue';
-import { $ref, $unref, $set, argv, on, toManualReleaseDelegate, releaseManualReleaseDelegate, blueprint } from 'puerts';
+import { $ref, $unref, $set, argv, on, toManualReleaseDelegate, releaseManualReleaseDelegate } from 'puerts';
 
 export function basicTest() {
 	const obj = new UE.MainObject();
@@ -115,7 +115,10 @@ export function basicTest() {
 	const fullView = new Uint8Array(ab);
 	obj.ArrayBufferTest(fullView.buffer);
 	const partialView = new Uint8Array(ab, 5);
-	const partialBuffer = partialView.buffer.slice(partialView.byteOffset, partialView.byteOffset + partialView.byteLength);
+	const partialBuffer = partialView.buffer.slice(
+		partialView.byteOffset,
+		partialView.byteOffset + partialView.byteLength,
+	);
 	const ab2 = obj.ArrayBufferTest(partialBuffer);
 	const u8a2 = new Uint8Array(ab2);
 	console.log(u8a2.length);
@@ -127,7 +130,11 @@ export function basicTest() {
 	console.log('--------------------------14--------------------------');
 	//在FJsEnv启动，调用Start时传入的参数可以通过argv获取。如果是继承ue类方式，这里的argv是空的
 	const gameInstance = argv.getByName('GameInstance') as UE.GameInstance;
-	const actor = UE.GameplayStatics.BeginDeferredActorSpawnFromClass(gameInstance, UE.MainActor.StaticClass(), undefined) as UE.MainActor;
+	const actor = UE.GameplayStatics.BeginDeferredActorSpawnFromClass(
+		gameInstance,
+		UE.MainActor.StaticClass(),
+		undefined,
+	) as UE.MainActor;
 	UE.GameplayStatics.FinishSpawningActor(actor, undefined);
 	console.log(actor.GetName());
 	console.log(actor.K2_GetActorLocation().ToString());

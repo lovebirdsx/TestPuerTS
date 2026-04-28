@@ -3,9 +3,14 @@
   "compilerOptions": {
     "composite": false,
     "declaration": false,
-    "outDir": "./out"
+    "skipLibCheck": true,
+    "outDir": "./out",
+    "rootDir": "./src"
   },
+	"include": [
+		"src/**/*"
+	],
 	"exclude": [
-		"./out",
+		"src/**/*.test.ts"
 	]
 }

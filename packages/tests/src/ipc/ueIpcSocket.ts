@@ -49,10 +49,11 @@ export class UeIpcSocket implements ISocket {
 		if (this.disposed) return;
 		// VSBuffer → ArrayBuffer → C++ SendBuffer(FArrayBuffer)
 		const uint8 = buffer.buffer;
-		const ab = uint8.byteOffset === 0 && uint8.byteLength === uint8.buffer.byteLength
-			? uint8.buffer
-			: uint8.buffer.slice(uint8.byteOffset, uint8.byteOffset + uint8.byteLength);
-		this.transport.SendBuffer(ab);
+		const ab =
+			uint8.byteOffset === 0 && uint8.byteLength === uint8.buffer.byteLength
+				? uint8.buffer
+				: uint8.buffer.slice(uint8.byteOffset, uint8.byteOffset + uint8.byteLength);
+		this.transport.SendBuffer(ab as ArrayBuffer);
 	}
 
 	end(): void {

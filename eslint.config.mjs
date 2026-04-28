@@ -1,6 +1,10 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+
+const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
 
 // 配置参考：https://eslint.org/docs/latest/use/configure/configuration-files
 export default tseslint.config(
@@ -22,6 +26,11 @@ export default tseslint.config(
 	{
 		files: ['**/*.{ts,tsx,js,mjs}'],
 		extends: [eslint.configs.recommended, ...tseslint.configs.recommended],
+		languageOptions: {
+			parserOptions: {
+				tsconfigRootDir,
+			},
+		},
 		rules: {
 			'@typescript-eslint/no-unsafe-declaration-merging': 'off',
 			'no-constant-condition': 'off',
@@ -46,6 +55,13 @@ export default tseslint.config(
 					ignoreRestSiblings: true,
 				},
 			],
+		},
+	},
+
+	{
+		files: ['**/*.test.ts'],
+		rules: {
+			'@typescript-eslint/no-unused-expressions': 'off',
 		},
 	},
 

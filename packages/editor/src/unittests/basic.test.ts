@@ -46,7 +46,10 @@ suite('Basic', () => {
 		assert.strictEqual(obj.DefaultTest(), 'Str: i am default, I: 10, Vec: X=1.100 Y=2.200 Z=3.300');
 		assert.strictEqual(obj.DefaultTest('custom'), 'Str: custom, I: 10, Vec: X=1.100 Y=2.200 Z=3.300');
 		assert.strictEqual(obj.DefaultTest('custom', 20), 'Str: custom, I: 20, Vec: X=1.100 Y=2.200 Z=3.300');
-		assert.strictEqual(obj.DefaultTest('custom', 20, new ue.Vector(4, 5, 6)), 'Str: custom, I: 20, Vec: X=4.000 Y=5.000 Z=6.000');
+		assert.strictEqual(
+			obj.DefaultTest('custom', 20, new ue.Vector(4, 5, 6)),
+			'Str: custom, I: 20, Vec: X=4.000 Y=5.000 Z=6.000',
+		);
 	});
 
 	test('enum', () => {

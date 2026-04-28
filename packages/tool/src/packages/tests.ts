@@ -3,7 +3,7 @@ import * as path from 'path';
 import { spawn, type ChildProcess } from 'child_process';
 import { info } from 'gulplog';
 
-import { exec } from '../common/exec';
+import { exec, formatEsbuildOutput, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 import { blue, green, red } from '../common/util';
@@ -21,7 +21,32 @@ gulp.task('tests:clean', async () => {
 });
 
 gulp.task('tests:build', async () => {
-	await exec('npx tsx esbuild.config.ts', { workingDir, logPrefix: '[tests:build] ' });
+	await exec('npx tsx esbuild.config.ts', {
+		workingDir,
+		logPrefix: '[tests:build] ',
+		formatText: formatEsbuildOutput,
+	});
+});
+
+gulp.task('tests:typecheck', async () => {
+	await exec('tsc --noEmit', { workingDir, logPrefix: '[tests:typecheck] ', formatText: formatTscCheckOutput });
+});
+
+gulp.task('tests:lint', async () => {
+	await exec('eslint src', {
+		workingDir,
+		logPrefix: '[tests:lint] ',
+		formatText: formatLintOutput,
+	});
+});
+
+gulp.task('tests:lint:fix', async () => {
+	await exec('eslint src --fix', {
+		workingDir,
+		logPrefix: '[tests:lint:fix] ',
+		formatText: formatLintOutput,
+		noThrow: true,
+	});
 });
 
 gulp.task('tests:watch', async () => {
@@ -61,10 +86,7 @@ gulp.task('tests:watch', async () => {
 		buildOnChange();
 
 		// 监听源文件变化
-		const watcher = gulp.watch(
-			['src/**/*.ts'],
-			{ cwd: workingDir, ignoreInitial: true },
-		);
+		const watcher = gulp.watch(['src/**/*.ts'], { cwd: workingDir, ignoreInitial: true });
 		watcher.on('change', buildOnChange);
 		watcher.on('add', buildOnChange);
 		watcher.on('unlink', buildOnChange);

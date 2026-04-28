@@ -2,6 +2,7 @@ import { blueprint } from 'puerts';
 import * as ue from 'ue';
 import { runTest } from '../tests/runTest';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface MainEUW extends ue.Game.Editor.W_Main.W_Main_C {}
 
 class MainEUW {

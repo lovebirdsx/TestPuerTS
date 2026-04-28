@@ -43,13 +43,20 @@ export function getEngineRoot(): string {
 	if (!entry) {
 		throw new Error(`Engine version ${engineVersion} not found in LauncherInstalled.dat`);
 	}
-	
+
 	return entry.InstallLocation;
 }
 
 function getUnrealBuildToolPath(): string {
 	const engineRoot = getEngineRoot();
-	const unrealBuildTool = path.join(engineRoot, 'Engine', 'Binaries', 'DotNET', 'UnrealBuildTool', 'UnrealBuildTool.exe');
+	const unrealBuildTool = path.join(
+		engineRoot,
+		'Engine',
+		'Binaries',
+		'DotNET',
+		'UnrealBuildTool',
+		'UnrealBuildTool.exe',
+	);
 	if (!fs.existsSync(unrealBuildTool)) {
 		throw new Error(`UnrealBuildTool.exe not found: ${unrealBuildTool}`);
 	}
@@ -70,13 +77,11 @@ function getBuildBatPath(): string {
 gulp.task('ue:build', async () => {
 	const buildBat = getBuildBatPath();
 	const cmd = `"${buildBat}" TestPuerTSEditor Win64 Development -Project="${uprojectPath}" -WaitMutex -FromMsBuild`;
-	info(`[ue:build] ${cmd}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
 		formatText: formatCSharpOutput,
 	});
-	info(green('[ue:build] Build completed successfully'));
 });
 
 gulp.task('ue:gen_vscode_settings', async () => {
@@ -115,12 +120,10 @@ gulp.task('ue:gen_typing', async () => {
 gulp.task('ue:test', async () => {
 	const editorCmd = getEditorCmdPath();
 	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
-	info(`[ue:test] ${cmd}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
 	});
-	info(green('[ue:test] Tests completed'));
 });
 
 gulp.task('ue:build:watch', async () => {
@@ -129,14 +132,12 @@ gulp.task('ue:build:watch', async () => {
 	const ignored = ['**/Intermediate/**', '**/Binaries/**'];
 
 	// Header files → build + gen_typing
-	const headerGlobs = [
-		path.join(sourceDir, '**/*.h'),
-		path.join(pluginsDir, '**/*.h'),
-	];
-	gulp.watch(headerGlobs, { ignored }, gulp.series('ue:build', 'ue:gen_typing'))
-		.on('change', (filePath: string) => {
-			info(`[ue:build:watch] Header ${path.relative(projectRoot, filePath)} changed, rebuilding + generating typings...`);
-		});
+	const headerGlobs = [path.join(sourceDir, '**/*.h'), path.join(pluginsDir, '**/*.h')];
+	gulp.watch(headerGlobs, { ignored }, gulp.series('ue:build', 'ue:gen_typing')).on('change', (filePath: string) => {
+		info(
+			`[ue:build:watch] Header ${path.relative(projectRoot, filePath)} changed, rebuilding + generating typings...`,
+		);
+	});
 
 	// Non-header files → build only
 	const otherGlobs = [
@@ -147,10 +148,9 @@ gulp.task('ue:build:watch', async () => {
 		path.join(pluginsDir, '**/*.uplugin'),
 		uprojectPath,
 	];
-	gulp.watch(otherGlobs, { ignored }, gulp.series('ue:build'))
-		.on('change', (filePath: string) => {
-			info(`[ue:build:watch] File ${path.relative(projectRoot, filePath)} changed, rebuilding...`);
-		});
+	gulp.watch(otherGlobs, { ignored }, gulp.series('ue:build')).on('change', (filePath: string) => {
+		info(`[ue:build:watch] File ${path.relative(projectRoot, filePath)} changed, rebuilding...`);
+	});
 
 	info(green('[ue:build:watch] Watching C++ sources for changes...'));
 });

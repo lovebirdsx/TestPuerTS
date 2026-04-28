@@ -2,13 +2,6 @@ import { spawn } from 'child_process';
 import { info } from 'gulplog';
 import { blue, green, isRed, red } from './util';
 
-function removeEmptyLines(data: string): string {
-	return data
-		.split('\n')
-		.filter((line) => line.trim() !== '')
-		.join('\n');
-}
-
 interface IExecOptions {
 	logPrefix?: string;
 
@@ -32,7 +25,10 @@ export function setExecVerbose(verbose: boolean): void {
  * @param cmd 命令
  * @param options {@link IExecOptions} 选项
  */
-export async function exec(cmd: string, { logPrefix, originalLog, workingDir, noThrow, formatText }: IExecOptions): Promise<void> {
+export async function exec(
+	cmd: string,
+	{ logPrefix, originalLog, workingDir, noThrow, formatText }: IExecOptions,
+): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		const subProcess = spawn(cmd, { shell: true, cwd: workingDir });
 
@@ -79,6 +75,14 @@ export async function exec(cmd: string, { logPrefix, originalLog, workingDir, no
 	});
 }
 
+export function formatEsbuildOutput(data: string, _isError: boolean) {
+	if (data.includes('errors')) {
+		return red(data);
+	}
+
+	return data;
+}
+
 export function formatWebpackOutput(data: string, _isError: boolean) {
 	if (data.includes('errors')) {
 		return red(data);
@@ -111,12 +115,17 @@ export function formatLintOutput(data: string, isError: boolean) {
 	return data;
 }
 
-export function formatMochaTestOutput(data: string, isError: boolean) {
+export function formatVitestOutput(data: string, isError: boolean) {
 	if (isError) {
 		return red(data);
 	}
 
-	if (data.includes('ERR_ASSERTION') || data.includes('error:') || data.includes('Error:')) {
+	if (
+		data.includes('FAIL') ||
+		data.includes('Error:') ||
+		data.includes('AssertionError') ||
+		data.includes('ERR_ASSERTION')
+	) {
 		return red(data);
 	}
 

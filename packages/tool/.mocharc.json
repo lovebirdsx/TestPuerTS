@@ -1,8 +1,0 @@
-{
-  "require": "tsx",
-  "spec": "src/**/*test.ts",
-  "timeout": 5000,
-  "extension": ["ts"],
-  "ui": "tdd",
-  "colors": true
-}

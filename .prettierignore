@@ -1,0 +1,10 @@
+node_modules/
+dist/
+out/
+Content/JavaScript/
+Typing/
+Binaries/
+Intermediate/
+Saved/
+.vscode/
+package-lock.json

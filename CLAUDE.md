@@ -40,9 +40,9 @@ packages/                     # npm 工作区（yarn/npm）
       common/util.ts          # 文件工具函数、颜色辅助函数
       packages/               # 按包定义的 gulp 任务
         ue.ts                 # ue:build, ue:gen_vscode_settings, ue:test, ue:gen_typing, ue:build:watch, ue:build:clean
-        editor.ts             # editor:build, editor:watch, editor:test, editor:lint
-        tests.ts              # tests:build, tests:watch, tests:rpc-server-test, tests:rpc-client-test
-        tool.ts               # tool:build, tool:watch, tool:test, tool:lint
+        editor.ts             # editor:build, editor:watch, editor:test, editor:typecheck, editor:lint, editor:lint:fix
+        tests.ts              # tests:build, tests:watch, tests:typecheck, tests:lint, tests:lint:fix, tests:rpc-server-test, tests:rpc-client-test
+        tool.ts               # tool:build, tool:watch, tool:test, tool:typecheck, tool:lint, tool:lint:fix
 ```
 
 ## 常用命令
@@ -62,16 +62,30 @@ npx gulp ue:build:clean         # 清理 C++ 构建产物
 
 npx gulp tests:build            # 编译测试包 TS（esbuild bundle）
 npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 ue:test
+npx gulp tests:typecheck        # 类型检查
+npx gulp tests:lint             # 检查代码规范
+npx gulp tests:lint:fix         # 自动修复代码规范
 npx gulp tests:rpc-server-test  # RPC 测试：Node.js Server + PuerTS Client
 npx gulp tests:rpc-client-test  # RPC 测试：PuerTS Server + Node.js Client
 
 npx gulp editor:build           # 编译编辑器包 TS
 npx gulp editor:watch           # 监听编辑器 TS
-npx gulp editor:test            # 运行编辑器 mocha 测试
+npx gulp editor:test            # 运行编辑器 vitest 测试
+npx gulp editor:typecheck       # 类型检查 + 循环依赖检查（madge）
 npx gulp editor:lint            # 检查编辑器包代码规范
+npx gulp editor:lint:fix        # 自动修复编辑器包代码规范
 
 npx gulp tool:build             # 编译工具包（postinstall 时也会运行）
-npx gulp tool:tsc-check         # 类型检查 + 循环依赖检查（madge）
+npx gulp tool:typecheck         # 类型检查 + 循环依赖检查（madge）
+npx gulp tool:lint              # 检查工具包代码规范
+npx gulp tool:lint:fix          # 自动修复工具包代码规范
+
+# 统一组合任务
+npx gulp typecheck              # 并行运行所有包的类型检查
+npx gulp lint                   # 并行运行所有包的 lint 检查
+npx gulp lint:fix               # 并行运行所有包的 lint 自动修复
+npx gulp unittest               # 并行运行 tool + editor 的单元测试
+npx gulp check                  # 串行运行 build → typecheck → lint → unittest
 ```
 
 ## 架构说明
@@ -99,6 +113,7 @@ npx gulp tool:tsc-check         # 类型检查 + 循环依赖检查（madge）
 ## 注意
 
 - 回答请使用中文
+- 完成feature后，请执行 `npm run check` 来检查
 
 ## PuerTS 环境注意事项
 

@@ -5,7 +5,7 @@ import { info } from 'gulplog';
 import { exec, formatCheckCircularText, formatTscCheckOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { formatLintOutput } from '../common/exec';
-import { formatMochaTestOutput } from '../common/exec';
+import { formatVitestOutput } from '../common/exec';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 
 const config = getConfig();
@@ -22,13 +22,16 @@ gulp.task('editor:build', async () => {
 });
 
 gulp.task('editor:test', async () => {
-	await exec('mocha', { workingDir, logPrefix: '[editor:test] ', formatText: formatMochaTestOutput });
+	await exec('npx vitest run', { workingDir, logPrefix: '[editor:test] ', formatText: formatVitestOutput });
 });
 
 gulp.task('editor:test:watch', async () => {
 	// 此处没有使用mocha --watch，因为@testing-library/react在watch模式下会有问题
 	gulp.series('editor:test')(() => {
-		gulp.watch([path.join(workingDir, 'src/**/*.ts'), path.join(workingDir, 'src/**/*.tsx')], gulp.task('editor:test')).on('change', (path) => {
+		gulp.watch(
+			[path.join(workingDir, 'src/**/*.ts'), path.join(workingDir, 'src/**/*.tsx')],
+			gulp.task('editor:test'),
+		).on('change', (path) => {
 			path = path.replace(workingDir, '');
 			info(`[editor:test:watch] File ${path} was changed, running tasks...`);
 		});
@@ -39,16 +42,28 @@ gulp.task('editor:watch', async () => {
 	await exec('tsc -w', { workingDir, logPrefix: '[editor:watch] ', formatText: formatTscCheckOutput });
 });
 
-gulp.task('editor:tsc-check', async () => {
-	await exec('tsc --noEmit', { workingDir, logPrefix: '[editor:tsc-check] ', formatText: formatTscCheckOutput });
-	await exec('madge -c --extensions ts,tsx ./src', { workingDir, logPrefix: '[editor:madge] ', formatText: formatCheckCircularText });
+gulp.task('editor:typecheck', async () => {
+	await exec('tsc --noEmit', { workingDir, logPrefix: '[editor:typecheck] ', formatText: formatTscCheckOutput });
+	await exec('madge -c --extensions ts,tsx ./src', {
+		workingDir,
+		logPrefix: '[editor:madge] ',
+		formatText: formatCheckCircularText,
+	});
 });
 
 gulp.task('editor:lint', async () => {
-	await exec('eslint src --fix', {
+	await exec('eslint src', {
 		workingDir,
-		noThrow: true,
 		logPrefix: '[editor:lint] ',
 		formatText: formatLintOutput,
+	});
+});
+
+gulp.task('editor:lint:fix', async () => {
+	await exec('eslint src --fix', {
+		workingDir,
+		logPrefix: '[editor:lint:fix] ',
+		formatText: formatLintOutput,
+		noThrow: true,
 	});
 });

@@ -1,6 +1,6 @@
 import { NetIPCClient, Protocol } from '@universe/lib';
 import { connectUeIpc } from './ueIpcSocket';
-import { PIPE_NAME, CHANNEL_NAME, createCalculatorProxy, type ICalculatorService } from './testService';
+import { PIPE_NAME, CHANNEL_NAME, createCalculatorProxy } from './testService';
 
 /**
  * 测试用例：PuerTS 作为 RPC Client，连接到 Node.js 端的 RPC Server。
