@@ -46,8 +46,11 @@ int32 UPuertsTestCommandlet::Main(const FString& Params)
 	UPuertsTestHelper::TestFilter = TestFilter;
 
 	{
+		auto Loader = std::make_shared<puerts::DefaultJSModuleLoader>(TEXT("JavaScript"));
+		Loader->AddSearchPath(FPaths::ProjectDir());
+
 		puerts::FJsEnv JsEnv(
-			std::make_shared<puerts::DefaultJSModuleLoader>(TEXT("JavaScript")),
+			Loader,
 			std::make_shared<puerts::FDefaultLogger>(), -1);
 
 		if (!JsEnv.Start(ModuleName))

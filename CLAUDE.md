@@ -16,11 +16,11 @@ Plugins/                      # UE 插件（包含 Puerts）
     IPCTransport.*            # UIPCTransport：Windows 命名管道传输层（FTSTicker 驱动）
 Content/JavaScript/           # JS 输出（编译后的 TS 输出到此处）
   editor/                     # 编辑器端 TS 输出
-  tests/                      # 测试包 TS 输出（esbuild bundle）
+  tests/                      # 测试包 TS 输出（tsc 编译）
 Typing/                       # PuerTS 生成的 d.ts 文件（ue.d.ts、ue_bp.d.ts）
 packages/                     # npm 工作区（yarn/npm）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
-  tests/                      # Commandlet 测试脚本（esbuild 打包输出到 Content/JavaScript/tests）
+  tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
     src/ipc/                  # IPC/RPC 相关代码
       ueIpcSocket.ts          # UIPCTransport → ISocket 适配器
       testService.ts          # 测试用 RPC 服务定义（CalculatorService）
@@ -30,7 +30,6 @@ packages/                     # npm 工作区（yarn/npm）
       nodeServer.ts           # Node.js RPC Server（配合 testRpcClient）
       nodeClient.ts           # Node.js RPC Client（配合 testRpcServer）
     src/puertsPolyfill.ts     # PuerTS 环境 polyfill（setTimeout 等）
-    esbuild.config.ts         # esbuild 打包配置
   universe-lib/               # IPC 框架库（Protocol、IPCClient/Server、ProxyChannel）
   tool/                       # 构建工具（gulp 任务、工具函数）
     src/
@@ -60,7 +59,7 @@ npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts �
 npx gulp ue:build:watch         # 监听 C++ 源文件；.h 文件变更还会触发 gen_typing
 npx gulp ue:build:clean         # 清理 C++ 构建产物
 
-npx gulp tests:build            # 编译测试包 TS（esbuild bundle）
+npx gulp tests:build            # 编译测试包 TS（tsc 编译）
 npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 ue:test
 npx gulp tests:typecheck        # 类型检查
 npx gulp tests:lint             # 检查代码规范
@@ -101,7 +100,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。
   - 协议层：复用 `universe-lib` 的 `Protocol` → `IPCClient/Server` → `ProxyChannel` 自动编排。
   - Node.js 端：直接使用 `universe-lib` 的 `serve()`/`connect()` 连接命名管道。
-- **tests 包打包**：使用 esbuild bundle，`@universe/lib` 被内联打包，`ue`/`puerts` 作为 external。
+- **tests 包构建**：使用 tsc 编译输出多文件 CommonJS，`universe-lib` 通过 `DefaultJSModuleLoader` 的 `ExtraSearchPaths`（指向项目根目录）在运行时解析，`ue`/`puerts` 由 PuerTS 运行时提供。
 
 ## 代码风格
 

@@ -7,7 +7,6 @@
     "universe-lib": "0.1.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0",
     "typescript": "^5.8.2"
   }
 }

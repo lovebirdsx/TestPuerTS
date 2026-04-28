@@ -116,6 +116,15 @@ bool DefaultJSModuleLoader::Search(const FString& RequiredDir, const FString& Re
         }
     }
 
+    // 在额外搜索路径中查找
+    for (const FString& ExtraPath : ExtraSearchPaths)
+    {
+        if (SearchModuleInDir(ExtraPath, RequiredModule, Path, AbsolutePath))
+        {
+            return true;
+        }
+    }
+
     return SearchModuleInDir(FPaths::ProjectContentDir() / ScriptRoot, RequiredModule, Path, AbsolutePath) ||
            (ScriptRoot != TEXT("JavaScript") &&
                SearchModuleInDir(FPaths::ProjectContentDir() / TEXT("JavaScript"), RequiredModule, Path, AbsolutePath));
@@ -142,6 +151,11 @@ bool DefaultJSModuleLoader::Load(const FString& Path, TArray<uint8>& Content)
 FString& DefaultJSModuleLoader::GetScriptRoot()
 {
     return ScriptRoot;
+}
+
+void DefaultJSModuleLoader::AddSearchPath(const FString& Path)
+{
+    ExtraSearchPaths.Add(Path);
 }
 
 }    // namespace PUERTS_NAMESPACE

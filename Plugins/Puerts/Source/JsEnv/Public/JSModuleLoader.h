@@ -47,7 +47,11 @@ public:
 
     virtual bool SearchModuleWithExtInDir(const FString& Dir, const FString& RequiredModule, FString& Path, FString& AbsolutePath);
 
+    void AddSearchPath(const FString& Path);
+
     FString ScriptRoot;
+
+    TArray<FString> ExtraSearchPaths;
 };
 
 }    // namespace PUERTS_NAMESPACE

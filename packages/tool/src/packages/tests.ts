@@ -3,7 +3,7 @@ import * as path from 'path';
 import { spawn } from 'child_process';
 import { info } from 'gulplog';
 
-import { exec, formatEsbuildOutput, formatLintOutput, formatTscCheckOutput } from '../common/exec';
+import { exec, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 import { blue, green, red } from '../common/util';
@@ -21,10 +21,9 @@ gulp.task('tests:clean', async () => {
 });
 
 gulp.task('tests:build', async () => {
-	await exec('npx tsx esbuild.config.ts', {
+	await exec('tsc', {
 		workingDir,
 		logPrefix: '[tests:build] ',
-		formatText: formatEsbuildOutput,
 	});
 });
 
@@ -56,7 +55,7 @@ gulp.task('tests:watch', async () => {
 		// 先执行一次构建
 		const buildOnChange = () => {
 			info(`${blue(prefix)}${green('Building...')}`);
-			const build = spawn('npx', ['tsx', 'esbuild.config.ts'], { shell: true, cwd: workingDir });
+			const build = spawn('npx', ['tsc'], { shell: true, cwd: workingDir });
 
 			build.on('close', (code) => {
 				if (code === 0) {
