@@ -6,6 +6,10 @@
 .vscode/compileCommands_TestPuerTS.json
 TestPuerTS.code-workspace
 
+# Ignore javascript output
+Content/JavaScript/editor/
+Content/JavaScript/tests/
+
 # Ignore binary files
 *.exe
 *.dll
