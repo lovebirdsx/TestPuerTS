@@ -55,22 +55,12 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'acp-client:build',
-			inputGlobs: [
-				'packages/acp-client/src/**/*.ts',
-				'packages/acp-client/tsconfig.json',
-				'packages/acp-client/tsconfig.bridge.json',
-			],
+			inputGlobs: ['packages/acp-client/src/**/*.ts', 'packages/acp-client/tsconfig.json'],
 		},
 		async () => {
-			// 编译 PuerTS 端代码
 			await exec('tsc', {
 				workingDir: acpClientDir,
 				logPrefix: '[acp-client:build] ',
-			});
-			// 编译 Node.js 桥接脚本
-			await exec('tsc -p tsconfig.bridge.json', {
-				workingDir: acpClientDir,
-				logPrefix: '[acp-client:build:bridge] ',
 			});
 		},
 	),

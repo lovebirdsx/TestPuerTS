@@ -5,6 +5,5 @@
     "rootDir": "src",
     "esModuleInterop": true
   },
-  "include": ["src"],
-  "exclude": ["src/bridge.ts"]
+  "include": ["src"]
 }

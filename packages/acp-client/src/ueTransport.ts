@@ -1,28 +1,45 @@
 /**
- * 将 C++ UIPCTransport 包装为 NdJsonTransport 接口。
- * 复用 packages/tests/src/ipc/ueIpcSocket.ts 的模式。
+ * 将 C++ UChildProcess 包装为 NdJsonTransport 接口。
+ * 直接启动 ACP Server 子进程，通过 stdio 通信，无需中转。
  */
 import * as UE from 'ue';
 import type { NdJsonTransport } from './jsonrpc';
 
-export class UeNdJsonTransport implements NdJsonTransport {
-	private readonly transport: UE.IPCTransport;
+export interface AcpServerOptions {
+	/** 可执行文件路径 */
+	executable: string;
+	/** 命令行参数字符串 */
+	args: string;
+	/** 工作目录 */
+	workspace: string;
+}
+
+export class ChildProcessTransport implements NdJsonTransport {
+	private proc: UE.ChildProcess;
 	private dataCallback: ((data: Uint8Array) => void) | null = null;
 	private closeCallback: (() => void) | null = null;
 	private disposed = false;
 
-	constructor(transport: UE.IPCTransport) {
-		this.transport = transport;
+	constructor(proc: UE.ChildProcess) {
+		this.proc = proc;
 
-		transport.OnDataAvailable.Add(() => {
+		proc.OnStdoutDataAvailable.Add(() => {
 			if (this.disposed) return;
-			const ab: ArrayBuffer = transport.ReadBuffer();
+			const ab: ArrayBuffer = proc.ReadStdout();
 			if (ab && ab.byteLength > 0) {
 				this.dataCallback?.(new Uint8Array(ab));
 			}
 		});
 
-		transport.OnClosed.Add(() => {
+		proc.OnStderrDataAvailable.Add(() => {
+			if (this.disposed) return;
+			const text = proc.ReadStderrString();
+			if (text) {
+				UE.ProcessIOHelper.WriteStderr(text);
+			}
+		});
+
+		proc.OnExit.Add(() => {
 			if (this.disposed) return;
 			this.closeCallback?.();
 		});
@@ -34,7 +51,7 @@ export class UeNdJsonTransport implements NdJsonTransport {
 			data.byteOffset === 0 && data.byteLength === data.buffer.byteLength
 				? data.buffer
 				: data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
-		this.transport.SendBuffer(ab as ArrayBuffer);
+		this.proc.WriteStdinBuffer(ab as ArrayBuffer);
 	}
 
 	onData(callback: (data: Uint8Array) => void): void {
@@ -48,51 +65,25 @@ export class UeNdJsonTransport implements NdJsonTransport {
 	close(): void {
 		if (this.disposed) return;
 		this.disposed = true;
-		this.transport.Close();
+		if (this.proc.IsRunning()) {
+			this.proc.Kill(true);
+		}
 	}
 }
 
 /**
- * 创建 UIPCTransport 并连接到指定管道（客户端模式）。
- * 支持重试，等待服务端就绪。
+ * 启动 ACP Server 子进程，返回 NdJsonTransport。
  */
-export function connectUeIpc(pipeName: string, timeoutMs = 15000): Promise<UeNdJsonTransport> {
-	return new Promise<UeNdJsonTransport>((resolve, reject) => {
-		let resolved = false;
-		const startTime = Date.now();
+export function spawnAcpServer(options: AcpServerOptions): ChildProcessTransport {
+	const proc = new UE.ChildProcess();
+	const opts = new UE.ChildProcessOptions();
+	opts.WorkingDir = options.workspace;
+	opts.bHideWindow = true;
 
-		const tryConnect = () => {
-			if (resolved) return;
+	const ok = proc.Spawn(options.executable, options.args, opts);
+	if (!ok) {
+		throw new Error(`Failed to spawn ACP server: ${options.executable} ${options.args}`);
+	}
 
-			if (Date.now() - startTime > timeoutMs) {
-				reject(new Error(`Connect to ${pipeName} timed out`));
-				return;
-			}
-
-			const transport = new UE.IPCTransport();
-
-			transport.OnConnected.Add(() => {
-				if (!resolved) {
-					resolved = true;
-					resolve(new UeNdJsonTransport(transport));
-				}
-			});
-
-			transport.Connect(pipeName);
-
-			if (!resolved && transport.IsConnected()) {
-				resolved = true;
-				resolve(new UeNdJsonTransport(transport));
-				return;
-			}
-
-			// 如果连接未建立，短暂等待后重试
-			if (!resolved) {
-				transport.Close();
-				setTimeout(() => tryConnect(), 500);
-			}
-		};
-
-		tryConnect();
-	});
+	return new ChildProcessTransport(proc);
 }

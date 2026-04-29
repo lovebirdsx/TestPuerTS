@@ -1,6 +1,6 @@
 import * as UE from 'ue';
 import { JsonRpcConnection } from './jsonrpc';
-import { connectUeIpc } from './ueTransport';
+import { spawnAcpServer } from './ueTransport';
 import { Renderer } from './renderer';
 import type { CliOptions } from './cli';
 
@@ -364,14 +364,11 @@ export class ACPClientHandler {
 
 // --- ACP Client ---
 
-const PIPE_NAME = '\\\\.\\pipe\\puerts-acp-bridge';
-
 export class ACPClient {
 	private connection: JsonRpcConnection | null = null;
 	private handler: ACPClientHandler;
 	private renderer: Renderer;
 	private options: CliOptions;
-	private bridgeProcessId = -1;
 
 	sessionId: string | null = null;
 	initResult: InitializeResponse | null = null;
@@ -389,31 +386,16 @@ export class ACPClient {
 	async connect(): Promise<void> {
 		const { command, args, workspace } = this.options;
 
-		// 启动桥接进程
-		const projectDir = UE.JsRunHelper.GetProjectDir();
-		const bridgeScript = `${projectDir}Content/JavaScript/acp-client/bridge.js`;
-		const bridgeArgs = [bridgeScript, '--pipe', PIPE_NAME, '--workspace', workspace];
+		// 解析命令字符串（如 'npx universe-agent-acp' → executable='npx', baseArgs=['universe-agent-acp']）
+		const parts = command.split(/\s+/);
+		const executable = parts[0]!;
+		const baseArgs = parts.slice(1);
 
-		// 如果指定了自定义 ACP 命令，传递给桥接
-		if (command !== 'npx universe-agent-acp') {
-			bridgeArgs.push('--acp-command', command);
-		}
+		// 组装完整参数
+		const allArgs = [...baseArgs, '--workspace', workspace, ...args].join(' ');
 
-		// 透传额外参数
-		if (args.length > 0) {
-			bridgeArgs.push('--', ...args);
-		}
-
-		this.bridgeProcessId = UE.JsRunHelper.SpawnProcess('node', bridgeArgs.join(' '), projectDir);
-		if (this.bridgeProcessId < 0) {
-			throw new Error('Failed to spawn bridge process');
-		}
-
-		// 等待桥接进程启动管道服务器
-		await new Promise<void>((resolve) => setTimeout(resolve, 2000));
-
-		// 连接命名管道
-		const transport = await connectUeIpc(PIPE_NAME, 30000);
+		// 直接启动 ACP Server 子进程
+		const transport = spawnAcpServer({ executable, args: allArgs, workspace });
 
 		// 创建 JSON-RPC 连接
 		this.connection = new JsonRpcConnection(transport);
@@ -506,11 +488,6 @@ export class ACPClient {
 		this.connection?.dispose();
 		this.connection = null;
 		this.sessionId = null;
-
-		if (this.bridgeProcessId > 0) {
-			UE.JsRunHelper.KillProcess(this.bridgeProcessId);
-			this.bridgeProcessId = -1;
-		}
 	}
 
 	get closed(): Promise<void> | undefined {
