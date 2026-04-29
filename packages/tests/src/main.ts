@@ -5,6 +5,7 @@ import { runTests } from './testRunner';
 // 导入测试文件（describe 在导入时注册）
 import './ipc/rpcClient.test';
 import './ipc/rpcServer.test';
+import './editorCommon/processIOHelper.test';
 
 async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;
