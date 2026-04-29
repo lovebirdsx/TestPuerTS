@@ -27,6 +27,13 @@ void FTsEditorModule::StartupModule()
 
     TsEditor = NewObject<UTsEditor>(GetTransientPackage(), FName("TsEditor"));
     SyncSettingsToEditor();
+
+    // Commandlet 模式下不启动 JS 虚拟机（如 PuertsGenTyping），避免 editor/main 模块不存在时报错
+    if (IsRunningCommandlet())
+    {
+        return;
+    }
+
     TsEditor->Start();
 
     // 引擎关闭前，先停止虚拟机，以便处理资源释放相关操作（譬如解绑mixin），避免报错

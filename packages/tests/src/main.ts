@@ -6,6 +6,7 @@ import { runTests } from './testRunner';
 import './ipc/rpcClient.test';
 import './ipc/rpcServer.test';
 import './editorCommon/processIOHelper.test';
+import './editorCommon/childProcess.test';
 
 async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;

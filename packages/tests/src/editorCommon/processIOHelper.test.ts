@@ -94,7 +94,7 @@ describe('ProcessIOHelper - Stdout/Stderr', () => {
 	});
 
 	it('WriteStderr should execute without throwing', () => {
-		UE.ProcessIOHelper.WriteStderr('[test] stderr output\n');
+		UE.ProcessIOHelper.WriteStderr('[ignore] stderr output\n');
 		expect(true).toBe(true);
 	});
 });

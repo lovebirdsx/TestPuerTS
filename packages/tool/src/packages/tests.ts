@@ -79,7 +79,7 @@ gulp.task('tests:watch', async () => {
 			build.on('close', (code) => {
 				if (code === 0) {
 					info(`${blue(prefix)}${green('Build succeeded, running ue:test...')}`);
-					gulp.task('ue:test')((err: Error | null) => {
+					gulp.task('ue:test')!((err: Error | null | undefined) => {
 						if (err) {
 							info(`${blue(prefix)}${red(`ue:test failed: ${err.message}`)}`);
 						}

@@ -39544,6 +39544,81 @@ declare module "ue" {
         __tid_ChildActorComponentInstanceData_0__: boolean;
     }
     
+    class ChildProcessOptions {
+        constructor();
+        constructor(WorkingDir: string, Environment: TMap<string, string>, bMergeStderr: boolean, bHideWindow: boolean);
+        WorkingDir: string;
+        Environment: TMap<string, string>;
+        bMergeStderr: boolean;
+        bHideWindow: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ChildProcessOptions_0__: boolean;
+    }
+    
+    class ChildProcess extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnStdoutDataAvailable: $MulticastDelegate<() => void>;
+        OnStderrDataAvailable: $MulticastDelegate<() => void>;
+        OnExit: $MulticastDelegate<() => void>;
+        /*
+         *关闭 stdin 管道（向子进程发送 EOF）
+         */
+        CloseStdin() : void;
+        /*
+         *获取退出码（OnExit 触发后有效）
+         */
+        GetExitCode() : number;
+        /*
+         *获取 OS 进程 ID
+         */
+        GetProcessId() : number;
+        /*
+         *子进程是否仍在运行
+         */
+        IsRunning() : boolean;
+        /*
+         *终止子进程
+         */
+        Kill(bKillTree?: boolean /* = true */) : void;
+        /*
+         *读取 stderr 二进制数据（在 OnStderrDataAvailable 回调中调用）
+         */
+        ReadStderr() : ArrayBuffer;
+        /*
+         *读取 stderr 文本（UTF-8）
+         */
+        ReadStderrString() : string;
+        /*
+         *读取 stdout 二进制数据（在 OnStdoutDataAvailable 回调中调用）
+         */
+        ReadStdout() : ArrayBuffer;
+        /*
+         *读取 stdout 文本（UTF-8）
+         */
+        ReadStdoutString() : string;
+        /*
+         *启动子进程，成功返回 true
+         */
+        Spawn(Executable: string, Args: string, Options: UE.ChildProcessOptions) : boolean;
+        /*
+         *写入字符串到子进程 stdin（UTF-8 编码）
+         */
+        WriteStdin(Text: string) : boolean;
+        /*
+         *写入二进制数据到子进程 stdin
+         */
+        WriteStdinBuffer(Buffer: ArrayBuffer) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ChildProcess;
+        static Load(InName: string): ChildProcess;
+    
+        __tid_ChildProcess_0__: boolean;
+    }
+    
     class ChunkDependency {
         constructor();
         constructor(ChunkID: number, ParentChunkID: number);

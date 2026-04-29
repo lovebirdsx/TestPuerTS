@@ -12,7 +12,10 @@ import { getConfig } from './config';
 import { cleanDirAsync, green } from './common/util';
 
 // 统一组合任务
-gulp.task('build', gulp.parallel('tool:build', 'editor:build', 'tests:build', 'acp-client:build', 'ue:gen_typing'));
+gulp.task(
+	'build',
+	gulp.series('ue:gen_typing', gulp.parallel('tool:build', 'editor:build', 'tests:build', 'acp-client:build')),
+);
 gulp.task('typecheck', gulp.parallel('tool:typecheck', 'editor:typecheck', 'tests:typecheck', 'acp-client:typecheck'));
 gulp.task('lint', gulp.parallel('tool:lint', 'editor:lint', 'tests:lint', 'acp-client:lint'));
 gulp.task('lint:fix', gulp.parallel('tool:lint:fix', 'editor:lint:fix', 'tests:lint:fix', 'acp-client:lint:fix'));

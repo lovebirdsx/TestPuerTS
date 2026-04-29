@@ -5,7 +5,7 @@ import { info } from 'gulplog';
 
 import { exec, formatCSharpOutput } from '../common/exec';
 import { getConfig } from '../config';
-import { readJsonFile } from '../common/util';
+import { readJsonFile, red } from '../common/util';
 import { green } from '../common/util';
 import { withCache } from '../common/taskCache';
 
@@ -174,6 +174,14 @@ gulp.task(
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,
+				formatText: (data: string, isError: boolean) => {
+					const text = data.toString();
+					if (text.includes('[ignore]')) {
+						return data;
+					}
+
+					return isError ? red(text) : text;
+				},
 			});
 		},
 	),
