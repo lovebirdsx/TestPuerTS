@@ -39,13 +39,13 @@ export class Repl {
 		const agentVersion = init?.agentInfo?.version ?? '';
 		const sessionId = this.client.sessionId ?? 'none';
 
-		UE.ACPClientHelper.WriteStderr('\n');
-		UE.ACPClientHelper.WriteStderr(
+		UE.ProcessIOHelper.WriteStderr('\n');
+		UE.ProcessIOHelper.WriteStderr(
 			fmt.bold('ACP Client') + fmt.dim(` connected to ${agentName} ${agentVersion}`) + '\n',
 		);
-		UE.ACPClientHelper.WriteStderr(fmt.dim(`Session: ${sessionId}\n`));
-		UE.ACPClientHelper.WriteStderr(fmt.dim('Type /help for available commands\n'));
-		UE.ACPClientHelper.WriteStderr('\n');
+		UE.ProcessIOHelper.WriteStderr(fmt.dim(`Session: ${sessionId}\n`));
+		UE.ProcessIOHelper.WriteStderr(fmt.dim('Type /help for available commands\n'));
+		UE.ProcessIOHelper.WriteStderr('\n');
 	}
 
 	/** 基于轮询的 stdin 行读取 */
@@ -56,7 +56,7 @@ export class Repl {
 					resolve('');
 					return;
 				}
-				const line = UE.ACPClientHelper.ReadStdinLine();
+				const line = UE.ProcessIOHelper.ReadStdinLine();
 				if (line !== '') {
 					resolve(line);
 				} else {
@@ -69,7 +69,7 @@ export class Repl {
 
 	private async promptLoop(): Promise<void> {
 		while (!this.closed) {
-			UE.ACPClientHelper.WriteStderr(fmt.prompt());
+			UE.ProcessIOHelper.WriteStderr(fmt.prompt());
 			const input = await this.readLine();
 			const trimmed = input.trim();
 
@@ -87,10 +87,10 @@ export class Repl {
 			try {
 				const result = await this.client.prompt(trimmed);
 				this.renderer.ensureNewline();
-				UE.ACPClientHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n\n`));
+				UE.ProcessIOHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n\n`));
 			} catch (err) {
 				this.renderer.ensureNewline();
-				UE.ACPClientHelper.WriteStderr(
+				UE.ProcessIOHelper.WriteStderr(
 					fmt.error(`Error: ${err instanceof Error ? err.message : String(err)}\n\n`),
 				);
 			} finally {
@@ -111,7 +111,7 @@ export class Repl {
 				break;
 
 			case '/help':
-				UE.ACPClientHelper.WriteStderr(HELP_TEXT + '\n\n');
+				UE.ProcessIOHelper.WriteStderr(HELP_TEXT + '\n\n');
 				break;
 
 			case '/session':
@@ -121,14 +121,14 @@ export class Repl {
 			case '/mode': {
 				const mode = parts[1];
 				if (!mode) {
-					UE.ACPClientHelper.WriteStderr(fmt.error('Usage: /mode <agent|plan|ask>\n'));
+					UE.ProcessIOHelper.WriteStderr(fmt.error('Usage: /mode <agent|plan|ask>\n'));
 					break;
 				}
 				try {
 					await this.client.setMode(mode);
-					UE.ACPClientHelper.WriteStderr(fmt.info(`Mode set to: ${mode}\n`));
+					UE.ProcessIOHelper.WriteStderr(fmt.info(`Mode set to: ${mode}\n`));
 				} catch (err) {
-					UE.ACPClientHelper.WriteStderr(
+					UE.ProcessIOHelper.WriteStderr(
 						fmt.error(`Failed to set mode: ${err instanceof Error ? err.message : String(err)}\n`),
 					);
 				}
@@ -137,31 +137,31 @@ export class Repl {
 
 			case '/protocol':
 				this.renderer.protocol = !this.renderer.protocol;
-				UE.ACPClientHelper.WriteStderr(
+				UE.ProcessIOHelper.WriteStderr(
 					fmt.info(`Protocol inspector: ${this.renderer.protocol ? 'ON' : 'OFF'}\n`),
 				);
 				break;
 
 			case '/verbose':
 				this.renderer.verbose = !this.renderer.verbose;
-				UE.ACPClientHelper.WriteStderr(fmt.info(`Verbose mode: ${this.renderer.verbose ? 'ON' : 'OFF'}\n`));
+				UE.ProcessIOHelper.WriteStderr(fmt.info(`Verbose mode: ${this.renderer.verbose ? 'ON' : 'OFF'}\n`));
 				break;
 
 			case '/cancel':
 				if (this.prompting) {
 					await this.client.cancel();
-					UE.ACPClientHelper.WriteStderr(fmt.info('Cancellation requested.\n'));
+					UE.ProcessIOHelper.WriteStderr(fmt.info('Cancellation requested.\n'));
 				} else {
-					UE.ACPClientHelper.WriteStderr(fmt.dim('No active prompt to cancel.\n'));
+					UE.ProcessIOHelper.WriteStderr(fmt.dim('No active prompt to cancel.\n'));
 				}
 				break;
 
 			case '/clear':
-				UE.ACPClientHelper.WriteStderr('\x1B[2J\x1B[H');
+				UE.ProcessIOHelper.WriteStderr('\x1B[2J\x1B[H');
 				break;
 
 			default:
-				UE.ACPClientHelper.WriteStderr(
+				UE.ProcessIOHelper.WriteStderr(
 					fmt.error(`Unknown command: ${cmd}. Type /help for available commands.\n`),
 				);
 		}
@@ -174,9 +174,9 @@ export class Repl {
 			case 'new':
 				try {
 					const sessionId = await this.client.newSession();
-					UE.ACPClientHelper.WriteStderr(fmt.green(`New session created: ${sessionId}\n`));
+					UE.ProcessIOHelper.WriteStderr(fmt.green(`New session created: ${sessionId}\n`));
 				} catch (err) {
-					UE.ACPClientHelper.WriteStderr(
+					UE.ProcessIOHelper.WriteStderr(
 						fmt.error(`Failed to create session: ${err instanceof Error ? err.message : String(err)}\n`),
 					);
 				}
@@ -185,14 +185,14 @@ export class Repl {
 			case 'load': {
 				const id = args[1];
 				if (!id) {
-					UE.ACPClientHelper.WriteStderr(fmt.error('Usage: /session load <id>\n'));
+					UE.ProcessIOHelper.WriteStderr(fmt.error('Usage: /session load <id>\n'));
 					break;
 				}
 				try {
 					const sessionId = await this.client.loadSession(id);
-					UE.ACPClientHelper.WriteStderr(fmt.green(`Session loaded: ${sessionId}\n`));
+					UE.ProcessIOHelper.WriteStderr(fmt.green(`Session loaded: ${sessionId}\n`));
 				} catch (err) {
-					UE.ACPClientHelper.WriteStderr(
+					UE.ProcessIOHelper.WriteStderr(
 						fmt.error(`Failed to load session: ${err instanceof Error ? err.message : String(err)}\n`),
 					);
 				}
@@ -200,17 +200,17 @@ export class Repl {
 			}
 
 			case 'info':
-				UE.ACPClientHelper.WriteStderr(fmt.info(`Session ID: ${this.client.sessionId ?? 'none'}\n`));
+				UE.ProcessIOHelper.WriteStderr(fmt.info(`Session ID: ${this.client.sessionId ?? 'none'}\n`));
 				if (this.client.initResult) {
 					const init = this.client.initResult;
-					UE.ACPClientHelper.WriteStderr(
+					UE.ProcessIOHelper.WriteStderr(
 						fmt.info(`Agent: ${init.agentInfo?.name ?? 'unknown'} ${init.agentInfo?.version ?? ''}\n`),
 					);
 				}
 				break;
 
 			default:
-				UE.ACPClientHelper.WriteStderr(fmt.error('Usage: /session <new|load <id>|info>\n'));
+				UE.ProcessIOHelper.WriteStderr(fmt.error('Usage: /session <new|load <id>|info>\n'));
 		}
 	}
 }

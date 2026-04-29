@@ -75,7 +75,14 @@ function getBuildBatPath(): string {
 	return buildBat;
 }
 
-gulp.task('ue:build', async () => {
+const UE_BUILD_FILES = [
+	'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
+	'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
+	'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
+	'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
+];
+
+async function buildUe() {
 	const buildBat = getBuildBatPath();
 	const cmd = `"${buildBat}" TestPuerTSEditor Win64 Development -Project="${uprojectPath}" -WaitMutex -FromMsBuild`;
 	await exec(cmd, {
@@ -83,7 +90,18 @@ gulp.task('ue:build', async () => {
 		originalLog: true,
 		formatText: formatCSharpOutput,
 	});
-});
+}
+
+gulp.task(
+	'ue:build',
+	withCache(
+		{
+			taskName: 'ue:build',
+			inputGlobs: UE_BUILD_FILES,
+		},
+		buildUe,
+	),
+);
 
 gulp.task('ue:gen_vscode_settings', async () => {
 	const unrealBuildTool = getUnrealBuildToolPath();
@@ -114,16 +132,28 @@ export function getEditorCmdPath(): string {
 	return editorCmd;
 }
 
-gulp.task('ue:gen_typing', async () => {
+async function genTyping() {
 	const editorCmd = getEditorCmdPath();
 	const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsGenTyping -FULL -unattended -nopause`;
-	info(`[ue:gen_typing] ${cmd}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
 	});
-	info(green('[ue:gen_typing] Typing generation completed'));
-});
+}
+
+gulp.task(
+	'ue:gen_typing',
+	withCache(
+		{
+			taskName: 'ue:gen_typing',
+			inputGlobs: UE_BUILD_FILES,
+		},
+		async () => {
+			await buildUe();
+			await genTyping();
+		},
+	),
+);
 
 gulp.task(
 	'ue:test',
@@ -140,7 +170,7 @@ gulp.task(
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
-			const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
+			const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -timeout=30 -unattended -nopause -DisablePlugins=EditorDataStorage`;
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,
@@ -164,7 +194,7 @@ gulp.task(
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
-			const cmd = `"${editorCmd}" "${uprojectPath}" -run=ACPClient -timeout=600 -unattended -nopause -DisablePlugins=EditorDataStorage`;
+			const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=acp-client/index -timeout=600 -unattended -nopause -DisablePlugins=EditorDataStorage`;
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,

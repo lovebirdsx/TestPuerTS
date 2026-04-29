@@ -171,7 +171,7 @@ export class ACPClientHandler {
 	private promptForPermission(params: RequestPermissionRequest): Promise<RequestPermissionResponse> {
 		return new Promise((resolve) => {
 			const toolCall = params.toolCall;
-			const writeStderr = UE.ACPClientHelper.WriteStderr;
+			const writeStderr = UE.ProcessIOHelper.WriteStderr;
 
 			writeStderr('\n');
 			writeStderr(`[Permission Required] ${toolCall.title ?? toolCall.toolCallId}\n`);
@@ -188,7 +188,7 @@ export class ACPClientHandler {
 			writeStderr('Choice [1]: ');
 
 			const poll = () => {
-				const line = UE.ACPClientHelper.ReadStdinLine();
+				const line = UE.ProcessIOHelper.ReadStdinLine();
 				if (line !== '') {
 					const idx = line.trim() === '' ? 0 : parseInt(line, 10) - 1;
 					const selected = params.options[idx];
@@ -215,21 +215,21 @@ export class ACPClientHandler {
 
 	private async readTextFile(params: { path: string }): Promise<{ content: string }> {
 		const filePath = this.resolveFilePath(params.path);
-		if (!UE.ACPClientHelper.FileExists(filePath)) {
+		if (!UE.ProcessIOHelper.FileExists(filePath)) {
 			throw { code: -32002, message: `File not found: ${params.path}` };
 		}
-		const content = UE.ACPClientHelper.ReadTextFile(filePath);
+		const content = UE.ProcessIOHelper.ReadTextFile(filePath);
 		return { content };
 	}
 
 	private async writeTextFile(params: { path: string; content: string }): Promise<Record<string, never>> {
 		const filePath = this.resolveFilePath(params.path);
-		const success = UE.ACPClientHelper.WriteTextFile(filePath, params.content);
+		const success = UE.ProcessIOHelper.WriteTextFile(filePath, params.content);
 		if (!success) {
 			throw { code: -32000, message: `Failed to write file: ${params.path}` };
 		}
 		if (this.renderer.verbose) {
-			UE.ACPClientHelper.WriteStderr(`[File written] ${filePath} (${params.content.length} bytes)\n`);
+			UE.ProcessIOHelper.WriteStderr(`[File written] ${filePath} (${params.content.length} bytes)\n`);
 		}
 		return {};
 	}
@@ -245,7 +245,7 @@ export class ACPClientHandler {
 		const fullArgs = [params.command, ...args].join(' ');
 		const cwd = params.cwd ?? this.options.workspace;
 
-		const processId = UE.PuertsTestHelper.SpawnProcess('cmd', `/c ${fullArgs}`, cwd);
+		const processId = UE.JsRunHelper.SpawnProcess('cmd', `/c ${fullArgs}`, cwd);
 		if (processId < 0) {
 			throw { code: -32000, message: 'Failed to spawn terminal process' };
 		}
@@ -269,7 +269,7 @@ export class ACPClientHandler {
 		// 轮询进程状态
 		const pollExit = () => {
 			if (terminal.exited) return;
-			if (!UE.PuertsTestHelper.IsProcessRunning(terminal.processId)) {
+			if (!UE.JsRunHelper.IsProcessRunning(terminal.processId)) {
 				terminal.exited = true;
 				terminal.exitCode = 0;
 				terminal.exitResolve();
@@ -322,7 +322,7 @@ export class ACPClientHandler {
 		if (!terminal) throw { code: -32002, message: `Terminal not found: ${params.terminalId}` };
 
 		if (!terminal.exited) {
-			UE.PuertsTestHelper.KillProcess(terminal.processId);
+			UE.JsRunHelper.KillProcess(terminal.processId);
 			terminal.exited = true;
 			terminal.exitCode = -1;
 			terminal.exitResolve();
@@ -335,7 +335,7 @@ export class ACPClientHandler {
 		if (!terminal) return {};
 
 		if (!terminal.exited) {
-			UE.PuertsTestHelper.KillProcess(terminal.processId);
+			UE.JsRunHelper.KillProcess(terminal.processId);
 		}
 		this.terminals.delete(params.terminalId);
 		return {};
@@ -344,7 +344,7 @@ export class ACPClientHandler {
 	cleanup(): void {
 		for (const [, terminal] of this.terminals) {
 			if (!terminal.exited) {
-				UE.PuertsTestHelper.KillProcess(terminal.processId);
+				UE.JsRunHelper.KillProcess(terminal.processId);
 			}
 		}
 		this.terminals.clear();
@@ -390,7 +390,7 @@ export class ACPClient {
 		const { command, args, workspace } = this.options;
 
 		// 启动桥接进程
-		const projectDir = UE.PuertsTestHelper.GetProjectDir();
+		const projectDir = UE.JsRunHelper.GetProjectDir();
 		const bridgeScript = `${projectDir}Content/JavaScript/acp-client/bridge.js`;
 		const bridgeArgs = [bridgeScript, '--pipe', PIPE_NAME, '--workspace', workspace];
 
@@ -404,7 +404,7 @@ export class ACPClient {
 			bridgeArgs.push('--', ...args);
 		}
 
-		this.bridgeProcessId = UE.PuertsTestHelper.SpawnProcess('node', bridgeArgs.join(' '), projectDir);
+		this.bridgeProcessId = UE.JsRunHelper.SpawnProcess('node', bridgeArgs.join(' '), projectDir);
 		if (this.bridgeProcessId < 0) {
 			throw new Error('Failed to spawn bridge process');
 		}
@@ -508,7 +508,7 @@ export class ACPClient {
 		this.sessionId = null;
 
 		if (this.bridgeProcessId > 0) {
-			UE.PuertsTestHelper.KillProcess(this.bridgeProcessId);
+			UE.JsRunHelper.KillProcess(this.bridgeProcessId);
 			this.bridgeProcessId = -1;
 		}
 	}

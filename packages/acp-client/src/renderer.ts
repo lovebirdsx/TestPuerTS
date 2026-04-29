@@ -194,11 +194,11 @@ export class Renderer {
 // --- 输出辅助函数 ---
 
 function writeStdout(text: string): void {
-	UE.ACPClientHelper.WriteStdout(text);
+	UE.ProcessIOHelper.WriteStdout(text);
 }
 
 function writeStderr(text: string): void {
-	UE.ACPClientHelper.WriteStderr(text);
+	UE.ProcessIOHelper.WriteStderr(text);
 }
 
 // --- 工具函数 ---

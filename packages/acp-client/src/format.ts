@@ -85,15 +85,15 @@ export function createSpinner(message: string) {
 	let i = 0;
 	const interval = setInterval(() => {
 		const frame = SPINNER_FRAMES[i++ % SPINNER_FRAMES.length]!;
-		UE.ACPClientHelper.WriteStderr(`\r${pc.cyan(frame)} ${pc.dim(message)}`);
+		UE.ProcessIOHelper.WriteStderr(`\r${pc.cyan(frame)} ${pc.dim(message)}`);
 	}, 80);
 
 	return {
 		stop(finalMessage?: string) {
 			clearInterval(interval);
-			UE.ACPClientHelper.WriteStderr(`\r${' '.repeat(message.length + 4)}\r`);
+			UE.ProcessIOHelper.WriteStderr(`\r${' '.repeat(message.length + 4)}\r`);
 			if (finalMessage) {
-				UE.ACPClientHelper.WriteStderr(finalMessage + '\n');
+				UE.ProcessIOHelper.WriteStderr(finalMessage + '\n');
 			}
 		},
 	};

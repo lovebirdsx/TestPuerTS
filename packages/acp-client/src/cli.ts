@@ -16,15 +16,15 @@ export interface CliOptions {
 
 /**
  * 解析命令行参数。
- * 在 PuerTS 环境中，参数通过 PuertsTestHelper.GetTestFilter() 传入，
+ * 在 PuerTS 环境中，参数通过 JsRunHelper.GetCommandArgs() 传入，
  * 格式为 "--key=value" 或 "prompt text"。
  */
 export function parseCliOptions(): {
 	options: CliOptions;
 	prompt: string | undefined;
 } {
-	const rawArgs = UE.PuertsTestHelper.GetTestFilter();
-	const projectDir = UE.PuertsTestHelper.GetProjectDir();
+	const rawArgs = UE.JsRunHelper.GetCommandArgs();
+	const projectDir = UE.JsRunHelper.GetProjectDir();
 
 	// 解析参数
 	const args = parseArgString(rawArgs);

@@ -7,11 +7,11 @@ import './ipc/rpcClient.test';
 import './ipc/rpcServer.test';
 
 async function main() {
-	const filter = UE.PuertsTestHelper.GetTestFilter() || undefined;
+	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;
 	const exitCode = await runTests(filter);
 
 	console.log(`=== 测试结束，退出码: ${exitCode} ===`);
-	UE.PuertsTestHelper.MarkTestDone(exitCode);
+	UE.JsRunHelper.MarkDone(exitCode);
 }
 
 main();

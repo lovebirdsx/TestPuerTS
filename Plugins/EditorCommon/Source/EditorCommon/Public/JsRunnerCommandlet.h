@@ -2,14 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "Commandlets/Commandlet.h"
-#include "ACPClientCommandlet.generated.h"
+#include "JsRunnerCommandlet.generated.h"
 
 UCLASS()
-class UACPClientCommandlet : public UCommandlet
+class EDITORCOMMON_API UJsRunnerCommandlet : public UCommandlet
 {
 	GENERATED_BODY()
 
 public:
-	UACPClientCommandlet();
+	UJsRunnerCommandlet();
 	virtual int32 Main(const FString& Params) override;
 };

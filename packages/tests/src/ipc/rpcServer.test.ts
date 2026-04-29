@@ -59,8 +59,8 @@ describe('rpcServer', () => {
 		transport.Listen(PIPE_NAME);
 
 		// 4. 启动 Node.js RPC Client
-		const projectDir = UE.PuertsTestHelper.GetProjectDir();
-		nodeProcessId = UE.PuertsTestHelper.SpawnProcess('node', `${projectDir}${NODE_SCRIPT}`, projectDir);
+		const projectDir = UE.JsRunHelper.GetProjectDir();
+		nodeProcessId = UE.JsRunHelper.SpawnProcess('node', `${projectDir}${NODE_SCRIPT}`, projectDir);
 		if (nodeProcessId < 0) {
 			throw new Error('Failed to spawn Node.js client process');
 		}
@@ -118,7 +118,7 @@ describe('rpcServer', () => {
 		onClientConnect?.dispose();
 		onDidClientDisconnect?.dispose();
 		if (nodeProcessId > 0) {
-			UE.PuertsTestHelper.KillProcess(nodeProcessId);
+			UE.JsRunHelper.KillProcess(nodeProcessId);
 		}
 	});
 

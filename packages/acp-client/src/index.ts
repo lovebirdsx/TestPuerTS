@@ -37,10 +37,10 @@ async function main(): Promise<void> {
 		);
 	} catch (err) {
 		spinner.stop();
-		UE.ACPClientHelper.WriteStderr(
+		UE.ProcessIOHelper.WriteStderr(
 			fmt.error(`Failed to connect: ${err instanceof Error ? err.message : String(err)}\n`),
 		);
-		UE.PuertsTestHelper.MarkTestDone(1);
+		UE.JsRunHelper.MarkDone(1);
 		return;
 	}
 
@@ -48,17 +48,17 @@ async function main(): Promise<void> {
 	try {
 		if (options.session) {
 			await client.loadSession(options.session);
-			UE.ACPClientHelper.WriteStderr(fmt.dim(`Session loaded: ${client.sessionId}\n`));
+			UE.ProcessIOHelper.WriteStderr(fmt.dim(`Session loaded: ${client.sessionId}\n`));
 		} else {
 			await client.newSession();
-			UE.ACPClientHelper.WriteStderr(fmt.dim(`Session created: ${client.sessionId}\n`));
+			UE.ProcessIOHelper.WriteStderr(fmt.dim(`Session created: ${client.sessionId}\n`));
 		}
 	} catch (err) {
-		UE.ACPClientHelper.WriteStderr(
+		UE.ProcessIOHelper.WriteStderr(
 			fmt.error(`Failed to create session: ${err instanceof Error ? err.message : String(err)}\n`),
 		);
 		await client.disconnect();
-		UE.PuertsTestHelper.MarkTestDone(1);
+		UE.JsRunHelper.MarkDone(1);
 		return;
 	}
 
@@ -67,7 +67,7 @@ async function main(): Promise<void> {
 		try {
 			await client.setMode(options.mode);
 		} catch (err) {
-			UE.ACPClientHelper.WriteStderr(
+			UE.ProcessIOHelper.WriteStderr(
 				fmt.error(`Failed to set mode: ${err instanceof Error ? err.message : String(err)}\n`),
 			);
 		}
@@ -78,22 +78,22 @@ async function main(): Promise<void> {
 		try {
 			const result = await client.prompt(prompt);
 			renderer.ensureNewline();
-			UE.ACPClientHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n`));
+			UE.ProcessIOHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n`));
 		} catch (err) {
 			renderer.ensureNewline();
-			UE.ACPClientHelper.WriteStderr(fmt.error(`Error: ${err instanceof Error ? err.message : String(err)}\n`));
+			UE.ProcessIOHelper.WriteStderr(fmt.error(`Error: ${err instanceof Error ? err.message : String(err)}\n`));
 		}
 		await client.disconnect();
-		UE.PuertsTestHelper.MarkTestDone(0);
+		UE.JsRunHelper.MarkDone(0);
 	} else {
 		const repl = new Repl(client, renderer);
 		await repl.start();
 		await client.disconnect();
-		UE.PuertsTestHelper.MarkTestDone(0);
+		UE.JsRunHelper.MarkDone(0);
 	}
 }
 
 main().catch((err) => {
-	UE.ACPClientHelper.WriteStderr(fmt.error(`Fatal: ${err instanceof Error ? err.message : String(err)}\n`));
-	UE.PuertsTestHelper.MarkTestDone(1);
+	UE.ProcessIOHelper.WriteStderr(fmt.error(`Fatal: ${err instanceof Error ? err.message : String(err)}\n`));
+	UE.JsRunHelper.MarkDone(1);
 });

@@ -7,15 +7,14 @@
 ```
 Source/                       # C++ 模块
   TestPuerTS/                 # 运行时模块（依赖 JsEnv）
-    PuertsTestCommandlet.*    # Commandlet：通过 FJsEnv 运行 JS 测试，无需编辑器
-    PuertsTestHelper.*        # MarkTestDone(exitCode) 供 JS 异步测试通知完成
-    ACPClientCommandlet.*     # Commandlet：运行 ACP 客户端 JS 入口
-    ACPClientHelper.*         # PuerTS 兼容 API：stdin/stdout/stderr、文件 I/O
   TestPuerTSEditor/           # 编辑器模块
   TsEditor/                   # 编辑器模块
 Plugins/                      # UE 插件（包含 Puerts）
   EditorCommon/               # 编辑器通用插件
     IPCTransport.*            # UIPCTransport：Windows 命名管道传输层（FTSTicker 驱动）
+    ProcessIOHelper.*         # UProcessIOHelper：stdin/stdout/stderr、文件 I/O、环境变量
+    JsRunHelper.*             # UJsRunHelper：MarkDone(exitCode) 供 JS 异步通知完成
+    JsRunnerCommandlet.*      # UJsRunnerCommandlet：通过 FJsEnv 运行 JS 模块（-run=JsRunner -module=xxx）
 Content/JavaScript/           # JS 输出（编译后的 TS 输出到此处）
   editor/                     # 编辑器端 TS 输出
   tests/                      # 测试包 TS 输出（tsc 编译）
@@ -35,7 +34,7 @@ packages/                     # npm 工作区（yarn/npm）
   acp-client/                 # ACP 协议客户端（移植到 PuerTS 环境）
     src/
       index.ts                # 入口：初始化、连接 ACP server、REPL 或单次 prompt
-      cli.ts                  # 命令行参数解析（通过 TestFilter 传入）
+      cli.ts                  # 命令行参数解析（通过 CommandArgs 传入）
       client.ts               # ACPClient + ACPClientHandler：ACP 协议核心
       jsonrpc.ts              # JSON-RPC 2.0 over ndjson（替代 @agentclientprotocol/sdk）
       ueTransport.ts          # UIPCTransport → NdJsonTransport 适配器
@@ -67,7 +66,7 @@ npx gulp watch                  # 启动所有监听器，不进行初始构建
 # 单独的 gulp 任务
 npx gulp ue:gen_vscode_settings # 通过 UnrealBuildTool 生成 .vscode/c_cpp_properties.json 和 compileCommands_*.json
 npx gulp ue:build               # 通过 Build.bat 编译 C++
-npx gulp ue:test                # 通过 PuertsTestCommandlet 运行 JS 测试（无需编辑器）
+npx gulp ue:test                # 通过 JsRunnerCommandlet 运行 JS 测试（无需编辑器）
 npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts 类型定义
 npx gulp ue:build:watch         # 监听 C++ 源文件；.h 文件变更还会触发 gen_typing
 npx gulp ue:build:clean         # 清理 C++ 构建产物
@@ -110,7 +109,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
 - **`ue:build:watch`** 使用两个独立的 `gulp.watch` 实例：头文件（`.h`）触发构建 + gen_typing；其他文件（`.cpp`、`.cs`、`.uplugin`、`.uproject`）仅触发构建。排除 `**/Intermediate/**` 和 `**/Binaries/**`。
 - **`tests:watch`** 启动 `tsc -w`，解析 stdout 中的 "Found 0 errors"，然后自动触发 `ue:test`。
 - **引擎路径解析**：`ue.ts` 中的 `getEngineRoot()` 读取 `.uproject` 的 EngineAssociation，从 `LauncherInstalled.dat` 查找安装路径。
-- **PuertsTestCommandlet**：创建 `FJsEnv`，运行 JS 模块（默认 `tests/main`），通过 `FTSTicker` tick 循环等待 `MarkTestDone()` 异步完成。支持 `-module=X` 和 `-timeout=N` 参数。
+- **JsRunnerCommandlet**：创建 `FJsEnv`，运行指定 JS 模块（`-module=` 必填），通过 `FTSTicker` tick 循环等待 `MarkDone()` 异步完成。支持 `-module=X` 和 `-timeout=N` 参数。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。
@@ -120,8 +119,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
 - **ACP Client 架构**：ACP 协议客户端，在 PuerTS 环境中运行。
   - `@agentclientprotocol/sdk` 是 ESM-only 且依赖 Web Streams，因此自实现了 JSON-RPC 2.0 层（`jsonrpc.ts`）替代 SDK 的 `ClientSideConnection`/`ndJsonStream`。
   - 通过 Node.js 桥接脚本（`bridge.ts`）启动 ACP Server（`@universe-agent/acp`），PuerTS 通过命名管道与桥接通信，桥接在管道和 ACP Server stdio 之间双向中继 ndjson。
-  - C++ `ACPClientHelper` 提供 PuerTS 缺失的 API：stdin 非阻塞读取、stdout/stderr 写入、文件 I/O。
-  - C++ `ACPClientCommandlet` 运行 `acp-client/index` 模块，tick 循环与 `PuertsTestCommandlet` 相同。
+  - C++ `ProcessIOHelper` 提供 PuerTS 缺失的 API：stdin 非阻塞读取、stdout/stderr 写入、文件 I/O。
 
 ## 代码风格
 

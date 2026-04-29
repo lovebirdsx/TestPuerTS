@@ -752,95 +752,6 @@ declare module "ue" {
         __tid_Object_0__: boolean;
     }
     
-    class Commandlet extends UE.Object {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        HelpDescription: string;
-        HelpUsage: string;
-        HelpWebLink: string;
-        HelpParamNames: TArray<string>;
-        HelpParamDescriptions: TArray<string>;
-        IsServer: boolean;
-        IsClient: boolean;
-        IsEditor: boolean;
-        LogToConsole: boolean;
-        ShowErrorCount: boolean;
-        ShowProgress: boolean;
-        FastExit: boolean;
-        UseCommandletResultAsExitCode: boolean;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): Commandlet;
-        static Load(InName: string): Commandlet;
-    
-        __tid_Commandlet_0__: boolean;
-    }
-    
-    class ACPClientCommandlet extends UE.Commandlet {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): ACPClientCommandlet;
-        static Load(InName: string): ACPClientCommandlet;
-    
-        __tid_ACPClientCommandlet_0__: boolean;
-    }
-    
-    class BlueprintFunctionLibrary extends UE.Object {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): BlueprintFunctionLibrary;
-        static Load(InName: string): BlueprintFunctionLibrary;
-    
-        __tid_BlueprintFunctionLibrary_0__: boolean;
-    }
-    
-    class ACPClientHelper extends UE.BlueprintFunctionLibrary {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        /*
-         *检查文件是否存在
-         */
-        static FileExists(FilePath: string) : boolean;
-        /*
-         *获取环境变量
-         */
-        static GetEnvVar(Name: string) : string;
-        /*
-         *检查 stdin 是否有可用输入（非阻塞）
-         */
-        static HasStdinInput() : boolean;
-        /*
-         *stdin 是否是 TTY
-         */
-        static IsStdinTTY() : boolean;
-        /*
-         *创建目录树
-         */
-        static MakeDirTree(Path: string) : boolean;
-        /*
-         *从 stdin 读取一行（非阻塞，无完整行时返回空字符串）
-         */
-        static ReadStdinLine() : string;
-        /*
-         *读取文件内容（UTF-8），失败返回空字符串
-         */
-        static ReadTextFile(FilePath: string) : string;
-        /*
-         *写入 stderr（原始输出，不添加换行）
-         */
-        static WriteStderr(Text: string) : void;
-        /*
-         *写入 stdout（原始输出，不添加换行）
-         */
-        static WriteStdout(Text: string) : void;
-        /*
-         *写入文件内容（UTF-8，自动创建目录）
-         */
-        static WriteTextFile(FilePath: string, Content: string) : boolean;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): ACPClientHelper;
-        static Load(InName: string): ACPClientHelper;
-    
-        __tid_ACPClientHelper_0__: boolean;
-    }
-    
     enum ETickingGroup { TG_PrePhysics, TG_StartPhysics, TG_DuringPhysics, TG_EndPhysics, TG_PostPhysics, TG_PostUpdateWork, TG_LastDemotable, TG_NewlySpawned, TG_MAX, __typeKeyDoNoAccess}
     class TickFunction {
         constructor();
@@ -28061,6 +27972,15 @@ declare module "ue" {
         __tid_AnimationActiveTransitionEntry_0__: boolean;
     }
     
+    class BlueprintFunctionLibrary extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BlueprintFunctionLibrary;
+        static Load(InName: string): BlueprintFunctionLibrary;
+    
+        __tid_BlueprintFunctionLibrary_0__: boolean;
+    }
+    
     class AnimationAssetExtensions extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
@@ -34268,6 +34188,28 @@ declare module "ue" {
         static Load(InName: string): AssetManagerSettings;
     
         __tid_AssetManagerSettings_0__: boolean;
+    }
+    
+    class Commandlet extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        HelpDescription: string;
+        HelpUsage: string;
+        HelpWebLink: string;
+        HelpParamNames: TArray<string>;
+        HelpParamDescriptions: TArray<string>;
+        IsServer: boolean;
+        IsClient: boolean;
+        IsEditor: boolean;
+        LogToConsole: boolean;
+        ShowErrorCount: boolean;
+        ShowProgress: boolean;
+        FastExit: boolean;
+        UseCommandletResultAsExitCode: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): Commandlet;
+        static Load(InName: string): Commandlet;
+    
+        __tid_Commandlet_0__: boolean;
     }
     
     class AssetRegistryDumpCommandlet extends UE.Commandlet {
@@ -55660,6 +55602,48 @@ declare module "ue" {
         __tid_JSGeneratedFunction_0__: boolean;
     }
     
+    class JsRunHelper extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *获取命令行参数
+         */
+        static GetCommandArgs() : string;
+        /*
+         *获取 UE 项目根目录绝对路径
+         */
+        static GetProjectDir() : string;
+        /*
+         *检查进程是否仍在运行
+         */
+        static IsProcessRunning(ProcessId: number) : boolean;
+        /*
+         *终止进程
+         */
+        static KillProcess(ProcessId: number) : void;
+        /*
+         *JS 模块完成时调用此方法，Commandlet 的 tick 循环会检测此标志
+         */
+        static MarkDone(ExitCode?: number /* = 0 */) : void;
+        /*
+         *启动外部进程，返回进程 ID（失败返回 -1）
+         */
+        static SpawnProcess(Executable: string, Args: string, WorkingDir: string) : number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): JsRunHelper;
+        static Load(InName: string): JsRunHelper;
+    
+        __tid_JsRunHelper_0__: boolean;
+    }
+    
+    class JsRunnerCommandlet extends UE.Commandlet {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): JsRunnerCommandlet;
+        static Load(InName: string): JsRunnerCommandlet;
+    
+        __tid_JsRunnerCommandlet_0__: boolean;
+    }
+    
     class JSWidgetGeneratedClass extends UE.WidgetBlueprintGeneratedClass {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -74943,6 +74927,55 @@ declare module "ue" {
         __tid_PrimitiveComponentInstanceData_0__: boolean;
     }
     
+    class ProcessIOHelper extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *检查文件是否存在
+         */
+        static FileExists(FilePath: string) : boolean;
+        /*
+         *获取环境变量
+         */
+        static GetEnvVar(Name: string) : string;
+        /*
+         *检查 stdin 是否有可用输入（非阻塞）
+         */
+        static HasStdinInput() : boolean;
+        /*
+         *stdin 是否是 TTY
+         */
+        static IsStdinTTY() : boolean;
+        /*
+         *创建目录树
+         */
+        static MakeDirTree(Path: string) : boolean;
+        /*
+         *从 stdin 读取一行（非阻塞，无完整行时返回空字符串）
+         */
+        static ReadStdinLine() : string;
+        /*
+         *读取文件内容（UTF-8），失败返回空字符串
+         */
+        static ReadTextFile(FilePath: string) : string;
+        /*
+         *写入 stderr（原始输出，不添加换行）
+         */
+        static WriteStderr(Text: string) : void;
+        /*
+         *写入 stdout（原始输出，不添加换行）
+         */
+        static WriteStdout(Text: string) : void;
+        /*
+         *写入文件内容（UTF-8，自动创建目录）
+         */
+        static WriteTextFile(FilePath: string, Content: string) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ProcessIOHelper;
+        static Load(InName: string): ProcessIOHelper;
+    
+        __tid_ProcessIOHelper_0__: boolean;
+    }
+    
     class ProgressWidgetStyle extends UE.SlateWidgetStyleContainerBase {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         ProgressBarStyle: UE.ProgressBarStyle;
@@ -75522,48 +75555,6 @@ declare module "ue" {
         static Load(InName: string): PuertsSetting;
     
         __tid_PuertsSetting_0__: boolean;
-    }
-    
-    class PuertsTestCommandlet extends UE.Commandlet {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): PuertsTestCommandlet;
-        static Load(InName: string): PuertsTestCommandlet;
-    
-        __tid_PuertsTestCommandlet_0__: boolean;
-    }
-    
-    class PuertsTestHelper extends UE.BlueprintFunctionLibrary {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        /*
-         *获取 UE 项目根目录绝对路径
-         */
-        static GetProjectDir() : string;
-        /*
-         *获取测试过滤器（通过 -test=X 命令行参数设置）
-         */
-        static GetTestFilter() : string;
-        /*
-         *检查进程是否仍在运行
-         */
-        static IsProcessRunning(ProcessId: number) : boolean;
-        /*
-         *终止进程
-         */
-        static KillProcess(ProcessId: number) : void;
-        /*
-         *JS 测试完成时调用此方法，Commandlet 的 tick 循环会检测此标志
-         */
-        static MarkTestDone(ExitCode?: number /* = 0 */) : void;
-        /*
-         *启动外部进程，返回进程 ID（失败返回 -1）
-         */
-        static SpawnProcess(Executable: string, Args: string, WorkingDir: string) : number;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): PuertsTestHelper;
-        static Load(InName: string): PuertsTestHelper;
-    
-        __tid_PuertsTestHelper_0__: boolean;
     }
     
     class QuartzPulseOverrideStep {

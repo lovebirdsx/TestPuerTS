@@ -1,4 +1,4 @@
-#include "ACPClientHelper.h"
+#include "ProcessIOHelper.h"
 #include "HAL/PlatformProcess.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
@@ -7,9 +7,9 @@
 #include <io.h>
 #include <fcntl.h>
 
-TArray<uint8> UACPClientHelper::StdinBuffer;
+TArray<uint8> UProcessIOHelper::StdinBuffer;
 
-bool UACPClientHelper::HasStdinInput()
+bool UProcessIOHelper::HasStdinInput()
 {
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 	if (hStdin == INVALID_HANDLE_VALUE)
@@ -59,7 +59,7 @@ bool UACPClientHelper::HasStdinInput()
 	}
 }
 
-FString UACPClientHelper::ReadStdinLine()
+FString UProcessIOHelper::ReadStdinLine()
 {
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 	if (hStdin == INVALID_HANDLE_VALUE)
@@ -193,7 +193,7 @@ FString UACPClientHelper::ReadStdinLine()
 	return FString();
 }
 
-void UACPClientHelper::WriteStdout(const FString& Text)
+void UProcessIOHelper::WriteStdout(const FString& Text)
 {
 	HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hStdout == INVALID_HANDLE_VALUE)
@@ -206,7 +206,7 @@ void UACPClientHelper::WriteStdout(const FString& Text)
 	WriteFile(hStdout, Utf8.Get(), Utf8.Length(), &BytesWritten, nullptr);
 }
 
-void UACPClientHelper::WriteStderr(const FString& Text)
+void UProcessIOHelper::WriteStderr(const FString& Text)
 {
 	HANDLE hStderr = GetStdHandle(STD_ERROR_HANDLE);
 	if (hStderr == INVALID_HANDLE_VALUE)
@@ -219,7 +219,7 @@ void UACPClientHelper::WriteStderr(const FString& Text)
 	WriteFile(hStderr, Utf8.Get(), Utf8.Length(), &BytesWritten, nullptr);
 }
 
-FString UACPClientHelper::ReadTextFile(const FString& FilePath)
+FString UProcessIOHelper::ReadTextFile(const FString& FilePath)
 {
 	FString Content;
 	if (FFileHelper::LoadFileToString(Content, *FilePath))
@@ -229,12 +229,12 @@ FString UACPClientHelper::ReadTextFile(const FString& FilePath)
 	return FString();
 }
 
-bool UACPClientHelper::FileExists(const FString& FilePath)
+bool UProcessIOHelper::FileExists(const FString& FilePath)
 {
 	return FPaths::FileExists(FilePath);
 }
 
-bool UACPClientHelper::WriteTextFile(const FString& FilePath, const FString& Content)
+bool UProcessIOHelper::WriteTextFile(const FString& FilePath, const FString& Content)
 {
 	// 自动创建目录
 	FString Dir = FPaths::GetPath(FilePath);
@@ -247,13 +247,13 @@ bool UACPClientHelper::WriteTextFile(const FString& FilePath, const FString& Con
 	return FFileHelper::SaveStringToFile(Content, *FilePath, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 }
 
-bool UACPClientHelper::MakeDirTree(const FString& Path)
+bool UProcessIOHelper::MakeDirTree(const FString& Path)
 {
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
 	return PlatformFile.CreateDirectoryTree(*Path);
 }
 
-bool UACPClientHelper::IsStdinTTY()
+bool UProcessIOHelper::IsStdinTTY()
 {
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
 	if (hStdin == INVALID_HANDLE_VALUE)
@@ -264,7 +264,7 @@ bool UACPClientHelper::IsStdinTTY()
 	return GetFileType(hStdin) == FILE_TYPE_CHAR;
 }
 
-FString UACPClientHelper::GetEnvVar(const FString& Name)
+FString UProcessIOHelper::GetEnvVar(const FString& Name)
 {
 	return FPlatformMisc::GetEnvironmentVariable(*Name);
 }
