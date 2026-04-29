@@ -1,5 +1,5 @@
 import * as UE from 'ue';
-import pc from 'picocolors';
+import * as pc from 'picocolors';
 
 export const fmt = {
 	// 基础格式化

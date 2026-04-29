@@ -386,16 +386,12 @@ export class ACPClient {
 	async connect(): Promise<void> {
 		const { command, args, workspace } = this.options;
 
-		// 解析命令字符串（如 'npx universe-agent-acp' → executable='npx', baseArgs=['universe-agent-acp']）
-		const parts = command.split(/\s+/);
-		const executable = parts[0]!;
-		const baseArgs = parts.slice(1);
+		// 组装完整命令参数
+		const allArgs = [...args].join(' ');
+		const fullCommand = allArgs ? `${command} --workspace ${workspace} ${allArgs}` : `${command} --workspace ${workspace}`;
 
-		// 组装完整参数
-		const allArgs = [...baseArgs, '--workspace', workspace, ...args].join(' ');
-
-		// 直接启动 ACP Server 子进程
-		const transport = spawnAcpServer({ executable, args: allArgs, workspace });
+		// Windows 上 npx/node 等命令为 .cmd 脚本，需通过 cmd /c 执行
+		const transport = spawnAcpServer({ executable: 'cmd', args: `/c ${fullCommand}`, workspace });
 
 		// 创建 JSON-RPC 连接
 		this.connection = new JsonRpcConnection(transport);
