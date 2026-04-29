@@ -9,6 +9,8 @@ Source/                       # C++ 模块
   TestPuerTS/                 # 运行时模块（依赖 JsEnv）
     PuertsTestCommandlet.*    # Commandlet：通过 FJsEnv 运行 JS 测试，无需编辑器
     PuertsTestHelper.*        # MarkTestDone(exitCode) 供 JS 异步测试通知完成
+    ACPClientCommandlet.*     # Commandlet：运行 ACP 客户端 JS 入口
+    ACPClientHelper.*         # PuerTS 兼容 API：stdin/stdout/stderr、文件 I/O
   TestPuerTSEditor/           # 编辑器模块
   TsEditor/                   # 编辑器模块
 Plugins/                      # UE 插件（包含 Puerts）
@@ -30,6 +32,17 @@ packages/                     # npm 工作区（yarn/npm）
       nodeServer.ts           # Node.js RPC Server（配合 testRpcClient）
       nodeClient.ts           # Node.js RPC Client（配合 testRpcServer）
     src/puertsPolyfill.ts     # PuerTS 环境 polyfill（setTimeout 等）
+  acp-client/                 # ACP 协议客户端（移植到 PuerTS 环境）
+    src/
+      index.ts                # 入口：初始化、连接 ACP server、REPL 或单次 prompt
+      cli.ts                  # 命令行参数解析（通过 TestFilter 传入）
+      client.ts               # ACPClient + ACPClientHandler：ACP 协议核心
+      jsonrpc.ts              # JSON-RPC 2.0 over ndjson（替代 @agentclientprotocol/sdk）
+      ueTransport.ts          # UIPCTransport → NdJsonTransport 适配器
+      renderer.ts             # 协议消息和会话更新渲染
+      repl.ts                 # 交互式 REPL（基于 C++ stdin API）
+      format.ts               # 终端颜色格式化（picocolors）
+      bridge.ts               # Node.js 桥接脚本：命名管道 ↔ ACP server stdio
   universe-lib/               # IPC 框架库（Protocol、IPCClient/Server、ProxyChannel）
   tool/                       # 构建工具（gulp 任务、工具函数）
     src/
@@ -40,7 +53,7 @@ packages/                     # npm 工作区（yarn/npm）
       packages/               # 按包定义的 gulp 任务
         ue.ts                 # ue:build, ue:gen_vscode_settings, ue:test, ue:gen_typing, ue:build:watch, ue:build:clean
         editor.ts             # editor:build, editor:watch, editor:test, editor:typecheck, editor:lint, editor:lint:fix
-        tests.ts              # tests:build, tests:watch, tests:typecheck, tests:lint, tests:lint:fix, tests:rpc-server-test, tests:rpc-client-test
+        tests.ts              # tests:build, tests:watch, tests:typecheck, tests:lint, tests:lint:fix, tests:rpc-server-test, tests:rpc-client-test, acp-client:build, ue:acp-client
         tool.ts               # tool:build, tool:watch, tool:test, tool:typecheck, tool:lint, tool:lint:fix
 ```
 
@@ -66,6 +79,9 @@ npx gulp tests:lint             # 检查代码规范
 npx gulp tests:lint:fix         # 自动修复代码规范
 npx gulp tests:rpc-server-test  # RPC 测试：Node.js Server + PuerTS Client
 npx gulp tests:rpc-client-test  # RPC 测试：PuerTS Server + Node.js Client
+
+npx gulp acp-client:build       # 编译 ACP 客户端 TS（PuerTS 端 + Node.js 桥接）
+npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
 
 npx gulp editor:build           # 编译编辑器包 TS
 npx gulp editor:watch           # 监听编辑器 TS
@@ -101,6 +117,11 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
   - 协议层：复用 `universe-lib` 的 `Protocol` → `IPCClient/Server` → `ProxyChannel` 自动编排。
   - Node.js 端：直接使用 `universe-lib` 的 `serve()`/`connect()` 连接命名管道。
 - **tests 包构建**：使用 tsc 编译输出多文件 CommonJS，`universe-lib` 通过 `DefaultJSModuleLoader` 的 `ExtraSearchPaths`（指向项目根目录）在运行时解析，`ue`/`puerts` 由 PuerTS 运行时提供。
+- **ACP Client 架构**：ACP 协议客户端，在 PuerTS 环境中运行。
+  - `@agentclientprotocol/sdk` 是 ESM-only 且依赖 Web Streams，因此自实现了 JSON-RPC 2.0 层（`jsonrpc.ts`）替代 SDK 的 `ClientSideConnection`/`ndJsonStream`。
+  - 通过 Node.js 桥接脚本（`bridge.ts`）启动 ACP Server（`@universe-agent/acp`），PuerTS 通过命名管道与桥接通信，桥接在管道和 ACP Server stdio 之间双向中继 ndjson。
+  - C++ `ACPClientHelper` 提供 PuerTS 缺失的 API：stdin 非阻塞读取、stdout/stderr 写入、文件 I/O。
+  - C++ `ACPClientCommandlet` 运行 `acp-client/index` 模块，tick 循环与 `PuertsTestCommandlet` 相同。
 
 ## 代码风格
 

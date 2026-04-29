@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../Content/JavaScript/acp-client",
+    "rootDir": "src",
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["src/bridge.ts"]
+}

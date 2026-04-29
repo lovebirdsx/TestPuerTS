@@ -94,6 +94,13 @@ gulp.task('ue:gen_vscode_settings', async () => {
 		originalLog: true,
 		formatText: formatCSharpOutput,
 	});
+
+	// 移除 .ignore 文件，避免对 vscode 和 claude code 的文件搜索造成干扰
+	const ignoreFile = path.join(projectRoot, '.ignore');
+	if (fs.existsSync(ignoreFile)) {
+		fs.unlinkSync(ignoreFile);
+	}
+
 	info(green('[ue:gen_vscode_settings] VS Code settings generated successfully'));
 });
 
@@ -134,6 +141,30 @@ gulp.task(
 		async () => {
 			const editorCmd = getEditorCmdPath();
 			const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -unattended -nopause -DisablePlugins=EditorDataStorage`;
+			await exec(cmd, {
+				workingDir: projectRoot,
+				originalLog: true,
+			});
+		},
+	),
+);
+
+gulp.task(
+	'ue:acp-client',
+	withCache(
+		{
+			taskName: 'ue:acp-client',
+			inputGlobs: [
+				'packages/acp-client/src/**/*.ts',
+				'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
+				'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
+				'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
+				'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
+			],
+		},
+		async () => {
+			const editorCmd = getEditorCmdPath();
+			const cmd = `"${editorCmd}" "${uprojectPath}" -run=ACPClient -timeout=600 -unattended -nopause -DisablePlugins=EditorDataStorage`;
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,

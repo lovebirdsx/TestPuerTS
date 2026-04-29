@@ -9,6 +9,7 @@ TestPuerTS.code-workspace
 # Ignore javascript output
 Content/JavaScript/editor/
 Content/JavaScript/tests/
+Content/JavaScript/acp-client/
 
 # Ignore binary files
 *.exe

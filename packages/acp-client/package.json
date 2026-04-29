@@ -1,0 +1,22 @@
+{
+  "name": "@universe-agent/acp-client",
+  "version": "1.0.0",
+  "description": "ACP protocol client for PuerTS environment",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --build && tsc -p tsconfig.bridge.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src",
+    "clean": "tsc --build --clean"
+  },
+  "dependencies": {
+    "commander": "^7.2.0",
+    "picocolors": "^1.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "typescript": "^5.8.2",
+    "@types/node": "*"
+  }
+}

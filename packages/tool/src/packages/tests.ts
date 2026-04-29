@@ -7,7 +7,6 @@ import { exec, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 import { blue, green, red } from '../common/util';
-import { getEditorCmdPath } from './ue';
 import { withCache } from '../common/taskCache';
 
 const config = getConfig();
@@ -115,55 +114,3 @@ gulp.task('tests:watch', async () => {
 		});
 	});
 });
-
-// ===== RPC 测试任务 =====
-
-const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
-
-/**
- * 运行 PuerTS commandlet 指定测试
- */
-function runCommandletTest(testFilter: string, prefix: string): Promise<void> {
-	return new Promise((resolve, reject) => {
-		const editorCmd = getEditorCmdPath();
-		const cmd = `"${editorCmd}" "${uprojectPath}" -run=PuertsTest -test=${testFilter} -unattended -nopause -DisablePlugins=EditorDataStorage`;
-		info(`${blue(prefix)}${cmd}`);
-
-		const child = spawn(cmd, { shell: true, cwd: projectRoot });
-
-		child.stdout?.on('data', (data: Buffer) => {
-			const text = data.toString().trim();
-			if (text) info(`${blue(prefix)}${text}`);
-		});
-
-		child.stderr?.on('data', (data: Buffer) => {
-			const text = data.toString().trim();
-			if (text) info(`${blue(prefix)}${red(text)}`);
-		});
-
-		const timeout = setTimeout(() => {
-			child.kill();
-			reject(new Error('测试超时'));
-		}, 60000);
-
-		child.on('close', (code) => {
-			clearTimeout(timeout);
-			if (code === 0) {
-				info(`${blue(prefix)}${green('测试通过！')}`);
-				resolve();
-			} else {
-				reject(new Error(`测试失败，退出码: ${code}`));
-			}
-		});
-	});
-}
-
-gulp.task('tests:rpc-server-test', async () => {
-	await runCommandletTest('rpcClient', '[tests:rpc-client] ');
-});
-
-gulp.task('tests:rpc-client-test', async () => {
-	await runCommandletTest('rpcServer', '[tests:rpc-server] ');
-});
-
-gulp.task('tests:rpc', gulp.series('tests:build', 'tests:rpc-server-test', 'tests:rpc-client-test'));
