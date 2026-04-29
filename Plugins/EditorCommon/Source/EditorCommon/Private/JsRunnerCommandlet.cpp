@@ -15,10 +15,21 @@ UJsRunnerCommandlet::UJsRunnerCommandlet()
 
 int32 UJsRunnerCommandlet::Main(const FString& Params)
 {
+	// 以 " -- " 为界：之前由 UE 解析，之后原样传给 JS
+	FString UeParams = Params;
+	FString JsRawArgs;
+
+	const int32 SepIndex = Params.Find(TEXT(" -- "));
+	if (SepIndex != INDEX_NONE)
+	{
+		UeParams = Params.Left(SepIndex);
+		JsRawArgs = Params.Mid(SepIndex + 4).TrimStartAndEnd();
+	}
+
 	TArray<FString> Tokens;
 	TArray<FString> Switches;
 	TMap<FString, FString> ParamMap;
-	ParseCommandLine(*Params, Tokens, Switches, ParamMap);
+	ParseCommandLine(*UeParams, Tokens, Switches, ParamMap);
 
 	// -module= 必填
 	FString ModuleName;
@@ -43,21 +54,7 @@ int32 UJsRunnerCommandlet::Main(const FString& Params)
 
 	UJsRunHelper::Reset();
 
-	// 将未识别参数转发给 JS
-	FString ExtraArgs;
-	for (const auto& Pair : ParamMap)
-	{
-		if (Pair.Key != TEXT("module") && Pair.Key != TEXT("timeout")
-			&& Pair.Key != TEXT("run") && Pair.Key != TEXT("DisablePlugins"))
-		{
-			ExtraArgs += FString::Printf(TEXT("--%s=%s "), *Pair.Key, *Pair.Value);
-		}
-	}
-	for (const auto& Token : Tokens)
-	{
-		ExtraArgs += Token + TEXT(" ");
-	}
-	UJsRunHelper::CommandArgs = ExtraArgs.TrimEnd();
+	UJsRunHelper::CommandArgs = JsRawArgs;
 
 	{
 		auto Loader = std::make_shared<puerts::DefaultJSModuleLoader>(TEXT("JavaScript"));
