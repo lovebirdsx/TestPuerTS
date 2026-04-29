@@ -73,6 +73,7 @@ export class ChildProcessTransport implements NdJsonTransport {
 
 /**
  * 启动 ACP Server 子进程，返回 NdJsonTransport。
+ * 子进程自动继承父进程的完整环境变量（包括 OPENAI_* 等配置）。
  */
 export function spawnAcpServer(options: AcpServerOptions): ChildProcessTransport {
 	const proc = new UE.ChildProcess();

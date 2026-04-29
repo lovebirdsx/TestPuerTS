@@ -11,6 +11,20 @@ export function isWindows(): boolean {
 	return process.platform === 'win32';
 }
 
+export function loadDotEnv(envPath: string): Record<string, string> {
+	if (!fs.existsSync(envPath)) return {};
+	const content = fs.readFileSync(envPath, 'utf-8');
+	const result: Record<string, string> = {};
+	for (const line of content.split('\n')) {
+		const trimmed = line.trim();
+		if (!trimmed || trimmed.startsWith('#')) continue;
+		const eqIdx = trimmed.indexOf('=');
+		if (eqIdx < 0) continue;
+		result[trimmed.slice(0, eqIdx).trim()] = trimmed.slice(eqIdx + 1).trim();
+	}
+	return result;
+}
+
 // #region 异步操作
 
 export function timeout(ms: number): Promise<void> {

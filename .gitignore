@@ -1,3 +1,6 @@
+# Ignore env
+.env
+
 # Ignore Unreal VsCode files
 .vscode/compileCommands_Default
 .vscode/compileCommands_TestPuerTS
