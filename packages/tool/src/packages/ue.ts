@@ -77,6 +77,7 @@ function getBuildBatPath(): string {
 }
 
 const UE_BUILD_FILES = [
+	'Config/**/*.{ini,json}',
 	'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',

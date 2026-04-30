@@ -33219,6 +33219,17 @@ declare module "ue" {
         __tid_AnimSequenceFactory_0__: boolean;
     }
     
+    class AnimSequenceLevelSequenceLink extends UE.AssetUserData {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SkelTrackGuid: UE.Guid;
+        PathToLevelSequence: UE.SoftObjectPath;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AnimSequenceLevelSequenceLink;
+        static Load(InName: string): AnimSequenceLevelSequenceLink;
+    
+        __tid_AnimSequenceLevelSequenceLink_0__: boolean;
+    }
+    
     class AnimSequencerInstance extends UE.AnimInstance {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -33639,6 +33650,15 @@ declare module "ue" {
         static Load(InName: string): AssetDefinitionDefault;
     
         __tid_AssetDefinitionDefault_0__: boolean;
+    }
+    
+    class AssetDefinition_TakePreset extends UE.AssetDefinitionDefault {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AssetDefinition_TakePreset;
+        static Load(InName: string): AssetDefinition_TakePreset;
+    
+        __tid_AssetDefinition_TakePreset_0__: boolean;
     }
     
     class AssetDefinition_WidgetBlueprint extends UE.AssetDefinitionDefault {
@@ -35517,6 +35537,751 @@ declare module "ue" {
         __tid_AudioEngineSubsystem_0__: boolean;
     }
     
+    enum EAudioRadialSliderLayout { Layout_LabelTop, Layout_LabelCenter, Layout_LabelBottom, Layout_MAX, __typeKeyDoNoAccess}
+    class AudioRadialSlider extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Value: number;
+        ValueDelegate: $Delegate<() => number>;
+        WidgetLayout: UE.EAudioRadialSliderLayout;
+        CenterBackgroundColor: UE.LinearColor;
+        SliderProgressColor: UE.LinearColor;
+        SliderBarColor: UE.LinearColor;
+        HandStartEndRatio: UE.Vector2D;
+        UnitsText: string;
+        TextLabelBackgroundColor: UE.LinearColor;
+        ShowLabelOnlyOnHover: boolean;
+        ShowUnitsText: boolean;
+        IsUnitsTextReadOnly: boolean;
+        IsValueTextReadOnly: boolean;
+        SliderThickness: number;
+        OutputRange: UE.Vector2D;
+        OnValueChanged: $MulticastDelegate<(Value: number) => void>;
+        /*
+         *Get output value from normalized linear (0 - 1) based on internal lin to output mapping.
+         */
+        GetOutputValue(InSliderValue: number) : number;
+        /*
+         *Get normalized linear (0 - 1) slider value from output based on internal lin to output mapping.
+         */
+        GetSliderValue(OutputValue: number) : number;
+        /*
+         *Sets the label background color
+         */
+        SetCenterBackgroundColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the start and end of the hand as a ratio to the slider radius (so 0.0 to 1.0 is from the slider center to the handle).
+         */
+        SetHandStartEndRatio(InHandStartEndRatio: UE.Vector2D) : void;
+        /*
+         *Sets the output range
+         */
+        SetOutputRange(InOutputRange: UE.Vector2D) : void;
+        /*
+         *If true, show text label only on hover; if false always show label.
+         */
+        SetShowLabelOnlyOnHover(bShowLabelOnlyOnHover: boolean) : void;
+        /*
+         *Sets whether to show the units text
+         */
+        SetShowUnitsText(bShowUnitsText: boolean) : void;
+        /*
+         *Sets the slider bar color
+         */
+        SetSliderBarColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the slider progress color
+         */
+        SetSliderProgressColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the slider thickness
+         */
+        SetSliderThickness(InThickness: number) : void;
+        /*
+         *Sets the label background color
+         */
+        SetTextLabelBackgroundColor(InColor: UE.SlateColor) : void;
+        /*
+         *Sets the units text
+         */
+        SetUnitsText(Units: string) : void;
+        /*
+         *Sets whether the units text is read only
+         */
+        SetUnitsTextReadOnly(bIsReadOnly: boolean) : void;
+        /*
+         *Sets whether the value text is read only
+         */
+        SetValueTextReadOnly(bIsReadOnly: boolean) : void;
+        /*
+         *Sets the widget layout
+         */
+        SetWidgetLayout(InLayout: UE.EAudioRadialSliderLayout) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioRadialSlider;
+        static Load(InName: string): AudioRadialSlider;
+    
+        __tid_AudioRadialSlider_0__: boolean;
+    }
+    
+    class AudioFrequencyRadialSlider extends UE.AudioRadialSlider {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioFrequencyRadialSlider;
+        static Load(InName: string): AudioFrequencyRadialSlider;
+    
+        __tid_AudioFrequencyRadialSlider_0__: boolean;
+    }
+    
+    enum EOrientation { Orient_Horizontal, Orient_Vertical, Orient_MAX, __typeKeyDoNoAccess}
+    class AudioSliderBase extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Value: number;
+        UnitsText: string;
+        TextLabelBackgroundColor: UE.LinearColor;
+        TextLabelBackgroundColorDelegate: $Delegate<() => UE.LinearColor>;
+        ShowLabelOnlyOnHover: boolean;
+        ShowUnitsText: boolean;
+        IsUnitsTextReadOnly: boolean;
+        IsValueTextReadOnly: boolean;
+        ValueDelegate: $Delegate<() => number>;
+        SliderBackgroundColor: UE.LinearColor;
+        SliderBackgroundColorDelegate: $Delegate<() => UE.LinearColor>;
+        SliderBarColor: UE.LinearColor;
+        SliderBarColorDelegate: $Delegate<() => UE.LinearColor>;
+        SliderThumbColor: UE.LinearColor;
+        SliderThumbColorDelegate: $Delegate<() => UE.LinearColor>;
+        WidgetBackgroundColor: UE.LinearColor;
+        WidgetBackgroundColorDelegate: $Delegate<() => UE.LinearColor>;
+        Orientation: UE.EOrientation;
+        OnValueChanged: $MulticastDelegate<(Value: number) => void>;
+        /*
+         *Get normalized linear (0 - 1) value from output based on internal lin to output mapping.
+         */
+        GetLinValue(OutputValue: number) : number;
+        /*
+         *Get output value from normalized linear (0 - 1) based on internal lin to output mapping.
+         */
+        GetOutputValue(InSliderValue: number) : number;
+        /*
+         *Get normalized linear (0 - 1) slider value from output based on internal lin to output mapping.
+         */
+        GetSliderValue(OutputValue: number) : number;
+        /*
+         *If true, show text label only on hover; if false always show label.
+         */
+        SetShowLabelOnlyOnHover(bShowLabelOnlyOnHover: boolean) : void;
+        /*
+         *Sets whether to show the units text
+         */
+        SetShowUnitsText(bShowUnitsText: boolean) : void;
+        /*
+         *Sets the slider background color
+         */
+        SetSliderBackgroundColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the slider bar color
+         */
+        SetSliderBarColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the slider thumb color
+         */
+        SetSliderThumbColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the label background color
+         */
+        SetTextLabelBackgroundColor(InColor: UE.SlateColor) : void;
+        /*
+         *Sets the units text
+         */
+        SetUnitsText(Units: string) : void;
+        /*
+         *Sets whether the units text is read only
+         */
+        SetUnitsTextReadOnly(bIsReadOnly: boolean) : void;
+        /*
+         *Sets whether the value text is read only
+         */
+        SetValueTextReadOnly(bIsReadOnly: boolean) : void;
+        /*
+         *Sets the widget background color
+         */
+        SetWidgetBackgroundColor(InValue: UE.LinearColor) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioSliderBase;
+        static Load(InName: string): AudioSliderBase;
+    
+        __tid_AudioSliderBase_0__: boolean;
+    }
+    
+    class AudioFrequencySlider extends UE.AudioSliderBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OutputRange: UE.Vector2D;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioFrequencySlider;
+        static Load(InName: string): AudioFrequencySlider;
+    
+        __tid_AudioFrequencySlider_0__: boolean;
+    }
+    
+    class AudioImpulseResponse extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ImpulseResponse: TArray<number>;
+        NumChannels: number;
+        SampleRate: number;
+        NormalizationVolumeDb: number;
+        bTrueStereo: boolean;
+        IRData: TArray<number>;
+        bIsEvenChannelCount: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioImpulseResponse;
+        static Load(InName: string): AudioImpulseResponse;
+    
+        __tid_AudioImpulseResponse_0__: boolean;
+    }
+    
+    class SlateWidgetStyle {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SlateWidgetStyle_0__: boolean;
+    }
+    
+    class AudioMaterialWidgetStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(Material: UE.MaterialInterface, DesiredSize: UE.Vector2f);
+        Material: UE.MaterialInterface;
+        DesiredSize: UE.Vector2f;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialWidgetStyle_0__: boolean;
+    }
+    
+    class AudioMaterialButtonStyle extends UE.AudioMaterialWidgetStyle {
+        constructor();
+        constructor(ButtonMainColor: UE.LinearColor, ButtonMainColorTint_1: UE.LinearColor, ButtonMainColorTint_2: UE.LinearColor, ButtonAccentColor: UE.LinearColor, ButtonShadowColor: UE.LinearColor, ButtonUnpressedOutlineColor: UE.LinearColor, ButtonPressedOutlineColor: UE.LinearColor);
+        ButtonMainColor: UE.LinearColor;
+        ButtonMainColorTint_1: UE.LinearColor;
+        ButtonMainColorTint_2: UE.LinearColor;
+        ButtonAccentColor: UE.LinearColor;
+        ButtonShadowColor: UE.LinearColor;
+        ButtonUnpressedOutlineColor: UE.LinearColor;
+        ButtonPressedOutlineColor: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialButtonStyle_0__: boolean;
+    }
+    
+    class AudioMaterialButton extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetStyle: UE.AudioMaterialButtonStyle;
+        OnButtonPressedChangedEvent: $MulticastDelegate<(bIsPressed: boolean) => void>;
+        bIsPressed: boolean;
+        /*
+         *Gets the current value of the slider.
+         */
+        GetIsPressed() : boolean;
+        /*
+         *Sets the current value of the slider. InValue is Clamped between 0.f - 1.f
+         */
+        SetIsPressed(InPressed: boolean) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialButton;
+        static Load(InName: string): AudioMaterialButton;
+    
+        __tid_AudioMaterialButton_0__: boolean;
+    }
+    
+    class SlateWidgetStyleContainerBase extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SlateWidgetStyleContainerBase;
+        static Load(InName: string): SlateWidgetStyleContainerBase;
+    
+        __tid_SlateWidgetStyleContainerBase_0__: boolean;
+    }
+    
+    class AudioMaterialButtonWidgetStyle extends UE.SlateWidgetStyleContainerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ButtonStyle: UE.AudioMaterialButtonStyle;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialButtonWidgetStyle;
+        static Load(InName: string): AudioMaterialButtonWidgetStyle;
+    
+        __tid_AudioMaterialButtonWidgetStyle_0__: boolean;
+    }
+    
+    class AudioMaterialEnvelopeStyle extends UE.AudioMaterialWidgetStyle {
+        constructor();
+        constructor(CurveColor: UE.LinearColor, BackgroundColor: UE.LinearColor, OutlineColor: UE.LinearColor);
+        CurveColor: UE.LinearColor;
+        BackgroundColor: UE.LinearColor;
+        OutlineColor: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialEnvelopeStyle_0__: boolean;
+    }
+    
+    enum EAudioMaterialEnvelopeType { AD, ADSR, EAudioMaterialEnvelopeType_MAX, __typeKeyDoNoAccess}
+    class AudioMaterialEnvelopeSettings {
+        constructor();
+        constructor(EnvelopeType: UE.EAudioMaterialEnvelopeType, AttackCurve: number, AttackValue: number, AttackTime: number, DecayCurve: number, DecayTime: number, SustainValue: number, ReleaseCurve: number, ReleaseTime: number);
+        EnvelopeType: UE.EAudioMaterialEnvelopeType;
+        AttackCurve: number;
+        AttackValue: number;
+        AttackTime: number;
+        DecayCurve: number;
+        DecayTime: number;
+        SustainValue: number;
+        ReleaseCurve: number;
+        ReleaseTime: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialEnvelopeSettings_0__: boolean;
+    }
+    
+    class AudioMaterialEnvelope extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetStyle: UE.AudioMaterialEnvelopeStyle;
+        EnvelopeSettings: UE.AudioMaterialEnvelopeSettings;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialEnvelope;
+        static Load(InName: string): AudioMaterialEnvelope;
+    
+        __tid_AudioMaterialEnvelope_0__: boolean;
+    }
+    
+    class AudioTextBoxStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(BackgroundImage: UE.SlateBrush, BackgroundColor: UE.SlateColor);
+        BackgroundImage: UE.SlateBrush;
+        BackgroundColor: UE.SlateColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioTextBoxStyle_0__: boolean;
+    }
+    
+    class AudioMaterialKnobStyle extends UE.AudioMaterialWidgetStyle {
+        constructor();
+        constructor(KnobMainColor: UE.LinearColor, KnobAccentColor: UE.LinearColor, KnobShadowColor: UE.LinearColor, KnobSmoothBevelColor: UE.LinearColor, KnobIndicatorDotColor: UE.LinearColor, KnobEdgeFillColor: UE.LinearColor, KnobBarColor: UE.LinearColor, KnobBarShadowColor: UE.LinearColor, KnobBarFillMinColor: UE.LinearColor, KnobBarFillMidColor: UE.LinearColor, KnobBarFillMaxColor: UE.LinearColor, KnobBarFillTintColor: UE.LinearColor, TextBoxStyle: UE.AudioTextBoxStyle);
+        KnobMainColor: UE.LinearColor;
+        KnobAccentColor: UE.LinearColor;
+        KnobShadowColor: UE.LinearColor;
+        KnobSmoothBevelColor: UE.LinearColor;
+        KnobIndicatorDotColor: UE.LinearColor;
+        KnobEdgeFillColor: UE.LinearColor;
+        KnobBarColor: UE.LinearColor;
+        KnobBarShadowColor: UE.LinearColor;
+        KnobBarFillMinColor: UE.LinearColor;
+        KnobBarFillMidColor: UE.LinearColor;
+        KnobBarFillMaxColor: UE.LinearColor;
+        KnobBarFillTintColor: UE.LinearColor;
+        TextBoxStyle: UE.AudioTextBoxStyle;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialKnobStyle_0__: boolean;
+    }
+    
+    class AudioMaterialKnob extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetStyle: UE.AudioMaterialKnobStyle;
+        OnKnobValueChanged: $MulticastDelegate<(Value: number) => void>;
+        Value: number;
+        TuneSpeed: number;
+        FineTuneSpeed: number;
+        bLocked: boolean;
+        bMouseUsesStep: boolean;
+        StepSize: number;
+        /*
+         *Get the Knobs fine-tune speed
+         */
+        GetFineTuneSpeed() : number;
+        /*
+         *Get whether the knob is interactive or fixed.
+         */
+        GetIsLocked() : boolean;
+        /*
+         *Get whether the knob uses steps when tuning On Mouse move
+         */
+        GetMouseUsesStep() : boolean;
+        /*
+         *Get Step Size
+         */
+        GetStepSize() : number;
+        /*
+         *Get the Knobs tune speed
+         */
+        GetTuneSpeed() : number;
+        /*
+         *Get the current value of the knob.
+         */
+        GetValue() : number;
+        /*
+         *Set the knobs fine-tune speed. InValue is Clamped between 0.f - 1.f
+         */
+        SetFineTuneSpeed(InValue: number) : void;
+        /*
+         *Set the knob to be interactive or fixed
+         */
+        SetLocked(InLocked: boolean) : void;
+        /*
+         *Set the knob to use steps when turning On Mouse move
+         */
+        SetMouseUsesStep(InUsesStep: boolean) : void;
+        /*
+         *Set the amount to adjust the value when using steps
+         */
+        SetStepSize(InValue: number) : void;
+        /*
+         *Set the knobs tune speed. InValue is Clamped between 0.f - 1.f
+         */
+        SetTuneSpeed(InValue: number) : void;
+        /*
+         *Set the current value of the knob. InValue is Clamped between 0.f - 1.f
+         */
+        SetValue(InValue: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialKnob;
+        static Load(InName: string): AudioMaterialKnob;
+    
+        __tid_AudioMaterialKnob_0__: boolean;
+    }
+    
+    class AudioMaterialKnobWidgetStyle extends UE.SlateWidgetStyleContainerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        KnobStyle: UE.AudioMaterialKnobStyle;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialKnobWidgetStyle;
+        static Load(InName: string): AudioMaterialKnobWidgetStyle;
+    
+        __tid_AudioMaterialKnobWidgetStyle_0__: boolean;
+    }
+    
+    class FontOutlineSettings {
+        constructor();
+        constructor(OutlineSize: number, bMiteredCorners: boolean, bSeparateFillAlpha: boolean, bApplyOutlineToDropShadows: boolean, OutlineMaterial: UE.Object, OutlineColor: UE.LinearColor);
+        OutlineSize: number;
+        bMiteredCorners: boolean;
+        bSeparateFillAlpha: boolean;
+        bApplyOutlineToDropShadows: boolean;
+        OutlineMaterial: UE.Object;
+        OutlineColor: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_FontOutlineSettings_0__: boolean;
+    }
+    
+    class SlateFontInfo {
+        constructor();
+        constructor(FontObject: UE.Object, FontMaterial: UE.Object, OutlineSettings: UE.FontOutlineSettings, TypefaceFontName: string, Size: number, LetterSpacing: number, SkewAmount: number, bForceMonospaced: boolean, bMaterialIsStencil: boolean, MonospacedWidth: number, FontName: string, Hinting: UE.EFontHinting);
+        FontObject: UE.Object;
+        FontMaterial: UE.Object;
+        OutlineSettings: UE.FontOutlineSettings;
+        TypefaceFontName: string;
+        Size: number;
+        LetterSpacing: number;
+        SkewAmount: number;
+        bForceMonospaced: boolean;
+        bMaterialIsStencil: boolean;
+        MonospacedWidth: number;
+        FontName: string;
+        Hinting: UE.EFontHinting;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SlateFontInfo_0__: boolean;
+    }
+    
+    class AudioMaterialMeterStyle extends UE.AudioMaterialWidgetStyle {
+        constructor();
+        constructor(MeterFillMinColor: UE.LinearColor, MeterFillMidColor: UE.LinearColor, MeterFillMaxColor: UE.LinearColor, MeterFillBackgroundColor: UE.LinearColor, MeterPadding: UE.Vector2D, ValueRangeDb: UE.Vector2D, bShowScale: boolean, bScaleSide: boolean, ScaleHashOffset: number, ScaleHashWidth: number, ScaleHashHeight: number, DecibelsPerHash: number, Font: UE.SlateFontInfo);
+        MeterFillMinColor: UE.LinearColor;
+        MeterFillMidColor: UE.LinearColor;
+        MeterFillMaxColor: UE.LinearColor;
+        MeterFillBackgroundColor: UE.LinearColor;
+        MeterPadding: UE.Vector2D;
+        ValueRangeDb: UE.Vector2D;
+        bShowScale: boolean;
+        bScaleSide: boolean;
+        ScaleHashOffset: number;
+        ScaleHashWidth: number;
+        ScaleHashHeight: number;
+        DecibelsPerHash: number;
+        Font: UE.SlateFontInfo;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialMeterStyle_0__: boolean;
+    }
+    
+    class MeterChannelInfo {
+        constructor();
+        constructor(MeterValue: number, PeakValue: number, ClippingValue: number);
+        MeterValue: number;
+        PeakValue: number;
+        ClippingValue: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MeterChannelInfo_0__: boolean;
+    }
+    
+    class AudioMaterialMeter extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetStyle: UE.AudioMaterialMeterStyle;
+        Orientation: UE.EOrientation;
+        MeterChannelInfoDelegate: $Delegate<() => TArray<UE.MeterChannelInfo>>;
+        MeterChannelInfo: TArray<UE.MeterChannelInfo>;
+        /*
+         *Gets the current linear values of the meter.
+         */
+        GetMeterChannelInfo() : TArray<UE.MeterChannelInfo>;
+        GetMeterChannelInfo__DelegateSignature() : TArray<UE.MeterChannelInfo>;
+        /*
+         *Sets the current meter values.
+         */
+        SetMeterChannelInfo(InMeterChannelInfo: TArray<UE.MeterChannelInfo>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialMeter;
+        static Load(InName: string): AudioMaterialMeter;
+    
+        __tid_AudioMaterialMeter_0__: boolean;
+    }
+    
+    class AudioMaterialMeterWidgetStyle extends UE.SlateWidgetStyleContainerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MeterStyle: UE.AudioMaterialMeterStyle;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialMeterWidgetStyle;
+        static Load(InName: string): AudioMaterialMeterWidgetStyle;
+    
+        __tid_AudioMaterialMeterWidgetStyle_0__: boolean;
+    }
+    
+    class AudioMaterialSliderStyle extends UE.AudioMaterialWidgetStyle {
+        constructor();
+        constructor(SliderBackgroundColor: UE.LinearColor, SliderBackgroundAccentColor: UE.LinearColor, SliderValueMainColor: UE.LinearColor, SliderHandleMainColor: UE.LinearColor, SliderHandleOutlineColor: UE.LinearColor, TextBoxStyle: UE.AudioTextBoxStyle);
+        SliderBackgroundColor: UE.LinearColor;
+        SliderBackgroundAccentColor: UE.LinearColor;
+        SliderValueMainColor: UE.LinearColor;
+        SliderHandleMainColor: UE.LinearColor;
+        SliderHandleOutlineColor: UE.LinearColor;
+        TextBoxStyle: UE.AudioTextBoxStyle;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMaterialSliderStyle_0__: boolean;
+    }
+    
+    class AudioMaterialSlider extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetStyle: UE.AudioMaterialSliderStyle;
+        OnValueChanged: $MulticastDelegate<(Value: number) => void>;
+        Value: number;
+        Orientation: UE.EOrientation;
+        TuneSpeed: number;
+        FineTuneSpeed: number;
+        bLocked: boolean;
+        bMouseUsesStep: boolean;
+        StepSize: number;
+        /*
+         *Get slider fine-tune speed
+         */
+        GetFineTuneSpeed() : number;
+        /*
+         *Get whether the slider is interactive or fixed.
+         */
+        GetIsLocked() : boolean;
+        /*
+         *Get whether the slider uses steps when turning On Mouse move
+         */
+        GetMouseUsesStep() : boolean;
+        /*
+         *Get Step Size
+         */
+        GetStepSize() : number;
+        /*
+         *Get slider tune speed
+         */
+        GetTuneSpeed() : number;
+        /*
+         *Gets the current value of the slider.
+         */
+        GetValue() : number;
+        /*
+         *Set the fine-tune speed of the slider. InValue is Clamped between 0.f - 1.f
+         */
+        SetFineTuneSpeed(InValue: number) : void;
+        /*
+         *Set the slider to be interactive or fixed
+         */
+        SetLocked(bInLocked: boolean) : void;
+        /*
+         *Sets the slider to use steps when turning On Mouse move
+         */
+        SetMouseUsesStep(bInUsesStep: boolean) : void;
+        /*
+         *Sets the amount to adjust the value when using steps
+         */
+        SetStepSize(InValue: number) : void;
+        /*
+         *Set the tune speed of the slider. InValue is Clamped between 0.f - 1.f
+         */
+        SetTuneSpeed(InValue: number) : void;
+        /*
+         *Sets the current value of the slider. InValue is Clamped between 0.f - 1.f
+         */
+        SetValue(InValue: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialSlider;
+        static Load(InName: string): AudioMaterialSlider;
+    
+        __tid_AudioMaterialSlider_0__: boolean;
+    }
+    
+    class AudioMaterialSliderWidgetStyle extends UE.SlateWidgetStyleContainerBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SliderStyle: UE.AudioMaterialSliderStyle;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMaterialSliderWidgetStyle;
+        static Load(InName: string): AudioMaterialSliderWidgetStyle;
+    
+        __tid_AudioMaterialSliderWidgetStyle_0__: boolean;
+    }
+    
+    class AudioMeterStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(MeterValueImage: UE.SlateBrush, BackgroundImage: UE.SlateBrush, MeterBackgroundImage: UE.SlateBrush, MeterValueBackgroundImage: UE.SlateBrush, MeterPeakImage: UE.SlateBrush, MeterSize: UE.Vector2D, MeterPadding: UE.Vector2D, MeterValuePadding: number, PeakValueWidth: number, ValueRangeDb: UE.Vector2D, bShowScale: boolean, bScaleSide: boolean, ScaleHashOffset: number, ScaleHashWidth: number, ScaleHashHeight: number, DecibelsPerHash: number, Font: UE.SlateFontInfo);
+        MeterValueImage: UE.SlateBrush;
+        BackgroundImage: UE.SlateBrush;
+        MeterBackgroundImage: UE.SlateBrush;
+        MeterValueBackgroundImage: UE.SlateBrush;
+        MeterPeakImage: UE.SlateBrush;
+        MeterSize: UE.Vector2D;
+        MeterPadding: UE.Vector2D;
+        MeterValuePadding: number;
+        PeakValueWidth: number;
+        ValueRangeDb: UE.Vector2D;
+        bShowScale: boolean;
+        bScaleSide: boolean;
+        ScaleHashOffset: number;
+        ScaleHashWidth: number;
+        ScaleHashHeight: number;
+        DecibelsPerHash: number;
+        Font: UE.SlateFontInfo;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMeterStyle_0__: boolean;
+    }
+    
+    class AudioMeter extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MeterChannelInfo: TArray<UE.MeterChannelInfo>;
+        MeterChannelInfoDelegate: $Delegate<() => TArray<UE.MeterChannelInfo>>;
+        WidgetStyle: UE.AudioMeterStyle;
+        Orientation: UE.EOrientation;
+        BackgroundColor: UE.LinearColor;
+        MeterBackgroundColor: UE.LinearColor;
+        MeterValueColor: UE.LinearColor;
+        MeterPeakColor: UE.LinearColor;
+        MeterClippingColor: UE.LinearColor;
+        MeterScaleColor: UE.LinearColor;
+        MeterScaleLabelColor: UE.LinearColor;
+        /*
+         *Gets the current linear value of the meter.
+         */
+        GetMeterChannelInfo() : TArray<UE.MeterChannelInfo>;
+        GetMeterChannelInfo__DelegateSignature() : TArray<UE.MeterChannelInfo>;
+        /*
+         *Sets the background color
+         */
+        SetBackgroundColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the meter background color
+         */
+        SetMeterBackgroundColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the current meter values.
+         */
+        SetMeterChannelInfo(InMeterChannelInfo: TArray<UE.MeterChannelInfo>) : void;
+        /*
+         *Sets the meter clipping color
+         */
+        SetMeterClippingColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the meter peak color
+         */
+        SetMeterPeakColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the meter scale color
+         */
+        SetMeterScaleColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the meter scale color
+         */
+        SetMeterScaleLabelColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the meter value color
+         */
+        SetMeterValueColor(InValue: UE.LinearColor) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioMeter;
+        static Load(InName: string): AudioMeter;
+    
+        __tid_AudioMeter_0__: boolean;
+    }
+    
+    class AudioMeterDefaultColorStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(MeterBackgroundColor: UE.LinearColor, MeterValueColor: UE.LinearColor, MeterPeakColor: UE.LinearColor, MeterClippingColor: UE.LinearColor, MeterScaleColor: UE.LinearColor, MeterScaleLabelColor: UE.LinearColor);
+        MeterBackgroundColor: UE.LinearColor;
+        MeterValueColor: UE.LinearColor;
+        MeterPeakColor: UE.LinearColor;
+        MeterClippingColor: UE.LinearColor;
+        MeterScaleColor: UE.LinearColor;
+        MeterScaleLabelColor: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioMeterDefaultColorStyle_0__: boolean;
+    }
+    
     class AudioMixerCommandlet extends UE.Commandlet {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -35524,6 +36289,131 @@ declare module "ue" {
         static Load(InName: string): AudioMixerCommandlet;
     
         __tid_AudioMixerCommandlet_0__: boolean;
+    }
+    
+    class FixedSampleSequenceRulerStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(HandleWidth: number, HandleColor: UE.SlateColor, HandleBrush: UE.SlateBrush, TicksColor: UE.SlateColor, TicksTextColor: UE.SlateColor, TicksTextFont: UE.SlateFontInfo, TicksTextOffset: number, BackgroundColor: UE.SlateColor, BackgroundBrush: UE.SlateBrush, DesiredWidth: number, DesiredHeight: number);
+        HandleWidth: number;
+        HandleColor: UE.SlateColor;
+        HandleBrush: UE.SlateBrush;
+        TicksColor: UE.SlateColor;
+        TicksTextColor: UE.SlateColor;
+        TicksTextFont: UE.SlateFontInfo;
+        TicksTextOffset: number;
+        BackgroundColor: UE.SlateColor;
+        BackgroundBrush: UE.SlateBrush;
+        DesiredWidth: number;
+        DesiredHeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_FixedSampleSequenceRulerStyle_0__: boolean;
+    }
+    
+    class SampledSequenceValueGridOverlayStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(GridColor: UE.SlateColor, GridThickness: number, LabelTextColor: UE.SlateColor, LabelTextFont: UE.SlateFontInfo, DesiredWidth: number, DesiredHeight: number);
+        GridColor: UE.SlateColor;
+        GridThickness: number;
+        LabelTextColor: UE.SlateColor;
+        LabelTextFont: UE.SlateFontInfo;
+        DesiredWidth: number;
+        DesiredHeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SampledSequenceValueGridOverlayStyle_0__: boolean;
+    }
+    
+    class SampledSequenceViewerStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(SequenceColor: UE.SlateColor, SequenceLineThickness: number, MajorGridLineColor: UE.SlateColor, MinorGridLineColor: UE.SlateColor, ZeroCrossingLineColor: UE.SlateColor, ZeroCrossingLineThickness: number, SampleMarkersSize: number, SequenceBackgroundColor: UE.SlateColor, BackgroundBrush: UE.SlateBrush, DesiredWidth: number, DesiredHeight: number);
+        SequenceColor: UE.SlateColor;
+        SequenceLineThickness: number;
+        MajorGridLineColor: UE.SlateColor;
+        MinorGridLineColor: UE.SlateColor;
+        ZeroCrossingLineColor: UE.SlateColor;
+        ZeroCrossingLineThickness: number;
+        SampleMarkersSize: number;
+        SequenceBackgroundColor: UE.SlateColor;
+        BackgroundBrush: UE.SlateBrush;
+        DesiredWidth: number;
+        DesiredHeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SampledSequenceViewerStyle_0__: boolean;
+    }
+    
+    class TriggerThresholdLineStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(LineColor: UE.LinearColor);
+        LineColor: UE.LinearColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TriggerThresholdLineStyle_0__: boolean;
+    }
+    
+    class AudioOscilloscopePanelStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(TimeRulerStyle: UE.FixedSampleSequenceRulerStyle, ValueGridStyle: UE.SampledSequenceValueGridOverlayStyle, WaveViewerStyle: UE.SampledSequenceViewerStyle, TriggerThresholdLineStyle: UE.TriggerThresholdLineStyle);
+        TimeRulerStyle: UE.FixedSampleSequenceRulerStyle;
+        ValueGridStyle: UE.SampledSequenceValueGridOverlayStyle;
+        WaveViewerStyle: UE.SampledSequenceViewerStyle;
+        TriggerThresholdLineStyle: UE.TriggerThresholdLineStyle;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioOscilloscopePanelStyle_0__: boolean;
+    }
+    
+    enum EXAxisLabelsUnit { Samples, Seconds, EXAxisLabelsUnit_MAX, __typeKeyDoNoAccess}
+    enum EYAxisLabelsUnit { Linear, Db, EYAxisLabelsUnit_MAX, __typeKeyDoNoAccess}
+    enum EAudioOscilloscopeTriggerMode { None, Rising, Falling, EAudioOscilloscopeTriggerMode_MAX, __typeKeyDoNoAccess}
+    enum EAudioPanelLayoutType { Basic, Advanced, EAudioPanelLayoutType_MAX, __typeKeyDoNoAccess}
+    class AudioOscilloscope extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OscilloscopeStyle: UE.AudioOscilloscopePanelStyle;
+        AudioBus: UE.AudioBus;
+        MaxTimeWindowMs: number;
+        TimeWindowMs: number;
+        AnalysisPeriodMs: number;
+        bShowTimeGrid: boolean;
+        TimeGridLabelsUnit: UE.EXAxisLabelsUnit;
+        bShowAmplitudeGrid: boolean;
+        bShowAmplitudeLabels: boolean;
+        AmplitudeGridLabelsUnit: UE.EYAxisLabelsUnit;
+        TriggerMode: UE.EAudioOscilloscopeTriggerMode;
+        TriggerThreshold: number;
+        PanelLayoutType: UE.EAudioPanelLayoutType;
+        ChannelToAnalyze: number;
+        CanTriggeringBeSet() : boolean;
+        GetOscilloscopeAudioSamples__DelegateSignature() : TArray<number>;
+        /*
+         *Starts the oscilloscope processing.
+         */
+        StartProcessing() : void;
+        /*
+         *Stops the oscilloscope processing.
+         */
+        StopProcessing() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioOscilloscope;
+        static Load(InName: string): AudioOscilloscope;
+    
+        __tid_AudioOscilloscope_0__: boolean;
     }
     
     class AudioPanelWidgetInterface extends UE.Interface {
@@ -35567,6 +36457,23 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_AudioQualitySettings_0__: boolean;
+    }
+    
+    class AudioRadialSliderStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(TextBoxStyle: UE.AudioTextBoxStyle, CenterBackgroundColor: UE.SlateColor, SliderBarColor: UE.SlateColor, SliderProgressColor: UE.SlateColor, LabelPadding: number, DefaultSliderRadius: number);
+        TextBoxStyle: UE.AudioTextBoxStyle;
+        CenterBackgroundColor: UE.SlateColor;
+        SliderBarColor: UE.SlateColor;
+        SliderProgressColor: UE.SlateColor;
+        LabelPadding: number;
+        DefaultSliderRadius: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioRadialSliderStyle_0__: boolean;
     }
     
     class AudioReverbEffect extends UE.AudioEffectParameters {
@@ -35646,6 +36553,73 @@ declare module "ue" {
         __tid_AudioSettings_0__: boolean;
     }
     
+    class AudioSlider extends UE.AudioSliderBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        LinToOutputCurve: TWeakObjectPtr<UE.CurveFloat>;
+        OutputToLinCurve: TWeakObjectPtr<UE.CurveFloat>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioSlider;
+        static Load(InName: string): AudioSlider;
+    
+        __tid_AudioSlider_0__: boolean;
+    }
+    
+    class SliderStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(NormalBarImage: UE.SlateBrush, HoveredBarImage: UE.SlateBrush, DisabledBarImage: UE.SlateBrush, NormalThumbImage: UE.SlateBrush, HoveredThumbImage: UE.SlateBrush, DisabledThumbImage: UE.SlateBrush, BarThickness: number);
+        NormalBarImage: UE.SlateBrush;
+        HoveredBarImage: UE.SlateBrush;
+        DisabledBarImage: UE.SlateBrush;
+        NormalThumbImage: UE.SlateBrush;
+        HoveredThumbImage: UE.SlateBrush;
+        DisabledThumbImage: UE.SlateBrush;
+        BarThickness: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SliderStyle_0__: boolean;
+    }
+    
+    class AudioSliderStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(SliderStyle: UE.SliderStyle, TextBoxStyle: UE.AudioTextBoxStyle, WidgetBackgroundImage: UE.SlateBrush, SliderBackgroundColor: UE.SlateColor, SliderBackgroundSize: UE.Vector2D, LabelPadding: number, SliderBarColor: UE.SlateColor, SliderThumbColor: UE.SlateColor, WidgetBackgroundColor: UE.SlateColor);
+        SliderStyle: UE.SliderStyle;
+        TextBoxStyle: UE.AudioTextBoxStyle;
+        WidgetBackgroundImage: UE.SlateBrush;
+        SliderBackgroundColor: UE.SlateColor;
+        SliderBackgroundSize: UE.Vector2D;
+        LabelPadding: number;
+        SliderBarColor: UE.SlateColor;
+        SliderThumbColor: UE.SlateColor;
+        WidgetBackgroundColor: UE.SlateColor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioSliderStyle_0__: boolean;
+    }
+    
+    class AudioSpectrumPlotStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(BackgroundColor: UE.SlateColor, GridColor: UE.SlateColor, AxisLabelColor: UE.SlateColor, AxisLabelFont: UE.SlateFontInfo, SpectrumColor: UE.SlateColor, CrosshairColor: UE.SlateColor, CrosshairLabelFont: UE.SlateFontInfo);
+        BackgroundColor: UE.SlateColor;
+        GridColor: UE.SlateColor;
+        AxisLabelColor: UE.SlateColor;
+        AxisLabelFont: UE.SlateFontInfo;
+        SpectrumColor: UE.SlateColor;
+        CrosshairColor: UE.SlateColor;
+        CrosshairLabelFont: UE.SlateFontInfo;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioSpectrumPlotStyle_0__: boolean;
+    }
+    
     class AudioSubsystemCollectionRoot extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -35653,6 +36627,60 @@ declare module "ue" {
         static Load(InName: string): AudioSubsystemCollectionRoot;
     
         __tid_AudioSubsystemCollectionRoot_0__: boolean;
+    }
+    
+    class SampledSequenceVectorViewerStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(BackgroundColor: UE.SlateColor, BackgroundBrush: UE.SlateBrush, LineColor: UE.LinearColor, LineThickness: number);
+        BackgroundColor: UE.SlateColor;
+        BackgroundBrush: UE.SlateBrush;
+        LineColor: UE.LinearColor;
+        LineThickness: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SampledSequenceVectorViewerStyle_0__: boolean;
+    }
+    
+    class AudioVectorscopePanelStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(ValueGridStyle: UE.SampledSequenceValueGridOverlayStyle, VectorViewerStyle: UE.SampledSequenceVectorViewerStyle);
+        ValueGridStyle: UE.SampledSequenceValueGridOverlayStyle;
+        VectorViewerStyle: UE.SampledSequenceVectorViewerStyle;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_AudioVectorscopePanelStyle_0__: boolean;
+    }
+    
+    class AudioVectorscope extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VectorscopeStyle: UE.AudioVectorscopePanelStyle;
+        AudioBus: UE.AudioBus;
+        bShowGrid: boolean;
+        GridDivisions: number;
+        MaxDisplayPersistenceMs: number;
+        DisplayPersistenceMs: number;
+        Scale: number;
+        PanelLayoutType: UE.EAudioPanelLayoutType;
+        GetVectorscopeAudioSamples__DelegateSignature() : TArray<number>;
+        /*
+         *Starts the vectorscope processing.
+         */
+        StartProcessing() : void;
+        /*
+         *Stops the vectorscope processing.
+         */
+        StopProcessing() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioVectorscope;
+        static Load(InName: string): AudioVectorscope;
+    
+        __tid_AudioVectorscope_0__: boolean;
     }
     
     enum EAudioVolumeLocationState { InsideTheVolume, OutsideTheVolume, EAudioVolumeLocationState_MAX, __typeKeyDoNoAccess}
@@ -35704,6 +36732,24 @@ declare module "ue" {
         static Load(InName: string): AudioVolume;
     
         __tid_AudioVolume_0__: boolean;
+    }
+    
+    class AudioVolumeRadialSlider extends UE.AudioRadialSlider {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioVolumeRadialSlider;
+        static Load(InName: string): AudioVolumeRadialSlider;
+    
+        __tid_AudioVolumeRadialSlider_0__: boolean;
+    }
+    
+    class AudioVolumeSlider extends UE.AudioSlider {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AudioVolumeSlider;
+        static Load(InName: string): AudioVolumeSlider;
+    
+        __tid_AudioVolumeSlider_0__: boolean;
     }
     
     class AudioWidgetSubsystem extends UE.EngineSubsystem {
@@ -38217,6 +39263,18 @@ declare module "ue" {
         __tid_BorderSlot_0__: boolean;
     }
     
+    class BoundActorProxy {
+        constructor();
+        constructor(BoundActor: UE.Actor);
+        BoundActor: UE.Actor;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_BoundActorProxy_0__: boolean;
+    }
+    
     class BoundsCopyComponent extends UE.ActorComponent {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         BoundsSourceActor: TSoftObjectPtr<UE.Actor>;
@@ -38477,16 +39535,6 @@ declare module "ue" {
         __tid_BuiltInAttributesExtensions_0__: boolean;
     }
     
-    class SlateWidgetStyle {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_SlateWidgetStyle_0__: boolean;
-    }
-    
     class SlateSound {
         constructor();
         constructor(ResourceObject: UE.Object);
@@ -38592,15 +39640,6 @@ declare module "ue" {
         static Load(InName: string): ButtonStyleAsset;
     
         __tid_ButtonStyleAsset_0__: boolean;
-    }
-    
-    class SlateWidgetStyleContainerBase extends UE.Object {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): SlateWidgetStyleContainerBase;
-        static Load(InName: string): SlateWidgetStyleContainerBase;
-    
-        __tid_SlateWidgetStyleContainerBase_0__: boolean;
     }
     
     class ButtonWidgetStyle extends UE.SlateWidgetStyleContainerBase {
@@ -40264,6 +41303,22 @@ declare module "ue" {
         __tid_ColorGradingSettings_0__: boolean;
     }
     
+    class ColorGradingSpinBoxStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(BorderBrush: UE.SlateBrush, ActiveBorderBrush: UE.SlateBrush, HoveredBorderBrush: UE.SlateBrush, SelectorBrush: UE.SlateBrush, SelectorWidth: number);
+        BorderBrush: UE.SlateBrush;
+        ActiveBorderBrush: UE.SlateBrush;
+        HoveredBorderBrush: UE.SlateBrush;
+        SelectorBrush: UE.SlateBrush;
+        SelectorWidth: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ColorGradingSpinBoxStyle_0__: boolean;
+    }
+    
     class DeviceColorCurveData {
         constructor();
         constructor(bEnable: boolean, bResetAfterCompletion: boolean, DeviceColorCurve: UE.CurveLinearColor);
@@ -40470,46 +41525,6 @@ declare module "ue" {
         static Load(InName: string): ComboBoxKey;
     
         __tid_ComboBoxKey_0__: boolean;
-    }
-    
-    class FontOutlineSettings {
-        constructor();
-        constructor(OutlineSize: number, bMiteredCorners: boolean, bSeparateFillAlpha: boolean, bApplyOutlineToDropShadows: boolean, OutlineMaterial: UE.Object, OutlineColor: UE.LinearColor);
-        OutlineSize: number;
-        bMiteredCorners: boolean;
-        bSeparateFillAlpha: boolean;
-        bApplyOutlineToDropShadows: boolean;
-        OutlineMaterial: UE.Object;
-        OutlineColor: UE.LinearColor;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_FontOutlineSettings_0__: boolean;
-    }
-    
-    class SlateFontInfo {
-        constructor();
-        constructor(FontObject: UE.Object, FontMaterial: UE.Object, OutlineSettings: UE.FontOutlineSettings, TypefaceFontName: string, Size: number, LetterSpacing: number, SkewAmount: number, bForceMonospaced: boolean, bMaterialIsStencil: boolean, MonospacedWidth: number, FontName: string, Hinting: UE.EFontHinting);
-        FontObject: UE.Object;
-        FontMaterial: UE.Object;
-        OutlineSettings: UE.FontOutlineSettings;
-        TypefaceFontName: string;
-        Size: number;
-        LetterSpacing: number;
-        SkewAmount: number;
-        bForceMonospaced: boolean;
-        bMaterialIsStencil: boolean;
-        MonospacedWidth: number;
-        FontName: string;
-        Hinting: UE.EFontHinting;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_SlateFontInfo_0__: boolean;
     }
     
     class ComboBoxString extends UE.Widget {
@@ -41926,6 +42941,7 @@ declare module "ue" {
         __tid_CurveImportFactory_0__: boolean;
     }
     
+    enum CurveInterpolationType { AUTOINTERP, LINEAR, CONSTANT, CurveInterpolationType_MAX, __typeKeyDoNoAccess}
     class CurveLinearColorAtlasFactory extends UE.Factory {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         Width: number;
@@ -42965,6 +43981,21 @@ declare module "ue" {
         __tid_DefaultContextSetting_0__: boolean;
     }
     
+    class DefaultLevelSequenceInstanceData extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        TransformOriginActor: UE.Actor;
+        TransformOrigin: UE.Transform;
+        /*
+         *Get the transform from which all absolute component transform sections should be relative. Scale is ignored.
+         */
+        BP_GetTransformOrigin() : UE.Transform;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DefaultLevelSequenceInstanceData;
+        static Load(InName: string): DefaultLevelSequenceInstanceData;
+    
+        __tid_DefaultLevelSequenceInstanceData_0__: boolean;
+    }
+    
     class DefaultPhysicsVolume extends UE.PhysicsVolume {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -43073,6 +44104,112 @@ declare module "ue" {
         static Load(InName: string): DestructibleInterface;
     
         __tid_DestructibleInterface_0__: boolean;
+    }
+    
+    class DetailRowMenuContext extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DetailRowMenuContext;
+        static Load(InName: string): DetailRowMenuContext;
+    
+        __tid_DetailRowMenuContext_0__: boolean;
+    }
+    
+    class DetailRowMenuContextPrivate extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DetailRowMenuContextPrivate;
+        static Load(InName: string): DetailRowMenuContextPrivate;
+    
+        __tid_DetailRowMenuContextPrivate_0__: boolean;
+    }
+    
+    class EditorConfigBase extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EditorConfigBase;
+        static Load(InName: string): EditorConfigBase;
+    
+        __tid_EditorConfigBase_0__: boolean;
+    }
+    
+    class DetailsSectionSelection {
+        constructor();
+        constructor(SectionNames: TSet<string>);
+        SectionNames: TSet<string>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DetailsSectionSelection_0__: boolean;
+    }
+    
+    class DetailsViewConfig {
+        constructor();
+        constructor(bShowFavoritesCategory: boolean, bShowAllAdvanced: boolean, bShowHiddenPropertiesWhilePlaying: boolean, bShowAllChildrenIfCategoryMatches: boolean, bShowOnlyKeyable: boolean, bShowOnlyAnimated: boolean, bShowOnlyModified: boolean, bShowSections: boolean, ValueColumnWidth: number, SelectedSections: TMap<string, UE.DetailsSectionSelection>);
+        bShowFavoritesCategory: boolean;
+        bShowAllAdvanced: boolean;
+        bShowHiddenPropertiesWhilePlaying: boolean;
+        bShowAllChildrenIfCategoryMatches: boolean;
+        bShowOnlyKeyable: boolean;
+        bShowOnlyAnimated: boolean;
+        bShowOnlyModified: boolean;
+        bShowSections: boolean;
+        ValueColumnWidth: number;
+        SelectedSections: TMap<string, UE.DetailsSectionSelection>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DetailsViewConfig_0__: boolean;
+    }
+    
+    class DetailsConfig extends UE.EditorConfigBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Views: TMap<string, UE.DetailsViewConfig>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DetailsConfig;
+        static Load(InName: string): DetailsConfig;
+    
+        __tid_DetailsConfig_0__: boolean;
+    }
+    
+    class PropertyViewBase extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Object: TSoftObjectPtr<UE.Object>;
+        SoftObjectPath: UE.SoftObjectPath;
+        bAutoLoadAsset: boolean;
+        OnPropertyChanged: $MulticastDelegate<(PropertyName: string) => void>;
+        GetObject() : UE.Object;
+        SetObject(NewObject: $Nullable<UE.Object>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PropertyViewBase;
+        static Load(InName: string): PropertyViewBase;
+    
+        __tid_PropertyViewBase_0__: boolean;
+    }
+    
+    class DetailsView extends UE.PropertyViewBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bAllowFiltering: boolean;
+        bAllowFavoriteSystem: boolean;
+        bShowModifiedPropertiesOption: boolean;
+        bShowKeyablePropertiesOption: boolean;
+        bShowAnimatedPropertiesOption: boolean;
+        ColumnWidth: number;
+        bShowScrollBar: boolean;
+        bForceHiddenPropertyVisibility: boolean;
+        ViewIdentifier: string;
+        CategoriesToShow: TArray<string>;
+        PropertiesToShow: TArray<string>;
+        bShowOnlyAllowed: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DetailsView;
+        static Load(InName: string): DetailsView;
+    
+        __tid_DetailsView_0__: boolean;
     }
     
     class DetectOrphanedLocalizedAssetsCommandlet extends UE.Commandlet {
@@ -43850,6 +44987,24 @@ declare module "ue" {
         __tid_DistributionVectorUniformCurve_0__: boolean;
     }
     
+    class ViewportDragOperation extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportDragOperation;
+        static Load(InName: string): ViewportDragOperation;
+    
+        __tid_ViewportDragOperation_0__: boolean;
+    }
+    
+    class DockableWindowDragOperation extends UE.ViewportDragOperation {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): DockableWindowDragOperation;
+        static Load(InName: string): DockableWindowDragOperation;
+    
+        __tid_DockableWindowDragOperation_0__: boolean;
+    }
+    
     enum ETextTransformPolicy { None, ToLower, ToUpper, ETextTransformPolicy_MAX, __typeKeyDoNoAccess}
     enum ETextOverflowPolicy { Clip, Ellipsis, MultilineEllipsis, MiddleEllipsis, ETextOverflowPolicy_MAX, __typeKeyDoNoAccess}
     class TextBlockStyle extends UE.SlateWidgetStyle {
@@ -44200,6 +45355,25 @@ declare module "ue" {
         __tid_DynamicEntryBox_0__: boolean;
     }
     
+    class DynamicsBandSettings {
+        constructor();
+        constructor(CrossoverTopFrequency: number, AttackTimeMsec: number, ReleaseTimeMsec: number, ThresholdDb: number, Ratio: number, KneeBandwidthDb: number, InputGainDb: number, OutputGainDb: number);
+        CrossoverTopFrequency: number;
+        AttackTimeMsec: number;
+        ReleaseTimeMsec: number;
+        ThresholdDb: number;
+        Ratio: number;
+        KneeBandwidthDb: number;
+        InputGainDb: number;
+        OutputGainDb: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_DynamicsBandSettings_0__: boolean;
+    }
+    
     class StreamableTextureInstance {
         constructor();
         /**
@@ -44236,7 +45410,16 @@ declare module "ue" {
     enum EArraySortOrder { Ascending, Descending, EArraySortOrder_MAX, __typeKeyDoNoAccess}
     enum EAssetEditorOpenLocation { Default, NewWindow, MainWindow, ContentBrowser, LastDockedWindowOrNewWindow, LastDockedWindowOrMainWindow, LastDockedWindowOrContentBrowser, EAssetEditorOpenLocation_MAX, __typeKeyDoNoAccess}
     enum EAttractorParticleSelectionMethod { EAPSM_Random, EAPSM_Sequential, EAPSM_MAX, __typeKeyDoNoAccess}
+    enum EAudioColorGradient { BlackToWhite, WhiteToBlack, EAudioColorGradient_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrogramFrequencyAxisPixelBucketMode { Sample, Peak, Average, EAudioSpectrogramFrequencyAxisPixelBucketMode_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrogramFrequencyAxisScale { Linear, Logarithmic, EAudioSpectrogramFrequencyAxisScale_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrumAnalyzerBallistics { Analog, Digital, EAudioSpectrumAnalyzerBallistics_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrumAnalyzerType { FFT, CQT, EAudioSpectrumAnalyzerType_MAX, __typeKeyDoNoAccess}
     enum EAudioSpectrumBandPresetType { KickDrum, SnareDrum, Voice, Cymbals, EAudioSpectrumBandPresetType_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrumPlotFrequencyAxisPixelBucketMode { Sample, Peak, Average, EAudioSpectrumPlotFrequencyAxisPixelBucketMode_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrumPlotFrequencyAxisScale { Linear, Logarithmic, EAudioSpectrumPlotFrequencyAxisScale_MAX, __typeKeyDoNoAccess}
+    enum EAudioSpectrumPlotTilt { NoTilt, Plus1_5dBPerOctave, Plus3dBPerOctave, Plus4_5dBPerOctave, Plus6dBPerOctave, EAudioSpectrumPlotTilt_MAX, __typeKeyDoNoAccess}
+    enum EAudioUnitsValueType { Linear, Frequency, Volume, EAudioUnitsValueType_MAX, __typeKeyDoNoAccess}
     enum EAutoExposureMethodUI { AEM_Histogram, AEM_Basic, AEM_Manual, AEM_MAX, __typeKeyDoNoAccess}
     enum EAutoSaveMethod { BackupAndRestore, BackupAndOverwrite, EAutoSaveMethod_MAX, __typeKeyDoNoAccess}
     enum EAxisList { None, X, Y, Z, Screen, XY, XZ, YZ, XYZ, All, ZRotation, Rotate2D, EAxisList_MAX, __typeKeyDoNoAccess}
@@ -44263,6 +45446,7 @@ declare module "ue" {
     enum EConsumeMouseWheel { WhenScrollingPossible, Always, Never, EConsumeMouseWheel_MAX, __typeKeyDoNoAccess}
     enum EContentBundleClientState { Unregistered, Registered, ContentInjectionRequested, ContentRemovalRequested, RegistrationFailed, EContentBundleClientState_MAX, __typeKeyDoNoAccess}
     enum EContentBundleStatus { Registered, ReadyToInject, FailedToInject, ContentInjected, Unknown, EContentBundleStatus_MAX, __typeKeyDoNoAccess}
+    enum EControllerType { Laser, AssistingLaser, UI, Navigation, Unknown, EControllerType_MAX, __typeKeyDoNoAccess}
     enum ECookMode { CookOnTheFly, CookOnTheFlyFromTheEditor, CookByTheBookFromTheEditor, CookByTheBook, CookWorker, ECookMode_MAX, __typeKeyDoNoAccess}
     enum ECookTickFlags { None, MarkupInUsePackages, HideProgressDisplay, ECookTickFlags_MAX, __typeKeyDoNoAccess}
     enum ECsgOper { CSG_Active, CSG_Add, CSG_Subtract, CSG_Intersect, CSG_Deintersect, CSG_None, CSG_MAX, __typeKeyDoNoAccess}
@@ -44593,6 +45777,52 @@ declare module "ue" {
         static Load(InName: string): EditableTextWidgetStyle;
     
         __tid_EditableTextWidgetStyle_0__: boolean;
+    }
+    
+    enum EditConditionByteEnum { First, Second, EditConditionByteEnum_MAX, __typeKeyDoNoAccess}
+    enum EditConditionTestEnum { First, Second, EditConditionTestEnum_MAX, __typeKeyDoNoAccess}
+    class EditConditionTestObject extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BoolProperty: boolean;
+        EnumProperty: UE.EditConditionTestEnum;
+        ByteEnumProperty: UE.EditConditionByteEnum;
+        DoubleProperty: number;
+        IntegerProperty: number;
+        UintBitfieldProperty: boolean;
+        UObjectPtr: UE.Object;
+        SoftClassPtr: TSoftClassPtr<UE.Object>;
+        WeakObjectPtr: TWeakObjectPtr<UE.Object>;
+        GetBoolFunction() : boolean;
+        GetByteEnumFunction() : UE.EditConditionByteEnum;
+        GetDoubleFunction() : number;
+        GetEnumFunction() : UE.EditConditionTestEnum;
+        GetIntegerFunction() : number;
+        GetSoftClassPtrFunction() : TSoftClassPtr<UE.Object>;
+        GetUintBitfieldFunction() : number;
+        GetUObjectPtrFunction() : UE.Object;
+        GetWeakObjectPtrFunction() : TWeakObjectPtr<UE.Object>;
+        /*
+         *Used in test cases that should fail, should not be able to execute a void function in edit condition
+         */
+        StaticVoidFunction() : void;
+        /*
+         *Used in test cases that should fail, should not be able to execute a void function in edit condition
+         */
+        VoidFunction() : void;
+        static StaticGetBoolFunction() : boolean;
+        static StaticGetByteEnumFunction() : UE.EditConditionByteEnum;
+        static StaticGetDoubleFunction() : number;
+        static StaticGetEnumFunction() : UE.EditConditionTestEnum;
+        static StaticGetIntegerFunction() : number;
+        static StaticGetSoftClassPtrFunction() : TSoftClassPtr<UE.Object>;
+        static StaticGetUintBitfieldFunction() : number;
+        static StaticGetUObjectPtrFunction() : UE.Object;
+        static StaticGetWeakObjectPtrFunction() : TWeakObjectPtr<UE.Object>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EditConditionTestObject;
+        static Load(InName: string): EditConditionTestObject;
+    
+        __tid_EditConditionTestObject_0__: boolean;
     }
     
     class EditorActorSubsystem extends UE.EditorSubsystem {
@@ -47388,7 +48618,6 @@ declare module "ue" {
         __tid_TableViewStyle_0__: boolean;
     }
     
-    enum EOrientation { Orient_Horizontal, Orient_Vertical, Orient_MAX, __typeKeyDoNoAccess}
     enum ESelectionMode { None, Single, SingleToggle, Multi, ESelectionMode_MAX, __typeKeyDoNoAccess}
     enum EScrollIntoViewAlignment { IntoView, TopOrLeft, CenterAligned, BottomOrRight, EScrollIntoViewAlignment_MAX, __typeKeyDoNoAccess}
     class ListView extends UE.ListViewBase {
@@ -47878,24 +49107,6 @@ declare module "ue" {
         static Load(InName: string): EditorUtilityScrollBox;
     
         __tid_EditorUtilityScrollBox_0__: boolean;
-    }
-    
-    class SliderStyle extends UE.SlateWidgetStyle {
-        constructor();
-        constructor(NormalBarImage: UE.SlateBrush, HoveredBarImage: UE.SlateBrush, DisabledBarImage: UE.SlateBrush, NormalThumbImage: UE.SlateBrush, HoveredThumbImage: UE.SlateBrush, DisabledThumbImage: UE.SlateBrush, BarThickness: number);
-        NormalBarImage: UE.SlateBrush;
-        HoveredBarImage: UE.SlateBrush;
-        DisabledBarImage: UE.SlateBrush;
-        NormalThumbImage: UE.SlateBrush;
-        HoveredThumbImage: UE.SlateBrush;
-        DisabledThumbImage: UE.SlateBrush;
-        BarThickness: number;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_SliderStyle_0__: boolean;
     }
     
     class Slider extends UE.Widget {
@@ -48527,6 +49738,7 @@ declare module "ue" {
     enum EEasingFunc { Linear, Step, SinusoidalIn, SinusoidalOut, SinusoidalInOut, EaseIn, EaseOut, EaseInOut, ExpoIn, ExpoOut, ExpoInOut, CircularIn, CircularOut, CircularInOut, EEasingFunc_MAX, __typeKeyDoNoAccess}
     enum EEditorPropertyValueState { Default, Overridden, NotFound, AccessDenied, EEditorPropertyValueState_MAX, __typeKeyDoNoAccess}
     enum EEmitterDynamicParameterValue { EDPV_UserSet, EDPV_AutoSet, EDPV_VelocityX, EDPV_VelocityY, EDPV_VelocityZ, EDPV_VelocityMag, EDPV_MAX, __typeKeyDoNoAccess}
+    enum EEnvelopeFollowerPeakMode { MeanSquared, RootMeanSquared, Peak, Count, EEnvelopeFollowerPeakMode_MAX, __typeKeyDoNoAccess}
     enum EFallbackEnum { EFallbackEnum_MAX, __typeKeyDoNoAccess}
     enum EFBXAnimationLengthImportType { FBXALIT_ExportedTime, FBXALIT_AnimatedKey, FBXALIT_SetRange, FBXALIT_MAX, __typeKeyDoNoAccess}
     enum EFBXExpectedResultPreset { Error_Number, Warning_Number, Created_Staticmesh_Number, Created_Skeletalmesh_Number, Materials_Created_Number, Material_Slot_Imported_Name, Vertex_Number, Lod_Number, Vertex_Number_Lod, Mesh_Materials_Number, Mesh_LOD_Section_Number, Mesh_LOD_Section_Vertex_Number, Mesh_LOD_Section_Triangle_Number, Mesh_LOD_Section_Material_Name, Mesh_LOD_Section_Material_Index, Mesh_LOD_Section_Material_Imported_Name, Mesh_LOD_Vertex_Position, Mesh_LOD_Vertex_Normal, LOD_UV_Channel_Number, Bone_Number, Bone_Position, Animation_Frame_Number, Animation_Length, Animation_CustomCurve_KeyValue, Animation_CustomCurve_KeyArriveTangent, Animation_CustomCurve_KeyLeaveTangent, Skin_By_Bone_Vertex_Number, Animation_CustomCurve_KeyArriveTangentWeight, Animation_CustomCurve_KeyLeaveTangentWeight, EFBXExpectedResultPreset_MAX, __typeKeyDoNoAccess}
@@ -48553,6 +49765,8 @@ declare module "ue" {
     enum EFullyLoadPackageType { FULLYLOAD_Map, FULLYLOAD_Game_PreLoadClass, FULLYLOAD_Game_PostLoadClass, FULLYLOAD_Always, FULLYLOAD_Mutator, FULLYLOAD_MAX, __typeKeyDoNoAccess}
     enum EGainParamMode { Linear, Decibels, EGainParamMode_MAX, __typeKeyDoNoAccess}
     enum EGBufferFormat { Force8BitsPerChannel, Default, HighPrecisionNormals, Force16BitsPerChannel, EGBufferFormat_MAX, __typeKeyDoNoAccess}
+    enum EGranularSynthEnvelopeType { Rectangular, Triangle, DownwardTriangle, UpwardTriangle, ExponentialDecay, ExponentialIncrease, Gaussian, Hanning, Lanczos, Cosine, CosineSquared, Welch, Blackman, BlackmanHarris, Count, EGranularSynthEnvelopeType_MAX, __typeKeyDoNoAccess}
+    enum EGranularSynthSeekType { FromBeginning, FromCurrentPosition, Count, EGranularSynthSeekType_MAX, __typeKeyDoNoAccess}
     enum EGraphAxisStyle { Lines, Notches, Grid, EGraphAxisStyle_MAX, __typeKeyDoNoAccess}
     enum EGraphDataStyle { Lines, Filled, EGraphDataStyle_MAX, __typeKeyDoNoAccess}
     enum EGraphType { GT_Function, GT_Ubergraph, GT_Macro, GT_Animation, GT_StateMachine, GT_MAX, __typeKeyDoNoAccess}
@@ -48569,6 +49783,7 @@ declare module "ue" {
     enum EInputDeviceAnalogStickMask { None, Left, Right, EInputDeviceAnalogStickMask_MAX, __typeKeyDoNoAccess}
     enum EInputMappingRebuildType { None, Rebuild, RebuildWithFlush, EInputMappingRebuildType_MAX, __typeKeyDoNoAccess}
     enum EInputPreProcessorType { Overlay, PreEngine, Engine, PreEditor, Editor, PreGame, Game, Count, EInputPreProcessorType_MAX, __typeKeyDoNoAccess}
+    enum EInteractorHand { Right, Left, EInteractorHand_MAX, __typeKeyDoNoAccess}
     enum EInterpToBehaviourType { OneShot, OneShot_Reverse, Loop_Reset, PingPong, EInterpToBehaviourType_MAX, __typeKeyDoNoAccess}
     enum ELabelAnchorMode { LabelAnchorMode_TopLeft, LabelAnchorMode_TopCenter, LabelAnchorMode_TopRight, LabelAnchorMode_CenterLeft, LabelAnchorMode_Centered, LabelAnchorMode_CenterRight, LabelAnchorMode_BottomLeft, LabelAnchorMode_BottomCenter, LabelAnchorMode_BottomRight, LabelAnchorMode_MAX, __typeKeyDoNoAccess}
     enum ELandscapeFoliageEditorControlType { IgnoreCtrl, RequireCtrl, RequireNoCtrl, ELandscapeFoliageEditorControlType_MAX, __typeKeyDoNoAccess}
@@ -48584,6 +49799,7 @@ declare module "ue" {
     enum ELightMapPaddingType { LMPT_NormalPadding, LMPT_PrePadding, LMPT_NoPadding, LMPT_MAX, __typeKeyDoNoAccess}
     enum ELightUnits { Unitless, Candelas, Lumens, EV, ELightUnits_MAX, __typeKeyDoNoAccess}
     enum EListItemAlignment { EvenlyDistributed, EvenlySize, EvenlyWide, LeftAligned, RightAligned, CenterAligned, Fill, EListItemAlignment_MAX, __typeKeyDoNoAccess}
+    enum EListViewColumnType { BuiltIn, PropertyGenerated, EListViewColumnType_MAX, __typeKeyDoNoAccess}
     enum ELocalizedTextSourceCategory { Game, Engine, Editor, ELocalizedTextSourceCategory_MAX, __typeKeyDoNoAccess}
     enum ELocalPositionOrigin { Instance, InstancePreSkinning, Primitive, ELocalPositionOrigin_MAX, __typeKeyDoNoAccess}
     enum ELocationBoneSocketSelectionMethod { BONESOCKETSEL_Sequential, BONESOCKETSEL_Random, BONESOCKETSEL_MAX, __typeKeyDoNoAccess}
@@ -50014,6 +51230,19 @@ declare module "ue" {
         __tid_EnumProperty_0__: boolean;
     }
     
+    class EnvelopeFollowerListener extends UE.ActorComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnEnvelopeFollowerUpdate: $MulticastDelegate<(EnvelopeValue: number) => void>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EnvelopeFollowerListener;
+        static Load(InName: string): EnvelopeFollowerListener;
+    
+        __tid_EnvelopeFollowerListener_0__: boolean;
+    }
+    
+    enum EObjectMixerHybridMode { HybridActor, HybridComponent, HybridNone, EObjectMixerHybridMode_MAX, __typeKeyDoNoAccess}
+    enum EObjectMixerInheritanceInclusionOptions { None, IncludeOnlyImmediateParent, IncludeOnlyImmediateChildren, IncludeOnlyImmediateParentAndChildren, IncludeAllParents, IncludeAllChildren, IncludeAllParentsAndChildren, IncludeAllParentsAndOnlyImmediateChildren, IncludeOnlyImmediateParentAndAllChildren, EObjectMixerInheritanceInclusionOptions_MAX, __typeKeyDoNoAccess}
+    enum EObjectMixerTreeViewMode { NoFolders, Folders, EObjectMixerTreeViewMode_MAX, __typeKeyDoNoAccess}
     enum EOcclusionCombineMode { OCM_Minimum, OCM_Multiply, OCM_MAX, __typeKeyDoNoAccess}
     enum EOptimizationType { OT_NumOfTriangles, OT_MaxDeviation, OT_MAX, __typeKeyDoNoAccess}
     enum EOrthoThumbnailDirection { Top, Bottom, Left, Right, Front, Back, EOrthoThumbnailDirection_MAX, __typeKeyDoNoAccess}
@@ -50029,11 +51258,40 @@ declare module "ue" {
     enum EParticleSourceSelectionMethod { EPSSM_Random, EPSSM_Sequential, EPSSM_MAX, __typeKeyDoNoAccess}
     enum EPasteTo { PT_OriginalLocation, PT_Here, PT_WorldOrigin, PT_MAX, __typeKeyDoNoAccess}
     enum EPathTracingBufferTextureId { PTBT_Radiance, PTBT_DenoisedRadiance, PTBT_Albedo, PTBT_Normal, PTBT_Variance, PTBT_MAX, __typeKeyDoNoAccess}
+    enum EPhaserLFOType { Sine, UpSaw, DownSaw, Square, Triangle, Exponential, RandomSampleHold, Count, EPhaserLFOType_MAX, __typeKeyDoNoAccess}
     enum EPhysicalMaterialMaskColor { Red, Green, Blue, Cyan, Magenta, Yellow, White, Black, MAX, __typeKeyDoNoAccess}
     enum EPhysicsAssetEditorCenterOfMassViewMode { All, Selected, None, EPhysicsAssetEditorCenterOfMassViewMode_MAX, __typeKeyDoNoAccess}
     enum EPhysicsAssetEditorCollisionViewMode { Solid, Wireframe, SolidWireframe, None, EPhysicsAssetEditorCollisionViewMode_MAX, __typeKeyDoNoAccess}
     enum EPhysicsAssetEditorConstraintViewMode { None, AllPositions, AllLimits, EPhysicsAssetEditorConstraintViewMode_MAX, __typeKeyDoNoAccess}
     enum EPhysicsAssetEditorMeshViewMode { Solid, Wireframe, None, EPhysicsAssetEditorMeshViewMode_MAX, __typeKeyDoNoAccess}
+    enum ESynth1PatchSource { LFO1, LFO2, Envelope, BiasEnvelope, Count, ESynth1PatchSource_MAX, __typeKeyDoNoAccess}
+    enum ESynth1PatchDestination { Osc1Gain, Osc1Frequency, Osc1Pulsewidth, Osc2Gain, Osc2Frequency, Osc2Pulsewidth, FilterFrequency, FilterQ, Gain, Pan, LFO1Frequency, LFO1Gain, LFO2Frequency, LFO2Gain, Count, ESynth1PatchDestination_MAX, __typeKeyDoNoAccess}
+    class Synth1PatchCable {
+        constructor();
+        constructor(Depth: number, Destination: UE.ESynth1PatchDestination);
+        Depth: number;
+        Destination: UE.ESynth1PatchDestination;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_Synth1PatchCable_0__: boolean;
+    }
+    
+    class EpicSynth1Patch {
+        constructor();
+        constructor(PatchSource: UE.ESynth1PatchSource, PatchCables: TArray<UE.Synth1PatchCable>);
+        PatchSource: UE.ESynth1PatchSource;
+        PatchCables: TArray<UE.Synth1PatchCable>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_EpicSynth1Patch_0__: boolean;
+    }
+    
     enum EPingAverageType { None, MovingAverage, PlayerStateAvg, EPingAverageType_MAX, __typeKeyDoNoAccess}
     enum EPingType { None, RoundTrip, RoundTripExclFrame, ICMP, UDPQoS, Max, Count, EPingType_MAX, __typeKeyDoNoAccess}
     enum EPinHidingMode { NeverAsPin, PinHiddenByDefault, PinShownByDefault, AlwaysAsPin, EPinHidingMode_MAX, __typeKeyDoNoAccess}
@@ -50086,6 +51344,7 @@ declare module "ue" {
     enum EReporterLineStyle { Line, Dash, EReporterLineStyle_MAX, __typeKeyDoNoAccess}
     enum ERichCurveCompressionFormat { RCCF_Empty, RCCF_Constant, RCCF_Linear, RCCF_Cubic, RCCF_Mixed, RCCF_Weighted, RCCF_MAX, __typeKeyDoNoAccess}
     enum ERichCurveKeyTimeCompressionFormat { RCKTCF_uint16, RCKTCF_float32, RCKTCF_MAX, __typeKeyDoNoAccess}
+    enum ERingModulatorTypeSourceEffect { Sine, Saw, Triangle, Square, Count, ERingModulatorTypeSourceEffect_MAX, __typeKeyDoNoAccess}
     enum ERootMotionAccumulateMode { Override, Additive, ERootMotionAccumulateMode_MAX, __typeKeyDoNoAccess}
     enum ERootMotionFinishVelocityMode { MaintainLastRootMotionVelocity, SetVelocity, ClampVelocity, ERootMotionFinishVelocityMode_MAX, __typeKeyDoNoAccess}
     enum ERootMotionSourceSettingsFlags { UseSensitiveLiftoffCheck, DisablePartialEndTick, IgnoreZAccumulate, ERootMotionSourceSettingsFlags_MAX, __typeKeyDoNoAccess}
@@ -50097,6 +51356,7 @@ declare module "ue" {
     enum ERuntimeVirtualTextureMaterialQuality { Low, Medium, High, Epic, ERuntimeVirtualTextureMaterialQuality_MAX, __typeKeyDoNoAccess}
     enum ERuntimeVirtualTextureMipValueMode { RVTMVM_None, RVTMVM_MipLevel, RVTMVM_MipBias, RVTMVM_RecalculateDerivatives, RVTMVM_DerivativeUV, RVTMVM_DerivativeWorld, RVTMVM_MAX, __typeKeyDoNoAccess}
     enum ERuntimeVirtualTextureTextureAddressMode { RVTTA_Clamp, RVTTA_Wrap, RVTTA_MAX, __typeKeyDoNoAccess}
+    enum ESamplePlayerSeekType { FromBeginning, FromCurrentPosition, FromEnd, Count, ESamplePlayerSeekType_MAX, __typeKeyDoNoAccess}
     enum ESamplerSourceMode { SSM_FromTextureAsset, SSM_Wrap_WorldGroupSettings, SSM_Clamp_WorldGroupSettings, SSM_TerrainWeightmapGroupSettings, SSM_MAX, __typeKeyDoNoAccess}
     enum ESceneTextureId { PPI_SceneColor, PPI_SceneDepth, PPI_DiffuseColor, PPI_SpecularColor, PPI_SubsurfaceColor, PPI_BaseColor, PPI_Specular, PPI_Metallic, PPI_WorldNormal, PPI_SeparateTranslucency, PPI_Opacity, PPI_Roughness, PPI_MaterialAO, PPI_CustomDepth, PPI_PostProcessInput0, PPI_PostProcessInput1, PPI_PostProcessInput2, PPI_PostProcessInput3, PPI_PostProcessInput4, PPI_PostProcessInput5, PPI_PostProcessInput6, PPI_DecalMask, PPI_ShadingModelColor, PPI_ShadingModelID, PPI_AmbientOcclusion, PPI_CustomStencil, PPI_StoredBaseColor, PPI_StoredSpecular, PPI_Velocity, PPI_WorldTangent, PPI_Anisotropy, PPI_UserSceneTexture0, PPI_UserSceneTexture1, PPI_UserSceneTexture2, PPI_UserSceneTexture3, PPI_UserSceneTexture4, PPI_UserSceneTexture5, PPI_UserSceneTexture6, PPI_MAX, __typeKeyDoNoAccess}
     enum EScrollDirection { Scroll_Down, Scroll_Up, Scroll_MAX, __typeKeyDoNoAccess}
@@ -50119,6 +51379,16 @@ declare module "ue" {
     enum ESlateGesture { None, Scroll, Magnify, Swipe, Rotate, LongPress, ESlateGesture_MAX, __typeKeyDoNoAccess}
     enum ESlateParentWindowSearchMethod { ActiveWindow, MainWindow, ESlateParentWindowSearchMethod_MAX, __typeKeyDoNoAccess}
     enum ESlatePostRT { None, ESlatePostRT_0, ESlatePostRT_1, ESlatePostRT_2, ESlatePostRT_3, ESlatePostRT_4, All, Num, ESlatePostRT_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectDynamicsPeakMode { MeanSquared, RootMeanSquared, Peak, Count, ESourceEffectDynamicsPeakMode_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectDynamicsProcessorType { Compressor, Limiter, Expander, Gate, UpwardsCompressor, Count, ESourceEffectDynamicsProcessorType_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectFilterCircuit { OnePole, StateVariable, Ladder, Count, ESourceEffectFilterCircuit_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectFilterParam { FilterFrequency, FilterResonance, Count, ESourceEffectFilterParam_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectFilterType { LowPass, HighPass, BandPass, BandStop, Count, ESourceEffectFilterType_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectMotionFilterCircuit { OnePole, StateVariable, Ladder, Count, ESourceEffectMotionFilterCircuit_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectMotionFilterModDestination { FilterACutoffFrequency, FilterAResonance, FilterAOutputVolumeDB, FilterBCutoffFrequency, FilterBResonance, FilterBOutputVolumeDB, FilterMix, Count, ESourceEffectMotionFilterModDestination_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectMotionFilterModSource { DistanceFromListener, SpeedRelativeToListener, SpeedOfSourceEmitter, SpeedOfListener, SpeedOfAngleDelta, Count, ESourceEffectMotionFilterModSource_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectMotionFilterTopology { SerialMode, ParallelMode, Count, ESourceEffectMotionFilterTopology_MAX, __typeKeyDoNoAccess}
+    enum ESourceEffectMotionFilterType { LowPass, HighPass, BandPass, BandStop, Count, ESourceEffectMotionFilterType_MAX, __typeKeyDoNoAccess}
     enum ESpawnActorScaleMethod { OverrideRootScale, MultiplyWithRoot, SelectDefaultAtRuntime, ESpawnActorScaleMethod_MAX, __typeKeyDoNoAccess}
     enum ESpeedTreeGeometryType { STG_Branch, STG_Frond, STG_Leaf, STG_FacingLeaf, STG_Billboard, STG_MAX, __typeKeyDoNoAccess}
     enum ESpeedTreeLODType { STLOD_Pop, STLOD_Smooth, STLOD_MAX, __typeKeyDoNoAccess}
@@ -50128,6 +51398,9 @@ declare module "ue" {
     enum ESplinePointType { Linear, Curve, Constant, CurveClamped, CurveCustomTangent, ESplinePointType_MAX, __typeKeyDoNoAccess}
     enum ESplitScreenType { None, TwoPlayer_Horizontal, TwoPlayer_Vertical, ThreePlayer_FavorTop, ThreePlayer_FavorBottom, ThreePlayer_Vertical, ThreePlayer_Horizontal, FourPlayer_Grid, FourPlayer_Vertical, FourPlayer_Horizontal, SplitTypeCount, ESplitScreenType_MAX, __typeKeyDoNoAccess}
     enum EStandbyType { STDBY_Rx, STDBY_Tx, STDBY_BadPing, STDBY_MAX, __typeKeyDoNoAccess}
+    enum EStereoChannelMode { MidSide, LeftRight, count, EStereoChannelMode_MAX, __typeKeyDoNoAccess}
+    enum EStereoDelayFiltertype { Lowpass, Highpass, Bandpass, Notch, Count, EStereoDelayFiltertype_MAX, __typeKeyDoNoAccess}
+    enum EStereoDelaySourceEffect { Normal, Cross, PingPong, Count, EStereoDelaySourceEffect_MAX, __typeKeyDoNoAccess}
     enum EStereoLayerShape { SLSH_QuadLayer, SLSH_CylinderLayer, SLSH_CubemapLayer, SLSH_EquirectLayer, SLSH_MAX, __typeKeyDoNoAccess}
     enum EStereoLayerType { SLT_WorldLocked, SLT_TrackerLocked, SLT_FaceLocked, SLT_MAX, __typeKeyDoNoAccess}
     enum EStreamingSourceTargetBehavior { Include, Exclude, EStreamingSourceTargetBehavior_MAX, __typeKeyDoNoAccess}
@@ -50136,10 +51409,29 @@ declare module "ue" {
     enum EStretchDirection { Both, DownOnly, UpOnly, EStretchDirection_MAX, __typeKeyDoNoAccess}
     enum EStructViewerDeveloperType { SVDT_None, SVDT_CurrentUser, SVDT_All, SVDT_Max, SVDT_MAX, __typeKeyDoNoAccess}
     enum EStyleColor { Black, Background, Title, WindowBorder, Foldout, Input, InputOutline, Recessed, Panel, Header, Dropdown, DropdownOutline, Hover, Hover2, White, White25, Highlight, Primary, PrimaryHover, PrimaryPress, Secondary, Foreground, ForegroundHover, ForegroundInverted, ForegroundHeader, Select, SelectInactive, SelectParent, SelectHover, Notifications, AccentBlue, AccentPurple, AccentPink, AccentRed, AccentOrange, AccentYellow, AccentGreen, AccentBrown, AccentBlack, AccentGray, AccentWhite, AccentFolder, Warning, Error, Success, User1, User2, User3, User4, User5, User6, User7, User8, User9, User10, User11, User12, User13, User14, User15, User16, MAX, __typeKeyDoNoAccess}
+    enum ESubmixEffectConvolutionReverbBlockSize { BlockSize256, BlockSize512, BlockSize1024, ESubmixEffectConvolutionReverbBlockSize_MAX, __typeKeyDoNoAccess}
+    enum ESubmixFilterAlgorithm { OnePole, StateVariable, Ladder, Count, ESubmixFilterAlgorithm_MAX, __typeKeyDoNoAccess}
+    enum ESubmixFilterType { LowPass, HighPass, BandPass, BandStop, Count, ESubmixFilterType_MAX, __typeKeyDoNoAccess}
     enum ESuggestProjVelocityTraceOption { DoNotTrace, TraceFullPath, OnlyTraceWhileAscending, ESuggestProjVelocityTraceOption_MAX, __typeKeyDoNoAccess}
     enum ESwapRootBone { SwapRootBone_Component, SwapRootBone_Actor, SwapRootBone_None, SwapRootBone_MAX, __typeKeyDoNoAccess}
     enum ESwitchMaterialOutputType { TMMOT_Float1, TMMOT_Float2, TMMOT_Float3, TMMOT_Float4, TMMOT_MAX, __typeKeyDoNoAccess}
+    enum ESynth1OscType { Sine, Saw, Triangle, Square, Noise, Count, ESynth1OscType_MAX, __typeKeyDoNoAccess}
+    enum ESynthFilterAlgorithm { OnePole, StateVariable, Ladder, Count, ESynthFilterAlgorithm_MAX, __typeKeyDoNoAccess}
+    enum ESynthFilterType { LowPass, HighPass, BandPass, BandStop, Count, ESynthFilterType_MAX, __typeKeyDoNoAccess}
+    enum ESynthKnobSize { Medium, Large, Count, ESynthKnobSize_MAX, __typeKeyDoNoAccess}
+    enum ESynthLFOMode { Sync, OneShot, Free, Count, ESynthLFOMode_MAX, __typeKeyDoNoAccess}
+    enum ESynthLFOPatchType { PatchToNone, PatchToGain, PatchToOscFreq, PatchToFilterFreq, PatchToFilterQ, PatchToOscPulseWidth, PatchToOscPan, PatchLFO1ToLFO2Frequency, PatchLFO1ToLFO2Gain, Count, ESynthLFOPatchType_MAX, __typeKeyDoNoAccess}
+    enum ESynthLFOType { Sine, UpSaw, DownSaw, Square, Triangle, Exponential, RandomSampleHold, Count, ESynthLFOType_MAX, __typeKeyDoNoAccess}
+    enum ESynthModEnvBiasPatch { PatchToNone, PatchToOscFreq, PatchToFilterFreq, PatchToFilterQ, PatchToLFO1Gain, PatchToLFO2Gain, PatchToLFO1Freq, PatchToLFO2Freq, Count, ESynthModEnvBiasPatch_MAX, __typeKeyDoNoAccess}
+    enum ESynthModEnvPatch { PatchToNone, PatchToOscFreq, PatchToFilterFreq, PatchToFilterQ, PatchToLFO1Gain, PatchToLFO2Gain, PatchToLFO1Freq, PatchToLFO2Freq, Count, ESynthModEnvPatch_MAX, __typeKeyDoNoAccess}
+    enum ESynthSlateColorStyle { Light, Dark, Count, ESynthSlateColorStyle_MAX, __typeKeyDoNoAccess}
+    enum ESynthSlateSizeType { Small, Medium, Large, Count, ESynthSlateSizeType_MAX, __typeKeyDoNoAccess}
+    enum ESynthStereoDelayMode { Normal, Cross, PingPong, Count, ESynthStereoDelayMode_MAX, __typeKeyDoNoAccess}
     enum ETableViewMode { List, Tile, Tree, ETableViewMode_MAX, __typeKeyDoNoAccess}
+    enum ETakeRecorderMode { RecordNewSequence, RecordIntoSequence, ETakeRecorderMode_MAX, __typeKeyDoNoAccess}
+    enum ETakeRecorderPanelMode { NewRecording, RecordingInto, EditingPreset, ReviewingRecording, ETakeRecorderPanelMode_MAX, __typeKeyDoNoAccess}
+    enum ETakeRecorderState { CountingDown, PreRecord, TickingAfterPre, Started, Stopped, Cancelled, ETakeRecorderState_MAX, __typeKeyDoNoAccess}
+    enum ETapLineMode { SendToChannel, Panning, Disabled, ETapLineMode_MAX, __typeKeyDoNoAccess}
     enum ETestEnumFlags { None, One, Two, Four, ETestEnumFlags_MAX, __typeKeyDoNoAccess}
     enum ETestInstanceDataObjectBird { TIDOB_None, TIDOB_Cardinal, TIDOB_Crow, TIDOB_Eagle, TIDOB_Hawk, TIDOB_Owl, TIDOB_Raven, TIDOB_MAX, __typeKeyDoNoAccess}
     enum ETestInstanceDataObjectDirection { None, North, East, South, West, ETestInstanceDataObjectDirection_MAX, __typeKeyDoNoAccess}
@@ -50171,6 +51463,7 @@ declare module "ue" {
     enum ETimelineSigType { ETS_EventSignature, ETS_FloatSignature, ETS_VectorSignature, ETS_LinearColorSignature, ETS_InvalidSignature, ETS_MAX, __typeKeyDoNoAccess}
     enum ETimeStretchCurveMapping { T_Original, T_TargetMin, T_TargetMax, MAX, __typeKeyDoNoAccess}
     enum EToTest { V0, V1, V13, EToTest_MAX, __typeKeyDoNoAccess}
+    enum ETouchSwipeDirection { None, Left, Right, Up, Down, ETouchSwipeDirection_MAX, __typeKeyDoNoAccess}
     enum ETouchType { Began, Moved, Stationary, ForceChanged, FirstMove, Ended, NumTypes, ETouchType_MAX, __typeKeyDoNoAccess}
     enum ETrail2SourceMethod { PET2SRCM_Default, PET2SRCM_Particle, PET2SRCM_Actor, PET2SRCM_MAX, __typeKeyDoNoAccess}
     enum ETrailsRenderAxisOption { Trails_CameraUp, Trails_SourceUp, Trails_WorldUp, Trails_MAX, __typeKeyDoNoAccess}
@@ -50199,6 +51492,7 @@ declare module "ue" {
     enum EViewTargetBlendOrder { VTBlendOrder_Base, VTBlendOrder_Override, VTBlendOrder_MAX, __typeKeyDoNoAccess}
     enum EVoiceBlockReasons { None, Muted, Gameplay, Blocked, BlockedBy, EVoiceBlockReasons_MAX, __typeKeyDoNoAccess}
     enum EVolumetricCloudTracingMaxDistanceMode { DistanceFromCloudLayerEntryPoint, DistanceFromPointOfView, EVolumetricCloudTracingMaxDistanceMode_MAX, __typeKeyDoNoAccess}
+    enum EVREditorWidgetDrawingPolicy { Always, Hovering, EVREditorWidgetDrawingPolicy_MAX, __typeKeyDoNoAccess}
     enum EWarpingEvaluationMode { Manual, Graph, EWarpingEvaluationMode_MAX, __typeKeyDoNoAccess}
     enum EWarpingVectorMode { ComponentSpaceVector, ActorSpaceVector, WorldSpaceVector, IKFootRootLocalSpaceVector, EWarpingVectorMode_MAX, __typeKeyDoNoAccess}
     enum EWASDType { WASD_Always, WASD_RMBOnly, WASD_Never, WASD_MAX, __typeKeyDoNoAccess}
@@ -50956,6 +52250,102 @@ declare module "ue" {
         static Load(InName: string): FloatingPawnMovement;
     
         __tid_FloatingPawnMovement_0__: boolean;
+    }
+    
+    class TextRenderComponent extends UE.PrimitiveComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Text: string;
+        TextMaterial: UE.MaterialInterface;
+        Font: UE.Font;
+        HorizontalAlignment: UE.EHorizTextAligment;
+        VerticalAlignment: UE.EVerticalTextAligment;
+        TextRenderColor: UE.Color;
+        XScale: number;
+        YScale: number;
+        WorldSize: number;
+        InvDefaultSize: number;
+        HorizSpacingAdjust: number;
+        VertSpacingAdjust: number;
+        bAlwaysRenderAsText: boolean;
+        /*
+         *Get local size of text
+         */
+        GetTextLocalSize() : UE.Vector;
+        /*
+         *Get world space size of text
+         */
+        GetTextWorldSize() : UE.Vector;
+        /*
+         *Change the text value and signal the primitives to be rebuilt
+         */
+        K2_SetText(Value: string) : void;
+        /*
+         *Change the font and signal the primitives to be rebuilt
+         */
+        SetFont(Value: $Nullable<UE.Font>) : void;
+        /*
+         *Change the horizontal alignment and signal the primitives to be rebuilt
+         */
+        SetHorizontalAlignment(Value: UE.EHorizTextAligment) : void;
+        /*
+         *Change the text horizontal spacing adjustment and signal the primitives to be rebuilt
+         */
+        SetHorizSpacingAdjust(Value: number) : void;
+        /*
+         *Change the text value and signal the primitives to be rebuilt
+         */
+        SetText(Value: string) : void;
+        /*
+         *Change the text material and signal the primitives to be rebuilt
+         */
+        SetTextMaterial(Material: $Nullable<UE.MaterialInterface>) : void;
+        /*
+         *Change the text render color and signal the primitives to be rebuilt
+         */
+        SetTextRenderColor(Value: UE.Color) : void;
+        /*
+         *Change the vertical alignment and signal the primitives to be rebuilt
+         */
+        SetVerticalAlignment(Value: UE.EVerticalTextAligment) : void;
+        /*
+         *Change the text vertical spacing adjustment and signal the primitives to be rebuilt
+         */
+        SetVertSpacingAdjust(Value: number) : void;
+        /*
+         *Change the world size of the text and signal the primitives to be rebuilt
+         */
+        SetWorldSize(Value: number) : void;
+        /*
+         *Change the text X scale and signal the primitives to be rebuilt
+         */
+        SetXScale(Value: number) : void;
+        /*
+         *Change the text Y scale and signal the primitives to be rebuilt
+         */
+        SetYScale(Value: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TextRenderComponent;
+        static Load(InName: string): TextRenderComponent;
+    
+        __tid_TextRenderComponent_0__: boolean;
+    }
+    
+    class FloatingText extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SceneComponent: UE.SceneComponent;
+        FirstLineComponent: UE.StaticMeshComponent;
+        JointSphereComponent: UE.StaticMeshComponent;
+        SecondLineComponent: UE.StaticMeshComponent;
+        TextComponent: UE.TextRenderComponent;
+        MaskedTextMaterial: UE.MaterialInterface;
+        TranslucentTextMaterial: UE.MaterialInterface;
+        LineMaterial: UE.MaterialInterface;
+        LineMaterialMID: UE.MaterialInstanceDynamic;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): FloatingText;
+        static Load(InName: string): FloatingText;
+    
+        __tid_FloatingText_0__: boolean;
     }
     
     class FloatInterval {
@@ -53143,6 +54533,179 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_GPUSpriteResourceData_0__: boolean;
+    }
+    
+    class SoundWaveProcedural extends UE.SoundWave {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SoundWaveProcedural;
+        static Load(InName: string): SoundWaveProcedural;
+    
+        __tid_SoundWaveProcedural_0__: boolean;
+    }
+    
+    class SynthSound extends UE.SoundWaveProcedural {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OwningSynthComponent: TWeakObjectPtr<UE.SynthComponent>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthSound;
+        static Load(InName: string): SynthSound;
+    
+        __tid_SynthSound_0__: boolean;
+    }
+    
+    class SynthComponent extends UE.SceneComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bAutoDestroy: boolean;
+        bStopWhenOwnerDestroyed: boolean;
+        bAllowSpatialization: boolean;
+        bOverrideAttenuation: boolean;
+        bOutputToBusOnly: boolean;
+        bEnableBusSends: boolean;
+        bEnableBaseSubmix: boolean;
+        bEnableSubmixSends: boolean;
+        AttenuationSettings: UE.SoundAttenuation;
+        AttenuationOverrides: UE.SoundAttenuationSettings;
+        ConcurrencySettings: UE.SoundConcurrency;
+        ConcurrencySet: TSet<UE.SoundConcurrency>;
+        ModulationRouting: UE.SoundModulationDefaultRoutingSettings;
+        SoundClass: UE.SoundClass;
+        SourceEffectChain: UE.SoundEffectSourcePresetChain;
+        SoundSubmix: UE.SoundSubmixBase;
+        SoundSubmixSends: TArray<UE.SoundSubmixSendInfo>;
+        BusSends: TArray<UE.SoundSourceBusSendInfo>;
+        PreEffectBusSends: TArray<UE.SoundSourceBusSendInfo>;
+        bIsUISound: boolean;
+        bIsPreviewSound: boolean;
+        EnvelopeFollowerAttackTime: number;
+        EnvelopeFollowerReleaseTime: number;
+        OnAudioEnvelopeValue: $MulticastDelegate<(EnvelopeValue: number) => void>;
+        Synth: UE.SynthSound;
+        AudioComponent: UE.AudioComponent;
+        /*
+         *This function allows designers to trigger an adjustment to the sound instance’s playback Volume with options for smoothly applying a curve over time.
+         *@param AdjustVolumeDuration The length of time in which to interpolate between the initial volume and the new volume.
+         *@param AdjustVolumeLevel The new volume to set the Audio Component to.
+         *@param FadeCurve The curve used when interpolating between the old and new volume.
+         */
+        AdjustVolume(AdjustVolumeDuration: number, AdjustVolumeLevel: number, FadeCurve?: UE.EAudioFaderCurve /* = Linear */) : void;
+        /*
+         *This function allows designers to call Play on an Audio Component instance while applying a volume curve over time.
+         *Parameters allow designers to indicate the duration of the fade, the curve shape, and the start time if seeking into the sound.
+         *
+         *@param FadeInDuration How long it should take to reach the FadeVolumeLevel
+         *@param FadeVolumeLevel The percentage of the AudioComponents's calculated volume to fade to
+         *@param FadeCurve The curve to use when interpolating between the old and new volume
+         */
+        FadeIn(FadeInDuration: number, FadeVolumeLevel?: number /* = 1.000000 */, StartTime?: number /* = 0.000000 */, FadeCurve?: UE.EAudioFaderCurve /* = Linear */) : void;
+        /*
+         *This function allows designers to call a delayed Stop on an Audio Component instance while applying a
+         *volume curve over time. Parameters allow designers to indicate the duration of the fade and the curve shape.
+         *
+         *@param FadeOutDuration how long it should take to reach the FadeVolumeLevel
+         *@param FadeVolumeLevel the percentage of the AudioComponents's calculated volume in which to fade to
+         *@param FadeCurve The curve to use when interpolating between the old and new volume
+         */
+        FadeOut(FadeOutDuration: number, FadeVolumeLevel: number, FadeCurve?: UE.EAudioFaderCurve /* = Linear */) : void;
+        /*
+         *Gets the set of currently active modulators for a given Modulation Destination.
+         *@param Destination The Destination to retrieve the Modulators from.
+         *@return The set of of Modulators applied to this component for the given Destination.
+         */
+        GetModulators(Destination: UE.EModulationDestination) : TSet<UE.SoundModulatorBase>;
+        /*
+         *Returns true if this component is currently playing.
+         */
+        IsPlaying() : boolean;
+        /*
+         *Sets how much audio the sound should send to the given AudioBus (post effect).
+         */
+        SetAudioBusSendPostEffect(AudioBus: $Nullable<UE.AudioBus>, AudioBusSendLevel: number) : void;
+        /*
+         *Sets how much audio the sound should send to the given AudioBus (pre effect).
+         */
+        SetAudioBusSendPreEffect(AudioBus: $Nullable<UE.AudioBus>, AudioBusSendLevel: number) : void;
+        /*
+         *Sets whether or not the low pass filter is enabled on the audio component.
+         */
+        SetLowPassFilterEnabled(InLowPassFilterEnabled: boolean) : void;
+        /*
+         *Sets lowpass filter frequency of the audio component.
+         */
+        SetLowPassFilterFrequency(InLowPassFilterFrequency: number) : void;
+        /*
+         *Sets the routing for one of the given Synth component's Modulation Destinations.
+         *@param Modulators The set of modulators to apply to the given destination on the component.
+         *@param Destination The destination to assign the modulators to.
+         *@param RoutingMethod The routing method to use for the given modulator.
+         */
+        SetModulationRouting(Modulators: TSet<UE.SoundModulatorBase>, Destination: UE.EModulationDestination, RoutingMethod?: UE.EModulationRouting /* = Inherit */) : void;
+        /*
+         *Sets whether or not the synth component outputs its audio to any source or audio buses.
+         */
+        SetOutputToBusOnly(bInOutputToBusOnly: boolean) : void;
+        /*
+         *Sets how much audio the sound should send to the given SourceBus (post effect).
+         */
+        SetSourceBusSendPostEffect(SoundSourceBus: $Nullable<UE.SoundSourceBus>, SourceBusSendLevel: number) : void;
+        /*
+         *Sets how much audio the sound should send to the given SourceBus (pre effect).
+         */
+        SetSourceBusSendPreEffect(SoundSourceBus: $Nullable<UE.SoundSourceBus>, SourceBusSendLevel: number) : void;
+        /*
+         *Sets how much audio the sound should send to the given submix.
+         */
+        SetSubmixSend(Submix: $Nullable<UE.SoundSubmixBase>, SendLevel: number) : void;
+        /*
+         *Set a new volume multiplier
+         */
+        SetVolumeMultiplier(VolumeMultiplier: number) : void;
+        /*
+         *Starts the synth generating audio.
+         */
+        Start() : void;
+        /*
+         *Stops the synth generating audio.
+         */
+        Stop() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthComponent;
+        static Load(InName: string): SynthComponent;
+    
+        __tid_SynthComponent_0__: boolean;
+    }
+    
+    class GranularSynth extends UE.SynthComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GranulatedSoundWave: UE.SoundWave;
+        GetCurrentPlayheadTime() : number;
+        GetSampleDuration() : number;
+        IsLoaded() : boolean;
+        NoteOff(Note: number, bKill?: boolean /* = false */) : void;
+        NoteOn(Note: number, Velocity: number, Duration?: number /* = -1.000000 */) : void;
+        SetAttackTime(AttackTimeMsec: number) : void;
+        SetDecayTime(DecayTimeMsec: number) : void;
+        SetGrainDuration(BaseDurationMsec: number, DurationRange?: UE.Vector2D /* =  */) : void;
+        SetGrainEnvelopeType(EnvelopeType: UE.EGranularSynthEnvelopeType) : void;
+        SetGrainPan(BasePan: number, PanRange?: UE.Vector2D /* =  */) : void;
+        SetGrainPitch(BasePitch: number, PitchRange?: UE.Vector2D /* =  */) : void;
+        SetGrainProbability(InGrainProbability: number) : void;
+        SetGrainsPerSecond(InGrainsPerSecond: number) : void;
+        SetGrainVolume(BaseVolume: number, VolumeRange?: UE.Vector2D /* =  */) : void;
+        SetPlaybackSpeed(InPlayheadRate: number) : void;
+        SetPlayheadTime(InPositionSec: number, LerpTimeSec?: number /* = 0.000000 */, SeekType?: UE.EGranularSynthSeekType /* = FromBeginning */) : void;
+        SetReleaseTimeMsec(ReleaseTimeMsec: number) : void;
+        SetScrubMode(bScrubMode: boolean) : void;
+        /*
+         *This will override the current sound wave if one is set, stop audio, and reload the new sound wave
+         */
+        SetSoundWave(InSoundWave: $Nullable<UE.SoundWave>) : void;
+        SetSustainGain(SustainGain: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): GranularSynth;
+        static Load(InName: string): GranularSynth;
+    
+        __tid_GranularSynth_0__: boolean;
     }
     
     class GraphNodeContextMenuContext extends UE.Object {
@@ -63727,6 +65290,27 @@ declare module "ue" {
         __tid_LegacyEdModeWrapper_0__: boolean;
     }
     
+    class LegacyLazyObjectPtrFragment {
+        constructor();
+        constructor(LazyObjectId: UE.Guid);
+        LazyObjectId: UE.Guid;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LegacyLazyObjectPtrFragment_0__: boolean;
+    }
+    
+    class LegacyLevelSequenceDirectorBlueprint extends UE.Blueprint {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LegacyLevelSequenceDirectorBlueprint;
+        static Load(InName: string): LegacyLevelSequenceDirectorBlueprint;
+    
+        __tid_LegacyLevelSequenceDirectorBlueprint_0__: boolean;
+    }
+    
     class LensBloomSettings {
         constructor();
         constructor(GaussianSum: UE.GaussianSumBloomSettings, Convolution: UE.ConvolutionBloomSettings, Method: UE.EBloomMethod);
@@ -64392,6 +65976,1971 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_LevelNameAndTime_0__: boolean;
+    }
+    
+    class UniversalObjectLocatorFragment {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_UniversalObjectLocatorFragment_0__: boolean;
+    }
+    
+    class UniversalObjectLocator {
+        constructor();
+        constructor(Fragments: TArray<UE.UniversalObjectLocatorFragment>);
+        Fragments: TArray<UE.UniversalObjectLocatorFragment>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_UniversalObjectLocator_0__: boolean;
+    }
+    
+    enum ELocatorResolveFlags { None, Load, Unload, Async, WillWait, AsyncWait, ELocatorResolveFlags_MAX, __typeKeyDoNoAccess}
+    class MovieSceneCustomBinding extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static GetBaseCustomPriority() : number;
+        static GetBaseEnginePriority() : number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneCustomBinding;
+        static Load(InName: string): MovieSceneCustomBinding;
+    
+        __tid_MovieSceneCustomBinding_0__: boolean;
+    }
+    
+    class MovieSceneBindingReference {
+        constructor();
+        constructor(ID: UE.Guid, Locator: UE.UniversalObjectLocator, ResolveFlags: UE.ELocatorResolveFlags, CustomBinding: UE.MovieSceneCustomBinding);
+        ID: UE.Guid;
+        Locator: UE.UniversalObjectLocator;
+        ResolveFlags: UE.ELocatorResolveFlags;
+        CustomBinding: UE.MovieSceneCustomBinding;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneBindingReference_0__: boolean;
+    }
+    
+    class MovieSceneBindingReferences {
+        constructor();
+        constructor(SortedReferences: TArray<UE.MovieSceneBindingReference>);
+        SortedReferences: TArray<UE.MovieSceneBindingReference>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneBindingReferences_0__: boolean;
+    }
+    
+    class UpgradedLevelSequenceBindingReferences extends UE.MovieSceneBindingReferences {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_UpgradedLevelSequenceBindingReferences_0__: boolean;
+    }
+    
+    class LevelSequenceObjectReferenceMap {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceObjectReferenceMap_0__: boolean;
+    }
+    
+    class LevelSequence extends UE.MovieSceneSequence {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MovieScene: UE.MovieScene;
+        BindingReferences: UE.UpgradedLevelSequenceBindingReferences;
+        ObjectReferences: UE.LevelSequenceObjectReferenceMap;
+        DirectorBlueprint: UE.Blueprint;
+        DirectorClass: UE.Class;
+        MetaDataObjects: TArray<UE.Object>;
+        AssetUserData: TArray<UE.AssetUserData>;
+        /*
+         *Creates and adds an instance of the provided AssetUserData class to the target asset.
+         *
+         *@param        InUserDataClass         UAssetUserData sub class to create
+         *
+         *@return       Whether or not an instance of InUserDataClass was succesfully added
+         */
+        AddAssetUserDataOfClass(InUserDataClass: $Nullable<UE.Class>) : boolean;
+        /*
+         *Copy the specified meta data into this level sequence, overwriting any existing meta-data of the same type
+         *Meta-data may implement the ILevelSequenceMetaData interface in order to hook into default ULevelSequence functionality.
+         *@param InMetaData - Existing Metadata Object that you wish to copy into this Level Sequence.
+         *@return The newly copied instance of the Metadata that now exists on this sequence.
+         */
+        CopyMetaData(InMetaData: $Nullable<UE.Object>) : UE.Object;
+        /*
+         *Find meta-data of a particular type for this level sequence instance.
+         *@param InClass - Class that you wish to find the metadata object for.
+         *@return An instance of this class if it already exists as metadata on this Level Sequence, otherwise null.
+         */
+        FindMetaDataByClass(InClass: $Nullable<UE.Class>) : UE.Object;
+        /*
+         *Find meta-data of a particular type for this level sequence instance, adding it if it doesn't already exist.
+         *@param InClass - Class that you wish to find or create the metadata object for.
+         *@return An instance of this class as metadata on this Level Sequence.
+         */
+        FindOrAddMetaDataByClass(InClass: $Nullable<UE.Class>) : UE.Object;
+        /*
+         *Returns an instance of the provided AssetUserData class if it's contained in the target asset.
+         *
+         *@param        InUserDataClass         UAssetUserData sub class to get
+         *
+         *@return       The instance of the UAssetUserData class contained, or null if it doesn't exist
+         */
+        GetAssetUserDataOfClass(InUserDataClass: $Nullable<UE.Class>) : UE.AssetUserData;
+        /*
+         *Checks whether or not an instance of the provided AssetUserData class is contained.
+         *
+         *@param        InUserDataClass         UAssetUserData sub class to check for
+         *
+         *@return       Whether or not an instance of InUserDataClass was found
+         */
+        HasAssetUserDataOfClass(InUserDataClass: $Nullable<UE.Class>) : boolean;
+        /*
+         *Remove meta-data of a particular type for this level sequence instance, if it exists
+         *@param InClass - The class type that you wish to remove the metadata for
+         */
+        RemoveMetaDataByClass(InClass: $Nullable<UE.Class>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequence;
+        static Load(InName: string): LevelSequence;
+    
+        __tid_LevelSequence_0__: boolean;
+    }
+    
+    class MovieSceneSequenceLoopCount {
+        constructor();
+        constructor(Value: number);
+        Value: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequenceLoopCount_0__: boolean;
+    }
+    
+    class MovieSceneSequenceTickInterval {
+        constructor();
+        constructor(TickIntervalSeconds: number, EvaluationBudgetMicroseconds: number, bTickWhenPaused: boolean, bAllowRounding: boolean);
+        TickIntervalSeconds: number;
+        EvaluationBudgetMicroseconds: number;
+        bTickWhenPaused: boolean;
+        bAllowRounding: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequenceTickInterval_0__: boolean;
+    }
+    
+    enum EMovieSceneCompletionModeOverride { None, ForceKeepState, ForceRestoreState, EMovieSceneCompletionModeOverride_MAX, __typeKeyDoNoAccess}
+    class MovieSceneSequencePlaybackSettings {
+        constructor();
+        constructor(bAutoPlay: boolean, LoopCount: UE.MovieSceneSequenceLoopCount, TickInterval: UE.MovieSceneSequenceTickInterval, PlayRate: number, StartTime: number, bRandomStartTime: boolean, bRestoreState: boolean, bDisableMovementInput: boolean, bDisableLookAtInput: boolean, bHidePlayer: boolean, bHideHud: boolean, bDisableCameraCuts: boolean, FinishCompletionStateOverride: UE.EMovieSceneCompletionModeOverride, bPauseAtEnd: boolean, bInheritTickIntervalFromOwner: boolean, bDynamicWeighting: boolean);
+        bAutoPlay: boolean;
+        LoopCount: UE.MovieSceneSequenceLoopCount;
+        TickInterval: UE.MovieSceneSequenceTickInterval;
+        PlayRate: number;
+        StartTime: number;
+        bRandomStartTime: boolean;
+        bRestoreState: boolean;
+        bDisableMovementInput: boolean;
+        bDisableLookAtInput: boolean;
+        bHidePlayer: boolean;
+        bHideHud: boolean;
+        bDisableCameraCuts: boolean;
+        FinishCompletionStateOverride: UE.EMovieSceneCompletionModeOverride;
+        bPauseAtEnd: boolean;
+        bInheritTickIntervalFromOwner: boolean;
+        bDynamicWeighting: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequencePlaybackSettings_0__: boolean;
+    }
+    
+    class MovieSceneSequencePlayerObserver extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneSequencePlayerObserver;
+        static Load(InName: string): MovieSceneSequencePlayerObserver;
+    
+        __tid_MovieSceneSequencePlayerObserver_0__: boolean;
+    }
+    
+    enum EMovieScenePlayerStatus { Stopped, Playing, Scrubbing, Jumping, Stepping, Paused, MAX, __typeKeyDoNoAccess}
+    class MovieSceneSequenceReplProperties {
+        constructor();
+        constructor(LastKnownPosition: UE.FrameTime, LastKnownStatus: UE.EMovieScenePlayerStatus, LastKnownNumLoops: number, LastKnownSerialNumber: number);
+        LastKnownPosition: UE.FrameTime;
+        LastKnownStatus: UE.EMovieScenePlayerStatus;
+        LastKnownNumLoops: number;
+        LastKnownSerialNumber: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequenceReplProperties_0__: boolean;
+    }
+    
+    class MovieScenePlaybackClient extends UE.Interface {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieScenePlaybackClient;
+        static Load(InName: string): MovieScenePlaybackClient;
+    
+        __tid_MovieScenePlaybackClient_0__: boolean;
+    }
+    
+    class MovieSceneSequenceTickManager extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneSequenceTickManager;
+        static Load(InName: string): MovieSceneSequenceTickManager;
+    
+        __tid_MovieSceneSequenceTickManager_0__: boolean;
+    }
+    
+    enum EMovieScenePositionType { Frame, Time, MarkedFrame, Timecode, EMovieScenePositionType_MAX, __typeKeyDoNoAccess}
+    enum EUpdatePositionMethod { Play, Jump, Scrub, EUpdatePositionMethod_MAX, __typeKeyDoNoAccess}
+    class MovieSceneSequencePlaybackParams {
+        constructor();
+        constructor(Frame: UE.FrameTime, Time: number, MarkedFrame: string, Timecode: UE.Timecode, PositionType: UE.EMovieScenePositionType, UpdateMethod: UE.EUpdatePositionMethod, bHasJumped: boolean);
+        Frame: UE.FrameTime;
+        Time: number;
+        MarkedFrame: string;
+        Timecode: UE.Timecode;
+        PositionType: UE.EMovieScenePositionType;
+        UpdateMethod: UE.EUpdatePositionMethod;
+        bHasJumped: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequencePlaybackParams_0__: boolean;
+    }
+    
+    class MovieSceneSequencePlayToParams {
+        constructor();
+        constructor(bExclusive: boolean);
+        bExclusive: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSequencePlayToParams_0__: boolean;
+    }
+    
+    class MovieSceneSequencePlayer extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Observer: UE.MovieSceneSequencePlayerObserver;
+        OnPlay: $MulticastDelegate<() => void>;
+        OnPlayReverse: $MulticastDelegate<() => void>;
+        OnStop: $MulticastDelegate<() => void>;
+        OnPause: $MulticastDelegate<() => void>;
+        OnFinished: $MulticastDelegate<() => void>;
+        Status: UE.EMovieScenePlayerStatus;
+        bReversePlayback: boolean;
+        Sequence: UE.MovieSceneSequence;
+        StartTime: UE.FrameNumber;
+        DurationFrames: number;
+        DurationSubFrames: number;
+        CurrentNumLoops: number;
+        SerialNumber: number;
+        PlaybackSettings: UE.MovieSceneSequencePlaybackSettings;
+        RootTemplateInstance: UE.MovieSceneRootEvaluationTemplateInstance;
+        NetSyncProps: UE.MovieSceneSequenceReplProperties;
+        PlaybackClient: UE.MovieScenePlaybackClient;
+        TickManager: UE.MovieSceneSequenceTickManager;
+        /*
+         *Changes the direction of playback (go in reverse if it was going forward, or vice versa)
+         */
+        ChangePlaybackDirection() : void;
+        /*
+         *Retrieve all objects currently bound to the specified binding identifier
+         */
+        GetBoundObjects(ObjectBinding: UE.MovieSceneObjectBindingID) : TArray<UE.Object>;
+        /*
+         *Get the state of the completion mode override
+         */
+        GetCompletionModeOverride() : UE.EMovieSceneCompletionModeOverride;
+        /*
+         *Get the current playback position
+         *@return The current playback position
+         */
+        GetCurrentTime() : UE.QualifiedFrameTime;
+        /*
+         *Set whether to disable camera cuts
+         */
+        GetDisableCameraCuts() : boolean;
+        /*
+         *Get the total duration of the sequence
+         */
+        GetDuration() : UE.QualifiedFrameTime;
+        /*
+         *Get the offset within the level sequence to finish playing
+         */
+        GetEndTime() : UE.QualifiedFrameTime;
+        /*
+         *Get this sequence's duration in frames
+         */
+        GetFrameDuration() : number;
+        /*
+         *Get this sequence's display rate.
+         */
+        GetFrameRate() : UE.FrameRate;
+        /*
+         *Get if the hud is hidden during play.
+         */
+        GetHideHud() : boolean;
+        /*
+         *Get the object bindings for the requested object
+         */
+        GetObjectBindings(InObject: $Nullable<UE.Object>) : TArray<UE.MovieSceneObjectBindingID>;
+        /*
+         *Get the playback rate of this player.
+         */
+        GetPlayRate() : number;
+        /*
+         *Access the sequence this player is playing
+         *@return the sequence currently assigned to this player
+         */
+        GetSequence() : UE.MovieSceneSequence;
+        /*
+         *Get the name of the sequence this player is playing
+         *@param bAddClientInfo  If true, add client index if running as a client
+         *@return the name of the sequence, or None if no sequence is set
+         */
+        GetSequenceName(bAddClientInfo?: boolean /* = false */) : string;
+        /*
+         *Get the offset within the level sequence to start playing
+         */
+        GetStartTime() : UE.QualifiedFrameTime;
+        /*
+         *Go to end of the sequence and stop. Adheres to 'When Finished' section rules.
+         */
+        GoToEndAndStop() : void;
+        /*
+         *Check whether the sequence is paused.
+         */
+        IsPaused() : boolean;
+        /*
+         *Check whether the sequence is actively playing.
+         */
+        IsPlaying() : boolean;
+        /*
+         *Check whether playback is reversed.
+         */
+        IsReversed() : boolean;
+        /*
+         *Pause playback.
+         */
+        Pause() : void;
+        /*
+         *Start playback forwards from the current time cursor position, using the current play rate.
+         */
+        Play() : void;
+        /*
+         *Start playback from the current time cursor position, looping the specified number of times.
+         *@param NumLoops - The number of loops to play. -1 indicates infinite looping.
+         */
+        PlayLooping(NumLoops?: number /* = -1 */) : void;
+        /*
+         *Reverse playback.
+         */
+        PlayReverse() : void;
+        /*
+         *Play from the current position to the requested position and pause. If requested position is before the current position,
+         *playback will be reversed. Playback to the requested position will be cancelled if Stop() or Pause() is invoked during this
+         *playback.
+         *
+         *@param PlaybackParams The position settings (ie. the position to play to)
+         */
+        PlayTo(PlaybackParams: UE.MovieSceneSequencePlaybackParams, PlayToParams: UE.MovieSceneSequencePlayToParams) : void;
+        /*
+         *Removes a previously assigned weight
+         */
+        RemoveWeight() : void;
+        /*
+         *Invalidates the given binding, forcing it to be refetched. This may be useful for some custom bindings that wish their resolution code to be called again.
+         */
+        RequestInvalidateBinding(ObjectBinding: UE.MovieSceneObjectBindingID) : void;
+        /*
+         *Restore any changes made by this player to their original state
+         */
+        RestoreState() : void;
+        /*
+         *Called on the server whenever an explicit change in time has occurred through one of the (Play|Jump|Scrub)To methods
+         */
+        RPC_ExplicitServerUpdateEvent(Method: UE.EUpdatePositionMethod, RelevantTime: UE.FrameTime, NewSerialNumber: number) : void;
+        /*
+         *Called on the server when playback has reached the end. Could lead to stopping or pausing.
+         */
+        RPC_OnFinishPlaybackEvent(StoppedTime: UE.FrameTime, NewSerialNumber: number) : void;
+        /*
+         *Called on the server when Stop() is called in order to differentiate Stops from Pauses.
+         */
+        RPC_OnStopEvent(StoppedTime: UE.FrameTime, NewSerialNumber: number) : void;
+        /*
+         *Scrub playback.
+         */
+        Scrub() : void;
+        /*
+         *Set the state of the completion mode override. Note, setting the state to force restore state will only take effect if the sequence hasn't started playing
+         */
+        SetCompletionModeOverride(CompletionModeOverride: UE.EMovieSceneCompletionModeOverride) : void;
+        /*
+         *Set whether to disable camera cuts
+         */
+        SetDisableCameraCuts(bInDisableCameraCuts: boolean) : void;
+        /*
+         *Set the valid play range for this sequence, determined by a starting frame number (in this sequence player's plaback frame), and a number of frames duration
+         *
+         *@param StartFrame      The frame number to start playing back the sequence
+         *@param Duration        The number of frames to play
+         */
+        SetFrameRange(StartFrame: number, Duration: number, SubFrames?: number /* = 0.000000 */) : void;
+        /*
+         *Set the frame-rate that this player should play with, making all frame numbers in the specified time-space
+         */
+        SetFrameRate(FrameRate: UE.FrameRate) : void;
+        /*
+         *Set if hiding the hud during play.
+         *@param HideHud - The new value of Hide Hud during play.
+         */
+        SetHideHud(HideHud: boolean) : void;
+        /*
+         *Set the current time of the player by evaluating from the current time to the specified time, as if the sequence is playing.
+         *Triggers events that lie within the evaluated range. Does not alter the persistent playback status of the player (IsPlaying).
+         *
+         *@param PlaybackParams The position settings (ie. the position to set playback to)
+         */
+        SetPlaybackPosition(PlaybackParams: UE.MovieSceneSequencePlaybackParams) : void;
+        /*
+         *Set the playback rate of this player. Negative values will play the animation in reverse.
+         *@param PlayRate - The new rate of playback for the animation.
+         */
+        SetPlayRate(PlayRate: number) : void;
+        /*
+         *Set the valid play range for this sequence, determined by a starting time  and a duration (in seconds)
+         *
+         *@param StartTime       The time to start playing back the sequence in seconds
+         *@param Duration        The length to play for
+         */
+        SetTimeRange(StartTime: number, Duration: number) : void;
+        /*
+         *Set a manual weight to be multiplied with all blendable elements within this sequence
+         *@note: It is recommended that a weight between 0 and 1 is supplied, though this is not enforced
+         *@note: It is recommended that either FMovieSceneSequencePlaybackSettings::DynamicWeighting should be true for this player or the asset it's playing back should be set to enable dynamic weight to avoid undesirable behavior
+         *
+         *@param InWeight    The weight to suuply to all elements in this sequence
+         */
+        SetWeight(InWeight: number) : void;
+        /*
+         *Stop playback and move the cursor to the end (or start, for reversed playback) of the sequence.
+         */
+        Stop() : void;
+        /*
+         *Stop playback without moving the cursor.
+         */
+        StopAtCurrentTime() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneSequencePlayer;
+        static Load(InName: string): MovieSceneSequencePlayer;
+    
+        __tid_MovieSceneSequencePlayer_0__: boolean;
+    }
+    
+    class LevelSequencePlayer extends UE.MovieSceneSequencePlayer {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnCameraCut: $MulticastDelegate<(CameraComponent: $Nullable<UE.CameraComponent>) => void>;
+        /*
+         *Get the active camera cut camera
+         */
+        GetActiveCameraComponent() : UE.CameraComponent;
+        /*
+         *Create a new level sequence player.
+         *
+         *@param WorldContextObject Context object from which to retrieve a UWorld.
+         *@param LevelSequence The level sequence to play.
+         *@param Settings The desired playback settings
+         *@param OutActor The level sequence actor created to play this sequence.
+         */
+        static CreateLevelSequencePlayer(WorldContextObject: $Nullable<UE.Object>, LevelSequence: $Nullable<UE.LevelSequence>, Settings: UE.MovieSceneSequencePlaybackSettings, OutActor: $Ref<UE.LevelSequenceActor>) : UE.LevelSequencePlayer;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequencePlayer;
+        static Load(InName: string): LevelSequencePlayer;
+    
+        __tid_LevelSequencePlayer_0__: boolean;
+    }
+    
+    class LevelSequenceCameraSettings {
+        constructor();
+        constructor(bOverrideAspectRatioAxisConstraint: boolean, AspectRatioAxisConstraint: UE.EAspectRatioAxisConstraint);
+        bOverrideAspectRatioAxisConstraint: boolean;
+        AspectRatioAxisConstraint: UE.EAspectRatioAxisConstraint;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceCameraSettings_0__: boolean;
+    }
+    
+    class LevelSequenceBurnInInitSettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceBurnInInitSettings;
+        static Load(InName: string): LevelSequenceBurnInInitSettings;
+    
+        __tid_LevelSequenceBurnInInitSettings_0__: boolean;
+    }
+    
+    class LevelSequenceBurnInOptions extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bUseBurnIn: boolean;
+        BurnInClass: UE.SoftClassPath;
+        Settings: UE.LevelSequenceBurnInInitSettings;
+        /*
+         *Loads the specified class path and initializes an instance, then stores it in Settings.
+         */
+        SetBurnIn(InBurnInClass: UE.SoftClassPath) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceBurnInOptions;
+        static Load(InName: string): LevelSequenceBurnInOptions;
+    
+        __tid_LevelSequenceBurnInOptions_0__: boolean;
+    }
+    
+    class MovieSceneBindingOverrideData {
+        constructor();
+        constructor(ObjectBindingId: UE.MovieSceneObjectBindingID, Object: TSoftObjectPtr<UE.Object>, bOverridesDefault: boolean);
+        ObjectBindingId: UE.MovieSceneObjectBindingID;
+        Object: TSoftObjectPtr<UE.Object>;
+        bOverridesDefault: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneBindingOverrideData_0__: boolean;
+    }
+    
+    class MovieSceneBindingOverrides extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        BindingData: TArray<UE.MovieSceneBindingOverrideData>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneBindingOverrides;
+        static Load(InName: string): MovieSceneBindingOverrides;
+    
+        __tid_MovieSceneBindingOverrides_0__: boolean;
+    }
+    
+    class LevelSequencePlayerSnapshot {
+        constructor();
+        constructor(RootName: string, RootTime: UE.QualifiedFrameTime, SourceTime: UE.QualifiedFrameTime, CurrentShotName: string, CurrentShotLocalTime: UE.QualifiedFrameTime, CurrentShotSourceTime: UE.QualifiedFrameTime, SourceTimecode: string, CameraComponent: TSoftObjectPtr<UE.CameraComponent>, ActiveShot: UE.LevelSequence, ShotID: UE.MovieSceneSequenceID);
+        RootName: string;
+        RootTime: UE.QualifiedFrameTime;
+        SourceTime: UE.QualifiedFrameTime;
+        CurrentShotName: string;
+        CurrentShotLocalTime: UE.QualifiedFrameTime;
+        CurrentShotSourceTime: UE.QualifiedFrameTime;
+        SourceTimecode: string;
+        CameraComponent: TSoftObjectPtr<UE.CameraComponent>;
+        ActiveShot: UE.LevelSequence;
+        ShotID: UE.MovieSceneSequenceID;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequencePlayerSnapshot_0__: boolean;
+    }
+    
+    class LevelSequenceBurnIn extends UE.UserWidget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        FrameInformation: UE.LevelSequencePlayerSnapshot;
+        LevelSequenceActor: UE.LevelSequenceActor;
+        /*
+         *Get the settings class to use for this burn in
+         */
+        GetSettingsClass() : UE.Class;
+        /*
+         *Called when this burn in is receiving its settings
+         */
+        SetSettings(InSettings: $Nullable<UE.Object>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceBurnIn;
+        static Load(InName: string): LevelSequenceBurnIn;
+    
+        __tid_LevelSequenceBurnIn_0__: boolean;
+    }
+    
+    class WorldPartitionResolveData {
+        constructor();
+        constructor(ContainerID: UE.ActorContainerID, SourceWorldAssetPath: UE.TopLevelAssetPath);
+        ContainerID: UE.ActorContainerID;
+        SourceWorldAssetPath: UE.TopLevelAssetPath;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_WorldPartitionResolveData_0__: boolean;
+    }
+    
+    class LevelSequenceActor extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PlaybackSettings: UE.MovieSceneSequencePlaybackSettings;
+        SequencePlayer: UE.LevelSequencePlayer;
+        LevelSequenceAsset: UE.LevelSequence;
+        LevelSequence: UE.SoftObjectPath;
+        CameraSettings: UE.LevelSequenceCameraSettings;
+        BurnInOptions: UE.LevelSequenceBurnInOptions;
+        BindingOverrides: UE.MovieSceneBindingOverrides;
+        bAutoPlay: boolean;
+        bOverrideInstanceData: boolean;
+        bReplicatePlayback: boolean;
+        DefaultInstanceData: UE.Object;
+        BurnInInstance: UE.LevelSequenceBurnIn;
+        bShowBurnin: boolean;
+        WorldPartitionResolveData: UE.WorldPartitionResolveData;
+        /*
+         *Adds the specified actor to the overridden bindings for the specified binding ID, optionally still allowing the bindings defined in the Level Sequence asset
+         *
+         *@param Binding Binding to modify
+         *@param Actor Actor to bind
+         *@param bAllowBindingsFromAsset If false the new bindings being supplied here will replace the bindings set in the level sequence asset, meaning the original object animated by
+         *                                                               Sequencer will no longer be animated. Bindings set to spawnables will not spawn if false. If true, new bindings will be in addition to ones set
+         *                                                               set in Sequencer UI. This function will not modify the original asset.
+         */
+        AddBinding(Binding: UE.MovieSceneObjectBindingID, Actor: $Nullable<UE.Actor>, bAllowBindingsFromAsset?: boolean /* = false */) : void;
+        /*
+         *Binds an actor to all the bindings tagged with the specified name in this sequence. Does not remove any exising bindings that have been set up through this API. Object Bindings can be tagged within the sequence UI by RMB -> Tags... on the object binding in the tree.
+         *
+         *@param BindingTag   The unique tag name to lookup bindings with
+         *@param Actor        The actor to assign to all the tagged bindings
+         *@param bAllowBindingsFromAsset If false the new bindings being supplied here will replace the bindings set in the level sequence asset, meaning the original object animated by
+         *                                                               Sequencer will no longer be animated. Bindings set to spawnables will not spawn if false. If true, new bindings will be in addition to ones set
+         *                                                               set in Sequencer UI. This function will not modify the original asset.
+         */
+        AddBindingByTag(BindingTag: string, Actor: $Nullable<UE.Actor>, bAllowBindingsFromAsset?: boolean /* = false */) : void;
+        /*
+         *Retrieve the first object binding that has been tagged with the specified name
+         */
+        FindNamedBinding(Tag: string) : UE.MovieSceneObjectBindingID;
+        /*
+         *Retrieve all the bindings that have been tagged with the specified name
+         *
+         *@param Tag  The unique tag name to lookup bindings with. Object Bindings can be tagged within the sequence UI by RMB -> Tags... on the object binding in the tree.
+         *@return An array containing all the bindings that are tagged with this name, potentially empty.
+         */
+        FindNamedBindings(Tag: string) : TArray<UE.MovieSceneObjectBindingID>;
+        /*
+         *Get the level sequence being played by this actor.
+         *
+         *@return Level sequence, or nullptr if not assigned or if it cannot be loaded.
+         *@see SetSequence
+         */
+        GetSequence() : UE.LevelSequence;
+        /*
+         *Access this actor's sequence player, or None if it is not yet initialized
+         */
+        GetSequencePlayer() : UE.LevelSequencePlayer;
+        /*
+         *Hide burnin
+         */
+        HideBurnin() : void;
+        OnLevelSequenceLoaded__DelegateSignature() : void;
+        /*
+         *Removes the specified actor from the specified binding's actor array
+         */
+        RemoveBinding(Binding: UE.MovieSceneObjectBindingID, Actor: $Nullable<UE.Actor>) : void;
+        /*
+         *Removes the specified actor from the specified binding's actor array
+         */
+        RemoveBindingByTag(Tag: string, Actor: $Nullable<UE.Actor>) : void;
+        /*
+         *Resets the specified binding back to the defaults defined by the Level Sequence asset
+         */
+        ResetBinding(Binding: UE.MovieSceneObjectBindingID) : void;
+        /*
+         *Resets all overridden bindings back to the defaults defined by the Level Sequence asset
+         */
+        ResetBindings() : void;
+        /*
+         *Overrides the specified binding with the specified actors, optionally still allowing the bindings defined in the Level Sequence asset
+         *
+         *@param Binding Binding to modify
+         *@param Actors Actors to bind
+         *@param bAllowBindingsFromAsset If false the new bindings being supplied here will replace the bindings set in the level sequence asset, meaning the original object animated by
+         *                                                               Sequencer will no longer be animated. Bindings set to spawnables will not spawn if false. If true, new bindings will be in addition to ones set
+         *                                                               set in Sequencer UI. This function will not modify the original asset.
+         */
+        SetBinding(Binding: UE.MovieSceneObjectBindingID, Actors: TArray<UE.Actor>, bAllowBindingsFromAsset?: boolean /* = false */) : void;
+        /*
+         *Assigns an set of actors to all the bindings tagged with the specified name in this sequence. Object Bindings can be tagged within the sequence UI by RMB -> Tags... on the object binding in the tree.
+         *
+         *@param BindingTag   The unique tag name to lookup bindings with
+         *@param Actors       The actors to assign to all the tagged bindings
+         *@param bAllowBindingsFromAsset If false the new bindings being supplied here will replace the bindings set in the level sequence asset, meaning the original object animated by
+         *                                                               Sequencer will no longer be animated. Bindings set to spawnables will not spawn if false. If true, new bindings will be in addition to ones set
+         *                                                               set in Sequencer UI. This function will not modify the original asset.
+         */
+        SetBindingByTag(BindingTag: string, Actors: TArray<UE.Actor>, bAllowBindingsFromAsset?: boolean /* = false */) : void;
+        /*
+         *Set whether or not to replicate playback for this actor
+         */
+        SetReplicatePlayback(ReplicatePlayback: boolean) : void;
+        /*
+         *Set the level sequence being played by this actor.
+         *
+         *@param InSequence The sequence object to set.
+         *@see GetSequence
+         */
+        SetSequence(InSequence: $Nullable<UE.LevelSequence>) : void;
+        /*
+         *Show burnin
+         */
+        ShowBurnin() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceActor;
+        static Load(InName: string): LevelSequenceActor;
+    
+        __tid_LevelSequenceActor_0__: boolean;
+    }
+    
+    class LevelSequenceAnimSequenceLinkItem {
+        constructor();
+        constructor(SkelTrackGuid: UE.Guid, PathToAnimSequence: UE.SoftObjectPath, bExportTransforms: boolean, bExportMorphTargets: boolean, bExportAttributeCurves: boolean, bExportMaterialCurves: boolean, Interpolation: UE.EAnimInterpolationType, CurveInterpolation: UE.ERichCurveInterpMode, bRecordInWorldSpace: boolean, bEvaluateAllSkeletalMeshComponents: boolean, IncludeAnimationNames: TArray<string>, ExcludeAnimationNames: TArray<string>, WarmUpFrames: UE.FrameNumber, DelayBeforeStart: UE.FrameNumber, bUseCustomTimeRange: boolean, CustomStartFrame: UE.FrameNumber, CustomEndFrame: UE.FrameNumber, CustomDisplayRate: UE.FrameRate);
+        SkelTrackGuid: UE.Guid;
+        PathToAnimSequence: UE.SoftObjectPath;
+        bExportTransforms: boolean;
+        bExportMorphTargets: boolean;
+        bExportAttributeCurves: boolean;
+        bExportMaterialCurves: boolean;
+        Interpolation: UE.EAnimInterpolationType;
+        CurveInterpolation: UE.ERichCurveInterpMode;
+        bRecordInWorldSpace: boolean;
+        bEvaluateAllSkeletalMeshComponents: boolean;
+        IncludeAnimationNames: TArray<string>;
+        ExcludeAnimationNames: TArray<string>;
+        WarmUpFrames: UE.FrameNumber;
+        DelayBeforeStart: UE.FrameNumber;
+        bUseCustomTimeRange: boolean;
+        CustomStartFrame: UE.FrameNumber;
+        CustomEndFrame: UE.FrameNumber;
+        CustomDisplayRate: UE.FrameRate;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceAnimSequenceLinkItem_0__: boolean;
+    }
+    
+    class LevelSequenceAnimSequenceLink extends UE.AssetUserData {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AnimSequenceLinks: TArray<UE.LevelSequenceAnimSequenceLinkItem>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceAnimSequenceLink;
+        static Load(InName: string): LevelSequenceAnimSequenceLink;
+    
+        __tid_LevelSequenceAnimSequenceLink_0__: boolean;
+    }
+    
+    class LevelSequenceBindingReference {
+        constructor();
+        constructor(PackageName: string, ExternalObjectPath: UE.SoftObjectPath, ObjectPath: string);
+        PackageName: string;
+        ExternalObjectPath: UE.SoftObjectPath;
+        ObjectPath: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceBindingReference_0__: boolean;
+    }
+    
+    class LevelSequenceBindingReferenceArray {
+        constructor();
+        constructor(References: TArray<UE.LevelSequenceBindingReference>);
+        References: TArray<UE.LevelSequenceBindingReference>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceBindingReferenceArray_0__: boolean;
+    }
+    
+    class LevelSequenceBindingReferences {
+        constructor();
+        constructor(BindingIdToReferences: TMap<UE.Guid, UE.LevelSequenceBindingReferenceArray>, AnimSequenceInstances: TSet<UE.Guid>, PostProcessInstances: TSet<UE.Guid>);
+        BindingIdToReferences: TMap<UE.Guid, UE.LevelSequenceBindingReferenceArray>;
+        AnimSequenceInstances: TSet<UE.Guid>;
+        PostProcessInstances: TSet<UE.Guid>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceBindingReferences_0__: boolean;
+    }
+    
+    class LevelSequenceDirector extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SubSequenceID: number;
+        WeakLinker: TWeakObjectPtr<UE.MovieSceneEntitySystemLinker>;
+        InstanceID: number;
+        InstanceSerial: number;
+        Player: UE.LevelSequencePlayer;
+        MovieScenePlayerIndex: number;
+        /*
+         *Resolve the first valid Actor binding inside this sub-sequence that relates to the specified ID
+         *@note: ObjectBinding should be constructed from the same sequence as this Sequence Director's owning Sequence (see the GetSequenceBinding node)
+         *
+         *@param ObjectBinding The ID for the object binding inside this sub-sequence or one of its children to resolve
+         */
+        GetBoundActor(ObjectBinding: UE.MovieSceneObjectBindingID) : UE.Actor;
+        /*
+         *Resolve the actor bindings inside this sub-sequence that relate to the specified ID
+         *@note: ObjectBinding should be constructed from the same sequence as this Sequence Director's owning Sequence (see the GetSequenceBinding node)
+         *
+         *@param ObjectBinding The ID for the object binding inside this sub-sequence or one of its children to resolve
+         */
+        GetBoundActors(ObjectBinding: UE.MovieSceneObjectBindingID) : TArray<UE.Actor>;
+        /*
+         *Resolve the first valid binding inside this sub-sequence that relates to the specified ID
+         *@note: ObjectBinding should be constructed from the same sequence as this Sequence Director's owning Sequence (see the GetSequenceBinding node)
+         *
+         *@param ObjectBinding The ID for the object binding inside this sub-sequence or one of its children to resolve
+         */
+        GetBoundObject(ObjectBinding: UE.MovieSceneObjectBindingID) : UE.Object;
+        /*
+         *Resolve the bindings inside this sub-sequence that relate to the specified ID
+         *@note: ObjectBinding should be constructed from the same sequence as this Sequence Director's owning Sequence (see the GetSequenceBinding node)
+         *
+         *@param ObjectBinding The ID for the object binding inside this sub-sequence or one of its children to resolve
+         */
+        GetBoundObjects(ObjectBinding: UE.MovieSceneObjectBindingID) : TArray<UE.Object>;
+        /*
+         *Get the current time for this director's sub-sequence (or the root sequence, if this is a root sequence director)
+         *@return The current playback position of this director's sequence
+         */
+        GetCurrentTime() : UE.QualifiedFrameTime;
+        /*
+         *Get the current time for the outermost (root) sequence
+         *@return The current playback position of the outermost (root) sequence
+         */
+        GetRootSequenceTime() : UE.QualifiedFrameTime;
+        /*
+         ** Get the current sequence that this director is playing back within
+         */
+        GetSequence() : UE.MovieSceneSequence;
+        /*
+         *Called when this director is created
+         */
+        OnCreated() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceDirector;
+        static Load(InName: string): LevelSequenceDirector;
+    
+        __tid_LevelSequenceDirector_0__: boolean;
+    }
+    
+    class LevelSequenceLegacyObjectReference {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceLegacyObjectReference_0__: boolean;
+    }
+    
+    enum MediaTextureOutputFormat { MTOF_Default, MTOF_SRGB_LINOUT, MTOF_MAX, __typeKeyDoNoAccess}
+    enum MediaTextureOrientation { MTORI_Original, MTORI_CW90, MTORI_CW180, MTORI_CW270, MTORI_MAX, __typeKeyDoNoAccess}
+    class MediaSource extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ThumbnailImage: UE.Texture;
+        MediaSourceRenderer: UE.Object;
+        /*
+         *Get the media source's URL string (must be implemented in child classes).
+         *
+         *@return The media URL.
+         *@see GetProxies
+         */
+        GetUrl() : string;
+        /*
+         *Set a boolean parameter to pass to the player.
+         */
+        SetMediaOptionBool(Key: string, Value: boolean) : void;
+        /*
+         *Set a float parameter to pass to the player.
+         */
+        SetMediaOptionFloat(Key: string, Value: number) : void;
+        /*
+         *Set an integer64 parameter to pass to the player.
+         */
+        SetMediaOptionInt64(Key: string, Value: bigint) : void;
+        /*
+         *Set a string parameter to pass to the player.
+         */
+        SetMediaOptionString(Key: string, Value: string) : void;
+        /*
+         *Validate the media source settings (must be implemented in child classes).
+         *
+         *@return true if validation passed, false otherwise.
+         */
+        Validate() : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaSource;
+        static Load(InName: string): MediaSource;
+    
+        __tid_MediaSource_0__: boolean;
+    }
+    
+    class MediaPlaylist extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Items: TArray<UE.MediaSource>;
+        /*
+         *Add a media source to the play list.
+         *
+         *@param MediaSource The media source to append.
+         *@return true if the media source was added, false otherwise.
+         *@see AddFile, AddUrl, Insert, RemoveAll, Remove, Replace
+         */
+        Add(MediaSource: $Nullable<UE.MediaSource>) : boolean;
+        /*
+         *Add a media file path to the play list.
+         *
+         *@param FilePath The file path to add.
+         *@return true if the file was added, false otherwise.
+         *@see Add, AddUrl, Insert, RemoveAll, Remove, Replace
+         */
+        AddFile(FilePath: string) : boolean;
+        /*
+         *Add a media URL to the play list.
+         *
+         *@param Url The URL to add.
+         *@return true if the URL was added, false otherwise.
+         *@see Add, AddFile, Insert, RemoveAll, Remove, Replace
+         */
+        AddUrl(Url: string) : boolean;
+        /*
+         *Get the media source at the specified index.
+         *
+         *@param Index The index of the media source to get.
+         *@return The media source, or nullptr if the index doesn't exist.
+         *@see GetNext, GetRandom
+         */
+        Get(Index: number) : UE.MediaSource;
+        /*
+         *Get the next media source in the play list.
+         *
+         *@param InOutIndex Index of the current media source (will contain the new index).
+         *@return The media source after the current one, or nullptr if the list is empty.
+         *@see , GetPrevious, GetRandom
+         */
+        GetNext(InOutIndex: $Ref<number>) : UE.MediaSource;
+        /*
+         *Get the previous media source in the play list.
+         *
+         *@param InOutIndex Index of the current media source (will contain the new index).
+         *@return The media source before the current one, or nullptr if the list is empty.
+         *@see , GetNext, GetRandom
+         */
+        GetPrevious(InOutIndex: $Ref<number>) : UE.MediaSource;
+        /*
+         *Get a random media source in the play list.
+         *
+         *@param OutIndex Will contain the index of the returned media source.
+         *@return The random media source, or nullptr if the list is empty.
+         *@see Get, GetNext, GetPrevious
+         */
+        GetRandom(OutIndex: $Ref<number>) : UE.MediaSource;
+        /*
+         *Insert a media source into the play list at the given position.
+         *
+         *@param MediaSource The media source to insert.
+         *@param Index The index to insert into.
+         *@see Add, Remove, RemoveAll, Replace
+         */
+        Insert(MediaSource: $Nullable<UE.MediaSource>, Index: number) : void;
+        /*
+         *Get the number of media sources in the play list.
+         *
+         *@return Number of media sources.
+         */
+        Num() : number;
+        /*
+         *Remove all occurrences of the given media source in the play list.
+         *
+         *@param MediaSource The media source to remove.
+         *@return true if the media source was removed, false otherwise.
+         *@see Add, Insert, Remove, Replace
+         */
+        Remove(MediaSource: $Nullable<UE.MediaSource>) : boolean;
+        /*
+         *Remove the media source at the specified position.
+         *
+         *@param Index The index of the media source to remove.
+         *@return true if the media source was removed, false otherwise.
+         *@see Add, Insert, RemoveAll, Replace
+         */
+        RemoveAt(Index: number) : boolean;
+        /*
+         *Replace the media source at the specified position.
+         *
+         *@param Index The index of the media source to replace.
+         *@param Replacement The replacement media source.
+         *@return true if the media source was replaced, false otherwise.
+         *@see Add, Insert, RemoveAll, RemoveAt
+         */
+        Replace(Index: number, Replacement: $Nullable<UE.MediaSource>) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaPlaylist;
+        static Load(InName: string): MediaPlaylist;
+    
+        __tid_MediaPlaylist_0__: boolean;
+    }
+    
+    enum EMediaPlayerTrack { Audio, Caption, Metadata, Script, Subtitle, Text, Video, EMediaPlayerTrack_MAX, __typeKeyDoNoAccess}
+    class MediaPlayerTrackOptions {
+        constructor();
+        constructor(Audio: number, Caption: number, Metadata: number, Script: number, Subtitle: number, Text: number, Video: number);
+        Audio: number;
+        Caption: number;
+        Metadata: number;
+        Script: number;
+        Subtitle: number;
+        Text: number;
+        Video: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MediaPlayerTrackOptions_0__: boolean;
+    }
+    
+    enum EMediaPlayerOptionTrackSelectMode { UseMediaPlayerDefaults, UseTrackOptionIndices, EMediaPlayerOptionTrackSelectMode_MAX, __typeKeyDoNoAccess}
+    enum EMediaPlayerOptionSeekTimeType { Ignored, RelativeToStartTime, EMediaPlayerOptionSeekTimeType_MAX, __typeKeyDoNoAccess}
+    enum EMediaPlayerOptionBooleanOverride { UseMediaPlayerSetting, Enabled, Disabled, EMediaPlayerOptionBooleanOverride_MAX, __typeKeyDoNoAccess}
+    class MediaPlayerOptions {
+        constructor();
+        constructor(Tracks: UE.MediaPlayerTrackOptions, TrackSelection: UE.EMediaPlayerOptionTrackSelectMode, SeekTime: UE.Timespan, SeekTimeType: UE.EMediaPlayerOptionSeekTimeType, PlayOnOpen: UE.EMediaPlayerOptionBooleanOverride, Loop: UE.EMediaPlayerOptionBooleanOverride);
+        Tracks: UE.MediaPlayerTrackOptions;
+        TrackSelection: UE.EMediaPlayerOptionTrackSelectMode;
+        SeekTime: UE.Timespan;
+        SeekTimeType: UE.EMediaPlayerOptionSeekTimeType;
+        PlayOnOpen: UE.EMediaPlayerOptionBooleanOverride;
+        Loop: UE.EMediaPlayerOptionBooleanOverride;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MediaPlayerOptions_0__: boolean;
+    }
+    
+    class MediaTimeStampInfo extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Time: UE.Timespan;
+        SequenceIndex: bigint;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaTimeStampInfo;
+        static Load(InName: string): MediaTimeStampInfo;
+    
+        __tid_MediaTimeStampInfo_0__: boolean;
+    }
+    
+    enum EMediaTimeRangeBPType { Absolute, Current, EMediaTimeRangeBPType_MAX, __typeKeyDoNoAccess}
+    class MediaMetadataItemBPT {
+        constructor();
+        constructor(LanguageCode: string, MimeType: string, StringData: string, BinaryData: TArray<number>);
+        LanguageCode: string;
+        MimeType: string;
+        StringData: string;
+        BinaryData: TArray<number>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MediaMetadataItemBPT_0__: boolean;
+    }
+    
+    class MediaMetadataItemsBPT {
+        constructor();
+        constructor(Items: TArray<UE.MediaMetadataItemBPT>);
+        Items: TArray<UE.MediaMetadataItemBPT>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MediaMetadataItemsBPT_0__: boolean;
+    }
+    
+    class MediaPlayer extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnEndReached: $MulticastDelegate<() => void>;
+        OnMediaClosed: $MulticastDelegate<() => void>;
+        OnMediaOpened: $MulticastDelegate<(OpenedUrl: string) => void>;
+        OnMediaOpenFailed: $MulticastDelegate<(FailedUrl: string) => void>;
+        OnPlaybackResumed: $MulticastDelegate<() => void>;
+        OnPlaybackSuspended: $MulticastDelegate<() => void>;
+        OnSeekCompleted: $MulticastDelegate<() => void>;
+        OnTracksChanged: $MulticastDelegate<() => void>;
+        OnMetadataChanged: $MulticastDelegate<() => void>;
+        CacheAhead: UE.Timespan;
+        CacheBehind: UE.Timespan;
+        CacheBehindGame: UE.Timespan;
+        NativeAudioOut: boolean;
+        PlayOnOpen: boolean;
+        Shuffle: boolean;
+        Loop: boolean;
+        Playlist: UE.MediaPlaylist;
+        PlaylistIndex: number;
+        TimeDelay: UE.Timespan;
+        HorizontalFieldOfView: number;
+        VerticalFieldOfView: number;
+        ViewRotation: UE.Rotator;
+        PlayerGuid: UE.Guid;
+        AffectedByPIEHandling: boolean;
+        /*
+         *Check whether media playback can be paused right now.
+         *
+         *Playback can be paused if the media supports pausing and if it is currently playing.
+         *
+         *@return true if pausing playback can be paused, false otherwise.
+         *@see CanPlay, Pause
+         */
+        CanPause() : boolean;
+        /*
+         *Check whether the specified media source can be played by this player.
+         *
+         *If a desired player name is set for this player, it will only check
+         *whether that particular player type can play the specified source.
+         *
+         *@param MediaSource The media source to check.
+         *@return true if the media source can be opened, false otherwise.
+         *@see CanPlayUrl, SetDesiredPlayerName
+         */
+        CanPlaySource(MediaSource: $Nullable<UE.MediaSource>) : boolean;
+        /*
+         *Check whether the specified URL can be played by this player.
+         *
+         *If a desired player name is set for this player, it will only check
+         *whether that particular player type can play the specified URL.
+         *
+         *@param Url The URL to check.
+         *@see CanPlaySource, SetDesiredPlayerName
+         */
+        CanPlayUrl(Url: string) : boolean;
+        /*
+         *Close the currently open media, if any.
+         *
+         *@see OnMediaClosed, OpenPlaylist, OpenPlaylistIndex, OpenSource, OpenUrl, Pause, Play
+         */
+        Close() : void;
+        /*
+         *Get the number of channels in the specified audio track.
+         *
+         *@param TrackIndex Index of the audio track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Number of channels.
+         *@see GetAudioTrackSampleRate, GetAudioTrackType
+         */
+        GetAudioTrackChannels(TrackIndex: number, FormatIndex: number) : number;
+        /*
+         *Get the sample rate of the specified audio track.
+         *
+         *@param TrackIndex Index of the audio track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Samples per second.
+         *@see GetAudioTrackChannels, GetAudioTrackType
+         */
+        GetAudioTrackSampleRate(TrackIndex: number, FormatIndex: number) : number;
+        /*
+         *Get the type of the specified audio track format.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Audio format type string.
+         *@see GetAudioTrackSampleRate, GetAudioTrackSampleRate
+         */
+        GetAudioTrackType(TrackIndex: number, FormatIndex: number) : string;
+        /*
+         *Get the name of the current desired native player.
+         *
+         *@return The name of the desired player, or NAME_None if not set.
+         *@see SetDesiredPlayerName
+         */
+        GetDesiredPlayerName() : string;
+        /*
+         *Get the media's current playback time as appropriate for display.
+         *
+         *@return Playback time.
+         *@see GetDuration, Seek
+         */
+        GetDisplayTime() : UE.Timespan;
+        /*
+         *Get the media's current playback timestamp as appropriate for display.
+         *
+         *@return Playback timestamp.
+         *@see GetDuration, Seek
+         */
+        GetDisplayTimeStamp() : UE.MediaTimeStampInfo;
+        /*
+         *Get the media's duration.
+         *
+         *@return A time span representing the duration.
+         *@see GetTime, Seek
+         */
+        GetDuration() : UE.Timespan;
+        /*
+         *Get the current horizontal field of view (only for 360 videos).
+         *
+         *@return Horizontal field of view (in Euler degrees).
+         *@see GetVerticalFieldOfView, GetViewRotation, SetHorizontalFieldOfView
+         */
+        GetHorizontalFieldOfView() : number;
+        /*
+         *This is the blueprint accessible version of the GetMediaMetadata.
+         *@return Map with arrays of FMediaMetaDataItem entries describing any metadata found in the current stream
+         *@note Listen to EMediaEvent::MetadataChanged to catch updates to this data
+         */
+        GetMediaMetadataItems() : TMap<string, UE.MediaMetadataItemsBPT>;
+        /*
+         *Get the human readable name of the currently loaded media source.
+         *
+         *@return Media source name, or empty text if no media is opened
+         *@see GetPlayerName, GetUrl
+         */
+        GetMediaName() : string;
+        /*
+         *Get the number of formats of the specified track.
+         *
+         *@param TrackType The type of media tracks.
+         *@param TrackIndex The index of the track.
+         *@return Number of formats.
+         *@see GetNumTracks, GetSelectedTrack, SelectTrack
+         */
+        GetNumTrackFormats(TrackType: UE.EMediaPlayerTrack, TrackIndex: number) : number;
+        /*
+         *Get the number of tracks of the given type.
+         *
+         *@param TrackType The type of media tracks.
+         *@return Number of tracks.
+         *@see GetNumTrackFormats, GetSelectedTrack, SelectTrack
+         */
+        GetNumTracks(TrackType: UE.EMediaPlayerTrack) : number;
+        /*
+         *Blueprint accessible version of GetPlaybackTimeRange.
+         *This returns the range truncated into a blueprint usable float interval and should not
+         *be used for live streams as 32 bit floats can not store wallclock times with enough precision.
+         */
+        GetPlaybackTimeRange(InRangeToGet: UE.EMediaTimeRangeBPType) : UE.FloatInterval;
+        /*
+         *Get the name of the current native media player.
+         *
+         *@return Player name, or NAME_None if not available.
+         *@see GetMediaName
+         */
+        GetPlayerName() : string;
+        /*
+         *Get the current play list.
+         *
+         *Media players always have a valid play list. In C++ code you can use
+         *the GetPlaylistRef to get a reference instead of a pointer to it.
+         *
+         *@return The play list.
+         *@see GetPlaylistIndex, GetPlaylistRef
+         */
+        GetPlaylist() : UE.MediaPlaylist;
+        /*
+         *Get the current play list index.
+         *
+         *@return Play list index.
+         *@see GetPlaylist
+         */
+        GetPlaylistIndex() : number;
+        /*
+         *Get the media's current playback rate.
+         *
+         *@return The playback rate.
+         *@see SetRate, SupportsRate
+         */
+        GetRate() : number;
+        /*
+         *Get the index of the currently selected track of the given type.
+         *
+         *@param TrackType The type of track to get.
+         *@return The index of the selected track, or INDEX_NONE if no track is active.
+         *@see GetNumTracks, GetTrackFormat, SelectTrack
+         */
+        GetSelectedTrack(TrackType: UE.EMediaPlayerTrack) : number;
+        /*
+         *Get the supported playback rates.
+         *
+         *@param Unthinned Whether the rates are for unthinned playback.
+         *@param Will contain the the ranges of supported rates.
+         *@see SetRate, SupportsRate
+         */
+        GetSupportedRates(OutRates: $Ref<TArray<UE.FloatRange>>, Unthinned: boolean) : void;
+        /*
+         *Get the media's current playback time.
+         *
+         *@return Playback time.
+         *@see GetDuration, Seek
+         */
+        GetTime() : UE.Timespan;
+        /*
+         *Delay of the player's time.
+         *
+         *@return Delay added to the player's time used to manually sync multiple sources.
+         *@see SetTimeDelay
+         */
+        GetTimeDelay() : UE.Timespan;
+        /*
+         *Get the media's current playback timestamp.
+         *
+         *@return Playback timestamp.
+         *@see GetDuration, Seek
+         */
+        GetTimeStamp() : UE.MediaTimeStampInfo;
+        /*
+         *Get the human readable name of the specified track.
+         *
+         *@param TrackType The type of track.
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@return Display name.
+         *@see GetNumTracks, GetTrackLanguage
+         */
+        GetTrackDisplayName(TrackType: UE.EMediaPlayerTrack, TrackIndex: number) : string;
+        /*
+         *Get the index of the active format of the specified track type.
+         *
+         *@param TrackType The type of track.
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@return The index of the selected format.
+         *@see GetNumTrackFormats, GetSelectedTrack, SetTrackFormat
+         */
+        GetTrackFormat(TrackType: UE.EMediaPlayerTrack, TrackIndex: number) : number;
+        /*
+         *Get the language tag of the specified track.
+         *
+         *@param TrackType The type of track.
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@return Language tag, i.e. "en-US" for English, or "und" for undefined.
+         *@see GetNumTracks, GetTrackDisplayName
+         */
+        GetTrackLanguage(TrackType: UE.EMediaPlayerTrack, TrackIndex: number) : string;
+        /*
+         *Get the URL of the currently loaded media, if any.
+         *
+         *@return Media URL, or empty string if no media was loaded.
+         *@see OpenUrl
+         */
+        GetUrl() : string;
+        /*
+         *Get the current vertical field of view (only for 360 videos).
+         *
+         *@return Vertical field of view (in Euler degrees), or 0.0 if not available.
+         *@see GetHorizontalFieldOfView, GetViewRotation, SetVerticalFieldOfView
+         */
+        GetVerticalFieldOfView() : number;
+        /*
+         *Get the aspect ratio of the specified video track.
+         *
+         *@param TrackIndex Index of the video track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Aspect ratio.
+         *@see GetVideoTrackDimensions, GetVideoTrackFrameRate, GetVideoTrackFrameRates, GetVideoTrackType
+         */
+        GetVideoTrackAspectRatio(TrackIndex: number, FormatIndex: number) : number;
+        /*
+         *Get the current dimensions of the specified video track.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Video dimensions (in pixels).
+         *@see GetVideoTrackAspectRatio, GetVideoTrackFrameRate, GetVideoTrackFrameRates, GetVideoTrackType
+         */
+        GetVideoTrackDimensions(TrackIndex: number, FormatIndex: number) : UE.IntPoint;
+        /*
+         *Get the frame rate of the specified video track.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Frame rate (in frames per second).
+         *@see GetVideoTrackAspectRatio, GetVideoTrackDimensions, GetVideoTrackFrameRates, GetVideoTrackType, SetVideoTrackFrameRate
+         */
+        GetVideoTrackFrameRate(TrackIndex: number, FormatIndex: number) : number;
+        /*
+         *Get the supported range of frame rates of the specified video track.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Frame rate range (in frames per second).
+         *@see GetVideoTrackAspectRatio, GetVideoTrackDimensions, GetVideoTrackFrameRate, GetVideoTrackType
+         */
+        GetVideoTrackFrameRates(TrackIndex: number, FormatIndex: number) : UE.FloatRange;
+        /*
+         *Get the type of the specified video track format.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@return Video format type string.
+         *@see GetVideoTrackAspectRatio, GetVideoTrackDimensions, GetVideoTrackFrameRate, GetVideoTrackFrameRates
+         */
+        GetVideoTrackType(TrackIndex: number, FormatIndex: number) : string;
+        /*
+         *Get the current view rotation (only for 360 videos).
+         *
+         *@return View rotation, or zero rotator if not available.
+         *@see GetHorizontalFieldOfView, GetVerticalFieldOfView, SetViewRotation
+         */
+        GetViewRotation() : UE.Rotator;
+        /*
+         *Check whether the player is in an error state.
+         *
+         *When the player is in an error state, no further operations are possible.
+         *The current media must be closed, and a new media source must be opened
+         *before the player can be used again. Errors are usually caused by faulty
+         *media files or interrupted network connections.
+         *
+         *@see IsReady
+         */
+        HasError() : boolean;
+        /*
+         *Check whether playback is buffering data.
+         *
+         *@return true if looping, false otherwise.
+         *@see IsConnecting, IsLooping, IsPaused, IsPlaying, IsPreparing, IsReady
+         */
+        IsBuffering() : boolean;
+        /*
+         *Whether media is currently closed.
+         *
+         *@return true if media is closed, false otherwise.
+         */
+        IsClosed() : boolean;
+        /*
+         *Check whether the player is currently connecting to a media source.
+         *
+         *@return true if connecting, false otherwise.
+         *@see IsBuffering, IsLooping, IsPaused, IsPlaying, IsPreparing, IsReady
+         */
+        IsConnecting() : boolean;
+        /*
+         *Check whether playback is looping.
+         *
+         *@return true if looping, false otherwise.
+         *@see IsBuffering, IsConnecting, IsPaused, IsPlaying, IsPreparing, IsReady, SetLooping
+         */
+        IsLooping() : boolean;
+        /*
+         *Check whether playback is currently paused.
+         *
+         *@return true if playback is paused, false otherwise.
+         *@see CanPause, IsBuffering, IsConnecting, IsLooping, IsPaused, IsPlaying, IsPreparing, IsReady, Pause
+         */
+        IsPaused() : boolean;
+        /*
+         *Check whether playback has started.
+         *
+         *@return true if playback has started, false otherwise.
+         *@see CanPlay, IsBuffering, IsConnecting, IsLooping, IsPaused, IsPlaying, IsPreparing, IsReady, Play
+         */
+        IsPlaying() : boolean;
+        /*
+         *Check whether the media is currently opening or buffering.
+         *
+         *@return true if playback is being prepared, false otherwise.
+         *@see CanPlay, IsBuffering, IsConnecting, IsLooping, IsPaused, IsPlaying, IsReady, Play
+         */
+        IsPreparing() : boolean;
+        /*
+         *Check whether media is ready for playback.
+         *
+         *A player is ready for playback if it has a media source opened that
+         *finished preparing and is not in an error state.
+         *
+         *@return true if media is ready, false otherwise.
+         *@see HasError, IsBuffering, IsConnecting, IsLooping, IsPaused, IsPlaying, IsPreparing
+         */
+        IsReady() : boolean;
+        /*
+         *Open the next item in the current play list.
+         *
+         *The player will start playing the new media source if it was playing
+         *something previously, otherwise it will only open the media source.
+         *
+         *@return true on success, false otherwise.
+         *@see Close, OpenUrl, OpenSource, Play, Previous, SetPlaylist
+         */
+        Next() : boolean;
+        /*
+         *Opens the specified media file path.
+         *
+         *A return value of true indicates that the player will attempt to open
+         *the media, but it may fail to do so later for other reasons, i.e. if
+         *a connection to the media server timed out. Use the OnMediaOpened and
+         *OnMediaOpenFailed delegates to detect if and when the media is ready!
+         *
+         *@param FilePath The file path to open.
+         *@return true if the file path will be opened, false otherwise.
+         *@see GetUrl, Close, OpenPlaylist, OpenPlaylistIndex, OpenSource, OpenUrl, Reopen
+         */
+        OpenFile(FilePath: string) : boolean;
+        /*
+         *Open the first media source in the specified play list.
+         *
+         *@param InPlaylist The play list to open.
+         *@return true if the source will be opened, false otherwise.
+         *@see Close, OpenFile, OpenPlaylistIndex, OpenSource, OpenUrl, Reopen
+         */
+        OpenPlaylist(InPlaylist: $Nullable<UE.MediaPlaylist>) : boolean;
+        /*
+         *Open a particular media source in the specified play list.
+         *
+         *@param InPlaylist The play list to open.
+         *@param Index The index of the source to open.
+         *@return true if the source will be opened, false otherwise.
+         *@see Close, OpenFile, OpenPlaylist, OpenSource, OpenUrl, Reopen
+         */
+        OpenPlaylistIndex(InPlaylist: $Nullable<UE.MediaPlaylist>, Index: number) : boolean;
+        /*
+         *Open the specified media source.
+         *
+         *A return value of true indicates that the player will attempt to open
+         *the media, but it may fail to do so later for other reasons, i.e. if
+         *a connection to the media server timed out. Use the OnMediaOpened and
+         *OnMediaOpenFailed delegates to detect if and when the media is ready!
+         *
+         *@param MediaSource The media source to open.
+         *@return true if the source will be opened, false otherwise.
+         *@see Close, OpenFile, OpenPlaylist, OpenPlaylistIndex, OpenUrl, Reopen
+         */
+        OpenSource(MediaSource: $Nullable<UE.MediaSource>) : boolean;
+        /*
+         *Open the specified media source with options using a latent action.
+         *
+         *A result of true indicates that the player successfully completed all requested operations.
+         *
+         *@param MediaSource The media source to open.
+         *@param Options The media player options to apply.
+         *@param bSuccess  All requested operations have completed successfully.
+         *@see Close, OpenFile, OpenPlaylist, OpenPlaylistIndex, OpenUrl, Reopen
+         */
+        OpenSourceLatent(WorldContextObject: $Nullable<UE.Object>, LatentInfo: UE.LatentActionInfo, MediaSource: $Nullable<UE.MediaSource>, Options: UE.MediaPlayerOptions, bSuccess: $Ref<boolean>) : void;
+        /*
+         *Open the specified media source with supplied options applied.
+         *
+         *A return value of true indicates that the player will attempt to open
+         *the media, but it may fail to do so later for other reasons, i.e. if
+         *a connection to the media server timed out. Use the OnMediaOpened and
+         *OnMediaOpenFailed delegates to detect if and when the media is ready!
+         *
+         *@param MediaSource The media source to open.
+         *@param Options The media player options to apply.
+         *@return true if the source will be opened, false otherwise.
+         *@see Close, OpenFile, OpenPlaylist, OpenPlaylistIndex, OpenUrl, Reopen
+         */
+        OpenSourceWithOptions(MediaSource: $Nullable<UE.MediaSource>, Options: UE.MediaPlayerOptions) : boolean;
+        /*
+         *Opens the specified media URL.
+         *
+         *A return value of true indicates that the player will attempt to open
+         *the media, but it may fail to do so later for other reasons, i.e. if
+         *a connection to the media server timed out. Use the OnMediaOpened and
+         *OnMediaOpenFailed delegates to detect if and when the media is ready!
+         *
+         *@param Url The URL to open.
+         *@return true if the URL will be opened, false otherwise.
+         *@see GetUrl, Close, OpenFile, OpenPlaylist, OpenPlaylistIndex, OpenSource, Reopen
+         */
+        OpenUrl(Url: string) : boolean;
+        /*
+         *Pauses media playback.
+         *
+         *This is the same as setting the playback rate to 0.0.
+         *
+         *@return true if playback is being paused, false otherwise.
+         *@see CanPause, Close, Next, Play, Previous, Rewind, Seek
+         */
+        Pause() : boolean;
+        /*
+         *Starts media playback.
+         *
+         *This is the same as setting the playback rate to 1.0.
+         *
+         *@return true if playback is starting, false otherwise.
+         *@see CanPlay, GetRate, Next, Pause, Previous, SetRate
+         */
+        Play() : boolean;
+        /*
+         *Starts playback from the media opened event, but can be used elsewhere.
+         */
+        PlayAndSeek() : void;
+        /*
+         *Open the previous item in the current play list.
+         *
+         *The player will start playing the new media source if it was playing
+         *something previously, otherwise it will only open the media source.
+         *
+         *@return true on success, false otherwise.
+         *@see Close, Next, OpenUrl, OpenSource, Play, SetPlaylist
+         */
+        Previous() : boolean;
+        /*
+         *Reopens the currently opened media or play list.
+         *
+         *@return true if the media will be opened, false otherwise.
+         *@see Close, Open, OpenFile, OpenPlaylist, OpenPlaylistIndex, OpenSource, OpenUrl
+         */
+        Reopen() : boolean;
+        /*
+         *Rewinds the media to the beginning.
+         *
+         *This is the same as seeking to zero time.
+         *
+         *@return true if rewinding, false otherwise.
+         *@see GetTime, Seek
+         */
+        Rewind() : boolean;
+        /*
+         *Seeks to the specified playback time.
+         *
+         *@param Time The playback time to set.
+         *@return true on success, false otherwise.
+         *@see GetTime, Rewind
+         */
+        Seek(Time: UE.Timespan) : boolean;
+        /*
+         *Select the active track of the given type.
+         *
+         *The selected track will use its currently active format. Active formats will
+         *be remembered on a per track basis. The first available format is active by
+         *default. To switch the track format, use SetTrackFormat instead.
+         *
+         *@param TrackType The type of track to select.
+         *@param TrackIndex The index of the track to select, or INDEX_NONE to deselect.
+         *@return true if the track was selected, false otherwise.
+         *@see GetNumTracks, GetSelectedTrack, SetTrackFormat
+         */
+        SelectTrack(TrackType: UE.EMediaPlayerTrack, TrackIndex: number) : boolean;
+        /*
+         *Set the time on which to block.
+         *
+         *If set, this player will block in TickInput or TickFetch until the video sample
+         *for the specified time are actually available.
+         *
+         *@param Time The time to block on, or FTimespan::MinValue to disable.
+         */
+        SetBlockOnTime(Time: UE.Timespan) : void;
+        /*
+         *Set the name of the desired native player.
+         *
+         *@param PlayerName The name of the player to set.
+         *@see GetDesiredPlayerName
+         */
+        SetDesiredPlayerName(PlayerName: string) : void;
+        /*
+         *Enables or disables playback looping.
+         *
+         *@param Looping Whether playback should be looped.
+         *@return true on success, false otherwise.
+         *@see IsLooping
+         */
+        SetLooping(Looping: boolean) : boolean;
+        /*
+         *Sets the media options used by the player.
+         *
+         *@param Options Options to pass to the player.
+         */
+        SetMediaOptions(Options: $Nullable<UE.MediaSource>) : void;
+        /*
+         *Set the volume on the native player if not mixing with Sound Wave asset.
+         *
+         *The SetNativeVolume can be used to change the audio output volume at runtime. Note that
+         *not all media player plug-ins may support native audio output on all platforms.
+         *
+         *@param Volume The volume to set.
+         *@return true on success, false otherwise.
+         *@see NativeAudioOut
+         */
+        SetNativeVolume(Volume: number) : boolean;
+        /*
+         *Blueprint accessible version of SetPlaybackTimeRange().
+         *The range is set through a blueprint usable float interval which may not have enough
+         *precision to represent the range accurately.
+         */
+        SetPlaybackTimeRange(InTimeRange: UE.FloatInterval) : boolean;
+        /*
+         *Changes the media's playback rate.
+         *
+         *@param Rate The playback rate to set.
+         *@return true on success, false otherwise.
+         *@see GetRate, SupportsRate
+         */
+        SetRate(Rate: number) : boolean;
+        /*
+         *Delay of the player's time.
+         *
+         *This setting can be used to manually sync multiple sources.
+         *Set to 1 seconds, if you would like that Player to play 1 second behind its current time.
+         *If the value is too big, it is possible that the player would not hold that frame for that long.
+         *@return true on success, false otherwise.
+         *@see GetTimeDelay
+         */
+        SetTimeDelay(TimeDelay: UE.Timespan) : void;
+        /*
+         *Set the format on the specified track.
+         *
+         *Selecting the format will not switch to the specified track. To switch
+         *tracks, use SelectTrack instead. If the track is already selected, the
+         *format change will be applied immediately.
+         *
+         *@param TrackType The type of track to update.
+         *@param TrackIndex The index of the track to update.
+         *@param FormatIndex The index of the format to select (must be valid).
+         *@return true if the track was selected, false otherwise.
+         *@see GetNumTrackFormats, GetNumTracks, GetTrackFormat, SelectTrack
+         */
+        SetTrackFormat(TrackType: UE.EMediaPlayerTrack, TrackIndex: number, FormatIndex: number) : boolean;
+        /*
+         *Set the frame rate of the specified video track.
+         *
+         *@param TrackIndex The index of the track, or INDEX_NONE for the selected one.
+         *@param FormatIndex Index of the track format, or INDEX_NONE for the selected one.
+         *@param FrameRate The frame rate to set (must be in range of format's supported frame rates).
+         *@return true on success, false otherwise.
+         *@see GetVideoTrackAspectRatio, GetVideoTrackDimensions, GetVideoTrackFrameRate, GetVideoTrackFrameRates, GetVideoTrackType
+         */
+        SetVideoTrackFrameRate(TrackIndex: number, FormatIndex: number, FrameRate: number) : boolean;
+        /*
+         *Set the field of view (only for 360 videos).
+         *
+         *@param Horizontal Horizontal field of view (in Euler degrees).
+         *@param Vertical Vertical field of view (in Euler degrees).
+         *@param Whether the field of view change should be absolute (true) or relative (false).
+         *@return true on success, false otherwise.
+         *@see GetHorizontalFieldOfView, GetVerticalFieldOfView, SetViewRotation
+         */
+        SetViewField(Horizontal: number, Vertical: number, Absolute: boolean) : boolean;
+        /*
+         *Set the view's rotation (only for 360 videos).
+         *
+         *@param Rotation The desired view rotation.
+         *@param Whether the rotation change should be absolute (true) or relative (false).
+         *@return true on success, false otherwise.
+         *@see GetViewRotation, SetViewField
+         */
+        SetViewRotation(Rotation: UE.Rotator, Absolute: boolean) : boolean;
+        /*
+         *Check whether the player supports playing back of range within the media.
+         *
+         *@return true if playing back a range is supported, false otherwise.
+         *@see GetPlaybackTimeRange, SetPlaybackTimeRange
+         */
+        SupportsPlaybackTimeRange() : boolean;
+        /*
+         *Check whether the specified playback rate is supported.
+         *
+         *@param Rate The playback rate to check.
+         *@param Unthinned Whether no frames should be dropped at the given rate.
+         *@see SupportsScrubbing, SupportsSeeking
+         */
+        SupportsRate(Rate: number, Unthinned: boolean) : boolean;
+        /*
+         *Check whether the currently loaded media supports scrubbing.
+         *
+         *@return true if scrubbing is supported, false otherwise.
+         *@see SupportsRate, SupportsSeeking
+         */
+        SupportsScrubbing() : boolean;
+        /*
+         *Check whether the currently loaded media can jump to a certain position.
+         *
+         *@return true if seeking is supported, false otherwise.
+         *@see SupportsRate, SupportsScrubbing
+         */
+        SupportsSeeking() : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaPlayer;
+        static Load(InName: string): MediaPlayer;
+    
+        __tid_MediaPlayer_0__: boolean;
+    }
+    
+    class MediaTexture extends UE.Texture {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AddressX: UE.TextureAddress;
+        AddressY: UE.TextureAddress;
+        AutoClear: boolean;
+        ClearColor: UE.LinearColor;
+        EnableGenMips: boolean;
+        NumMips: number;
+        NewStyleOutput: boolean;
+        OutputFormat: UE.MediaTextureOutputFormat;
+        CurrentAspectRatio: number;
+        CurrentOrientation: UE.MediaTextureOrientation;
+        MediaPlayer: UE.MediaPlayer;
+        /*
+         *Gets the current aspect ratio of the texture.
+         *
+         *@return Texture aspect ratio.
+         *@see GetHeight, GetWidth
+         */
+        GetAspectRatio() : number;
+        /*
+         *Gets the current height of the texture.
+         *
+         *@return Texture height (in pixels).
+         *@see GetAspectRatio, GetWidth
+         */
+        GetHeight() : number;
+        /*
+         *Get the media player that provides the video samples.
+         *
+         *@return The texture's media player, or nullptr if not set.
+         *@see SetMediaPlayer
+         */
+        GetMediaPlayer() : UE.MediaPlayer;
+        /*
+         *Gets the current numbe of mips of the texture.
+         *
+         *@return Number of mips.
+         */
+        GetTextureNumMips() : number;
+        /*
+         *Gets the current width of the texture.
+         *
+         *@return Texture width (in pixels).
+         *@see GetAspectRatio, GetHeight
+         */
+        GetWidth() : number;
+        /*
+         *Set the media player that provides the video samples.
+         *
+         *@param NewMediaPlayer The player to set.
+         *@see GetMediaPlayer
+         */
+        SetMediaPlayer(NewMediaPlayer: $Nullable<UE.MediaPlayer>) : void;
+        /*
+         *Creates a new resource for the texture, and updates any cached references to the resource.
+         *This obviously is just an override to expose to blueprints.
+         */
+        UpdateResource() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaTexture;
+        static Load(InName: string): MediaTexture;
+    
+        __tid_MediaTexture_0__: boolean;
+    }
+    
+    class MediaComponent extends UE.ActorComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        MediaTexture: UE.MediaTexture;
+        MediaPlayer: UE.MediaPlayer;
+        /*
+         *Get the media player that this component owns
+         */
+        GetMediaPlayer() : UE.MediaPlayer;
+        /*
+         *Get the media texture that this component owns, bound to its media player.
+         */
+        GetMediaTexture() : UE.MediaTexture;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MediaComponent;
+        static Load(InName: string): MediaComponent;
+    
+        __tid_MediaComponent_0__: boolean;
+    }
+    
+    class LevelSequenceMediaController extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Sequence: UE.LevelSequenceActor;
+        MediaComponent: UE.MediaComponent;
+        ServerStartTimeSeconds: number;
+        /*
+         *Access this actor's media component
+         */
+        GetMediaComponent() : UE.MediaComponent;
+        /*
+         *Access this actor's Level Sequence Actor
+         */
+        GetSequence() : UE.LevelSequenceActor;
+        OnRep_ServerStartTimeSeconds() : void;
+        OnRequestCurrentTime(InCurrentTime: UE.QualifiedFrameTime, InPlayRate: number) : UE.FrameTime;
+        OnStartPlaying(InStartTime: UE.QualifiedFrameTime) : void;
+        OnStopPlaying(InStopTime: UE.QualifiedFrameTime) : void;
+        OnTick(DeltaSeconds: number, InPlayRate: number) : void;
+        Play() : void;
+        /*
+         *Forcibly synchronize the sequence to the server's position if it has diverged by more than the specified threshold
+         */
+        SynchronizeToServer(DesyncThresholdSeconds?: number /* = 2.000000 */) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceMediaController;
+        static Load(InName: string): LevelSequenceMediaController;
+    
+        __tid_LevelSequenceMediaController_0__: boolean;
+    }
+    
+    class LevelSequenceObject {
+        constructor();
+        constructor(ObjectOrOwner: TLazyObjectPtr<UE.Object>, ComponentName: string, CachedComponent: TWeakObjectPtr<UE.Object>);
+        ObjectOrOwner: TLazyObjectPtr<UE.Object>;
+        ComponentName: string;
+        CachedComponent: TWeakObjectPtr<UE.Object>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_LevelSequenceObject_0__: boolean;
+    }
+    
+    class LevelSequenceProjectSettings extends UE.DeveloperSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bDefaultLockEngineToDisplayRate: boolean;
+        DefaultDisplayRate: string;
+        DefaultTickResolution: string;
+        DefaultClockSource: UE.EUpdateClockSource;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): LevelSequenceProjectSettings;
+        static Load(InName: string): LevelSequenceProjectSettings;
+    
+        __tid_LevelSequenceProjectSettings_0__: boolean;
     }
     
     class LevelStreamingAlwaysLoaded extends UE.LevelStreaming {
@@ -69817,6 +73366,396 @@ declare module "ue" {
         __tid_ModifyCurveAnimLibrary_0__: boolean;
     }
     
+    class ModularSynthPreset extends UE.TableRowBase {
+        constructor();
+        constructor(bEnablePolyphony: boolean, Osc1Type: UE.ESynth1OscType, Osc1Gain: number, Osc1Octave: number, Osc1Semitones: number, Osc1Cents: number, Osc1PulseWidth: number, Osc2Type: UE.ESynth1OscType, Osc2Gain: number, Osc2Octave: number, Osc2Semitones: number, Osc2Cents: number, Osc2PulseWidth: number, Portamento: number, bEnableUnison: boolean, bEnableOscillatorSync: boolean, Spread: number, Pan: number, LFO1Frequency: number, LFO1Gain: number, LFO1Type: UE.ESynthLFOType, LFO1Mode: UE.ESynthLFOMode, LFO1PatchType: UE.ESynthLFOPatchType, LFO2Frequency: number, LFO2Gain: number, LFO2Type: UE.ESynthLFOType, LFO2Mode: UE.ESynthLFOMode, LFO2PatchType: UE.ESynthLFOPatchType, GainDb: number, AttackTime: number, DecayTime: number, SustainGain: number, ReleaseTime: number, ModEnvPatchType: UE.ESynthModEnvPatch, ModEnvBiasPatchType: UE.ESynthModEnvBiasPatch, bInvertModulationEnvelope: boolean, bInvertModulationEnvelopeBias: boolean, ModulationEnvelopeDepth: number, ModulationEnvelopeAttackTime: number, ModulationEnvelopeDecayTime: number, ModulationEnvelopeSustainGain: number, ModulationEnvelopeReleaseTime: number, bLegato: boolean, bRetrigger: boolean, FilterFrequency: number, FilterQ: number, FilterType: UE.ESynthFilterType, FilterAlgorithm: UE.ESynthFilterAlgorithm, bStereoDelayEnabled: boolean, StereoDelayMode: UE.ESynthStereoDelayMode, StereoDelayTime: number, StereoDelayFeedback: number, StereoDelayWetlevel: number, StereoDelayRatio: number, bChorusEnabled: boolean, ChorusDepth: number, ChorusFeedback: number, ChorusFrequency: number, Patches: TArray<UE.EpicSynth1Patch>);
+        bEnablePolyphony: boolean;
+        Osc1Type: UE.ESynth1OscType;
+        Osc1Gain: number;
+        Osc1Octave: number;
+        Osc1Semitones: number;
+        Osc1Cents: number;
+        Osc1PulseWidth: number;
+        Osc2Type: UE.ESynth1OscType;
+        Osc2Gain: number;
+        Osc2Octave: number;
+        Osc2Semitones: number;
+        Osc2Cents: number;
+        Osc2PulseWidth: number;
+        Portamento: number;
+        bEnableUnison: boolean;
+        bEnableOscillatorSync: boolean;
+        Spread: number;
+        Pan: number;
+        LFO1Frequency: number;
+        LFO1Gain: number;
+        LFO1Type: UE.ESynthLFOType;
+        LFO1Mode: UE.ESynthLFOMode;
+        LFO1PatchType: UE.ESynthLFOPatchType;
+        LFO2Frequency: number;
+        LFO2Gain: number;
+        LFO2Type: UE.ESynthLFOType;
+        LFO2Mode: UE.ESynthLFOMode;
+        LFO2PatchType: UE.ESynthLFOPatchType;
+        GainDb: number;
+        AttackTime: number;
+        DecayTime: number;
+        SustainGain: number;
+        ReleaseTime: number;
+        ModEnvPatchType: UE.ESynthModEnvPatch;
+        ModEnvBiasPatchType: UE.ESynthModEnvBiasPatch;
+        bInvertModulationEnvelope: boolean;
+        bInvertModulationEnvelopeBias: boolean;
+        ModulationEnvelopeDepth: number;
+        ModulationEnvelopeAttackTime: number;
+        ModulationEnvelopeDecayTime: number;
+        ModulationEnvelopeSustainGain: number;
+        ModulationEnvelopeReleaseTime: number;
+        bLegato: boolean;
+        bRetrigger: boolean;
+        FilterFrequency: number;
+        FilterQ: number;
+        FilterType: UE.ESynthFilterType;
+        FilterAlgorithm: UE.ESynthFilterAlgorithm;
+        bStereoDelayEnabled: boolean;
+        StereoDelayMode: UE.ESynthStereoDelayMode;
+        StereoDelayTime: number;
+        StereoDelayFeedback: number;
+        StereoDelayWetlevel: number;
+        StereoDelayRatio: number;
+        bChorusEnabled: boolean;
+        ChorusDepth: number;
+        ChorusFeedback: number;
+        ChorusFrequency: number;
+        Patches: TArray<UE.EpicSynth1Patch>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ModularSynthPreset_0__: boolean;
+    }
+    
+    class PatchId {
+        constructor();
+        constructor(Id: number);
+        Id: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PatchId_0__: boolean;
+    }
+    
+    class ModularSynthComponent extends UE.SynthComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VoiceCount: number;
+        /*
+         *Creates a new modular synth patch between a modulation source and a set of modulation destinations
+         */
+        CreatePatch(PatchSource: UE.ESynth1PatchSource, PatchCables: TArray<UE.Synth1PatchCable>, bEnableByDefault: boolean) : UE.PatchId;
+        /*
+         *Stop the note (will only do anything if a voice is playing with that note)
+         */
+        NoteOff(Note: number, bAllNotesOff?: boolean /* = false */, bKillAllNotes?: boolean /* = false */) : void;
+        /*
+         *Play a new note. Optionally pass in a duration to automatically turn off the note.
+         */
+        NoteOn(Note: number, Velocity: number, Duration?: number /* = -1.000000 */) : void;
+        /*
+         *Sets the envelope attack time in msec.
+         */
+        SetAttackTime(AttackTimeMsec: number) : void;
+        /*
+         *Sets the chorus depth
+         */
+        SetChorusDepth(Depth: number) : void;
+        /*
+         *Sets whether or not chorus is enabled.
+         */
+        SetChorusEnabled(EnableChorus: boolean) : void;
+        /*
+         *Sets the chorus feedback
+         */
+        SetChorusFeedback(Feedback: number) : void;
+        /*
+         *Sets the chorus frequency
+         */
+        SetChorusFrequency(Frequency: number) : void;
+        /*
+         *Sets the envelope decay time in msec.
+         */
+        SetDecayTime(DecayTimeMsec: number) : void;
+        /*
+         *Sets whether or not to use legato for the synthesizer.
+         */
+        SetEnableLegato(LegatoEnabled: boolean) : void;
+        SetEnablePatch(PatchId: UE.PatchId, bIsEnabled: boolean) : boolean;
+        /*
+         *Sets whether or not to use polyphony for the synthesizer.
+         *@param bEnablePolyphony Whether or not to enable polyphony for the synth.
+         */
+        SetEnablePolyphony(bEnablePolyphony: boolean) : void;
+        /*
+         *Sets whether or not to retrigger envelope per note on.
+         */
+        SetEnableRetrigger(RetriggerEnabled: boolean) : void;
+        /*
+         *Sets whether or not the synth is in unison mode (i.e. no spread)
+         */
+        SetEnableUnison(EnableUnison: boolean) : void;
+        /*
+         *Sets the filter algorithm.
+         */
+        SetFilterAlgorithm(FilterAlgorithm: UE.ESynthFilterAlgorithm) : void;
+        /*
+         *Sets the filter cutoff frequency in hz.
+         */
+        SetFilterFrequency(FilterFrequencyHz: number) : void;
+        /*
+         *Sets the filter cutoff frequency in hz.
+         */
+        SetFilterFrequencyMod(FilterFrequencyHz: number) : void;
+        /*
+         *Sets the filter Q (resonance)
+         */
+        SetFilterQ(FilterQ: number) : void;
+        /*
+         *Sets a modulated filter Q (resonance)
+         */
+        SetFilterQMod(FilterQ: number) : void;
+        /*
+         *Sets the filter type.
+         */
+        SetFilterType(FilterType: UE.ESynthFilterType) : void;
+        /*
+         *Sets the synth gain in decibels.
+         */
+        SetGainDb(GainDb: number) : void;
+        /*
+         *Sets the LFO frequency in hz
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param FrequencyHz The LFO frequency to use.
+         */
+        SetLFOFrequency(LFOIndex: number, FrequencyHz: number) : void;
+        /*
+         *Sets the LFO frequency modulation in hz
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param FrequencyModHz The LFO frequency to use.
+         */
+        SetLFOFrequencyMod(LFOIndex: number, FrequencyModHz: number) : void;
+        /*
+         *Sets the LFO gain factor
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param Gain The gain factor to use for the LFO.
+         */
+        SetLFOGain(LFOIndex: number, Gain: number) : void;
+        /*
+         *Sets the LFO gain mod factor (external modulation)
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param Gain The gain factor to use for the LFO.
+         */
+        SetLFOGainMod(LFOIndex: number, GainMod: number) : void;
+        /*
+         *Sets the LFO type
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param LFOMode The LFO mode to use.
+         */
+        SetLFOMode(LFOIndex: number, LFOMode: UE.ESynthLFOMode) : void;
+        /*
+         *Sets the LFO patch type. LFO patch determines what parameter is modulated by the LFO.
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param LFOPatchType The LFO patch type to use.
+         */
+        SetLFOPatch(LFOIndex: number, LFOPatchType: UE.ESynthLFOPatchType) : void;
+        /*
+         *Sets the LFO type
+         *@param LFOIndex Which LFO to set the frequency for.
+         *@param LFOType The LFO type to use.
+         */
+        SetLFOType(LFOIndex: number, LFOType: UE.ESynthLFOType) : void;
+        /*
+         *Sets the envelope modulator attack time in msec
+         */
+        SetModEnvAttackTime(AttackTimeMsec: number) : void;
+        /*
+         *Sets whether or not to invert the bias output of the envelope modulator.
+         */
+        SetModEnvBiasInvert(bInvert: boolean) : void;
+        /*
+         *Sets whether or not to modulate a param based on the envelope. Uses bias envelope output (offset from sustain gain).
+         */
+        SetModEnvBiasPatch(InPatchType: UE.ESynthModEnvBiasPatch) : void;
+        /*
+         *Sets the envelope modulator attack time in msec
+         */
+        SetModEnvDecayTime(DecayTimeMsec: number) : void;
+        /*
+         *Sets the envelope modulator depth (amount to apply the output modulation)
+         */
+        SetModEnvDepth(Depth: number) : void;
+        /*
+         *Sets whether or not to invert the envelope modulator.
+         */
+        SetModEnvInvert(bInvert: boolean) : void;
+        /*
+         *Sets whether or not to modulate a param based on the envelope. Uses bias envelope output (offset from sustain gain).
+         */
+        SetModEnvPatch(InPatchType: UE.ESynthModEnvPatch) : void;
+        /*
+         *Sets the envelope modulator release
+         */
+        SetModEnvReleaseTime(Release: number) : void;
+        /*
+         *Sets the envelope modulator sustain gain
+         */
+        SetModEnvSustainGain(SustainGain: number) : void;
+        /*
+         *Sets the oscillator cents.
+         *@param OscIndex Which oscillator to set the type for.
+         *@param Cents The amount of cents to set the oscillator to (relative to base frequency_pitch)..
+         */
+        SetOscCents(OscIndex: number, Cents: number) : void;
+        /*
+         *Set the oscillator frequency modulation
+         *@param OscIndex Which oscillator to set the type for.
+         *@param OscFreqMod The oscillator frequency modulation to use.
+         */
+        SetOscFrequencyMod(OscIndex: number, OscFreqMod: number) : void;
+        /*
+         *Set the oscillator gain.
+         *@param OscIndex Which oscillator to set the type for.
+         *@param OscGain The oscillator gain.
+         */
+        SetOscGain(OscIndex: number, OscGain: number) : void;
+        /*
+         *Set the oscillator gain modulation.
+         *@param OscIndex Which oscillator to set the type for.
+         *@param OscGainMod The oscillator gain modulation to use.
+         */
+        SetOscGainMod(OscIndex: number, OscGainMod: number) : void;
+        /*
+         *Sets the oscillator octaves
+         *@param OscIndex Which oscillator to set the type for.
+         *@param Octave Which octave to set the oscillator to (relative to base frequency_pitch).
+         */
+        SetOscOctave(OscIndex: number, Octave: number) : void;
+        /*
+         *Sets the square wave pulsewidth [0.0, 1.0]
+         */
+        SetOscPulsewidth(OscIndex: number, Pulsewidth: number) : void;
+        /*
+         *Sets the oscillator semitones.
+         *@param OscIndex Which oscillator to set the type for.
+         *@param Semitones The amount of semitones to set the oscillator to (relative to base frequency_pitch).
+         */
+        SetOscSemitones(OscIndex: number, Semitones: number) : void;
+        /*
+         *Set whether or not to follow the phase of osc2 to osc1
+         */
+        SetOscSync(bIsSynced: boolean) : void;
+        /*
+         *Set the oscillator type.
+         *@param OscIndex Which oscillator to set the type for.
+         *@param OscType The oscillator type to set.
+         */
+        SetOscType(OscIndex: number, OscType: UE.ESynth1OscType) : void;
+        /*
+         *Sets the pan of the synth [-1.0, 1.0].
+         */
+        SetPan(Pan: number) : void;
+        /*
+         *Sets the synth pitch bend amount.
+         */
+        SetPitchBend(PitchBend: number) : void;
+        /*
+         *Sets the synth portamento [0.0, 1.0]
+         */
+        SetPortamento(Portamento: number) : void;
+        /*
+         *Sets the envelope release time in msec.
+         */
+        SetReleaseTime(ReleaseTimeMsec: number) : void;
+        /*
+         *Sets the amount of spread of the oscillators. [0.0, 1.0]
+         */
+        SetSpread(Spread: number) : void;
+        /*
+         *Sets the amount of stereo delay feedback [0.0, 1.0]
+         */
+        SetStereoDelayFeedback(DelayFeedback: number) : void;
+        /*
+         *Sets whether not stereo delay is enabled.
+         */
+        SetStereoDelayIsEnabled(StereoDelayEnabled: boolean) : void;
+        /*
+         *Sets whether not stereo delay is enabled.
+         */
+        SetStereoDelayMode(StereoDelayMode: UE.ESynthStereoDelayMode) : void;
+        /*
+         *Sets the amount of stereo delay ratio between left and right delay lines [0.0, 1.0]
+         */
+        SetStereoDelayRatio(DelayRatio: number) : void;
+        /*
+         *Sets the amount of stereo delay time in msec.
+         */
+        SetStereoDelayTime(DelayTimeMsec: number) : void;
+        /*
+         *Sets the amount of stereo delay wetlevel [0.0, 1.0]
+         */
+        SetStereoDelayWetlevel(DelayWetlevel: number) : void;
+        /*
+         *Sets the envelope sustain gain value.
+         */
+        SetSustainGain(SustainGain: number) : void;
+        /*
+         *Sets the preset struct for the synth
+         */
+        SetSynthPreset(SynthPreset: UE.ModularSynthPreset) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ModularSynthComponent;
+        static Load(InName: string): ModularSynthComponent;
+    
+        __tid_ModularSynthComponent_0__: boolean;
+    }
+    
+    class ModularSynthPresetBankEntry {
+        constructor();
+        constructor(PresetName: string, Preset: UE.ModularSynthPreset);
+        PresetName: string;
+        Preset: UE.ModularSynthPreset;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ModularSynthPresetBankEntry_0__: boolean;
+    }
+    
+    class ModularSynthPresetBank extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Presets: TArray<UE.ModularSynthPresetBankEntry>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ModularSynthPresetBank;
+        static Load(InName: string): ModularSynthPresetBank;
+    
+        __tid_ModularSynthPresetBank_0__: boolean;
+    }
+    
+    class ModularSynthLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Adds the modular synth preset to the bank asset in the content browser. Only call during editor.
+         */
+        static AddModularSynthPresetToBankAsset(InBank: $Nullable<UE.ModularSynthPresetBank>, Preset: UE.ModularSynthPreset, PresetName: string) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ModularSynthLibrary;
+        static Load(InName: string): ModularSynthLibrary;
+    
+        __tid_ModularSynthLibrary_0__: boolean;
+    }
+    
     enum ModulationParamMode { MPM_Normal, MPM_Abs, MPM_Direct, MPM_MAX, __typeKeyDoNoAccess}
     class ModulatorContinuousParams {
         constructor();
@@ -69834,6 +73773,21 @@ declare module "ue" {
         static StaticClass(): ScriptStruct;
         static StaticStruct(): ScriptStruct;
         __tid_ModulatorContinuousParams_0__: boolean;
+    }
+    
+    class MonoWaveTableSynthPreset extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PresetName: string;
+        bLockKeyframesToGridBool: boolean;
+        LockKeyframesToGrid: number;
+        WaveTableResolution: number;
+        WaveTable: TArray<UE.RuntimeFloatCurve>;
+        bNormalizeWaveTables: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MonoWaveTableSynthPreset;
+        static Load(InName: string): MonoWaveTableSynthPreset;
+    
+        __tid_MonoWaveTableSynthPreset_0__: boolean;
     }
     
     class MouseCursorBinding extends UE.PropertyBinding {
@@ -71364,6 +75318,247 @@ declare module "ue" {
         static Load(InName: string): ObjectLibraryFactory;
     
         __tid_ObjectLibraryFactory_0__: boolean;
+    }
+    
+    class ObjectMixerBlueprintFilterFactory extends UE.Factory {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ParentClass: UE.Class;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerBlueprintFilterFactory;
+        static Load(InName: string): ObjectMixerBlueprintFilterFactory;
+    
+        __tid_ObjectMixerBlueprintFilterFactory_0__: boolean;
+    }
+    
+    class ObjectMixerObjectFilter extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerObjectFilter;
+        static Load(InName: string): ObjectMixerObjectFilter;
+    
+        __tid_ObjectMixerObjectFilter_0__: boolean;
+    }
+    
+    class ObjectMixerBlueprintObjectFilter extends UE.ObjectMixerObjectFilter {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Specify a list of property names corresponding to columns you don't want to ever show.
+         *For example, you can specify "Intensity" and "LightColor" to ensure that they can't be enabled or shown in the UI.
+         *Columns not specified can be enabled by the user in the UI.
+         */
+        GetColumnsToExclude() : TSet<string>;
+        /*
+         *Specify a list of property names corresponding to columns you want to show by default.
+         *For example, you can specify "Intensity" and "LightColor" to show only those property columns by default in the UI.
+         *Columns not specified will not be shown by default but can be enabled by the user in the UI.
+         */
+        GetColumnsToShowByDefault() : TSet<string>;
+        /*
+         *Specify a list of property names found in parent classes you want to show that aren't in the specified classes.
+         *Note that properties specified here do not override the properties specified in GetColumnsToExclude().
+         *For example, a ULightComponent displays "LightColor" in the editor's details panel,
+         *but ULightComponent itself doesn't have a property named "LightColor". Instead it's in its parent class, ULightComponentBase.
+         *In this scenario, ULightComponent is specified and PropertyInheritanceInclusionOptions is None, so "LightColor" won't appear by default.
+         *Specify "LightColor" in this function to ensure that "LightColor" will appear as a column as long as
+         *the property is accessible to one of the specified classes regardless of which parent class it comes from.
+         */
+        GetForceAddedColumns() : TSet<string>;
+        /*
+         *Return the basic object types you want to filter for in your level.
+         *For example, if you want to work with Lights, return ULightComponentBase.
+         *If you also want to see the properties for parent or child classes,
+         *override the GetObjectMixerPropertyInheritanceInclusionOptions and GetForceAddedColumns functions.
+         */
+        GetObjectClassesToFilter() : TSet<UE.Class>;
+        /*
+         *Return the basic actor types you want to be able to place using the Add button.
+         *Note that only subclasses of AActor are supported and only those which have a registered factory.
+         *This includes most engine actor types.
+         */
+        GetObjectClassesToPlace() : TSet<UE.Class>;
+        /*
+         *Specify whether we should return only the specified classes or the parent and child classes in placement mode.
+         *Defaults to 'None' which only considers the specified classes.
+         */
+        GetObjectMixerPlacementClassInclusionOptions() : UE.EObjectMixerInheritanceInclusionOptions;
+        /*
+         *Specify whether we should return only the properties of the specified classes or the properties of parent and child classes.
+         *Defaults to 'None' which only considers the properties of the specified classes.
+         *If you're not seeing all the properties you expected, try overloading this function.
+         */
+        GetObjectMixerPropertyInheritanceInclusionOptions() : UE.EObjectMixerInheritanceInclusionOptions;
+        /*
+         *If a property is changed that has a name found in this set, the panel will be refreshed.
+         *Add a property name to this list if you expect the list to change in some way after changing that property.
+         */
+        GetPropertiesThatRequireListRefresh() : TSet<string>;
+        /*
+         *Determines if transient objects (such as Sequencer Spawnables) should be shown in the list. False by default.
+         */
+        GetShowTransientObjects() : boolean;
+        /*
+         *If true, properties that are not visible in the details panel and properties not supported by SSingleProperty will be selectable.
+         *Defaults to false.
+         */
+        ShouldIncludeUnsupportedProperties() : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerBlueprintObjectFilter;
+        static Load(InName: string): ObjectMixerBlueprintObjectFilter;
+    
+        __tid_ObjectMixerBlueprintObjectFilter_0__: boolean;
+    }
+    
+    class ObjectMixerCollectionObjectData {
+        constructor();
+        constructor(ObjectPath: UE.SoftObjectPath);
+        ObjectPath: UE.SoftObjectPath;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerCollectionObjectData_0__: boolean;
+    }
+    
+    class ObjectMixerCollectionObjectSet {
+        constructor();
+        constructor(CollectionName: string, CollectionObjects: TArray<UE.ObjectMixerCollectionObjectData>);
+        CollectionName: string;
+        CollectionObjects: TArray<UE.ObjectMixerCollectionObjectData>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerCollectionObjectSet_0__: boolean;
+    }
+    
+    class ObjectMixerColumnData {
+        constructor();
+        constructor(ColumnName: string, bShouldBeEnabled: boolean);
+        ColumnName: string;
+        bShouldBeEnabled: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerColumnData_0__: boolean;
+    }
+    
+    class ObjectMixerEditorListMenuContext extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerEditorListMenuContext;
+        static Load(InName: string): ObjectMixerEditorListMenuContext;
+    
+        __tid_ObjectMixerEditorListMenuContext_0__: boolean;
+    }
+    
+    class ObjectMixerSerializationDataPerFilter {
+        constructor();
+        constructor(FilterClassName: string, SerializedCollections: TArray<UE.ObjectMixerCollectionObjectSet>, SerializedColumnData: TSet<UE.ObjectMixerColumnData>);
+        FilterClassName: string;
+        SerializedCollections: TArray<UE.ObjectMixerCollectionObjectSet>;
+        SerializedColumnData: TSet<UE.ObjectMixerColumnData>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerSerializationDataPerFilter_0__: boolean;
+    }
+    
+    class ObjectMixerEditorSerializedData extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SerializedDataPerFilter: TSet<UE.ObjectMixerSerializationDataPerFilter>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerEditorSerializedData;
+        static Load(InName: string): ObjectMixerEditorSerializedData;
+    
+        __tid_ObjectMixerEditorSerializedData_0__: boolean;
+    }
+    
+    class ObjectMixerEditorSettings extends UE.DeveloperSettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bSyncSelection: boolean;
+        HybridRowPolicy: UE.EObjectMixerHybridMode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerEditorSettings;
+        static Load(InName: string): ObjectMixerEditorSettings;
+    
+        __tid_ObjectMixerEditorSettings_0__: boolean;
+    }
+    
+    class ObjectMixerWidgetUserConfig {
+        constructor();
+        constructor(DefaultFilterClass: UE.Class);
+        DefaultFilterClass: UE.Class;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerWidgetUserConfig_0__: boolean;
+    }
+    
+    class ObjectMixerEditorUWidget extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ObjectMixerWidgetUserConfig: UE.ObjectMixerWidgetUserConfig;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerEditorUWidget;
+        static Load(InName: string): ObjectMixerEditorUWidget;
+    
+        __tid_ObjectMixerEditorUWidget_0__: boolean;
+    }
+    
+    class ObjectMixerOutlinerModeConfig {
+        constructor();
+        constructor(bHideTemporaryActors: boolean, bShowOnlyActorsInCurrentLevel: boolean, bShowOnlyActorsInCurrentDataLayers: boolean, bShowOnlyActorsInCurrentContentBundle: boolean, bShowOnlySelectedActors: boolean, bHideActorComponents: boolean, bHideLevelInstanceHierarchy: boolean, bHideUnloadedActors: boolean, bHideEmptyFolders: boolean, bAlwaysFrameSelection: boolean);
+        bHideTemporaryActors: boolean;
+        bShowOnlyActorsInCurrentLevel: boolean;
+        bShowOnlyActorsInCurrentDataLayers: boolean;
+        bShowOnlyActorsInCurrentContentBundle: boolean;
+        bShowOnlySelectedActors: boolean;
+        bHideActorComponents: boolean;
+        bHideLevelInstanceHierarchy: boolean;
+        bHideUnloadedActors: boolean;
+        bHideEmptyFolders: boolean;
+        bAlwaysFrameSelection: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerOutlinerModeConfig_0__: boolean;
+    }
+    
+    class ObjectMixerOutlinerModeEditorConfig extends UE.EditorConfigBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Browsers: TMap<string, UE.ObjectMixerOutlinerModeConfig>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ObjectMixerOutlinerModeEditorConfig;
+        static Load(InName: string): ObjectMixerOutlinerModeEditorConfig;
+    
+        __tid_ObjectMixerOutlinerModeEditorConfig_0__: boolean;
+    }
+    
+    class ObjectMixerSceneOutlinerColumnInfo {
+        constructor();
+        constructor(PropertyName: string, ColumnID: string, PropertyDisplayText: string, PropertyType: UE.EListViewColumnType, PropertyCategoryName: string, bCanBeHidden: boolean, bIsDesiredToBeShownByDefault: boolean);
+        PropertyName: string;
+        ColumnID: string;
+        PropertyDisplayText: string;
+        PropertyType: UE.EListViewColumnType;
+        PropertyCategoryName: string;
+        bCanBeHidden: boolean;
+        bIsDesiredToBeShownByDefault: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ObjectMixerSceneOutlinerColumnInfo_0__: boolean;
     }
     
     class ObjectReachabilityStressData extends UE.Object {
@@ -74499,6 +78694,21 @@ declare module "ue" {
         __tid_PlayerStateCountLimiterConfig_0__: boolean;
     }
     
+    class PlayheadOverlayStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(PlayheadColor: UE.SlateColor, PlayheadWidth: number, DesiredWidth: number, DesiredHeight: number);
+        PlayheadColor: UE.SlateColor;
+        PlayheadWidth: number;
+        DesiredWidth: number;
+        DesiredHeight: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_PlayheadOverlayStyle_0__: boolean;
+    }
+    
     class PlayMontageCallbackProxy extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         OnCompleted: $MulticastDelegate<(NotifyName: string) => void>;
@@ -75301,6 +79511,16 @@ declare module "ue" {
         __tid_PropertyEditorRowGeneratorTest_0__: boolean;
     }
     
+    class PropertyEditorSinglePropertyTestClass extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Vector: UE.Vector;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): PropertyEditorSinglePropertyTestClass;
+        static Load(InName: string): PropertyEditorSinglePropertyTestClass;
+    
+        __tid_PropertyEditorSinglePropertyTestClass_0__: boolean;
+    }
+    
     class PropertyEditorTestActor extends UE.Actor {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         InstancedUObjectArray: TArray<UE.PropertyEditorTestInstancedObject>;
@@ -75775,6 +79995,123 @@ declare module "ue" {
         static Load(InName: string): RadialForceActor;
     
         __tid_RadialForceActor_0__: boolean;
+    }
+    
+    class RadialSlider extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Value: number;
+        ValueDelegate: $Delegate<() => number>;
+        bUseCustomDefaultValue: boolean;
+        CustomDefaultValue: number;
+        SliderRange: UE.RuntimeFloatCurve;
+        ValueTags: TArray<number>;
+        SliderHandleStartAngle: number;
+        SliderHandleEndAngle: number;
+        AngularOffset: number;
+        HandStartEndRatio: UE.Vector2D;
+        WidgetStyle: UE.SliderStyle;
+        SliderBarColor: UE.LinearColor;
+        SliderProgressColor: UE.LinearColor;
+        SliderHandleColor: UE.LinearColor;
+        CenterBackgroundColor: UE.LinearColor;
+        Locked: boolean;
+        MouseUsesStep: boolean;
+        RequiresControllerLock: boolean;
+        StepSize: number;
+        IsFocusable: boolean;
+        UseVerticalDrag: boolean;
+        ShowSliderHandle: boolean;
+        ShowSliderHand: boolean;
+        OnMouseCaptureBegin: $MulticastDelegate<() => void>;
+        OnMouseCaptureEnd: $MulticastDelegate<() => void>;
+        OnControllerCaptureBegin: $MulticastDelegate<() => void>;
+        OnControllerCaptureEnd: $MulticastDelegate<() => void>;
+        OnValueChanged: $MulticastDelegate<(Value: number) => void>;
+        /*
+         *Gets the current custom default value of the slider.
+         */
+        GetCustomDefaultValue() : number;
+        /*
+         *Get the current raw slider alpha from 0 to 1
+         */
+        GetNormalizedSliderHandlePosition() : number;
+        /*
+         *Gets the current value of the slider.
+         */
+        GetValue() : number;
+        /*
+         *Sets the Angular Offset for the slider.
+         */
+        SetAngularOffset(InValue: number) : void;
+        /*
+         *Sets the color of the slider bar
+         */
+        SetCenterBackgroundColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the current custom default value of the slider.
+         */
+        SetCustomDefaultValue(InValue: number) : void;
+        /*
+         *Sets the start and end of the hand as a ratio to the slider radius (so 0.0 to 1.0 is from the slider center to the handle).
+         */
+        SetHandStartEndRatio(InValue: UE.Vector2D) : void;
+        /*
+         *Sets the handle to be interactive or fixed
+         */
+        SetLocked(InValue: boolean) : void;
+        /*
+         *Whether to show the slider hand.
+         */
+        SetShowSliderHand(InShowSliderHand: boolean) : void;
+        /*
+         *Whether to show the slider handle (thumb).
+         */
+        SetShowSliderHandle(InShowSliderHandle: boolean) : void;
+        /*
+         *Sets the color of the slider bar
+         */
+        SetSliderBarColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the color of the handle bar
+         */
+        SetSliderHandleColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the maximum angle of the slider.
+         */
+        SetSliderHandleEndAngle(InValue: number) : void;
+        /*
+         *Sets the minimum angle of the slider.
+         */
+        SetSliderHandleStartAngle(InValue: number) : void;
+        /*
+         *Sets the progress color of the slider bar
+         */
+        SetSliderProgressColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the curve for the slider range
+         */
+        SetSliderRange(InSliderRange: UE.RuntimeFloatCurve) : void;
+        /*
+         *Sets the amount to adjust the value by, when using a controller or keyboard
+         */
+        SetStepSize(InValue: number) : void;
+        /*
+         *Set whether the value is changed when dragging vertically as opposed to along the radial curve.
+         */
+        SetUseVerticalDrag(InUseVerticalDrag: boolean) : void;
+        /*
+         *Sets the current value of the slider.
+         */
+        SetValue(InValue: number) : void;
+        /*
+         *Adds value tags to the slider.
+         */
+        SetValueTags(InValueTags: TArray<number>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): RadialSlider;
+        static Load(InName: string): RadialSlider;
+    
+        __tid_RadialSlider_0__: boolean;
     }
     
     class RawAnimSequenceTrackExtensions extends UE.BlueprintFunctionLibrary {
@@ -76360,6 +80697,15 @@ declare module "ue" {
         static Load(InName: string): ReplaySubsystem;
     
         __tid_ReplaySubsystem_0__: boolean;
+    }
+    
+    class ReplicatedLevelSequenceActor extends UE.LevelSequenceActor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ReplicatedLevelSequenceActor;
+        static Load(InName: string): ReplicatedLevelSequenceActor;
+    
+        __tid_ReplicatedLevelSequenceActor_0__: boolean;
     }
     
     class ReplicationConnectionDriver extends UE.Object {
@@ -77871,6 +82217,21 @@ declare module "ue" {
         static Load(InName: string): SimulatedClientNetConnection;
     
         __tid_SimulatedClientNetConnection_0__: boolean;
+    }
+    
+    class SinglePropertyView extends UE.PropertyViewBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PropertyName: string;
+        NameOverride: string;
+        GetNameOverride() : string;
+        GetPropertyName() : string;
+        SetNameOverride(NewPropertyName: string) : void;
+        SetPropertyName(NewPropertyName: string) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SinglePropertyView;
+        static Load(InName: string): SinglePropertyView;
+    
+        __tid_SinglePropertyView_0__: boolean;
     }
     
     class SizeBox extends UE.ContentWidget {
@@ -79411,15 +83772,6 @@ declare module "ue" {
         __tid_SoundSurroundExporterWAV_0__: boolean;
     }
     
-    class SoundWaveProcedural extends UE.SoundWave {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): SoundWaveProcedural;
-        static Load(InName: string): SoundWaveProcedural;
-    
-        __tid_SoundWaveProcedural_0__: boolean;
-    }
-    
     class SoundWaveThumbnailRenderer extends UE.DefaultSizedThumbnailRenderer {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -79427,6 +83779,597 @@ declare module "ue" {
         static Load(InName: string): SoundWaveThumbnailRenderer;
     
         __tid_SoundWaveThumbnailRenderer_0__: boolean;
+    }
+    
+    class SourceEffectBitCrusherBaseSettings {
+        constructor();
+        constructor(SampleRate: number, BitDepth: number);
+        SampleRate: number;
+        BitDepth: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectBitCrusherBaseSettings_0__: boolean;
+    }
+    
+    class SourceEffectBitCrusherSettings {
+        constructor();
+        constructor(CrushedSampleRate: number, SampleRateModulation: UE.SoundModulationDestinationSettings, CrushedBits: number, BitModulation: UE.SoundModulationDestinationSettings);
+        CrushedSampleRate: number;
+        SampleRateModulation: UE.SoundModulationDestinationSettings;
+        CrushedBits: number;
+        BitModulation: UE.SoundModulationDestinationSettings;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectBitCrusherSettings_0__: boolean;
+    }
+    
+    class SourceEffectBitCrusherPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectBitCrusherSettings;
+        SetBitModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetBitModulators(InModulators: TSet<UE.SoundModulatorBase>) : void;
+        SetBits(Bits: number) : void;
+        SetModulationSettings(ModulationSettings: UE.SourceEffectBitCrusherSettings) : void;
+        SetSampleRate(SampleRate: number) : void;
+        SetSampleRateModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetSampleRateModulators(InModulators: TSet<UE.SoundModulatorBase>) : void;
+        /*
+         *Sets just base (i.e. carrier) setting values without modifying modulation source references
+         */
+        SetSettings(Settings: UE.SourceEffectBitCrusherBaseSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectBitCrusherPreset;
+        static Load(InName: string): SourceEffectBitCrusherPreset;
+    
+        __tid_SourceEffectBitCrusherPreset_0__: boolean;
+    }
+    
+    class SourceEffectChorusBaseSettings {
+        constructor();
+        constructor(Depth: number, Frequency: number, Feedback: number, WetLevel: number, DryLevel: number, Spread: number);
+        Depth: number;
+        Frequency: number;
+        Feedback: number;
+        WetLevel: number;
+        DryLevel: number;
+        Spread: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectChorusBaseSettings_0__: boolean;
+    }
+    
+    class SourceEffectChorusSettings {
+        constructor();
+        constructor(Depth: number, Frequency: number, Feedback: number, WetLevel: number, DryLevel: number, Spread: number, DepthModulation: UE.SoundModulationDestinationSettings, FrequencyModulation: UE.SoundModulationDestinationSettings, FeedbackModulation: UE.SoundModulationDestinationSettings, WetModulation: UE.SoundModulationDestinationSettings, DryModulation: UE.SoundModulationDestinationSettings, SpreadModulation: UE.SoundModulationDestinationSettings);
+        Depth: number;
+        Frequency: number;
+        Feedback: number;
+        WetLevel: number;
+        DryLevel: number;
+        Spread: number;
+        DepthModulation: UE.SoundModulationDestinationSettings;
+        FrequencyModulation: UE.SoundModulationDestinationSettings;
+        FeedbackModulation: UE.SoundModulationDestinationSettings;
+        WetModulation: UE.SoundModulationDestinationSettings;
+        DryModulation: UE.SoundModulationDestinationSettings;
+        SpreadModulation: UE.SoundModulationDestinationSettings;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectChorusSettings_0__: boolean;
+    }
+    
+    class SourceEffectChorusPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectChorusSettings;
+        SetDepth(Depth: number) : void;
+        SetDepthModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetDepthModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        SetDry(DryAmount: number) : void;
+        SetDryModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetDryModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        SetFeedback(Feedback: number) : void;
+        SetFeedbackModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetFeedbackModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        SetFrequency(Frequency: number) : void;
+        SetFrequencyModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetFrequencyModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        SetModulationSettings(ModulationSettings: UE.SourceEffectChorusSettings) : void;
+        /*
+         *Sets just base (i.e. carrier) setting values without modifying modulation source references
+         */
+        SetSettings(Settings: UE.SourceEffectChorusBaseSettings) : void;
+        SetSpread(Spread: number) : void;
+        SetSpreadModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetSpreadModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        SetWet(WetAmount: number) : void;
+        SetWetModulator(Modulator: $Nullable<UE.SoundModulatorBase>) : void;
+        SetWetModulators(Modulators: TSet<UE.SoundModulatorBase>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectChorusPreset;
+        static Load(InName: string): SourceEffectChorusPreset;
+    
+        __tid_SourceEffectChorusPreset_0__: boolean;
+    }
+    
+    class SourceEffectConvolutionReverbSettings {
+        constructor();
+        constructor(NormalizationVolumeDb: number, WetVolumeDb: number, DryVolumeDb: number, bBypass: boolean);
+        NormalizationVolumeDb: number;
+        WetVolumeDb: number;
+        DryVolumeDb: number;
+        bBypass: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectConvolutionReverbSettings_0__: boolean;
+    }
+    
+    class SourceEffectConvolutionReverbPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ImpulseResponse: UE.AudioImpulseResponse;
+        Settings: UE.SourceEffectConvolutionReverbSettings;
+        BlockSize: UE.ESubmixEffectConvolutionReverbBlockSize;
+        bEnableHardwareAcceleration: boolean;
+        /*
+         *Set the convolution reverb impulse response
+         */
+        SetImpulseResponse(InImpulseResponse: $Nullable<UE.AudioImpulseResponse>) : void;
+        /*
+         *Set the convolution reverb settings
+         */
+        SetSettings(InSettings: UE.SourceEffectConvolutionReverbSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectConvolutionReverbPreset;
+        static Load(InName: string): SourceEffectConvolutionReverbPreset;
+    
+        __tid_SourceEffectConvolutionReverbPreset_0__: boolean;
+    }
+    
+    class SourceEffectDynamicsProcessorSettings {
+        constructor();
+        constructor(DynamicsProcessorType: UE.ESourceEffectDynamicsProcessorType, PeakMode: UE.ESourceEffectDynamicsPeakMode, LookAheadMsec: number, AttackTimeMsec: number, ReleaseTimeMsec: number, ThresholdDb: number, Ratio: number, KneeBandwidthDb: number, InputGainDb: number, OutputGainDb: number, bStereoLinked: boolean, bAnalogMode: boolean);
+        DynamicsProcessorType: UE.ESourceEffectDynamicsProcessorType;
+        PeakMode: UE.ESourceEffectDynamicsPeakMode;
+        LookAheadMsec: number;
+        AttackTimeMsec: number;
+        ReleaseTimeMsec: number;
+        ThresholdDb: number;
+        Ratio: number;
+        KneeBandwidthDb: number;
+        InputGainDb: number;
+        OutputGainDb: number;
+        bStereoLinked: boolean;
+        bAnalogMode: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectDynamicsProcessorSettings_0__: boolean;
+    }
+    
+    class SourceEffectDynamicsProcessorPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectDynamicsProcessorSettings;
+        SetSettings(InSettings: UE.SourceEffectDynamicsProcessorSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectDynamicsProcessorPreset;
+        static Load(InName: string): SourceEffectDynamicsProcessorPreset;
+    
+        __tid_SourceEffectDynamicsProcessorPreset_0__: boolean;
+    }
+    
+    class SourceEffectEnvelopeFollowerSettings {
+        constructor();
+        constructor(AttackTime: number, ReleaseTime: number, PeakMode: UE.EEnvelopeFollowerPeakMode, bIsAnalogMode: boolean);
+        AttackTime: number;
+        ReleaseTime: number;
+        PeakMode: UE.EEnvelopeFollowerPeakMode;
+        bIsAnalogMode: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectEnvelopeFollowerSettings_0__: boolean;
+    }
+    
+    class SourceEffectEnvelopeFollowerPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectEnvelopeFollowerSettings;
+        /*
+         *Registers an envelope follower listener with the effect.
+         */
+        RegisterEnvelopeFollowerListener(EnvelopeFollowerListener: $Nullable<UE.EnvelopeFollowerListener>) : void;
+        SetSettings(InSettings: UE.SourceEffectEnvelopeFollowerSettings) : void;
+        /*
+         *Unregisters an envelope follower listener with the effect.
+         */
+        UnregisterEnvelopeFollowerListener(EnvelopeFollowerListener: $Nullable<UE.EnvelopeFollowerListener>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectEnvelopeFollowerPreset;
+        static Load(InName: string): SourceEffectEnvelopeFollowerPreset;
+    
+        __tid_SourceEffectEnvelopeFollowerPreset_0__: boolean;
+    }
+    
+    class SourceEffectEQBand {
+        constructor();
+        constructor(Frequency: number, Bandwidth: number, GainDb: number, bEnabled: boolean);
+        Frequency: number;
+        Bandwidth: number;
+        GainDb: number;
+        bEnabled: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectEQBand_0__: boolean;
+    }
+    
+    class SourceEffectEQSettings {
+        constructor();
+        constructor(EQBands: TArray<UE.SourceEffectEQBand>);
+        EQBands: TArray<UE.SourceEffectEQBand>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectEQSettings_0__: boolean;
+    }
+    
+    class SourceEffectEQPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectEQSettings;
+        SetSettings(InSettings: UE.SourceEffectEQSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectEQPreset;
+        static Load(InName: string): SourceEffectEQPreset;
+    
+        __tid_SourceEffectEQPreset_0__: boolean;
+    }
+    
+    class SourceEffectFilterAudioBusModulationSettings {
+        constructor();
+        constructor(AudioBus: UE.AudioBus, EnvelopeFollowerAttackTimeMsec: number, EnvelopeFollowerReleaseTimeMsec: number, EnvelopeGainMultiplier: number, FilterParam: UE.ESourceEffectFilterParam, MinFrequencyModulation: number, MaxFrequencyModulation: number, MinResonanceModulation: number, MaxResonanceModulation: number);
+        AudioBus: UE.AudioBus;
+        EnvelopeFollowerAttackTimeMsec: number;
+        EnvelopeFollowerReleaseTimeMsec: number;
+        EnvelopeGainMultiplier: number;
+        FilterParam: UE.ESourceEffectFilterParam;
+        MinFrequencyModulation: number;
+        MaxFrequencyModulation: number;
+        MinResonanceModulation: number;
+        MaxResonanceModulation: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectFilterAudioBusModulationSettings_0__: boolean;
+    }
+    
+    class SourceEffectFilterSettings {
+        constructor();
+        constructor(FilterCircuit: UE.ESourceEffectFilterCircuit, FilterType: UE.ESourceEffectFilterType, CutoffFrequency: number, FilterQ: number, AudioBusModulation: TArray<UE.SourceEffectFilterAudioBusModulationSettings>);
+        FilterCircuit: UE.ESourceEffectFilterCircuit;
+        FilterType: UE.ESourceEffectFilterType;
+        CutoffFrequency: number;
+        FilterQ: number;
+        AudioBusModulation: TArray<UE.SourceEffectFilterAudioBusModulationSettings>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectFilterSettings_0__: boolean;
+    }
+    
+    class SourceEffectFilterPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectFilterSettings;
+        SetSettings(InSettings: UE.SourceEffectFilterSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectFilterPreset;
+        static Load(InName: string): SourceEffectFilterPreset;
+    
+        __tid_SourceEffectFilterPreset_0__: boolean;
+    }
+    
+    class SourceEffectFoldbackDistortionSettings {
+        constructor();
+        constructor(InputGainDb: number, ThresholdDb: number, OutputGainDb: number);
+        InputGainDb: number;
+        ThresholdDb: number;
+        OutputGainDb: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectFoldbackDistortionSettings_0__: boolean;
+    }
+    
+    class SourceEffectFoldbackDistortionPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectFoldbackDistortionSettings;
+        SetSettings(InSettings: UE.SourceEffectFoldbackDistortionSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectFoldbackDistortionPreset;
+        static Load(InName: string): SourceEffectFoldbackDistortionPreset;
+    
+        __tid_SourceEffectFoldbackDistortionPreset_0__: boolean;
+    }
+    
+    class SourceEffectIndividualFilterSettings {
+        constructor();
+        constructor(FilterCircuit: UE.ESourceEffectMotionFilterCircuit, FilterType: UE.ESourceEffectMotionFilterType, CutoffFrequency: number, FilterQ: number);
+        FilterCircuit: UE.ESourceEffectMotionFilterCircuit;
+        FilterType: UE.ESourceEffectMotionFilterType;
+        CutoffFrequency: number;
+        FilterQ: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectIndividualFilterSettings_0__: boolean;
+    }
+    
+    class SourceEffectMidSideSpreaderSettings {
+        constructor();
+        constructor(SpreadAmount: number, InputMode: UE.EStereoChannelMode, OutputMode: UE.EStereoChannelMode, bEqualPower: boolean);
+        SpreadAmount: number;
+        InputMode: UE.EStereoChannelMode;
+        OutputMode: UE.EStereoChannelMode;
+        bEqualPower: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectMidSideSpreaderSettings_0__: boolean;
+    }
+    
+    class SourceEffectMidSideSpreaderPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectMidSideSpreaderSettings;
+        /*
+         *Change settings of your effect from blueprints. Will broadcast changes to active instances.
+         */
+        SetSettings(InSettings: UE.SourceEffectMidSideSpreaderSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectMidSideSpreaderPreset;
+        static Load(InName: string): SourceEffectMidSideSpreaderPreset;
+    
+        __tid_SourceEffectMidSideSpreaderPreset_0__: boolean;
+    }
+    
+    class SourceEffectMotionFilterModulationSettings {
+        constructor();
+        constructor(ModulationSource: UE.ESourceEffectMotionFilterModSource, ModulationInputRange: UE.Vector2D, ModulationOutputMinimumRange: UE.Vector2D, ModulationOutputMaximumRange: UE.Vector2D, UpdateEaseMS: number);
+        ModulationSource: UE.ESourceEffectMotionFilterModSource;
+        ModulationInputRange: UE.Vector2D;
+        ModulationOutputMinimumRange: UE.Vector2D;
+        ModulationOutputMaximumRange: UE.Vector2D;
+        UpdateEaseMS: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectMotionFilterModulationSettings_0__: boolean;
+    }
+    
+    class SourceEffectMotionFilterSettings {
+        constructor();
+        constructor(MotionFilterTopology: UE.ESourceEffectMotionFilterTopology, MotionFilterMix: number, FilterASettings: UE.SourceEffectIndividualFilterSettings, FilterBSettings: UE.SourceEffectIndividualFilterSettings, ModulationMappings: TMap<UE.ESourceEffectMotionFilterModDestination, UE.SourceEffectMotionFilterModulationSettings>, DryVolumeDb: number);
+        MotionFilterTopology: UE.ESourceEffectMotionFilterTopology;
+        MotionFilterMix: number;
+        FilterASettings: UE.SourceEffectIndividualFilterSettings;
+        FilterBSettings: UE.SourceEffectIndividualFilterSettings;
+        ModulationMappings: TMap<UE.ESourceEffectMotionFilterModDestination, UE.SourceEffectMotionFilterModulationSettings>;
+        DryVolumeDb: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectMotionFilterSettings_0__: boolean;
+    }
+    
+    class SourceEffectMotionFilterPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectMotionFilterSettings;
+        /*
+         *Change settings of your effect from blueprints. Will broadcast changes to active instances.
+         */
+        SetSettings(InSettings: UE.SourceEffectMotionFilterSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectMotionFilterPreset;
+        static Load(InName: string): SourceEffectMotionFilterPreset;
+    
+        __tid_SourceEffectMotionFilterPreset_0__: boolean;
+    }
+    
+    class SourceEffectPannerSettings {
+        constructor();
+        constructor(Spread: number, Pan: number);
+        Spread: number;
+        Pan: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectPannerSettings_0__: boolean;
+    }
+    
+    class SourceEffectPannerPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectPannerSettings;
+        SetSettings(InSettings: UE.SourceEffectPannerSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectPannerPreset;
+        static Load(InName: string): SourceEffectPannerPreset;
+    
+        __tid_SourceEffectPannerPreset_0__: boolean;
+    }
+    
+    class SourceEffectPhaserSettings {
+        constructor();
+        constructor(WetLevel: number, Frequency: number, Feedback: number, LFOType: UE.EPhaserLFOType, UseQuadraturePhase: boolean);
+        WetLevel: number;
+        Frequency: number;
+        Feedback: number;
+        LFOType: UE.EPhaserLFOType;
+        UseQuadraturePhase: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectPhaserSettings_0__: boolean;
+    }
+    
+    class SourceEffectPhaserPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectPhaserSettings;
+        SetSettings(InSettings: UE.SourceEffectPhaserSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectPhaserPreset;
+        static Load(InName: string): SourceEffectPhaserPreset;
+    
+        __tid_SourceEffectPhaserPreset_0__: boolean;
+    }
+    
+    class SourceEffectRingModulationSettings {
+        constructor();
+        constructor(ModulatorType: UE.ERingModulatorTypeSourceEffect, Frequency: number, Depth: number, DryLevel: number, WetLevel: number, AudioBusModulator: UE.AudioBus);
+        ModulatorType: UE.ERingModulatorTypeSourceEffect;
+        Frequency: number;
+        Depth: number;
+        DryLevel: number;
+        WetLevel: number;
+        AudioBusModulator: UE.AudioBus;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectRingModulationSettings_0__: boolean;
+    }
+    
+    class SourceEffectRingModulationPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectRingModulationSettings;
+        SetSettings(InSettings: UE.SourceEffectRingModulationSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectRingModulationPreset;
+        static Load(InName: string): SourceEffectRingModulationPreset;
+    
+        __tid_SourceEffectRingModulationPreset_0__: boolean;
+    }
+    
+    class SourceEffectSimpleDelaySettings {
+        constructor();
+        constructor(SpeedOfSound: number, DelayAmount: number, DryAmount: number, WetAmount: number, Feedback: number, bDelayBasedOnDistance: boolean, bUseDistanceOverride: boolean);
+        SpeedOfSound: number;
+        DelayAmount: number;
+        DryAmount: number;
+        WetAmount: number;
+        Feedback: number;
+        bDelayBasedOnDistance: boolean;
+        bUseDistanceOverride: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectSimpleDelaySettings_0__: boolean;
+    }
+    
+    class SourceEffectSimpleDelayPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectSimpleDelaySettings;
+        SetSettings(InSettings: UE.SourceEffectSimpleDelaySettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectSimpleDelayPreset;
+        static Load(InName: string): SourceEffectSimpleDelayPreset;
+    
+        __tid_SourceEffectSimpleDelayPreset_0__: boolean;
+    }
+    
+    class SourceEffectStereoDelaySettings {
+        constructor();
+        constructor(DelayMode: UE.EStereoDelaySourceEffect, DelayTimeMsec: number, Feedback: number, DelayRatio: number, WetLevel: number, DryLevel: number, bFilterEnabled: boolean, FilterType: UE.EStereoDelayFiltertype, FilterFrequency: number, FilterQ: number);
+        DelayMode: UE.EStereoDelaySourceEffect;
+        DelayTimeMsec: number;
+        Feedback: number;
+        DelayRatio: number;
+        WetLevel: number;
+        DryLevel: number;
+        bFilterEnabled: boolean;
+        FilterType: UE.EStereoDelayFiltertype;
+        FilterFrequency: number;
+        FilterQ: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectStereoDelaySettings_0__: boolean;
+    }
+    
+    class SourceEffectStereoDelayPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectStereoDelaySettings;
+        SetSettings(InSettings: UE.SourceEffectStereoDelaySettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectStereoDelayPreset;
+        static Load(InName: string): SourceEffectStereoDelayPreset;
+    
+        __tid_SourceEffectStereoDelayPreset_0__: boolean;
+    }
+    
+    class SourceEffectWaveShaperSettings {
+        constructor();
+        constructor(Amount: number, OutputGainDb: number);
+        Amount: number;
+        OutputGainDb: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SourceEffectWaveShaperSettings_0__: boolean;
+    }
+    
+    class SourceEffectWaveShaperPreset extends UE.SoundEffectSourcePreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SourceEffectWaveShaperSettings;
+        SetSettings(InSettings: UE.SourceEffectWaveShaperSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SourceEffectWaveShaperPreset;
+        static Load(InName: string): SourceEffectWaveShaperPreset;
+    
+        __tid_SourceEffectWaveShaperPreset_0__: boolean;
     }
     
     class Spacer extends UE.Widget {
@@ -80905,6 +85848,373 @@ declare module "ue" {
         __tid_StyleTheme_0__: boolean;
     }
     
+    class SubmixEffectConvolutionReverbSettings {
+        constructor();
+        constructor(NormalizationVolumeDb: number, WetVolumeDb: number, DryVolumeDb: number, bBypass: boolean, bMixInputChannelFormatToImpulseResponseFormat: boolean, bMixReverbOutputToOutputChannelFormat: boolean, SurroundRearChannelBleedDb: number, bInvertRearChannelBleedPhase: boolean, bSurroundRearChannelFlip: boolean, SurroundRearChannelBleedAmount: number, ImpulseResponse: UE.AudioImpulseResponse, AllowHardwareAcceleration: boolean);
+        NormalizationVolumeDb: number;
+        WetVolumeDb: number;
+        DryVolumeDb: number;
+        bBypass: boolean;
+        bMixInputChannelFormatToImpulseResponseFormat: boolean;
+        bMixReverbOutputToOutputChannelFormat: boolean;
+        SurroundRearChannelBleedDb: number;
+        bInvertRearChannelBleedPhase: boolean;
+        bSurroundRearChannelFlip: boolean;
+        SurroundRearChannelBleedAmount: number;
+        ImpulseResponse: UE.AudioImpulseResponse;
+        AllowHardwareAcceleration: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectConvolutionReverbSettings_0__: boolean;
+    }
+    
+    class SubmixEffectConvolutionReverbPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ImpulseResponse: UE.AudioImpulseResponse;
+        Settings: UE.SubmixEffectConvolutionReverbSettings;
+        BlockSize: UE.ESubmixEffectConvolutionReverbBlockSize;
+        bEnableHardwareAcceleration: boolean;
+        /*
+         *Set the convolution reverb impulse response
+         */
+        SetImpulseResponse(InImpulseResponse: $Nullable<UE.AudioImpulseResponse>) : void;
+        /*
+         *Set the convolution reverb settings
+         */
+        SetSettings(InSettings: UE.SubmixEffectConvolutionReverbSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectConvolutionReverbPreset;
+        static Load(InName: string): SubmixEffectConvolutionReverbPreset;
+    
+        __tid_SubmixEffectConvolutionReverbPreset_0__: boolean;
+    }
+    
+    class SubmixEffectDelaySettings {
+        constructor();
+        constructor(MaximumDelayLength: number, InterpolationTime: number, DelayLength: number);
+        MaximumDelayLength: number;
+        InterpolationTime: number;
+        DelayLength: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectDelaySettings_0__: boolean;
+    }
+    
+    class SubmixEffectDelayPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectDelaySettings;
+        DynamicSettings: UE.SubmixEffectDelaySettings;
+        /*
+         *Get the maximum delay possible.
+         */
+        GetMaxDelayInMilliseconds() : number;
+        /*
+         *Sets object's default settings. This will update both the default UObject settings (and mark it as dirty),
+         *as well as any dynamically set settings.
+         */
+        SetDefaultSettings(InSettings: UE.SubmixEffectDelaySettings) : void;
+        /*
+         *Set how long the delay actually is, in milliseconds.
+         */
+        SetDelay(Length: number) : void;
+        /*
+         *Set the time it takes to interpolate between parameters, in milliseconds.
+         */
+        SetInterpolationTime(Time: number) : void;
+        /*
+         *Sets runtime delay settings. This will replace any dynamically added or modified settings without modifying
+         *the original UObject.
+         */
+        SetSettings(InSettings: UE.SubmixEffectDelaySettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectDelayPreset;
+        static Load(InName: string): SubmixEffectDelayPreset;
+    
+        __tid_SubmixEffectDelayPreset_0__: boolean;
+    }
+    
+    class SubmixEffectDelayStatics extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static SetDelayLength(DelaySettings: $Ref<UE.SubmixEffectDelaySettings>, DelayLength: number) : UE.SubmixEffectDelaySettings;
+        static SetInterpolationTime(DelaySettings: $Ref<UE.SubmixEffectDelaySettings>, InterpolationTime: number) : UE.SubmixEffectDelaySettings;
+        static SetMaximumDelayLength(DelaySettings: $Ref<UE.SubmixEffectDelaySettings>, MaximumDelayLength: number) : UE.SubmixEffectDelaySettings;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectDelayStatics;
+        static Load(InName: string): SubmixEffectDelayStatics;
+    
+        __tid_SubmixEffectDelayStatics_0__: boolean;
+    }
+    
+    class SubmixEffectFilterSettings {
+        constructor();
+        constructor(FilterType: UE.ESubmixFilterType, FilterAlgorithm: UE.ESubmixFilterAlgorithm, FilterFrequency: number, FilterQ: number);
+        FilterType: UE.ESubmixFilterType;
+        FilterAlgorithm: UE.ESubmixFilterAlgorithm;
+        FilterFrequency: number;
+        FilterQ: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectFilterSettings_0__: boolean;
+    }
+    
+    class SubmixEffectFilterPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectFilterSettings;
+        /*
+         *Sets the filter algorithm
+         */
+        SetFilterAlgorithm(InAlgorithm: UE.ESubmixFilterAlgorithm) : void;
+        /*
+         *Sets the base filter cutoff frequency
+         */
+        SetFilterCutoffFrequency(InFrequency: number) : void;
+        /*
+         *Sets the mod filter cutoff frequency
+         */
+        SetFilterCutoffFrequencyMod(InFrequency: number) : void;
+        /*
+         *Sets the filter Q
+         */
+        SetFilterQ(InQ: number) : void;
+        /*
+         *Sets the filter Q
+         */
+        SetFilterQMod(InQ: number) : void;
+        /*
+         *Sets the filter type
+         */
+        SetFilterType(InType: UE.ESubmixFilterType) : void;
+        /*
+         *Set all filter effect settings
+         */
+        SetSettings(InSettings: UE.SubmixEffectFilterSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectFilterPreset;
+        static Load(InName: string): SubmixEffectFilterPreset;
+    
+        __tid_SubmixEffectFilterPreset_0__: boolean;
+    }
+    
+    class SubmixEffectFlexiverbSettings {
+        constructor();
+        constructor(PreDelay: number, DecayTime: number, RoomDampening: number, Complexity: number);
+        PreDelay: number;
+        DecayTime: number;
+        RoomDampening: number;
+        Complexity: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectFlexiverbSettings_0__: boolean;
+    }
+    
+    class SubmixEffectFlexiverbPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectFlexiverbSettings;
+        SetSettings(InSettings: UE.SubmixEffectFlexiverbSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectFlexiverbPreset;
+        static Load(InName: string): SubmixEffectFlexiverbPreset;
+    
+        __tid_SubmixEffectFlexiverbPreset_0__: boolean;
+    }
+    
+    enum ESubmixEffectDynamicsProcessorType { Compressor, Limiter, Expander, Gate, UpwardsCompressor, Count, ESubmixEffectDynamicsProcessorType_MAX, __typeKeyDoNoAccess}
+    enum ESubmixEffectDynamicsPeakMode { MeanSquared, RootMeanSquared, Peak, Count, ESubmixEffectDynamicsPeakMode_MAX, __typeKeyDoNoAccess}
+    enum ESubmixEffectDynamicsChannelLinkMode { Disabled, Average, Peak, Count, ESubmixEffectDynamicsChannelLinkMode_MAX, __typeKeyDoNoAccess}
+    enum ESubmixEffectDynamicsKeySource { Default, AudioBus, Submix, Count, ESubmixEffectDynamicsKeySource_MAX, __typeKeyDoNoAccess}
+    class SubmixEffectMultibandCompressorSettings {
+        constructor();
+        constructor(DynamicsProcessorType: UE.ESubmixEffectDynamicsProcessorType, PeakMode: UE.ESubmixEffectDynamicsPeakMode, LinkMode: UE.ESubmixEffectDynamicsChannelLinkMode, LookAheadMsec: number, bAnalogMode: boolean, bFourPole: boolean, bBypass: boolean, KeySource: UE.ESubmixEffectDynamicsKeySource, ExternalAudioBus: UE.AudioBus, ExternalSubmix: UE.SoundSubmix, KeyGainDb: number, bKeyAudition: boolean, Bands: TArray<UE.DynamicsBandSettings>);
+        DynamicsProcessorType: UE.ESubmixEffectDynamicsProcessorType;
+        PeakMode: UE.ESubmixEffectDynamicsPeakMode;
+        LinkMode: UE.ESubmixEffectDynamicsChannelLinkMode;
+        LookAheadMsec: number;
+        bAnalogMode: boolean;
+        bFourPole: boolean;
+        bBypass: boolean;
+        KeySource: UE.ESubmixEffectDynamicsKeySource;
+        ExternalAudioBus: UE.AudioBus;
+        ExternalSubmix: UE.SoundSubmix;
+        KeyGainDb: number;
+        bKeyAudition: boolean;
+        Bands: TArray<UE.DynamicsBandSettings>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectMultibandCompressorSettings_0__: boolean;
+    }
+    
+    class SubmixEffectMultibandCompressorPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectMultibandCompressorSettings;
+        ResetKey() : void;
+        /*
+         *Sets the source key input as the provided AudioBus' output.  If no object is provided, key is set
+         *to effect's input.
+         */
+        SetAudioBus(AudioBus: $Nullable<UE.AudioBus>) : void;
+        /*
+         *Sets the source key input as the provided Submix's output.  If no object is provided, key is set
+         *to effect's input.
+         */
+        SetExternalSubmix(Submix: $Nullable<UE.SoundSubmix>) : void;
+        SetSettings(InSettings: UE.SubmixEffectMultibandCompressorSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectMultibandCompressorPreset;
+        static Load(InName: string): SubmixEffectMultibandCompressorPreset;
+    
+        __tid_SubmixEffectMultibandCompressorPreset_0__: boolean;
+    }
+    
+    class SubmixEffectStereoDelaySettings {
+        constructor();
+        constructor(DelayMode: UE.EStereoDelaySourceEffect, DelayTimeMsec: number, Feedback: number, DelayRatio: number, WetLevel: number, DryLevel: number, bFilterEnabled: boolean, FilterType: UE.EStereoDelayFiltertype, FilterFrequency: number, FilterQ: number);
+        DelayMode: UE.EStereoDelaySourceEffect;
+        DelayTimeMsec: number;
+        Feedback: number;
+        DelayRatio: number;
+        WetLevel: number;
+        DryLevel: number;
+        bFilterEnabled: boolean;
+        FilterType: UE.EStereoDelayFiltertype;
+        FilterFrequency: number;
+        FilterQ: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectStereoDelaySettings_0__: boolean;
+    }
+    
+    class SubmixEffectStereoDelayPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectStereoDelaySettings;
+        /*
+         *Set all tap delay settings. This will replace any dynamically added or modified taps.
+         */
+        SetSettings(InSettings: UE.SubmixEffectStereoDelaySettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectStereoDelayPreset;
+        static Load(InName: string): SubmixEffectStereoDelayPreset;
+    
+        __tid_SubmixEffectStereoDelayPreset_0__: boolean;
+    }
+    
+    class SubmixEffectStereoToQuadSettings {
+        constructor();
+        constructor(bFlipChannels: boolean, RearChannelGain: number);
+        bFlipChannels: boolean;
+        RearChannelGain: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectStereoToQuadSettings_0__: boolean;
+    }
+    
+    class SubmixEffectStereoToQuadPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectStereoToQuadSettings;
+        /*
+         *Set all tap delay settings. This will replace any dynamically added or modified taps.
+         */
+        SetSettings(InSettings: UE.SubmixEffectStereoToQuadSettings) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectStereoToQuadPreset;
+        static Load(InName: string): SubmixEffectStereoToQuadPreset;
+    
+        __tid_SubmixEffectStereoToQuadPreset_0__: boolean;
+    }
+    
+    class TapDelayInfo {
+        constructor();
+        constructor(TapLineMode: UE.ETapLineMode, DelayLength: number, Gain: number, OutputChannel: number, PanInDegrees: number, TapId: number);
+        TapLineMode: UE.ETapLineMode;
+        DelayLength: number;
+        Gain: number;
+        OutputChannel: number;
+        PanInDegrees: number;
+        TapId: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TapDelayInfo_0__: boolean;
+    }
+    
+    class SubmixEffectTapDelaySettings {
+        constructor();
+        constructor(MaximumDelayLength: number, InterpolationTime: number, Taps: TArray<UE.TapDelayInfo>);
+        MaximumDelayLength: number;
+        InterpolationTime: number;
+        Taps: TArray<UE.TapDelayInfo>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SubmixEffectTapDelaySettings_0__: boolean;
+    }
+    
+    class SubmixEffectTapDelayPreset extends UE.SoundEffectSubmixPreset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.SubmixEffectTapDelaySettings;
+        /*
+         *Adds a dynamic tap delay with the given settings. Returns the tap id.
+         */
+        AddTap(TapId: $Ref<number>) : void;
+        /*
+         *Get the maximum delay possible.
+         */
+        GetMaxDelayInMilliseconds() : number;
+        /*
+         *Get the current info about a specific tap.
+         */
+        GetTap(TapId: number, TapInfo: $Ref<UE.TapDelayInfo>) : void;
+        /*
+         *Retrieve an array of all tap ids for the submix effect.
+         */
+        GetTapIds(TapIds: $Ref<TArray<number>>) : void;
+        /*
+         *Remove the tap from the preset.
+         */
+        RemoveTap(TapId: number) : void;
+        /*
+         *Set the time it takes to interpolate between parameters, in milliseconds.
+         */
+        SetInterpolationTime(Time: number) : void;
+        /*
+         *Set all tap delay setting. This will replace any dynamically added or modified taps.
+         */
+        SetSettings(InSettings: UE.SubmixEffectTapDelaySettings) : void;
+        /*
+         *Modify a specific tap.
+         */
+        SetTap(TapId: number, TapInfo: UE.TapDelayInfo) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SubmixEffectTapDelayPreset;
+        static Load(InName: string): SubmixEffectTapDelayPreset;
+    
+        __tid_SubmixEffectTapDelayPreset_0__: boolean;
+    }
+    
     class SubsurfaceProfileFactory extends UE.Factory {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;
@@ -80994,6 +86304,400 @@ declare module "ue" {
         __tid_SwapSoundForDialogueInCuesCommandlet_0__: boolean;
     }
     
+    class Synth2DSliderStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(NormalThumbImage: UE.SlateBrush, DisabledThumbImage: UE.SlateBrush, NormalBarImage: UE.SlateBrush, DisabledBarImage: UE.SlateBrush, BackgroundImage: UE.SlateBrush, BarThickness: number);
+        NormalThumbImage: UE.SlateBrush;
+        DisabledThumbImage: UE.SlateBrush;
+        NormalBarImage: UE.SlateBrush;
+        DisabledBarImage: UE.SlateBrush;
+        BackgroundImage: UE.SlateBrush;
+        BarThickness: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_Synth2DSliderStyle_0__: boolean;
+    }
+    
+    class Synth2DSlider extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ValueX: number;
+        ValueY: number;
+        ValueXDelegate: $Delegate<() => number>;
+        ValueYDelegate: $Delegate<() => number>;
+        WidgetStyle: UE.Synth2DSliderStyle;
+        SliderHandleColor: UE.LinearColor;
+        IndentHandle: boolean;
+        Locked: boolean;
+        StepSize: number;
+        IsFocusable: boolean;
+        OnMouseCaptureBegin: $MulticastDelegate<() => void>;
+        OnMouseCaptureEnd: $MulticastDelegate<() => void>;
+        OnControllerCaptureBegin: $MulticastDelegate<() => void>;
+        OnControllerCaptureEnd: $MulticastDelegate<() => void>;
+        OnValueChangedX: $MulticastDelegate<(Value: number) => void>;
+        OnValueChangedY: $MulticastDelegate<(Value: number) => void>;
+        /*
+         *Gets the current value of the slider.
+         */
+        GetValue() : UE.Vector2D;
+        /*
+         *Sets if the slidable area should be indented to fit the handle
+         */
+        SetIndentHandle(InValue: boolean) : void;
+        /*
+         *Sets the handle to be interactive or fixed
+         */
+        SetLocked(InValue: boolean) : void;
+        /*
+         *Sets the color of the handle bar
+         */
+        SetSliderHandleColor(InValue: UE.LinearColor) : void;
+        /*
+         *Sets the amount to adjust the value by, when using a controller or keyboard
+         */
+        SetStepSize(InValue: number) : void;
+        /*
+         *Sets the current value of the slider.
+         */
+        SetValue(InValue: UE.Vector2D) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): Synth2DSlider;
+        static Load(InName: string): Synth2DSlider;
+    
+        __tid_Synth2DSlider_0__: boolean;
+    }
+    
+    class SynthComponentMonoWaveTable extends UE.SynthComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnTableAltered: $MulticastDelegate<(TableIndex: number) => void>;
+        OnNumTablesChanged: $MulticastDelegate<() => void>;
+        CurrentPreset: UE.MonoWaveTableSynthPreset;
+        /*
+         *Get the curve interpolation type (What the curve is doing between keyframes)
+         */
+        GetCurveTangent(TableIndex: number) : number;
+        /*
+         *Get an array of floats that represent the key frames in the requested curve
+         */
+        GetKeyFrameValuesForTable(TableIndex: number) : TArray<number>;
+        /*
+         *Get the number of curves in the wave table. (returns -1 if there is no asset)
+         */
+        GetMaxTableIndex() : number;
+        /*
+         *Start BP functionality __ Get the number of table elements from Blueprint
+         */
+        GetNumTableEntries() : number;
+        /*
+         *Starts a new note (retrigs modulators, etc.)
+         */
+        NoteOff(InMidiNote: number) : void;
+        /*
+         *Starts a new note (retrigs modulators, etc.)
+         */
+        NoteOn(InMidiNote: number, InVelocity: number) : void;
+        /*
+         *Refresh all wavetables (from Game Thread data)
+         */
+        RefreshAllWaveTables() : void;
+        /*
+         *Refresh a particular wavetable (from Game Thread data)
+         */
+        RefreshWaveTable(Index: number) : void;
+        /*
+         *Set Amp envelope attack time (msec)
+         */
+        SetAmpEnvelopeAttackTime(InAttackTimeMsec: number) : void;
+        /*
+         *Set the bias depth of the the Amp envelope
+         */
+        SetAmpEnvelopeBiasDepth(InDepth: number) : void;
+        /*
+         *Set whether or not the Amp envelope's bias is inverted
+         */
+        SetAmpEnvelopeBiasInvert(bInBiasInvert: boolean) : void;
+        /*
+         *Set Amp envelope decay time (msec)
+         */
+        SetAmpEnvelopeDecayTime(InDecayTimeMsec: number) : void;
+        /*
+         *Set the overall depth of the Amp envelope
+         */
+        SetAmpEnvelopeDepth(InDepth: number) : void;
+        /*
+         *Set whether or not the Amp envelope is inverted
+         */
+        SetAmpEnvelopeInvert(bInInvert: boolean) : void;
+        /*
+         *Set Amp envelope release time (msec)
+         */
+        SetAmpEnvelopeReleaseTime(InReleaseTimeMsec: number) : void;
+        /*
+         *Set Amp envelope sustain gain [0.0, 1.0]
+         */
+        SetAmpEnvelopeSustainGain(InSustainGain: number) : void;
+        /*
+         *Set the curve interpolation type (What the curve is doing between keyframes)
+         *This should only be used for live-editing features! (changing the curves at runtime is expensive)
+         */
+        SetCurveInterpolationType(InterpolationType: UE.CurveInterpolationType, TableIndex: number) : boolean;
+        /*
+         *Set the curve tangent ("Curve depth" between keyframes)
+         *This should only be used for live-editing features! (changing the curves at runtime is expensive)
+         */
+        SetCurveTangent(TableIndex: number, InNewTangent: number) : boolean;
+        /*
+         *Set a Keyframe value given a Table number and Keyframe number.
+         *         Returns false if the request was invalid.
+         *         NewValue will be clamped from +_- 1.0
+         */
+        SetCurveValue(TableIndex: number, KeyframeIndex: number, NewValue: number) : boolean;
+        /*
+         *Set Low-Pass Filter envelope attack time (msec)
+         */
+        SetFilterEnvelopeAttackTime(InAttackTimeMsec: number) : void;
+        /*
+         *Set Low-Pass Filter envelope bias depth
+         */
+        SetFilterEnvelopeBiasDepth(InDepth: number) : void;
+        /*
+         *Set Low-Pass Filter envelope bias inversion
+         */
+        SetFilterEnvelopeBiasInvert(bInBiasInvert: boolean) : void;
+        /*
+         *Set Low-Pass Filter envelope depth
+         */
+        SetFilterEnvelopeDepth(InDepth: number) : void;
+        /*
+         *Set Low-Pass Filter envelope inversion
+         */
+        SetFilterEnvelopeInvert(bInInvert: boolean) : void;
+        /*
+         *Set Low-Pass Filter envelope decay time (msec)
+         */
+        SetFilterEnvelopenDecayTime(InDecayTimeMsec: number) : void;
+        /*
+         *Set Low-Pass Filter envelope release time (msec)
+         */
+        SetFilterEnvelopeReleaseTime(InReleaseTimeMsec: number) : void;
+        /*
+         *Set Low-Pass Filter envelope sustain gain
+         */
+        SetFilterEnvelopeSustainGain(InSustainGain: number) : void;
+        /*
+         *Sets the oscillator's frequency
+         */
+        SetFrequency(FrequencyHz: number) : void;
+        /*
+         *Set a frequency offset in cents (for pitch modulation such as the Pitch Bend Wheel)
+         */
+        SetFrequencyPitchBend(FrequencyOffsetCents: number) : void;
+        /*
+         *Set the oscillator's frequency via midi note number
+         */
+        SetFrequencyWithMidiNote(InMidiNote: number) : void;
+        /*
+         *Set the Cut-off frequency of the low-pass filter
+         */
+        SetLowPassFilterResonance(InNewQ: number) : void;
+        /*
+         *Set Position envelope attack time (msec)
+         */
+        SetPositionEnvelopeAttackTime(InAttackTimeMsec: number) : void;
+        /*
+         *Set Position envelope bias depth
+         */
+        SetPositionEnvelopeBiasDepth(InDepth: number) : void;
+        /*
+         *Set Position envelope bias inversion
+         */
+        SetPositionEnvelopeBiasInvert(bInBiasInvert: boolean) : void;
+        /*
+         *Set Position envelope decay time (msec)
+         */
+        SetPositionEnvelopeDecayTime(InDecayTimeMsec: number) : void;
+        /*
+         *Set Position envelope envelope depth
+         */
+        SetPositionEnvelopeDepth(InDepth: number) : void;
+        /*
+         *Set Position envelope envelope inversion
+         */
+        SetPositionEnvelopeInvert(bInInvert: boolean) : void;
+        /*
+         *Set Position envelope release time (msec)
+         */
+        SetPositionEnvelopeReleaseTime(InReleaseTimeMsec: number) : void;
+        /*
+         *Set Position envelope sustain gain
+         */
+        SetPositionEnvelopeSustainGain(InSustainGain: number) : void;
+        /*
+         *Set the Modulation depth of the Lfo controlling the Table Position around the current position value
+         *         0.0 = no modulation, 1.0 = current position +_- 0.5 (Lfo + Position result will clamp [0.0, 1.0])
+         */
+        SetPosLfoDepth(InLfoDepth: number) : void;
+        /*
+         *Set frequency of LFO controlling Table Position (in Hz)
+         */
+        SetPosLfoFrequency(InLfoFrequency: number) : void;
+        /*
+         *Set the shape of the Lfo controlling the position
+         */
+        SetPosLfoType(InLfoType: UE.ESynthLFOType) : void;
+        /*
+         *Inform the synth if the sustain pedal is pressed or not
+         */
+        SetSustainPedalState(InSustainPedalState: boolean) : void;
+        /*
+         *Sets the wavetable position. Expects a percentage between 0.0 and 1.0
+         */
+        SetWaveTablePosition(InPosition: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthComponentMonoWaveTable;
+        static Load(InName: string): SynthComponentMonoWaveTable;
+    
+        __tid_SynthComponentMonoWaveTable_0__: boolean;
+    }
+    
+    class SynthComponentToneGenerator extends UE.SynthComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Frequency: number;
+        Volume: number;
+        DistanceAttenuationCurve: UE.RuntimeFloatCurve;
+        DistanceRange: UE.Vector2D;
+        AttenuationDbAtMaxRange: number;
+        /*
+         *Sets the frequency of the tone generator
+         */
+        SetFrequency(InFrequency: number) : void;
+        /*
+         *Sets the volume of the tone generator
+         */
+        SetVolume(InVolume: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthComponentToneGenerator;
+        static Load(InName: string): SynthComponentToneGenerator;
+    
+        __tid_SynthComponentToneGenerator_0__: boolean;
+    }
+    
+    class SynthesisUtilitiesBlueprintFunctionLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Returns the log frequency of the input value. Maps linear domain and range values to log output (good for linear slider controlling frequency)
+         */
+        static GetLinearFrequency(InLogFrequencyValue: number, InDomainMin: number, InDomainMax: number, InRangeMin: number, InRangeMax: number) : number;
+        /*
+         *Returns the log frequency of the input value. Maps linear domain and range values to log output (good for linear slider controlling frequency)
+         */
+        static GetLogFrequency(InLinearValue: number, InDomainMin: number, InDomainMax: number, InRangeMin: number, InRangeMax: number) : number;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthesisUtilitiesBlueprintFunctionLibrary;
+        static Load(InName: string): SynthesisUtilitiesBlueprintFunctionLibrary;
+    
+        __tid_SynthesisUtilitiesBlueprintFunctionLibrary_0__: boolean;
+    }
+    
+    class SynthKnobStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(LargeKnob: UE.SlateBrush, LargeKnobOverlay: UE.SlateBrush, MediumKnob: UE.SlateBrush, MediumKnobOverlay: UE.SlateBrush, MinValueAngle: number, MaxValueAngle: number, KnobSize: UE.ESynthKnobSize);
+        LargeKnob: UE.SlateBrush;
+        LargeKnobOverlay: UE.SlateBrush;
+        MediumKnob: UE.SlateBrush;
+        MediumKnobOverlay: UE.SlateBrush;
+        MinValueAngle: number;
+        MaxValueAngle: number;
+        KnobSize: UE.ESynthKnobSize;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SynthKnobStyle_0__: boolean;
+    }
+    
+    class SynthKnob extends UE.Widget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Value: number;
+        StepSize: number;
+        MouseSpeed: number;
+        MouseFineTuneSpeed: number;
+        ShowTooltipInfo: boolean;
+        ParameterName: string;
+        ParameterUnits: string;
+        ValueDelegate: $Delegate<() => number>;
+        WidgetStyle: UE.SynthKnobStyle;
+        Locked: boolean;
+        IsFocusable: boolean;
+        OnMouseCaptureBegin: $MulticastDelegate<() => void>;
+        OnMouseCaptureEnd: $MulticastDelegate<() => void>;
+        OnControllerCaptureBegin: $MulticastDelegate<() => void>;
+        OnControllerCaptureEnd: $MulticastDelegate<() => void>;
+        OnValueChanged: $MulticastDelegate<(Value: number) => void>;
+        /*
+         *Gets the current value of the slider.
+         */
+        GetValue() : number;
+        /*
+         *Sets the handle to be interactive or fixed
+         */
+        SetLocked(InValue: boolean) : void;
+        /*
+         *Sets the amount to adjust the value by, when using a controller or keyboard
+         */
+        SetStepSize(InValue: number) : void;
+        /*
+         *Sets the current value of the slider.
+         */
+        SetValue(InValue: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthKnob;
+        static Load(InName: string): SynthKnob;
+    
+        __tid_SynthKnob_0__: boolean;
+    }
+    
+    class SynthSamplePlayer extends UE.SynthComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SoundWave: UE.SoundWave;
+        OnSampleLoaded: $MulticastDelegate<() => void>;
+        OnSamplePlaybackProgress: $MulticastDelegate<(ProgressPercent: number, ProgressTimeSeconds: number) => void>;
+        GetCurrentPlaybackProgressPercent() : number;
+        GetCurrentPlaybackProgressTime() : number;
+        GetSampleDuration() : number;
+        IsLoaded() : boolean;
+        SeekToTime(TimeSec: number, SeekType: UE.ESamplePlayerSeekType, bWrap?: boolean /* = true */) : void;
+        SetPitch(InPitch: number, TimeSec: number) : void;
+        SetScrubMode(bScrubMode: boolean) : void;
+        SetScrubTimeWidth(InScrubTimeWidthSec: number) : void;
+        /*
+         *This will override the current sound wave if one is set, stop audio, and reload the new sound wave
+         */
+        SetSoundWave(InSoundWave: $Nullable<UE.SoundWave>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): SynthSamplePlayer;
+        static Load(InName: string): SynthSamplePlayer;
+    
+        __tid_SynthSamplePlayer_0__: boolean;
+    }
+    
+    class SynthSlateStyle extends UE.SlateWidgetStyle {
+        constructor();
+        constructor(SizeType: UE.ESynthSlateSizeType, ColorStyle: UE.ESynthSlateColorStyle);
+        SizeType: UE.ESynthSlateSizeType;
+        ColorStyle: UE.ESynthSlateColorStyle;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_SynthSlateStyle_0__: boolean;
+    }
+    
     class SystemTimeTimecodeProvider extends UE.TimecodeProvider {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         FrameRate: UE.FrameRate;
@@ -81004,6 +86708,613 @@ declare module "ue" {
         static Load(InName: string): SystemTimeTimecodeProvider;
     
         __tid_SystemTimeTimecodeProvider_0__: boolean;
+    }
+    
+    class TakeRecorderOverlayWidget extends UE.UserWidget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Recorder: UE.TakeRecorder;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderOverlayWidget;
+        static Load(InName: string): TakeRecorderOverlayWidget;
+    
+        __tid_TakeRecorderOverlayWidget_0__: boolean;
+    }
+    
+    class TakeRecorderUserParameters {
+        constructor();
+        constructor(bMaximizeViewport: boolean, CountdownSeconds: number, EngineTimeDilation: number, bResetPlayhead: boolean, bStopAtPlaybackEnd: boolean, bRemoveRedundantTracks: boolean, ReduceKeysTolerance: number, bSaveRecordedAssets: boolean, bAutoLock: boolean, bAutoSerialize: boolean);
+        bMaximizeViewport: boolean;
+        CountdownSeconds: number;
+        EngineTimeDilation: number;
+        bResetPlayhead: boolean;
+        bStopAtPlaybackEnd: boolean;
+        bRemoveRedundantTracks: boolean;
+        ReduceKeysTolerance: number;
+        bSaveRecordedAssets: boolean;
+        bAutoLock: boolean;
+        bAutoSerialize: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TakeRecorderUserParameters_0__: boolean;
+    }
+    
+    class TakeRecorderPropertyTrackSettings {
+        constructor();
+        constructor(ComponentPath: string, PropertyPath: string);
+        ComponentPath: string;
+        PropertyPath: string;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TakeRecorderPropertyTrackSettings_0__: boolean;
+    }
+    
+    class TakeRecorderTrackSettings {
+        constructor();
+        constructor(MatchingActorClass: UE.SoftClassPath, DefaultPropertyTracks: TArray<UE.TakeRecorderPropertyTrackSettings>, ExcludePropertyTracks: TArray<UE.TakeRecorderPropertyTrackSettings>);
+        MatchingActorClass: UE.SoftClassPath;
+        DefaultPropertyTracks: TArray<UE.TakeRecorderPropertyTrackSettings>;
+        ExcludePropertyTracks: TArray<UE.TakeRecorderPropertyTrackSettings>;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TakeRecorderTrackSettings_0__: boolean;
+    }
+    
+    class TakeRecorderProjectParameters {
+        constructor();
+        constructor(RootTakeSaveDir: UE.DirectoryPath, TakeSaveDir: string, DefaultSlate: string, RecordingClockSource: UE.EUpdateClockSource, bStartAtCurrentTimecode: boolean, bRecordTimecode: boolean, bRecordSourcesIntoSubSequences: boolean, bRecordToPossessable: boolean, DefaultTracks: TArray<UE.TakeRecorderTrackSettings>, bShowNotifications: boolean);
+        RootTakeSaveDir: UE.DirectoryPath;
+        TakeSaveDir: string;
+        DefaultSlate: string;
+        RecordingClockSource: UE.EUpdateClockSource;
+        bStartAtCurrentTimecode: boolean;
+        bRecordTimecode: boolean;
+        bRecordSourcesIntoSubSequences: boolean;
+        bRecordToPossessable: boolean;
+        DefaultTracks: TArray<UE.TakeRecorderTrackSettings>;
+        bShowNotifications: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TakeRecorderProjectParameters_0__: boolean;
+    }
+    
+    class TakeRecorderParameters {
+        constructor();
+        constructor(User: UE.TakeRecorderUserParameters, Project: UE.TakeRecorderProjectParameters, TakeRecorderMode: UE.ETakeRecorderMode, StartFrame: UE.FrameNumber, bDisableRecordingAndSave: boolean);
+        User: UE.TakeRecorderUserParameters;
+        Project: UE.TakeRecorderProjectParameters;
+        TakeRecorderMode: UE.ETakeRecorderMode;
+        StartFrame: UE.FrameNumber;
+        bDisableRecordingAndSave: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TakeRecorderParameters_0__: boolean;
+    }
+    
+    class TakeRecorder extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SequenceAsset: UE.LevelSequence;
+        OverlayWidget: UE.TakeRecorderOverlayWidget;
+        WeakWorld: TWeakObjectPtr<UE.World>;
+        Parameters: UE.TakeRecorderParameters;
+        /*
+         *Access the number of seconds remaining before this recording will start
+         */
+        GetCountdownSeconds() : number;
+        /*
+         *Access the sequence asset that this recorder is recording into
+         */
+        GetSequence() : UE.LevelSequence;
+        /*
+         *Get the current state of this recorder
+         */
+        GetState() : UE.ETakeRecorderState;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorder;
+        static Load(InName: string): TakeRecorder;
+    
+        __tid_TakeRecorder_0__: boolean;
+    }
+    
+    class TakeRecorderSource extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bEnabled: boolean;
+        TakeNumber: number;
+        TrackTint: UE.Color;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderSource;
+        static Load(InName: string): TakeRecorderSource;
+    
+        __tid_TakeRecorderSource_0__: boolean;
+    }
+    
+    class MovieSceneSectionParameters {
+        constructor();
+        constructor(StartFrameOffset: UE.FrameNumber, bCanLoop: boolean, EndFrameOffset: UE.FrameNumber, FirstLoopStartFrameOffset: UE.FrameNumber, TimeScale: UE.MovieSceneTimeWarpVariant, HierarchicalBias: number, Flags: UE.EMovieSceneSubSectionFlags, StartOffset: number, PrerollTime: number, PostrollTime: number);
+        StartFrameOffset: UE.FrameNumber;
+        bCanLoop: boolean;
+        EndFrameOffset: UE.FrameNumber;
+        FirstLoopStartFrameOffset: UE.FrameNumber;
+        TimeScale: UE.MovieSceneTimeWarpVariant;
+        HierarchicalBias: number;
+        Flags: UE.EMovieSceneSubSectionFlags;
+        StartOffset: number;
+        PrerollTime: number;
+        PostrollTime: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSectionParameters_0__: boolean;
+    }
+    
+    class MovieSceneSubSectionOriginOverrideMask {
+        constructor();
+        constructor(Mask: number);
+        Mask: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneSubSectionOriginOverrideMask_0__: boolean;
+    }
+    
+    class MovieSceneDoubleValue {
+        constructor();
+        constructor(Value: number, Tangent: UE.MovieSceneTangentData, InterpMode: UE.ERichCurveInterpMode, TangentMode: UE.ERichCurveTangentMode, PaddingByte: number);
+        Value: number;
+        Tangent: UE.MovieSceneTangentData;
+        InterpMode: UE.ERichCurveInterpMode;
+        TangentMode: UE.ERichCurveTangentMode;
+        PaddingByte: number;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneDoubleValue_0__: boolean;
+    }
+    
+    class MovieSceneDoubleChannel extends UE.MovieSceneChannel {
+        constructor();
+        constructor(PreInfinityExtrap: UE.ERichCurveExtrapolation, PostInfinityExtrap: UE.ERichCurveExtrapolation, Times: TArray<UE.FrameNumber>, Values: TArray<UE.MovieSceneDoubleValue>, DefaultValue: number, bHasDefaultValue: boolean, KeyHandles: UE.MovieSceneKeyHandleMap, TickResolution: UE.FrameRate, bShowCurve: boolean);
+        PreInfinityExtrap: UE.ERichCurveExtrapolation;
+        PostInfinityExtrap: UE.ERichCurveExtrapolation;
+        Times: TArray<UE.FrameNumber>;
+        Values: TArray<UE.MovieSceneDoubleValue>;
+        DefaultValue: number;
+        bHasDefaultValue: boolean;
+        KeyHandles: UE.MovieSceneKeyHandleMap;
+        TickResolution: UE.FrameRate;
+        bShowCurve: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_MovieSceneDoubleChannel_0__: boolean;
+    }
+    
+    class MovieSceneSubSection extends UE.MovieSceneSection {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Parameters: UE.MovieSceneSectionParameters;
+        StartOffset: number;
+        TimeScale: number;
+        PrerollTime: number;
+        NetworkMask: number;
+        OriginOverrideMask: UE.MovieSceneSubSectionOriginOverrideMask;
+        Translation: FixSizeArray<UE.MovieSceneDoubleChannel>;
+        Rotation: FixSizeArray<UE.MovieSceneDoubleChannel>;
+        SubSequence: UE.MovieSceneSequence;
+        /*
+         *Get the sequence that is assigned to this section.
+         *
+         *@return The sequence.
+         *@see SetSequence
+         */
+        GetSequence() : UE.MovieSceneSequence;
+        /*
+         *Sets the sequence played by this section.
+         *
+         *@param Sequence The sequence to play.
+         *@see GetSequence
+         */
+        SetSequence(Sequence: $Nullable<UE.MovieSceneSequence>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MovieSceneSubSection;
+        static Load(InName: string): MovieSceneSubSection;
+    
+        __tid_MovieSceneSubSection_0__: boolean;
+    }
+    
+    class TakeRecorderSources extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Sources: TArray<UE.TakeRecorderSource>;
+        SourceSubSequenceMap: TMap<UE.TakeRecorderSource, UE.LevelSequence>;
+        ActiveSubSections: TArray<UE.MovieSceneSubSection>;
+        /*
+         *Add a new source to this source list of the templated type
+         *
+         *@param InSourceType    The class type of the source to add
+         *@return An instance of the specified source type
+         */
+        AddSource(InSourceType: $Nullable<UE.Class>) : UE.TakeRecorderSource;
+        /*
+         *Retrieves a copy of the list of sources that are being recorded. This is intended for Blueprint usages which cannot
+         *use TArrayView.
+         *DO NOT MODIFY THIS ARRAY, modifications will be lost.
+         */
+        GetSourcesCopy() : TArray<UE.TakeRecorderSource>;
+        /*
+         *Remove the specified source from this list
+         *
+         *@param InSource        The source to remove
+         */
+        RemoveSource(InSource: $Nullable<UE.TakeRecorderSource>) : void;
+        /*
+         *Calls the recording initialization flows on each of the specified sources.
+         */
+        StartRecordingSource(InSources: TArray<UE.TakeRecorderSource>, CurrentFrameTime: UE.QualifiedFrameTime) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderSources;
+        static Load(InName: string): TakeRecorderSources;
+    
+        __tid_TakeRecorderSources_0__: boolean;
+    }
+    
+    class TakePreset extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        LevelSequence: UE.LevelSequence;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakePreset;
+        static Load(InName: string): TakePreset;
+    
+        __tid_TakePreset_0__: boolean;
+    }
+    
+    class TakeMetaData extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bIsLocked: boolean;
+        Slate: string;
+        TakeNumber: number;
+        Timestamp: UE.DateTime;
+        TimecodeIn: UE.Timecode;
+        TimecodeOut: UE.Timecode;
+        Duration: UE.FrameTime;
+        FrameRate: UE.FrameRate;
+        Description: string;
+        PresetOrigin: TSoftObjectPtr<UE.TakePreset>;
+        LevelOrigin: TSoftObjectPtr<UE.Level>;
+        bFrameRateFromTimecode: boolean;
+        /*
+         *Generate the desired asset path for this take meta-data
+         */
+        GenerateAssetPath(PathFormatString: string) : string;
+        /*
+         *@return The user-provided description for this take
+         */
+        GetDescription() : string;
+        /*
+         *@return The duration for this take
+         */
+        GetDuration() : UE.FrameTime;
+        /*
+         *@return The frame-rate for this take
+         */
+        GetFrameRate() : UE.FrameRate;
+        /*
+         *@return Get if we get frame rate from time code
+         */
+        GetFrameRateFromTimecode() : boolean;
+        /*
+         *@return The Map used to create this recording
+         */
+        GetLevelOrigin() : UE.Level;
+        /*
+         *@return The AssetPath of the Level used to create a Recorded Level Sequence
+         */
+        GetLevelPath() : string;
+        /*
+         *@return The preset on which the take was originally based
+         */
+        GetPresetOrigin() : UE.TakePreset;
+        /*
+         *@return The slate for this take
+         */
+        GetSlate() : string;
+        /*
+         *@return The take number for this take
+         */
+        GetTakeNumber() : number;
+        /*
+         *@return The timecode in for this take
+         */
+        GetTimecodeIn() : UE.Timecode;
+        /*
+         *@return The timecode out for this take
+         */
+        GetTimecodeOut() : UE.Timecode;
+        /*
+         *@return The timestamp for this take
+         */
+        GetTimestamp() : UE.DateTime;
+        /*
+         *Check whether this take is locked
+         */
+        IsLocked() : boolean;
+        /*
+         *Lock this take, causing it to become read-only
+         */
+        Lock() : void;
+        /*
+         *Check if this take was recorded (as opposed
+         *to being setup for recording)
+         */
+        Recorded() : boolean;
+        /*
+         *Set this take's user-provided description
+         *@note: Only valid for takes that have not been locked
+         */
+        SetDescription(InDescription: string) : void;
+        /*
+         *Set this take's duration
+         *@note: Only valid for takes that have not been locked
+         */
+        SetDuration(InDuration: UE.FrameTime) : void;
+        /*
+         *Set this take's frame-rate
+         *@note: Only valid for takes that have not been locked
+         */
+        SetFrameRate(InFrameRate: UE.FrameRate) : void;
+        /*
+         *Set if we get frame rate from time code
+         */
+        SetFrameRateFromTimecode(InFromTimecode: boolean) : void;
+        /*
+         *Set the map used to create this recording
+         */
+        SetLevelOrigin(InLevelOrigin: $Nullable<UE.Level>) : void;
+        /*
+         *Set the preset on which the take is based
+         *@note: Only valid for takes that have not been locked
+         */
+        SetPresetOrigin(InPresetOrigin: $Nullable<UE.TakePreset>) : void;
+        /*
+         *Set the slate for this take and reset its take number to 1
+         *@param bEmitChanged Whether or not to send a slate changed event
+         *@note: Only valid for takes that have not been locked
+         */
+        SetSlate(InSlate: string, bEmitChanged?: boolean /* = true */) : void;
+        /*
+         *Set this take's take number. Take numbers are always clamped to be >= 1.
+         *@param bEmitChanged Whether or not to send a take number changed event
+         *@note: Only valid for takes that have not been locked
+         */
+        SetTakeNumber(InTakeNumber: number, bEmitChanged?: boolean /* = true */) : void;
+        /*
+         *Set this take's timecode in
+         *@note: Only valid for takes that have not been locked
+         */
+        SetTimecodeIn(InTimecodeIn: UE.Timecode) : void;
+        /*
+         *Set this take's timecode out
+         *@note: Only valid for takes that have not been locked
+         */
+        SetTimecodeOut(InTimecodeOut: UE.Timecode) : void;
+        /*
+         *Set this take's timestamp
+         *@note: Only valid for takes that have not been locked
+         */
+        SetTimestamp(InTimestamp: UE.DateTime) : void;
+        /*
+         *Unlock this take if it is read-only, allowing it to be modified once again
+         */
+        Unlock() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeMetaData;
+        static Load(InName: string): TakeMetaData;
+    
+        __tid_TakeMetaData_0__: boolean;
+    }
+    
+    class TakeRecorderPanel extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Whether the panel is ready to start recording
+         */
+        CanStartRecording(OutErrorText: $Ref<string>) : boolean;
+        /*
+         ** Clear the pending take level sequence
+         */
+        ClearPendingTake() : void;
+        /*
+         *Access the frame rate for this take
+         */
+        GetFrameRate() : UE.FrameRate;
+        /*
+         *Access the last level sequence that was recorded
+         */
+        GetLastRecordedLevelSequence() : UE.LevelSequence;
+        /*
+         *Access the level sequence for this take
+         */
+        GetLevelSequence() : UE.LevelSequence;
+        /*
+         *Get the mode that the panel is currently in
+         */
+        GetMode() : UE.ETakeRecorderPanelMode;
+        /*
+         *Access the sources that are to be (or were) used for recording this take
+         */
+        GetSources() : UE.TakeRecorderSources;
+        /*
+         *Access take meta data for this take
+         */
+        GetTakeMetaData() : UE.TakeMetaData;
+        /*
+         *Set the frame rate for this take
+         */
+        SetFrameRate(InFrameRate: UE.FrameRate) : void;
+        /*
+         *Set if the frame rate is set from the Timecode frame rate
+         */
+        SetFrameRateFromTimecode(bInFromTimecode: boolean) : void;
+        /*
+         *Setup this panel as an editor for the specified take preset asset.
+         */
+        SetupForEditing(TakePreset: $Nullable<UE.TakePreset>) : void;
+        /*
+         *Setup this panel such that it is ready to start recording using the specified
+         *level sequence asset as a template for the recording.
+         */
+        SetupForRecording_LevelSequence(LevelSequenceAsset: $Nullable<UE.LevelSequence>) : void;
+        /*
+         *Setup this panel such that it is ready to start recording using the specified
+         *take preset as a template for the recording.
+         */
+        SetupForRecording_TakePreset(TakePresetAsset: $Nullable<UE.TakePreset>) : void;
+        /*
+         *Setup this panel such that it is ready to start recording using the specified
+         *level sequence asset to record into.
+         */
+        SetupForRecordingInto_LevelSequence(LevelSequenceAsset: $Nullable<UE.LevelSequence>) : void;
+        /*
+         *Setup this panel as a viewer for a previously recorded take.
+         */
+        SetupForViewing(LevelSequenceAsset: $Nullable<UE.LevelSequence>) : void;
+        /*
+         *Start recording with the current take
+         */
+        StartRecording() : void;
+        /*
+         *Stop recording with the current take
+         */
+        StopRecording() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderPanel;
+        static Load(InName: string): TakeRecorderPanel;
+    
+        __tid_TakeRecorderPanel_0__: boolean;
+    }
+    
+    class TakeRecorderBlueprintLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *Cancel recording if there is a recorder currently active
+         */
+        static CancelRecording() : void;
+        /*
+         *Retrieve the currently active recorder, or None if there none are active
+         */
+        static GetActiveRecorder() : UE.TakeRecorder;
+        /*
+         *Get the default recorder parameters according to the project and user settings
+         */
+        static GetDefaultParameters() : UE.TakeRecorderParameters;
+        /*
+         *Get the currently open take recorder panel, if one is open
+         */
+        static GetTakeRecorderPanel() : UE.TakeRecorderPanel;
+        /*
+         *Check whether a recording is currently active
+         */
+        static IsRecording() : boolean;
+        /*
+         *Is the Take Recorder enabled in the build
+         */
+        static IsTakeRecorderEnabled() : boolean;
+        /*
+         *Get the currently open take recorder panel, if one is open, opening a new one if not
+         */
+        static OpenTakeRecorderPanel() : UE.TakeRecorderPanel;
+        /*
+         *Set the default recorder parameters
+         */
+        static SetDefaultParameters(DefaultParameters: UE.TakeRecorderParameters) : void;
+        static SetOnTakeRecorderCancelled(OnTakeRecorderCancelled: $Delegate<() => void>) : void;
+        static SetOnTakeRecorderFinished(OnTakeRecorderFinished: $Delegate<(SequenceAsset: $Nullable<UE.LevelSequence>) => void>) : void;
+        static SetOnTakeRecorderMarkedFrameAdded(OnTakeRecorderMarkedFrameAdded: $Delegate<(MarkedFrame: UE.MovieSceneMarkedFrame) => void>) : void;
+        /*
+         *Called when a Take Panel is constructed or destroyed.
+         */
+        static SetOnTakeRecorderPanelChanged(OnTakeRecorderPanelChanged: $Delegate<() => void>) : void;
+        static SetOnTakeRecorderPreInitialize(OnTakeRecorderPreInitialize: $Delegate<() => void>) : void;
+        static SetOnTakeRecorderStarted(OnTakeRecorderStarted: $Delegate<() => void>) : void;
+        static SetOnTakeRecorderStopped(OnTakeRecorderStopped: $Delegate<() => void>) : void;
+        /*
+         *Start a new recording using the specified parameters. Will fail if a recording is currently in progress
+         *
+         *@param LevelSequence         The base level sequence to use for the recording. Will be played back during the recording and duplicated to create the starting point for the resulting asset.
+         *@param Sources               The sources to use for the recording
+         *@param MetaData              Meta-data pertaining to this recording, duplicated into the resulting recorded sequence
+         *@param Parameters            Configurable parameters for this recorder instance
+         *@return The recorder responsible for the recording, or None if a a recording could not be started
+         */
+        static StartRecording(LevelSequence: $Nullable<UE.LevelSequence>, Sources: $Nullable<UE.TakeRecorderSources>, MetaData: $Nullable<UE.TakeMetaData>, Parameters: UE.TakeRecorderParameters) : UE.TakeRecorder;
+        /*
+         *Stop recording if there is a recorder currently active
+         */
+        static StopRecording() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderBlueprintLibrary;
+        static Load(InName: string): TakeRecorderBlueprintLibrary;
+    
+        __tid_TakeRecorderBlueprintLibrary_0__: boolean;
+    }
+    
+    class TakeRecorderProjectSettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.TakeRecorderProjectParameters;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderProjectSettings;
+        static Load(InName: string): TakeRecorderProjectSettings;
+    
+        __tid_TakeRecorderProjectSettings_0__: boolean;
+    }
+    
+    class TakeRecorderSubsystem extends UE.EngineSubsystem {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        TakeRecorderPreInitialize: $MulticastDelegate<() => void>;
+        TakeRecorderStarted: $MulticastDelegate<() => void>;
+        TakeRecorderStopped: $MulticastDelegate<() => void>;
+        TakeRecorderFinished: $MulticastDelegate<(SequenceAsset: $Nullable<UE.LevelSequence>) => void>;
+        TakeRecorderCancelled: $MulticastDelegate<() => void>;
+        TakeRecorderMarkedFrameAdded: $MulticastDelegate<(MarkedFrame: UE.MovieSceneMarkedFrame) => void>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderSubsystem;
+        static Load(InName: string): TakeRecorderSubsystem;
+    
+        __tid_TakeRecorderSubsystem_0__: boolean;
+    }
+    
+    class TakeRecorderUserSettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Settings: UE.TakeRecorderUserParameters;
+        PresetSaveDir: UE.DirectoryPath;
+        LastOpenedPreset: TSoftObjectPtr<UE.TakePreset>;
+        bIsSequenceOpen: boolean;
+        bShowUserSettingsOnUI: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TakeRecorderUserSettings;
+        static Load(InName: string): TakeRecorderUserSettings;
+    
+        __tid_TakeRecorderUserSettings_0__: boolean;
     }
     
     class TargetPoint extends UE.Actor {
@@ -81437,84 +87748,6 @@ declare module "ue" {
         static Load(InName: string): TextPropertyTestObject;
     
         __tid_TextPropertyTestObject_0__: boolean;
-    }
-    
-    class TextRenderComponent extends UE.PrimitiveComponent {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        Text: string;
-        TextMaterial: UE.MaterialInterface;
-        Font: UE.Font;
-        HorizontalAlignment: UE.EHorizTextAligment;
-        VerticalAlignment: UE.EVerticalTextAligment;
-        TextRenderColor: UE.Color;
-        XScale: number;
-        YScale: number;
-        WorldSize: number;
-        InvDefaultSize: number;
-        HorizSpacingAdjust: number;
-        VertSpacingAdjust: number;
-        bAlwaysRenderAsText: boolean;
-        /*
-         *Get local size of text
-         */
-        GetTextLocalSize() : UE.Vector;
-        /*
-         *Get world space size of text
-         */
-        GetTextWorldSize() : UE.Vector;
-        /*
-         *Change the text value and signal the primitives to be rebuilt
-         */
-        K2_SetText(Value: string) : void;
-        /*
-         *Change the font and signal the primitives to be rebuilt
-         */
-        SetFont(Value: $Nullable<UE.Font>) : void;
-        /*
-         *Change the horizontal alignment and signal the primitives to be rebuilt
-         */
-        SetHorizontalAlignment(Value: UE.EHorizTextAligment) : void;
-        /*
-         *Change the text horizontal spacing adjustment and signal the primitives to be rebuilt
-         */
-        SetHorizSpacingAdjust(Value: number) : void;
-        /*
-         *Change the text value and signal the primitives to be rebuilt
-         */
-        SetText(Value: string) : void;
-        /*
-         *Change the text material and signal the primitives to be rebuilt
-         */
-        SetTextMaterial(Material: $Nullable<UE.MaterialInterface>) : void;
-        /*
-         *Change the text render color and signal the primitives to be rebuilt
-         */
-        SetTextRenderColor(Value: UE.Color) : void;
-        /*
-         *Change the vertical alignment and signal the primitives to be rebuilt
-         */
-        SetVerticalAlignment(Value: UE.EVerticalTextAligment) : void;
-        /*
-         *Change the text vertical spacing adjustment and signal the primitives to be rebuilt
-         */
-        SetVertSpacingAdjust(Value: number) : void;
-        /*
-         *Change the world size of the text and signal the primitives to be rebuilt
-         */
-        SetWorldSize(Value: number) : void;
-        /*
-         *Change the text X scale and signal the primitives to be rebuilt
-         */
-        SetXScale(Value: number) : void;
-        /*
-         *Change the text Y scale and signal the primitives to be rebuilt
-         */
-        SetYScale(Value: number) : void;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): TextRenderComponent;
-        static Load(InName: string): TextRenderComponent;
-    
-        __tid_TextRenderComponent_0__: boolean;
     }
     
     class TextRenderActor extends UE.Actor {
@@ -83099,28 +89332,6 @@ declare module "ue" {
         __tid_UniqueNetIdReplNetSerializerStringStruct_0__: boolean;
     }
     
-    class UniversalObjectLocatorFragment {
-        constructor();
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_UniversalObjectLocatorFragment_0__: boolean;
-    }
-    
-    class UniversalObjectLocator {
-        constructor();
-        constructor(Fragments: TArray<UE.UniversalObjectLocatorFragment>);
-        Fragments: TArray<UE.UniversalObjectLocatorFragment>;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_UniversalObjectLocator_0__: boolean;
-    }
-    
     class UniversalObjectLocatorScriptingExtensions extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
@@ -84178,6 +90389,1089 @@ declare module "ue" {
         __tid_VolumetricLightMapGridDesc_0__: boolean;
     }
     
+    class WidgetComponent extends UE.MeshComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Space: UE.EWidgetSpace;
+        TimingPolicy: UE.EWidgetTimingPolicy;
+        WidgetClass: UE.Class;
+        DrawSize: UE.IntPoint;
+        bManuallyRedraw: boolean;
+        bRedrawRequested: boolean;
+        RedrawTime: number;
+        CurrentDrawSize: UE.IntPoint;
+        bUseInvalidationInWorldSpace: boolean;
+        bDrawAtDesiredSize: boolean;
+        Pivot: UE.Vector2D;
+        bReceiveHardwareInput: boolean;
+        bWindowFocusable: boolean;
+        WindowVisibility: UE.EWindowVisibility;
+        bApplyGammaCorrection: boolean;
+        OwnerPlayer: UE.LocalPlayer;
+        BackgroundColor: UE.LinearColor;
+        TintColorAndOpacity: UE.LinearColor;
+        OpacityFromTexture: number;
+        BlendMode: UE.EWidgetBlendMode;
+        bIsTwoSided: boolean;
+        TickWhenOffscreen: boolean;
+        BodySetup: UE.BodySetup;
+        TranslucentMaterial: UE.MaterialInterface;
+        TranslucentMaterial_OneSided: UE.MaterialInterface;
+        OpaqueMaterial: UE.MaterialInterface;
+        OpaqueMaterial_OneSided: UE.MaterialInterface;
+        MaskedMaterial: UE.MaterialInterface;
+        MaskedMaterial_OneSided: UE.MaterialInterface;
+        RenderTarget: UE.TextureRenderTarget2D;
+        MaterialInstance: UE.MaterialInstanceDynamic;
+        bAddedToScreen: boolean;
+        bEditTimeUsable: boolean;
+        SharedLayerName: string;
+        LayerZOrder: number;
+        GeometryMode: UE.EWidgetGeometryMode;
+        CylinderArcAngle: number;
+        TickMode: UE.ETickMode;
+        Widget: UE.UserWidget;
+        /*
+         *Returns the "actual" draw size of the quad in the world
+         */
+        GetCurrentDrawSize() : UE.Vector2D;
+        /*
+         *Defines the curvature of the widget component when using EWidgetGeometryMode::Cylinder; ignored otherwise.
+         */
+        GetCylinderArcAngle() : number;
+        GetDrawAtDesiredSize() : boolean;
+        /*
+         *Returns the "specified" draw size of the quad in the world
+         */
+        GetDrawSize() : UE.Vector2D;
+        /*
+         *@see EWidgetGeometryMode, @see GetCylinderArcAngle()
+         */
+        GetGeometryMode() : UE.EWidgetGeometryMode;
+        /*
+         *@see bManuallyRedraw
+         */
+        GetManuallyRedraw() : boolean;
+        /*
+         *Returns the dynamic material instance used to render the user widget
+         */
+        GetMaterialInstance() : UE.MaterialInstanceDynamic;
+        /*
+         *Gets the local player that owns this widget component.
+         */
+        GetOwnerPlayer() : UE.LocalPlayer;
+        /*
+         *Returns the pivot point where the UI is rendered about the origin.
+         */
+        GetPivot() : UE.Vector2D;
+        GetRedrawTime() : number;
+        /*
+         *Returns the render target to which the user widget is rendered
+         */
+        GetRenderTarget() : UE.TextureRenderTarget2D;
+        /*
+         *Gets whether the widget ticks when offscreen or not
+         */
+        GetTickWhenOffscreen() : boolean;
+        /*
+         *Gets whether the widget is two-sided or not
+         */
+        GetTwoSided() : boolean;
+        /*
+         *Returns the user widget object displayed by this component
+         */
+        GetUserWidgetObject() : UE.UserWidget;
+        /*
+         *Gets the widget that is used by this Widget Component. It will be null if a Slate Widget was set using SetSlateWidget function.
+         */
+        GetWidget() : UE.UserWidget;
+        GetWidgetSpace() : UE.EWidgetSpace;
+        /*
+         *@see bWindowFocusable
+         */
+        GetWindowFocusable() : boolean;
+        /*
+         *Gets the visibility of the virtual window created to host the widget focusable.
+         */
+        GetWindowVisiblility() : UE.EWindowVisibility;
+        /*
+         *Returns true if the the Slate window is visible and that the widget is also visible, false otherwise.
+         */
+        IsWidgetVisible() : boolean;
+        /*
+         *Requests that the widget be redrawn.
+         */
+        RequestRedraw() : void;
+        /*
+         *Requests that the widget have it's render target updated, if TickMode is disabled, this will force a tick to happen to update the render target.
+         */
+        RequestRenderUpdate() : void;
+        /*
+         *Sets the background color and opacityscale for this widget
+         */
+        SetBackgroundColor(NewBackgroundColor: UE.LinearColor) : void;
+        /*
+         *Defines the curvature of the widget component when using EWidgetGeometryMode::Cylinder; ignored otherwise.
+         */
+        SetCylinderArcAngle(InCylinderArcAngle: number) : void;
+        SetDrawAtDesiredSize(bInDrawAtDesiredSize: boolean) : void;
+        /*
+         *Sets the draw size of the quad in the world
+         */
+        SetDrawSize(Size: UE.Vector2D) : void;
+        SetGeometryMode(InGeometryMode: UE.EWidgetGeometryMode) : void;
+        /*
+         *@see bManuallyRedraw
+         */
+        SetManuallyRedraw(bUseManualRedraw: boolean) : void;
+        /*
+         *Sets the local player that owns this widget component.  Setting the owning player controls
+         *which player's viewport the widget appears on in a split screen scenario.  Additionally it
+         *forwards the owning player to the actual UserWidget that is spawned.
+         */
+        SetOwnerPlayer(LocalPlayer: $Nullable<UE.LocalPlayer>) : void;
+        SetPivot(InPivot: UE.Vector2D) : void;
+        SetRedrawTime(InRedrawTime: number) : void;
+        /*
+         *Sets the Tick mode of the Widget Component.
+         */
+        SetTickMode(InTickMode: UE.ETickMode) : void;
+        /*
+         *Sets whether the widget ticks when offscreen or not
+         */
+        SetTickWhenOffscreen(bWantTickWhenOffscreen: boolean) : void;
+        /*
+         *Sets the tint color and opacity scale for this widget
+         */
+        SetTintColorAndOpacity(NewTintColorAndOpacity: UE.LinearColor) : void;
+        /*
+         *Sets whether the widget is two-sided or not
+         */
+        SetTwoSided(bWantTwoSided: boolean) : void;
+        /*
+         *Sets the widget to use directly. This function will keep track of the widget till the next time it's called
+         *    with either a newer widget or a nullptr
+         */
+        SetWidget(Widget: $Nullable<UE.UserWidget>) : void;
+        SetWidgetSpace(NewSpace: UE.EWidgetSpace) : void;
+        /*
+         *@see bWindowFocusable
+         */
+        SetWindowFocusable(bInWindowFocusable: boolean) : void;
+        /*
+         *Sets the visibility of the virtual window created to host the widget focusable.
+         */
+        SetWindowVisibility(InVisibility: UE.EWindowVisibility) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): WidgetComponent;
+        static Load(InName: string): WidgetComponent;
+    
+        __tid_WidgetComponent_0__: boolean;
+    }
+    
+    class VREditorWidgetComponent extends UE.WidgetComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        DrawingPolicy: UE.EVREditorWidgetDrawingPolicy;
+        bIsHovering: boolean;
+        bHasEverDrawn: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorWidgetComponent;
+        static Load(InName: string): VREditorWidgetComponent;
+    
+        __tid_VREditorWidgetComponent_0__: boolean;
+    }
+    
+    class VRButton {
+        constructor();
+        constructor(ButtonWidget: UE.VREditorWidgetComponent);
+        ButtonWidget: UE.VREditorWidgetComponent;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_VRButton_0__: boolean;
+    }
+    
+    class VREditorAssetContainer extends UE.DataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        DockableWindowCloseSound: UE.SoundBase;
+        DockableWindowOpenSound: UE.SoundBase;
+        DockableWindowDropSound: UE.SoundBase;
+        DockableWindowDragSound: UE.SoundBase;
+        DropFromContentBrowserSound: UE.SoundBase;
+        RadialMenuOpenSound: UE.SoundBase;
+        RadialMenuCloseSound: UE.SoundBase;
+        TeleportSound: UE.SoundBase;
+        ButtonPressSound: UE.SoundCue;
+        AutoScaleSound: UE.SoundBase;
+        GenericHMDMesh: UE.StaticMesh;
+        PlaneMesh: UE.StaticMesh;
+        CylinderMesh: UE.StaticMesh;
+        LaserPointerStartMesh: UE.StaticMesh;
+        LaserPointerMesh: UE.StaticMesh;
+        LaserPointerEndMesh: UE.StaticMesh;
+        LaserPointerHoverMesh: UE.StaticMesh;
+        VivePreControllerMesh: UE.StaticMesh;
+        OculusControllerMesh: UE.StaticMesh;
+        GenericControllerMesh: UE.StaticMesh;
+        TeleportRootMesh: UE.StaticMesh;
+        WindowMesh: UE.StaticMesh;
+        WindowSelectionBarMesh: UE.StaticMesh;
+        WindowCloseButtonMesh: UE.StaticMesh;
+        RadialMenuMainMesh: UE.StaticMesh;
+        RadialMenuPointerMesh: UE.StaticMesh;
+        PointerCursorMesh: UE.StaticMesh;
+        LineSegmentCylinderMesh: UE.StaticMesh;
+        JointSphereMesh: UE.StaticMesh;
+        DockingButtonMesh: UE.StaticMesh;
+        GridMaterial: UE.MaterialInterface;
+        LaserPointerMaterial: UE.MaterialInterface;
+        LaserPointerTranslucentMaterial: UE.MaterialInterface;
+        WorldMovementPostProcessMaterial: UE.Material;
+        TextMaterial: UE.MaterialInterface;
+        VivePreControllerMaterial: UE.MaterialInterface;
+        OculusControllerMaterial: UE.MaterialInterface;
+        TeleportMaterial: UE.MaterialInterface;
+        WindowMaterial: UE.MaterialInterface;
+        WindowTranslucentMaterial: UE.MaterialInterface;
+        LineMaterial: UE.Material;
+        TranslucentTextMaterial: UE.MaterialInterface;
+        WidgetMaterial: UE.MaterialInterface;
+        CameraWidgetMaterial: UE.MaterialInterface;
+        TextFont: UE.Font;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorAssetContainer;
+        static Load(InName: string): VREditorAssetContainer;
+    
+        __tid_VREditorAssetContainer_0__: boolean;
+    }
+    
+    class VREditorModeBase extends UE.EditorWorldExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorModeBase;
+        static Load(InName: string): VREditorModeBase;
+    
+        __tid_VREditorModeBase_0__: boolean;
+    }
+    
+    class VREditorAvatarActor extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        HeadMeshComponent: UE.StaticMeshComponent;
+        WorldMovementGridMeshComponent: UE.StaticMeshComponent;
+        WorldMovementGridMID: UE.MaterialInstanceDynamic;
+        WorldMovementGridOpacity: number;
+        bIsDrawingWorldMovementPostProcess: boolean;
+        WorldMovementPostProcessMaterial: UE.MaterialInstanceDynamic;
+        ScaleProgressMeshComponent: UE.StaticMeshComponent;
+        CurrentScaleProgressMeshComponent: UE.StaticMeshComponent;
+        UserScaleIndicatorText: UE.TextRenderComponent;
+        FixedUserScaleMID: UE.MaterialInstanceDynamic;
+        TranslucentFixedUserScaleMID: UE.MaterialInstanceDynamic;
+        CurrentUserScaleMID: UE.MaterialInstanceDynamic;
+        TranslucentCurrentUserScaleMID: UE.MaterialInstanceDynamic;
+        PostProcessComponent: UE.PostProcessComponent;
+        VRMode: UE.VREditorMode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorAvatarActor;
+        static Load(InName: string): VREditorAvatarActor;
+    
+        __tid_VREditorAvatarActor_0__: boolean;
+    }
+    
+    class VREditorBaseActor extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VRMode: UE.VREditorMode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorBaseActor;
+        static Load(InName: string): VREditorBaseActor;
+    
+        __tid_VREditorBaseActor_0__: boolean;
+    }
+    
+    class VREditorFloatingUICreationContext {
+        constructor();
+        constructor(WidgetClass: UE.Class, PanelID: string, ParentActor: UE.Actor, PanelSpawnOffset: UE.Transform, PanelSize: UE.Vector2D, PanelMesh: UE.StaticMesh, EditorUISize: number, bHideWindowHandles: boolean, bMaskOutWidgetBackground: boolean, bNoCloseButton: boolean);
+        WidgetClass: UE.Class;
+        PanelID: string;
+        ParentActor: UE.Actor;
+        PanelSpawnOffset: UE.Transform;
+        PanelSize: UE.Vector2D;
+        PanelMesh: UE.StaticMesh;
+        EditorUISize: number;
+        bHideWindowHandles: boolean;
+        bMaskOutWidgetBackground: boolean;
+        bNoCloseButton: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_VREditorFloatingUICreationContext_0__: boolean;
+    }
+    
+    class VREditorFloatingUI extends UE.VREditorBaseActor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        CreationContext: UE.VREditorFloatingUICreationContext;
+        UserWidget: UE.UserWidget;
+        WidgetComponent: UE.VREditorWidgetComponent;
+        WindowMeshComponent: UE.StaticMeshComponent;
+        UserWidgetClass: UE.Class;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorFloatingUI;
+        static Load(InName: string): VREditorFloatingUI;
+    
+        __tid_VREditorFloatingUI_0__: boolean;
+    }
+    
+    class VREditorRadialFloatingUI extends UE.VREditorBaseActor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        WidgetComponents: TArray<UE.VREditorWidgetComponent>;
+        WindowMeshComponent: UE.StaticMeshComponent;
+        ArrowMeshComponent: UE.StaticMeshComponent;
+        CentralWidgetComponent: UE.VREditorWidgetComponent;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorRadialFloatingUI;
+        static Load(InName: string): VREditorRadialFloatingUI;
+    
+        __tid_VREditorRadialFloatingUI_0__: boolean;
+    }
+    
+    class ViewportDragOperationComponent extends UE.ActorComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        DragOperation: UE.ViewportDragOperation;
+        DragOperationSubclass: UE.Class;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportDragOperationComponent;
+        static Load(InName: string): ViewportDragOperationComponent;
+    
+        __tid_ViewportDragOperationComponent_0__: boolean;
+    }
+    
+    class VREditorDockableWindow extends UE.VREditorFloatingUI {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        DockButtonMeshComponent: UE.StaticMeshComponent;
+        SelectionBarMeshComponent: UE.StaticMeshComponent;
+        CloseButtonMeshComponent: UE.StaticMeshComponent;
+        DockButtonMID: UE.MaterialInstanceDynamic;
+        SelectionBarMID: UE.MaterialInstanceDynamic;
+        SelectionBarTranslucentMID: UE.MaterialInstanceDynamic;
+        CloseButtonMID: UE.MaterialInstanceDynamic;
+        CloseButtonTranslucentMID: UE.MaterialInstanceDynamic;
+        DragOperationComponent: UE.ViewportDragOperationComponent;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorDockableWindow;
+        static Load(InName: string): VREditorDockableWindow;
+    
+        __tid_VREditorDockableWindow_0__: boolean;
+    }
+    
+    class ViewportActionKeyInput {
+        constructor();
+        constructor(ActionType: string, Event: UE.EInputEvent, bIsInputCaptured: boolean, bIsAxis: boolean);
+        ActionType: string;
+        Event: UE.EInputEvent;
+        bIsInputCaptured: boolean;
+        bIsAxis: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_ViewportActionKeyInput_0__: boolean;
+    }
+    
+    class ViewportTransformer extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        ViewportWorldInteraction: UE.ViewportWorldInteraction;
+        /*
+         *@return If this transformer can be used to align its transformable to actors in the scene
+         */
+        CanAlignToActors() : boolean;
+        Init(InitViewportWorldInteraction: $Nullable<UE.ViewportWorldInteraction>) : void;
+        /*
+         *When starting to drag
+         */
+        OnStartDragging(Interactor: $Nullable<UE.ViewportInteractor>) : void;
+        /*
+         *When ending drag
+         */
+        OnStopDragging(Interactor: $Nullable<UE.ViewportInteractor>) : void;
+        /*
+         *@return True if the transform gizmo should be aligned to the center of the bounds of all selected objects with more than one is selected.  Otherwise it will be at the pivot of the last transformable, similar to legacl editor actor selection
+         */
+        ShouldCenterTransformGizmoPivot() : boolean;
+        Shutdown() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportTransformer;
+        static Load(InName: string): ViewportTransformer;
+    
+        __tid_ViewportTransformer_0__: boolean;
+    }
+    
+    class GizmoHandle {
+        constructor();
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_GizmoHandle_0__: boolean;
+    }
+    
+    class GizmoHandleGroup extends UE.SceneComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GizmoMaterial: UE.MaterialInterface;
+        TranslucentGizmoMaterial: UE.MaterialInterface;
+        Handles: TArray<UE.GizmoHandle>;
+        OwningTransformGizmoActor: UE.BaseTransformGizmo;
+        DragOperationComponent: UE.ViewportDragOperationComponent;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): GizmoHandleGroup;
+        static Load(InName: string): GizmoHandleGroup;
+    
+        __tid_GizmoHandleGroup_0__: boolean;
+    }
+    
+    class BaseTransformGizmo extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        SceneComponent: UE.SceneComponent;
+        AllHandleGroups: TArray<UE.GizmoHandleGroup>;
+        WorldInteraction: UE.ViewportWorldInteraction;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): BaseTransformGizmo;
+        static Load(InName: string): BaseTransformGizmo;
+    
+        __tid_BaseTransformGizmo_0__: boolean;
+    }
+    
+    class MouseCursorInteractor extends UE.ViewportInteractor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MouseCursorInteractor;
+        static Load(InName: string): MouseCursorInteractor;
+    
+        __tid_MouseCursorInteractor_0__: boolean;
+    }
+    
+    class ViewportInteractionAssetContainer extends UE.DataAsset {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GizmoHandleSelectedSound: UE.SoundBase;
+        GizmoHandleDropSound: UE.SoundBase;
+        SelectionChangeSound: UE.SoundBase;
+        SelectionDropSound: UE.SoundBase;
+        SelectionStartDragSound: UE.SoundBase;
+        GridSnapSound: UE.SoundBase;
+        ActorSnapSound: UE.SoundBase;
+        UndoSound: UE.SoundBase;
+        RedoSound: UE.SoundBase;
+        GridMesh: UE.StaticMesh;
+        TranslationHandleMesh: UE.StaticMesh;
+        UniformScaleHandleMesh: UE.StaticMesh;
+        ScaleHandleMesh: UE.StaticMesh;
+        PlaneTranslationHandleMesh: UE.StaticMesh;
+        RotationHandleMesh: UE.StaticMesh;
+        RotationHandleSelectedMesh: UE.StaticMesh;
+        StartRotationIndicatorMesh: UE.StaticMesh;
+        CurrentRotationIndicatorMesh: UE.StaticMesh;
+        FreeRotationHandleMesh: UE.StaticMesh;
+        GridMaterial: UE.MaterialInterface;
+        TransformGizmoMaterial: UE.MaterialInterface;
+        TranslucentTransformGizmoMaterial: UE.MaterialInterface;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportInteractionAssetContainer;
+        static Load(InName: string): ViewportInteractionAssetContainer;
+    
+        __tid_ViewportInteractionAssetContainer_0__: boolean;
+    }
+    
+    class ViewportWorldInteraction extends UE.EditorWorldExtension {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Interactors: TArray<UE.ViewportInteractor>;
+        ViewportTransformer: UE.ViewportTransformer;
+        TransformGizmoActor: UE.BaseTransformGizmo;
+        SnapGridActor: UE.Actor;
+        SnapGridMeshComponent: UE.StaticMeshComponent;
+        SnapGridMID: UE.MaterialInstanceDynamic;
+        DefaultMouseCursorInteractor: UE.MouseCursorInteractor;
+        ActorsToExcludeFromHitTest: TArray<TWeakObjectPtr<UE.Actor>>;
+        AssetContainer: UE.ViewportInteractionAssetContainer;
+        /*
+         *Adds an actor to the list of actors to never allow an interactor to hit in the scene.  No selection.  No hover.
+         *There's no need to remove actors from this list.  They'll expire from it automatically when destroyed.
+         *
+         *@param       ActorToExcludeFromHitTests      The actor that should be forever excluded from hit tests
+         */
+        AddActorToExcludeFromHitTests(ActorToExcludeFromHitTests: $Nullable<UE.Actor>) : void;
+        /*
+         *Adds interactor to the worldinteraction
+         */
+        AddInteractor(Interactor: $Nullable<UE.ViewportInteractor>) : void;
+        /*
+         *Gets the transform of the viewport _ user's HMD in world space
+         */
+        GetHeadTransform() : UE.Transform;
+        /*
+         *Gets all the interactors
+         */
+        GetInteractors() : TArray<UE.ViewportInteractor>;
+        /*
+         *Gets the transform of the viewport _ user's HMD in room space
+         */
+        GetRoomSpaceHeadTransform() : UE.Transform;
+        /*
+         *Gets the world space transform of the calibrated VR room origin.  When using a seated VR device, this will feel like the
+         *      camera's world transform (before any HMD positional or rotation adjustments are applied.)
+         */
+        GetRoomTransform() : UE.Transform;
+        /*
+         *Gets the transform gizmo actor, or returns null if we currently don't have one
+         */
+        GetTransformGizmoActor() : UE.BaseTransformGizmo;
+        /*
+         *Gets the world scale factor, which can be multiplied by a scale vector to convert to room space
+         */
+        GetWorldScaleFactor() : number;
+        /*
+         *Removes interactor from the worldinteraction and removes the interactor from its paired interactor if any
+         */
+        RemoveInteractor(Interactor: $Nullable<UE.ViewportInteractor>) : void;
+        /*
+         *Sets a new transform for the room so that the HMD is aligned to the new transform.
+         *              The Head is kept level to the ground and only rotated on the yaw
+         */
+        SetHeadTransform(NewHeadTransform: UE.Transform) : void;
+        SetRoomTransformForNextFrame(NewRoomTransform: UE.Transform) : void;
+        /*
+         *Sets GNewWorldToMetersScale
+         */
+        SetWorldToMetersScale(NewWorldToMetersScale: number, bCompensateRoomWorldScale?: boolean /* = false */) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportWorldInteraction;
+        static Load(InName: string): ViewportWorldInteraction;
+    
+        __tid_ViewportWorldInteraction_0__: boolean;
+    }
+    
+    enum EHitResultGizmoFilterMode { All, NoGizmos, GizmosOnly, EHitResultGizmoFilterMode_MAX, __typeKeyDoNoAccess}
+    enum EViewportInteractionDraggingMode { Nothing, TransformablesWithGizmo, TransformablesAtLaserImpact, AssistingDrag, TransformablesFreely, World, Interactable, Material, EViewportInteractionDraggingMode_MAX, __typeKeyDoNoAccess}
+    class ViewportInteractor extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        KeyToActionMap: TMap<UE.Key, UE.ViewportActionKeyInput>;
+        WorldInteraction: UE.ViewportWorldInteraction;
+        OtherInteractor: UE.ViewportInteractor;
+        /*
+         *Gets if the interactor can carry an object
+         */
+        CanCarry() : boolean;
+        /*
+         *Gets the current interactor data dragging mode
+         */
+        GetDraggingMode() : UE.EViewportInteractionDraggingMode;
+        /*
+         *Gets current gizmo filter mode used for Interaction
+         */
+        GetHitResultGizmoFilterMode() : UE.EHitResultGizmoFilterMode;
+        /*
+         *Gets the interactor laser hover location
+         */
+        GetHoverLocation() : UE.Vector;
+        /*
+         *Gets the start and end point of the laser pointer for the specified hand
+         *
+         *@param LasertPointerStart    (Out) The start location of the laser pointer in world space
+         *@param LasertPointerEnd              (Out) The end location of the laser pointer in world space
+         *@param bEvenIfBlocked                If true, returns a laser pointer even if the hand has UI in front of it (defaults to false)
+         *@param LaserLengthOverride   If zero the default laser length (VREdMode::GetLaserLength) is used
+         *
+         *@return      True if we have motion controller data for this hand and could return a valid result
+         */
+        GetLaserPointer(LaserPointerStart: $Ref<UE.Vector>, LaserPointerEnd: $Ref<UE.Vector>, bEvenIfBlocked?: boolean /* = false */, LaserLengthOverride?: number /* = 0.000000 */) : boolean;
+        /*
+         *Gets the last hand transform of the interactor, in the local tracking space
+         */
+        GetLastRoomSpaceTransform() : UE.Transform;
+        /*
+         *Gets the last world transform of this interactor
+         */
+        GetLastTransform() : UE.Transform;
+        /*
+         *Gets the paired interactor assigned by the world interaction, can return null when there is no other interactor
+         */
+        GetOtherInteractor() : UE.ViewportInteractor;
+        /*
+         *Gets the hand transform of the interactor, in the local tracking space
+         */
+        GetRoomSpaceTransform() : UE.Transform;
+        /*
+         *Gets the world transform of this interactor
+         */
+        GetTransform() : UE.Transform;
+        /*
+         *Creates a hand transform and forward vector for a laser pointer for a given hand
+         *
+         *@param OutHandTransform      The created hand transform
+         *@param OutForwardVector      The forward vector of the hand
+         *
+         *@return      True if we have motion controller data for this hand and could return a valid result
+         */
+        GetTransformAndForwardVector(OutHandTransform: $Ref<UE.Transform>, OutForwardVector: $Ref<UE.Vector>) : boolean;
+        /*
+         *Gets the world interaction
+         */
+        GetWorldInteraction() : UE.ViewportWorldInteraction;
+        /*
+         *To be overridden. Called by HandleInputAxis before delegates and default input implementation
+         */
+        HandleInputAxis_BP(Action: UE.ViewportActionKeyInput, Key: UE.Key, Delta: number, DeltaTime: number, bOutWasHandled: $Ref<boolean>) : void;
+        /*
+         *To be overridden. Called by HandleInputKey before delegates and default input implementation
+         */
+        HandleInputKey_BP(Action: UE.ViewportActionKeyInput, Key: UE.Key, Event: UE.EInputEvent, bOutWasHandled: $Ref<boolean>) : void;
+        /*
+         *If the interactor laser is currently hovering over a gizmo handle
+         */
+        IsHoveringOverGizmo() : boolean;
+        /*
+         *Sets if the interactor can carry an object
+         */
+        SetCanCarry(bInCanCarry: boolean) : void;
+        /*
+         *Sets the current dragging mode for this interactor
+         */
+        SetDraggingMode(NewDraggingMode: UE.EViewportInteractionDraggingMode) : void;
+        /*
+         *Sets the current gizmo filter mode used for Interaction
+         */
+        SetHitResultGizmoFilterMode(newFilter: UE.EHitResultGizmoFilterMode) : void;
+        /*
+         *Whenever the ViewportWorldInteraction is shut down, the interacts will shut down as well
+         */
+        Shutdown() : void;
+        /*
+         *Update for this interactor called by the ViewportWorldInteraction
+         */
+        Tick(DeltaTime: number) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ViewportInteractor;
+        static Load(InName: string): ViewportInteractor;
+    
+        __tid_ViewportInteractor_0__: boolean;
+    }
+    
+    enum ETrackingStatus { NotTracked, InertialOnly, Tracked, ETrackingStatus_MAX, __typeKeyDoNoAccess}
+    class MotionControllerComponent extends UE.PrimitiveComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        PlayerIndex: number;
+        MotionSource: string;
+        bDisableLowLatencyUpdate: boolean;
+        CurrentTrackingStatus: UE.ETrackingStatus;
+        /*
+         *If the motion tracking system provides angular velocity at this time OutAngularVelocity will be that velocity in deg_s in unreal world space and the function will return true. Note that it is not difficult to rotate a controller at more than 0.5 or 1 rotation per second briefly and some mathmatical operations(such as conversion to quaternion) lose rotations beyond 180 degrees or 360 degrees..  In some cases that is OK becuase the resulting final rotation is the same, but in some cases it would generate incorrect results.   If angular velocity is unavailable it will return false.
+         */
+        GetAngularVelocity(OutAngularVelocity: $Ref<UE.Rotator>) : boolean;
+        GetHandJointPosition(jointIndex: number, bValueFound: $Ref<boolean>) : UE.Vector;
+        /*
+         *If the motion tracking system provides linear acceleration at this time the vector will be that acceleration in cm_(s^2) in unreal world space and the function will return true.  If acceleration is unavailable it will return false.
+         */
+        GetLinearAcceleration(OutLinearAcceleration: $Ref<UE.Vector>) : boolean;
+        /*
+         *If the motion tracking system provides linear velocity at this time the vector will be that velocity in cm_s in unreal world space and the function will return true.  If velocity is unavailable it will return false.
+         */
+        GetLinearVelocity(OutLinearVelocity: $Ref<UE.Vector>) : boolean;
+        /*
+         *Returns the value of a custom parameter on the current in use Motion Controller (see member InUseMotionController). Only valid for the duration of OnMotionControllerUpdated
+         */
+        GetParameterValue(InName: string, bValueFound: $Ref<boolean>) : number;
+        GetTrackingSource() : UE.EControllerHand;
+        /*
+         *Whether or not this component had a valid tracked device this frame
+         */
+        IsTracked() : boolean;
+        /*
+         *Blueprint Implementable function for responding to updated data from a motion controller (so we can use custom parameter values from it)
+         */
+        OnMotionControllerUpdated() : void;
+        SetAssociatedPlayerIndex(NewPlayer: number) : void;
+        SetTrackingMotionSource(NewSource: string) : void;
+        SetTrackingSource(NewSource: UE.EControllerHand) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): MotionControllerComponent;
+        static Load(InName: string): MotionControllerComponent;
+    
+        __tid_MotionControllerComponent_0__: boolean;
+    }
+    
+    class VREditorTeleporter extends UE.Actor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VRMode: UE.VREditorMode;
+        TeleportDirectionMeshComponent: UE.StaticMeshComponent;
+        HMDMeshComponent: UE.StaticMeshComponent;
+        LeftMotionControllerMeshComponent: UE.StaticMeshComponent;
+        RightMotionControllerMeshComponent: UE.StaticMeshComponent;
+        TeleportMID: UE.MaterialInstanceDynamic;
+        InteractorTryingTeleport: UE.ViewportInteractor;
+        /*
+         *Do and finalize teleport.
+         */
+        DoTeleport() : void;
+        /*
+         *Get the actor we're currently trying to teleport with.
+         *Valid during aiming and teleporting.
+         */
+        GetInteractorTryingTeleport() : UE.ViewportInteractor;
+        /*
+         *Get slide delta to push_pull or scale the teleporter
+         */
+        GetSlideDelta(Interactor: $Nullable<UE.VREditorInteractor>, Axis: boolean) : number;
+        GetVRMode() : UE.VREditorMode;
+        /*
+         *Initializes the teleporter
+         */
+        Init(InMode: $Nullable<UE.VREditorMode>) : void;
+        /*
+         *Whether we are currently aiming to teleport.
+         */
+        IsAiming() : boolean;
+        IsTeleporting() : boolean;
+        /*
+         *Sets the color for the teleporter visuals
+         */
+        SetColor(Color: UE.LinearColor) : void;
+        /*
+         *Hide or show the teleporter visuals
+         */
+        SetVisibility(bVisible: boolean) : void;
+        /*
+         *Shuts down the teleporter
+         */
+        Shutdown() : void;
+        /*
+         *Functions we call to handle teleporting in navigation mode
+         */
+        StartAiming(Interactor: $Nullable<UE.ViewportInteractor>) : void;
+        /*
+         *Start teleporting, does a ray trace with the hand passed and calculates the locations for lerp movement in Teleport
+         */
+        StartTeleport() : void;
+        /*
+         *Cancel teleport aiming mode without doing the teleport
+         */
+        StopAiming() : void;
+        /*
+         *Called when teleport is done for cleanup
+         */
+        TeleportDone() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorTeleporter;
+        static Load(InName: string): VREditorTeleporter;
+    
+        __tid_VREditorTeleporter_0__: boolean;
+    }
+    
+    class VREditorInteractor extends UE.ViewportInteractor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bIsUndoRedoSwipeEnabled: boolean;
+        MotionControllerComponent: UE.MotionControllerComponent;
+        LaserMotionControllerComponent: UE.MotionControllerComponent;
+        HandMeshComponent: UE.StaticMeshComponent;
+        LaserSplineComponent: UE.SplineComponent;
+        LaserSplineMeshComponents: TArray<UE.SplineMeshComponent>;
+        LaserPointerMID: UE.MaterialInstanceDynamic;
+        TranslucentLaserPointerMID: UE.MaterialInstanceDynamic;
+        HoverMeshComponent: UE.StaticMeshComponent;
+        HoverPointLightComponent: UE.PointLightComponent;
+        HandMeshMID: UE.MaterialInstanceDynamic;
+        OwningAvatar: UE.Actor;
+        ControllerType: UE.EControllerType;
+        OverrideControllerType: UE.EControllerType;
+        ControllerMotionSource: string;
+        VRMode: UE.VREditorMode;
+        /*
+         *Sets the EControllerHand for this motioncontroller
+         */
+        GetControllerHandSide() : string;
+        /*
+         *Get the side of the controller
+         */
+        GetControllerSide() : UE.EControllerHand;
+        /*
+         *Returns what controller type this is for asymmetric control schemes
+         */
+        GetControllerType() : UE.EControllerType;
+        /*
+         *@return Returns the type of HMD we're dealing with
+         */
+        GetHMDDeviceType() : string;
+        GetLaserEnd() : UE.Vector;
+        /*
+         *Getters and setters
+         */
+        GetLaserStart() : UE.Vector;
+        /*
+         *Get the last position of the trackpad or analog stick
+         */
+        GetLastTrackpadPosition() : UE.Vector2D;
+        /*
+         *Get the motioncontroller component of this interactor
+         */
+        GetMotionControllerComponent() : UE.MotionControllerComponent;
+        /*
+         *Gets the trigger value
+         */
+        GetSelectAndMoveTriggerValue() : number;
+        /*
+         *Returns the slide delta for pushing and pulling objects. Needs to be implemented by derived classes (e.g. touchpad for vive controller or scrollweel for mouse )
+         */
+        GetSlideDelta() : number;
+        GetTeleportActor() : UE.VREditorTeleporter;
+        /*
+         *Get the current position of the trackpad or analog stick
+         */
+        GetTrackpadPosition() : UE.Vector2D;
+        /*
+         *Initialize default values
+         */
+        Init(InVRMode: $Nullable<UE.VREditorMode>) : void;
+        /*
+         *Gets if the interactor is clicking on any UI
+         */
+        IsClickingOnUI() : boolean;
+        /*
+         *Gets if this interactor is hovering over UI
+         */
+        IsHoveringOverUI() : boolean;
+        /*
+         *Check if the touchpad is currently touched
+         */
+        IsTouchingTrackpad() : boolean;
+        /*
+         *Replace the default VR controller mesh with a custom one.
+         */
+        ReplaceHandMeshComponent(NewMesh: $Nullable<UE.StaticMesh>, MeshScale?: UE.Vector /* = 1.000000,1.000000,1.000000 */) : void;
+        /*
+         *Sets the EControllerHand for this motioncontroller
+         */
+        SetControllerHandSide(InControllerHandSide: string) : void;
+        /*
+         *Set what controller type this is for asymmetric control schemes
+         */
+        SetControllerType(InControllerType: UE.EControllerType) : void;
+        /*
+         *Next frame this will be used as color for the laser
+         */
+        SetForceLaserColor(InColor: UE.LinearColor) : void;
+        /*
+         *Set if we want to force to show the laser
+         */
+        SetForceShowLaser(bInForceShow: boolean) : void;
+        /*
+         *Sets up all components
+         */
+        SetupComponent(OwningActor: $Nullable<UE.Actor>) : void;
+        /*
+         *Temporary set what controller type this is for asymmetric control schemes.
+         *You can't override the controller type when there's already an override.
+         *Remove the temporary controller type with EControllerType::Unknown
+         *@return true if the controller type was changed
+         */
+        TryOverrideControllerType(InControllerType: UE.EControllerType) : boolean;
+        UpdateHandMeshRelativeTransform() : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorInteractor;
+        static Load(InName: string): VREditorInteractor;
+    
+        __tid_VREditorInteractor_0__: boolean;
+    }
+    
+    class VRRadialMenuHandler extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VRRadialMenuHandler;
+        static Load(InName: string): VRRadialMenuHandler;
+    
+        __tid_VRRadialMenuHandler_0__: boolean;
+    }
+    
+    class VREditorUISystem extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VRMode: UE.VREditorMode;
+        FloatingUIs: TMap<string, UE.VREditorFloatingUI>;
+        PreviewWindowInfo: TMap<string, UE.Actor>;
+        InfoDisplayPanel: UE.VREditorFloatingUI;
+        QuickRadialMenu: UE.VREditorRadialFloatingUI;
+        DraggingUI: UE.VREditorDockableWindow;
+        ColorPickerUI: UE.VREditorDockableWindow;
+        LaserInteractor: UE.VREditorInteractor;
+        UIInteractor: UE.VREditorInteractor;
+        VRButtons: TArray<UE.VRButton>;
+        RadialMenuHandler: UE.VRRadialMenuHandler;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorUISystem;
+        static Load(InName: string): VREditorUISystem;
+    
+        __tid_VREditorUISystem_0__: boolean;
+    }
+    
+    class VREditorPlacement extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VRMode: UE.VREditorMode;
+        ViewportWorldInteraction: UE.ViewportWorldInteraction;
+        FloatingUIAssetDraggedFrom: UE.WidgetComponent;
+        PlacingMaterialOrTextureAsset: UE.Object;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorPlacement;
+        static Load(InName: string): VREditorPlacement;
+    
+        __tid_VREditorPlacement_0__: boolean;
+    }
+    
+    class VREditorMode extends UE.VREditorModeBase {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AvatarActor: UE.VREditorAvatarActor;
+        UISystem: UE.VREditorUISystem;
+        TeleportActor: UE.VREditorTeleporter;
+        AutoScalerSystem: UE.VREditorAutoScaler;
+        WorldInteraction: UE.ViewportWorldInteraction;
+        PlacementSystem: UE.VREditorPlacement;
+        Interactors: TArray<UE.VREditorInteractor>;
+        InteractorClass: TSoftClassPtr<UE.VREditorInteractor>;
+        TeleporterClass: TSoftClassPtr<UE.VREditorTeleporter>;
+        AssetContainer: UE.VREditorAssetContainer;
+        /*
+         *Gets the world scale factor, which can be multiplied by a scale vector to convert to room space
+         */
+        GetWorldScaleFactor() : number;
+        /*
+         *Returns whether game view is currently active.
+         */
+        IsInGameView() : boolean;
+        /*
+         *Display the scene more closely to how it would appear at runtime (as opposed to edit time).
+         */
+        SetGameView(bGameView: boolean) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorMode;
+        static Load(InName: string): VREditorMode;
+    
+        __tid_VREditorMode_0__: boolean;
+    }
+    
+    class VREditorAutoScaler extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        VRMode: UE.VREditorMode;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorAutoScaler;
+        static Load(InName: string): VREditorAutoScaler;
+    
+        __tid_VREditorAutoScaler_0__: boolean;
+    }
+    
+    class VREditorBaseUserWidget extends UE.UserWidget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        Owner: TWeakObjectPtr<UE.VREditorFloatingUI>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorBaseUserWidget;
+        static Load(InName: string): VREditorBaseUserWidget;
+    
+        __tid_VREditorBaseUserWidget_0__: boolean;
+    }
+    
+    class VREditorCameraWidgetComponent extends UE.VREditorWidgetComponent {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorCameraWidgetComponent;
+        static Load(InName: string): VREditorCameraWidgetComponent;
+    
+        __tid_VREditorCameraWidgetComponent_0__: boolean;
+    }
+    
+    class VREditorDockableCameraWindow extends UE.VREditorDockableWindow {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorDockableCameraWindow;
+        static Load(InName: string): VREditorDockableCameraWindow;
+    
+        __tid_VREditorDockableCameraWindow_0__: boolean;
+    }
+    
+    class VREditorFloatingCameraUI extends UE.VREditorFloatingUI {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OffsetFromCamera: UE.Vector;
+        LinkedActor: TWeakObjectPtr<UE.Actor>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VREditorFloatingCameraUI;
+        static Load(InName: string): VREditorFloatingCameraUI;
+    
+        __tid_VREditorFloatingCameraUI_0__: boolean;
+    }
+    
+    class VISettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bScaleWorldFromFloor: boolean;
+        bScaleWorldWithDynamicPivot: boolean;
+        bAllowSimultaneousWorldScalingAndRotation: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VISettings;
+        static Load(InName: string): VISettings;
+    
+        __tid_VISettings_0__: boolean;
+    }
+    
+    class VRModeSettings extends UE.VISettings {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bEnableAutoVREditMode: boolean;
+        bAutokeySequences: boolean;
+        InteractorHand: UE.EInteractorHand;
+        bShowWorldMovementGrid: boolean;
+        bShowWorldMovementPostProcess: boolean;
+        bShowWorldScaleProgressBar: boolean;
+        UIBrightness: number;
+        GizmoScale: number;
+        DoubleClickTime: number;
+        TriggerPressedThreshold_Vive: number;
+        TriggerPressedThreshold_Rift: number;
+        InteractorClass: TSoftClassPtr<UE.VREditorInteractor>;
+        TeleporterClass: TSoftClassPtr<UE.VREditorTeleporter>;
+        ModeClass: TSoftClassPtr<UE.VREditorModeBase>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VRModeSettings;
+        static Load(InName: string): VRModeSettings;
+    
+        __tid_VRModeSettings_0__: boolean;
+    }
+    
+    enum EGizmoHandleTypes { All, Translate, Rotate, Scale, EGizmoHandleTypes_MAX, __typeKeyDoNoAccess}
+    class VRScoutingInteractor extends UE.VREditorInteractor {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        FlyingIndicatorComponent: UE.StaticMeshComponent;
+        EditorOnlyInputComponent: UE.InputComponent;
+        bReceivesEditorInput: boolean;
+        /*
+         *Gets the gizmo mode for selected object
+         */
+        GetGizmoMode() : UE.EGizmoHandleTypes;
+        /*
+         *Returns the current InputComponent. This will be NULL unless bReceivesEditorInput is set to true.
+         */
+        GetInputComponent() : UE.InputComponent;
+        GetReceivesEditorInput() : boolean;
+        /*
+         *Sets the gizmo mode for selected object
+         */
+        SetGizmoMode(InGizmoMode: UE.EGizmoHandleTypes) : void;
+        SetReceivesEditorInput(bInValue: boolean) : void;
+        /*
+         *Gets all actors that are selected in the world editor
+         */
+        static GetSelectedActors() : TArray<UE.Actor>;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): VRScoutingInteractor;
+        static Load(InName: string): VRScoutingInteractor;
+    
+        __tid_VRScoutingInteractor_0__: boolean;
+    }
+    
     class WarpingVectorValue {
         constructor();
         constructor(Mode: UE.EWarpingVectorMode, Value: UE.Vector);
@@ -84561,185 +91855,6 @@ declare module "ue" {
         static Load(InName: string): WidgetCompilerRule;
     
         __tid_WidgetCompilerRule_0__: boolean;
-    }
-    
-    class WidgetComponent extends UE.MeshComponent {
-        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
-        Space: UE.EWidgetSpace;
-        TimingPolicy: UE.EWidgetTimingPolicy;
-        WidgetClass: UE.Class;
-        DrawSize: UE.IntPoint;
-        bManuallyRedraw: boolean;
-        bRedrawRequested: boolean;
-        RedrawTime: number;
-        CurrentDrawSize: UE.IntPoint;
-        bUseInvalidationInWorldSpace: boolean;
-        bDrawAtDesiredSize: boolean;
-        Pivot: UE.Vector2D;
-        bReceiveHardwareInput: boolean;
-        bWindowFocusable: boolean;
-        WindowVisibility: UE.EWindowVisibility;
-        bApplyGammaCorrection: boolean;
-        OwnerPlayer: UE.LocalPlayer;
-        BackgroundColor: UE.LinearColor;
-        TintColorAndOpacity: UE.LinearColor;
-        OpacityFromTexture: number;
-        BlendMode: UE.EWidgetBlendMode;
-        bIsTwoSided: boolean;
-        TickWhenOffscreen: boolean;
-        BodySetup: UE.BodySetup;
-        TranslucentMaterial: UE.MaterialInterface;
-        TranslucentMaterial_OneSided: UE.MaterialInterface;
-        OpaqueMaterial: UE.MaterialInterface;
-        OpaqueMaterial_OneSided: UE.MaterialInterface;
-        MaskedMaterial: UE.MaterialInterface;
-        MaskedMaterial_OneSided: UE.MaterialInterface;
-        RenderTarget: UE.TextureRenderTarget2D;
-        MaterialInstance: UE.MaterialInstanceDynamic;
-        bAddedToScreen: boolean;
-        bEditTimeUsable: boolean;
-        SharedLayerName: string;
-        LayerZOrder: number;
-        GeometryMode: UE.EWidgetGeometryMode;
-        CylinderArcAngle: number;
-        TickMode: UE.ETickMode;
-        Widget: UE.UserWidget;
-        /*
-         *Returns the "actual" draw size of the quad in the world
-         */
-        GetCurrentDrawSize() : UE.Vector2D;
-        /*
-         *Defines the curvature of the widget component when using EWidgetGeometryMode::Cylinder; ignored otherwise.
-         */
-        GetCylinderArcAngle() : number;
-        GetDrawAtDesiredSize() : boolean;
-        /*
-         *Returns the "specified" draw size of the quad in the world
-         */
-        GetDrawSize() : UE.Vector2D;
-        /*
-         *@see EWidgetGeometryMode, @see GetCylinderArcAngle()
-         */
-        GetGeometryMode() : UE.EWidgetGeometryMode;
-        /*
-         *@see bManuallyRedraw
-         */
-        GetManuallyRedraw() : boolean;
-        /*
-         *Returns the dynamic material instance used to render the user widget
-         */
-        GetMaterialInstance() : UE.MaterialInstanceDynamic;
-        /*
-         *Gets the local player that owns this widget component.
-         */
-        GetOwnerPlayer() : UE.LocalPlayer;
-        /*
-         *Returns the pivot point where the UI is rendered about the origin.
-         */
-        GetPivot() : UE.Vector2D;
-        GetRedrawTime() : number;
-        /*
-         *Returns the render target to which the user widget is rendered
-         */
-        GetRenderTarget() : UE.TextureRenderTarget2D;
-        /*
-         *Gets whether the widget ticks when offscreen or not
-         */
-        GetTickWhenOffscreen() : boolean;
-        /*
-         *Gets whether the widget is two-sided or not
-         */
-        GetTwoSided() : boolean;
-        /*
-         *Returns the user widget object displayed by this component
-         */
-        GetUserWidgetObject() : UE.UserWidget;
-        /*
-         *Gets the widget that is used by this Widget Component. It will be null if a Slate Widget was set using SetSlateWidget function.
-         */
-        GetWidget() : UE.UserWidget;
-        GetWidgetSpace() : UE.EWidgetSpace;
-        /*
-         *@see bWindowFocusable
-         */
-        GetWindowFocusable() : boolean;
-        /*
-         *Gets the visibility of the virtual window created to host the widget focusable.
-         */
-        GetWindowVisiblility() : UE.EWindowVisibility;
-        /*
-         *Returns true if the the Slate window is visible and that the widget is also visible, false otherwise.
-         */
-        IsWidgetVisible() : boolean;
-        /*
-         *Requests that the widget be redrawn.
-         */
-        RequestRedraw() : void;
-        /*
-         *Requests that the widget have it's render target updated, if TickMode is disabled, this will force a tick to happen to update the render target.
-         */
-        RequestRenderUpdate() : void;
-        /*
-         *Sets the background color and opacityscale for this widget
-         */
-        SetBackgroundColor(NewBackgroundColor: UE.LinearColor) : void;
-        /*
-         *Defines the curvature of the widget component when using EWidgetGeometryMode::Cylinder; ignored otherwise.
-         */
-        SetCylinderArcAngle(InCylinderArcAngle: number) : void;
-        SetDrawAtDesiredSize(bInDrawAtDesiredSize: boolean) : void;
-        /*
-         *Sets the draw size of the quad in the world
-         */
-        SetDrawSize(Size: UE.Vector2D) : void;
-        SetGeometryMode(InGeometryMode: UE.EWidgetGeometryMode) : void;
-        /*
-         *@see bManuallyRedraw
-         */
-        SetManuallyRedraw(bUseManualRedraw: boolean) : void;
-        /*
-         *Sets the local player that owns this widget component.  Setting the owning player controls
-         *which player's viewport the widget appears on in a split screen scenario.  Additionally it
-         *forwards the owning player to the actual UserWidget that is spawned.
-         */
-        SetOwnerPlayer(LocalPlayer: $Nullable<UE.LocalPlayer>) : void;
-        SetPivot(InPivot: UE.Vector2D) : void;
-        SetRedrawTime(InRedrawTime: number) : void;
-        /*
-         *Sets the Tick mode of the Widget Component.
-         */
-        SetTickMode(InTickMode: UE.ETickMode) : void;
-        /*
-         *Sets whether the widget ticks when offscreen or not
-         */
-        SetTickWhenOffscreen(bWantTickWhenOffscreen: boolean) : void;
-        /*
-         *Sets the tint color and opacity scale for this widget
-         */
-        SetTintColorAndOpacity(NewTintColorAndOpacity: UE.LinearColor) : void;
-        /*
-         *Sets whether the widget is two-sided or not
-         */
-        SetTwoSided(bWantTwoSided: boolean) : void;
-        /*
-         *Sets the widget to use directly. This function will keep track of the widget till the next time it's called
-         *    with either a newer widget or a nullptr
-         */
-        SetWidget(Widget: $Nullable<UE.UserWidget>) : void;
-        SetWidgetSpace(NewSpace: UE.EWidgetSpace) : void;
-        /*
-         *@see bWindowFocusable
-         */
-        SetWindowFocusable(bInWindowFocusable: boolean) : void;
-        /*
-         *Sets the visibility of the virtual window created to host the widget focusable.
-         */
-        SetWindowVisibility(InVisibility: UE.EWindowVisibility) : void;
-        static StaticClass(): Class;
-        static Find(OrigInName: string, Outer?: Object): WidgetComponent;
-        static Load(InName: string): WidgetComponent;
-    
-        __tid_WidgetComponent_0__: boolean;
     }
     
     class WidgetComponentInstanceData extends UE.SceneComponentInstanceData {
@@ -85890,19 +93005,6 @@ declare module "ue" {
         static Load(InName: string): WorldPartitionResaveActorsBuilder;
     
         __tid_WorldPartitionResaveActorsBuilder_0__: boolean;
-    }
-    
-    class WorldPartitionResolveData {
-        constructor();
-        constructor(ContainerID: UE.ActorContainerID, SourceWorldAssetPath: UE.TopLevelAssetPath);
-        ContainerID: UE.ActorContainerID;
-        SourceWorldAssetPath: UE.TopLevelAssetPath;
-        /**
-         * @deprecated use StaticStruct instead.
-         */
-        static StaticClass(): ScriptStruct;
-        static StaticStruct(): ScriptStruct;
-        __tid_WorldPartitionResolveData_0__: boolean;
     }
     
     class WorldPartitionRuntimeCellDataHashSet extends UE.WorldPartitionRuntimeCellData {
