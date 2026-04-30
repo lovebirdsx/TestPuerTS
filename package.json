@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "@agentclientprotocol/sdk": "^0.21.0",
-    "@universe-agent/acp": "^1.0.1"
+    "@universe-agent/acp": "^1.0.6"
   }
 }
