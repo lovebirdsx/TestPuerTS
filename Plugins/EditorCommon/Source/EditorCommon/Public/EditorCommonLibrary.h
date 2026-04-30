@@ -30,7 +30,7 @@ public:
 	static bool IsMainFrameCreationFinished();
 	
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
-	static UWorld* GetWorld();
+	static UWorld* GetEditorWorld();
 	
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, Category = "EditorCommon")
 	static void TempWorldTest(FWorldCallbackDelegate Callback); 

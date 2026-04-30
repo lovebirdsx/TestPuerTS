@@ -80,6 +80,7 @@ const UE_BUILD_FILES = [
 	'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
+	'Plugins/ReactUMG/Source/**/*.{h,cpp,cs,uplugin}',
 	'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
 ];
 
@@ -161,13 +162,7 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'ue:test',
-			inputGlobs: [
-				'packages/tests/src/**/*.{ts,tsx}',
-				'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
-				'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
-				'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
-				'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
-			],
+			inputGlobs: ['packages/tests/src/**/*.{ts,tsx}', ...UE_BUILD_FILES],
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
@@ -193,13 +188,7 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'ue:acp-client',
-			inputGlobs: [
-				'packages/acp-client/src/**/*.ts',
-				'Plugins/EditorCommon/Source/**/*.{h,cpp,cs,uplugin}',
-				'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
-				'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
-				'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
-			],
+			inputGlobs: ['packages/acp-client/src/**/*.ts', ...UE_BUILD_FILES],
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
@@ -269,8 +258,6 @@ gulp.task('ue:build:watch', async () => {
 	gulp.watch(otherGlobs, { ignored }, gulp.series('ue:build')).on('change', (filePath: string) => {
 		info(`[ue:build:watch] File ${path.relative(projectRoot, filePath)} changed, rebuilding...`);
 	});
-
-	info(green('[ue:build:watch] Watching C++ sources for changes...'));
 });
 
 gulp.task('ue:build:clean', async () => {

@@ -1,5 +1,6 @@
 #include "PuertsGenTypingCommandlet.h"
 #include "IDeclarationGenerator.h"
+#include "CodeGenerator.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPuertsGenTyping, Log, All);
 
@@ -33,6 +34,16 @@ int32 UPuertsGenTypingCommandlet::Main(const FString& Params)
 	UE_LOG(LogPuertsGenTyping, Display, TEXT("PuertsGenTyping: Generating typings (Full=%s)"), bGenFull ? TEXT("true") : TEXT("false"));
 
 	IDeclarationGenerator::Get().GenTypeScriptDeclaration(bGenFull, SearchPath);
+
+	// 遍历所有实现 ICodeGenerator 接口的类（如 ReactDeclarationGenerator），生成额外的类型声明
+	for (TObjectIterator<UClass> It; It; ++It)
+	{
+		UClass* Class = *It;
+		if (Class && Class->ImplementsInterface(UCodeGenerator::StaticClass()))
+		{
+			ICodeGenerator::Execute_Gen(Class->GetDefaultObject());
+		}
+	}
 
 	UE_LOG(LogPuertsGenTyping, Display, TEXT("PuertsGenTyping: Completed"));
 	return 0;

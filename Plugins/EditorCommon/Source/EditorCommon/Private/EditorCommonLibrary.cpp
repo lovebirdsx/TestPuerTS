@@ -54,7 +54,7 @@ bool UEditorCommonLibrary::IsMainFrameCreationFinished()
 	return MainFrameModule.IsWindowInitialized();
 }
 
-UWorld* UEditorCommonLibrary::GetWorld()
+UWorld* UEditorCommonLibrary::GetEditorWorld()
 {
 	UWorld* World = nullptr;
 	if (GEditor) {

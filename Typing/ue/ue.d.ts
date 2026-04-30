@@ -45151,7 +45151,7 @@ declare module "ue" {
         WorldCallbackDelegate__DelegateSignature(World: $Nullable<UE.World>) : void;
         static CloseEditorWidget(TabName: string) : void;
         static GetEditorEvent() : UE.EditorEvent;
-        static GetWorld() : UE.World;
+        static GetEditorWorld() : UE.World;
         static IsMainFrameCreationFinished() : boolean;
         static ShowEditorWidget(EditorUtilityWidgetBlueprint: $Nullable<UE.EditorUtilityWidgetBlueprint>) : string;
         static TempWorldTest(Callback: $Delegate<(World: $Nullable<UE.World>) => void>) : void;
@@ -75865,6 +75865,33 @@ declare module "ue" {
         __tid_RBFTarget_0__: boolean;
     }
     
+    class ReactUMGStarter extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        GetWorld() : UE.World;
+        /**
+         * @deprecated Unsupported super overloads.
+         */
+        GetWorld() : World;
+        SetContent(Content: $Nullable<UE.Widget>) : void;
+        Start(EditorUtilityWidgetBlueprint: $Nullable<UE.EditorUtilityWidgetBlueprint>) : string;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ReactUMGStarter;
+        static Load(InName: string): ReactUMGStarter;
+    
+        __tid_ReactUMGStarter_0__: boolean;
+    }
+    
+    class ReactWidget extends UE.UserWidget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        AddChild(Content: $Nullable<UE.Widget>) : UE.PanelSlot;
+        RemoveChild(Content: $Nullable<UE.Widget>) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): ReactWidget;
+        static Load(InName: string): ReactWidget;
+    
+        __tid_ReactWidget_0__: boolean;
+    }
+    
     class RectLightComponent extends UE.LocalLightComponent {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         SourceWidth: number;
@@ -82953,6 +82980,40 @@ declare module "ue" {
         static Load(InName: string): UMGEditorProjectSettings;
     
         __tid_UMGEditorProjectSettings_0__: boolean;
+    }
+    
+    class UMGManager extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static CreateReactWidget(World: $Nullable<UE.World>) : UE.ReactWidget;
+        static CreateWidget(World: $Nullable<UE.World>, _Class: $Nullable<UE.Class>) : UE.UserWidget;
+        static InsertWidget(Panel: $Nullable<UE.PanelWidget>, Index: number, Content: $Nullable<UE.Widget>) : UE.PanelSlot;
+        static SynchronizeSlotProperties(Slot: $Nullable<UE.PanelSlot>) : void;
+        static SynchronizeWidgetProperties(Widget: $Nullable<UE.Widget>) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): UMGManager;
+        static Load(InName: string): UMGManager;
+    
+        __tid_UMGManager_0__: boolean;
+    }
+    
+    class UMGRoot extends UE.UserWidget {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnUMGKeyDown: $MulticastDelegate<(Key: string) => void>;
+        OnUMGKeyUp: $MulticastDelegate<(Key: string) => void>;
+        OnUMGTick: $MulticastDelegate<(DeltaTime: number) => void>;
+        OnUMGFocusGet: $MulticastDelegate<() => void>;
+        OnUMGFocusLost: $MulticastDelegate<() => void>;
+        AddChild(Content: $Nullable<UE.Widget>) : UE.PanelSlot;
+        RemoveChild(Content: $Nullable<UE.Widget>) : boolean;
+        UMGEvent__DelegateSignature() : void;
+        UMGKeyEvent__DelegateSignature(Key: string) : void;
+        UMGTickEvent__DelegateSignature(DeltaTime: number) : void;
+        static CreateUmgRoot(World: $Nullable<UE.World>) : UE.UMGRoot;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): UMGRoot;
+        static Load(InName: string): UMGRoot;
+    
+        __tid_UMGRoot_0__: boolean;
     }
     
     class UndoableResolveHandler extends UE.Object {

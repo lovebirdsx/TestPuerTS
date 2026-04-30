@@ -40,6 +40,9 @@ public class EditorCommon : ModuleRules
 				"SlateCore",
 				"Blutility",
 				"UnrealEd",
+				"LevelEditor",
+				"UMGEditor",
+				"UMG",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
