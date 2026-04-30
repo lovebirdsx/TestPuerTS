@@ -388,7 +388,9 @@ export class ACPClient {
 
 		// 组装完整命令参数
 		const allArgs = [...args].join(' ');
-		const fullCommand = allArgs ? `${command} --workspace ${workspace} ${allArgs}` : `${command} --workspace ${workspace}`;
+		const fullCommand = allArgs
+			? `${command} --workspace ${workspace} ${allArgs}`
+			: `${command} --workspace ${workspace}`;
 
 		// Windows 上 npx/node 等命令为 .cmd 脚本，需通过 cmd /c 执行
 		const transport = spawnAcpServer({ executable: 'cmd', args: `/c ${fullCommand}`, workspace });
