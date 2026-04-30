@@ -34702,6 +34702,19 @@ declare module "ue" {
         __tid_AsyncEditorWaitForGameWorld_0__: boolean;
     }
     
+    class AsyncFileResult extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnComplete: $MulticastDelegate<() => void>;
+        bSuccess: boolean;
+        Content: string;
+        bDone: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): AsyncFileResult;
+        static Load(InName: string): AsyncFileResult;
+    
+        __tid_AsyncFileResult_0__: boolean;
+    }
+    
     class AsyncImageExport extends UE.BlueprintAsyncActionBase {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         Complete: $MulticastDelegate<(bSuccess: boolean) => void>;
@@ -75005,9 +75018,9 @@ declare module "ue" {
     class ProcessIOHelper extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
-         *检查文件是否存在
+         *异步检查文件是否存在，完成后通过 OnComplete 通知，结果在 bSuccess 属性
          */
-        static FileExists(FilePath: string) : boolean;
+        static FileExists(FilePath: string) : UE.AsyncFileResult;
         /*
          *获取环境变量
          */
@@ -75021,17 +75034,17 @@ declare module "ue" {
          */
         static IsStdinTTY() : boolean;
         /*
-         *创建目录树
+         *异步创建目录树，完成后通过 OnComplete 通知，结果在 bSuccess 属性
          */
-        static MakeDirTree(Path: string) : boolean;
+        static MakeDirTree(Path: string) : UE.AsyncFileResult;
         /*
          *从 stdin 读取一行（非阻塞，无完整行时返回空字符串）
          */
         static ReadStdinLine() : string;
         /*
-         *读取文件内容（UTF-8），失败返回空字符串
+         *异步读取文件内容（UTF-8），完成后通过 OnComplete 通知，结果在 Content 属性
          */
-        static ReadTextFile(FilePath: string) : string;
+        static ReadTextFile(FilePath: string) : UE.AsyncFileResult;
         /*
          *写入 stderr（原始输出，不添加换行）
          */
@@ -75041,9 +75054,9 @@ declare module "ue" {
          */
         static WriteStdout(Text: string) : void;
         /*
-         *写入文件内容（UTF-8，自动创建目录）
+         *异步写入文件内容（UTF-8，自动创建目录），完成后通过 OnComplete 通知，结果在 bSuccess 属性
          */
-        static WriteTextFile(FilePath: string, Content: string) : boolean;
+        static WriteTextFile(FilePath: string, Content: string) : UE.AsyncFileResult;
         static StaticClass(): Class;
         static Find(OrigInName: string, Outer?: Object): ProcessIOHelper;
         static Load(InName: string): ProcessIOHelper;

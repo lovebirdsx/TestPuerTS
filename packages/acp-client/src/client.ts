@@ -215,17 +215,27 @@ export class ACPClientHandler {
 
 	private async readTextFile(params: { path: string }): Promise<{ content: string }> {
 		const filePath = this.resolveFilePath(params.path);
-		if (!UE.ProcessIOHelper.FileExists(filePath)) {
+		const existsResult = await new Promise<UE.AsyncFileResult>((resolve) => {
+			const r = UE.ProcessIOHelper.FileExists(filePath);
+			r.OnComplete.Add(() => resolve(r));
+		});
+		if (!existsResult.bSuccess) {
 			throw { code: -32002, message: `File not found: ${params.path}` };
 		}
-		const content = UE.ProcessIOHelper.ReadTextFile(filePath);
-		return { content };
+		const readResult = await new Promise<UE.AsyncFileResult>((resolve) => {
+			const r = UE.ProcessIOHelper.ReadTextFile(filePath);
+			r.OnComplete.Add(() => resolve(r));
+		});
+		return { content: readResult.Content };
 	}
 
 	private async writeTextFile(params: { path: string; content: string }): Promise<Record<string, never>> {
 		const filePath = this.resolveFilePath(params.path);
-		const success = UE.ProcessIOHelper.WriteTextFile(filePath, params.content);
-		if (!success) {
+		const writeResult = await new Promise<UE.AsyncFileResult>((resolve) => {
+			const r = UE.ProcessIOHelper.WriteTextFile(filePath, params.content);
+			r.OnComplete.Add(() => resolve(r));
+		});
+		if (!writeResult.bSuccess) {
 			throw { code: -32000, message: `Failed to write file: ${params.path}` };
 		}
 		if (this.renderer.verbose) {

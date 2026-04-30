@@ -1,8 +1,46 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Containers/Ticker.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ProcessIOHelper.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAsyncFileComplete);
+
+// 异步文件操作的结果对象
+// 操作完成后通过 OnComplete delegate 通知，结果通过属性读取
+UCLASS()
+class EDITORCOMMON_API UAsyncFileResult : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	// 完成通知（无参，避免 PuerTS 的 delegate 参数限制）
+	UPROPERTY(BlueprintAssignable, Category = "AsyncFile")
+	FOnAsyncFileComplete OnComplete;
+
+	// 操作是否成功
+	UPROPERTY(BlueprintReadOnly, Category = "AsyncFile")
+	bool bSuccess = false;
+
+	// 读取结果（仅 ReadTextFile 使用）
+	UPROPERTY(BlueprintReadOnly, Category = "AsyncFile")
+	FString Content;
+
+	// 是否已完成
+	UPROPERTY(BlueprintReadOnly, Category = "AsyncFile")
+	bool bDone = false;
+
+private:
+	friend class UProcessIOHelper;
+
+	// 线程安全的完成标记
+	TAtomic<bool> bCompleted{false};
+	FTSTicker::FDelegateHandle TickerHandle;
+
+	// 启动 ticker 轮询完成状态
+	void StartPolling();
+};
 
 UCLASS()
 class EDITORCOMMON_API UProcessIOHelper : public UBlueprintFunctionLibrary
@@ -26,21 +64,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
 	static void WriteStderr(const FString& Text);
 
-	// 读取文件内容（UTF-8），失败返回空字符串
+	// 异步读取文件内容（UTF-8），完成后通过 OnComplete 通知，结果在 Content 属性
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
-	static FString ReadTextFile(const FString& FilePath);
+	static UAsyncFileResult* ReadTextFile(const FString& FilePath);
 
-	// 检查文件是否存在
+	// 异步检查文件是否存在，完成后通过 OnComplete 通知，结果在 bSuccess 属性
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
-	static bool FileExists(const FString& FilePath);
+	static UAsyncFileResult* FileExists(const FString& FilePath);
 
-	// 写入文件内容（UTF-8，自动创建目录）
+	// 异步写入文件内容（UTF-8，自动创建目录），完成后通过 OnComplete 通知，结果在 bSuccess 属性
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
-	static bool WriteTextFile(const FString& FilePath, const FString& Content);
+	static UAsyncFileResult* WriteTextFile(const FString& FilePath, const FString& Content);
 
-	// 创建目录树
+	// 异步创建目录树，完成后通过 OnComplete 通知，结果在 bSuccess 属性
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
-	static bool MakeDirTree(const FString& Path);
+	static UAsyncFileResult* MakeDirTree(const FString& Path);
 
 	// stdin 是否是 TTY
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")

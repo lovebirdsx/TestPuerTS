@@ -2,6 +2,7 @@
 #include "HAL/PlatformProcess.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Async/Async.h"
 
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include <io.h>
@@ -219,38 +220,97 @@ void UProcessIOHelper::WriteStderr(const FString& Text)
 	WriteFile(hStderr, Utf8.Get(), Utf8.Length(), &BytesWritten, nullptr);
 }
 
-FString UProcessIOHelper::ReadTextFile(const FString& FilePath)
+void UAsyncFileResult::StartPolling()
 {
-	FString Content;
-	if (FFileHelper::LoadFileToString(Content, *FilePath))
+	TickerHandle = FTSTicker::GetCoreTicker().AddTicker(
+		FTickerDelegate::CreateLambda([this](float) -> bool
+		{
+			if (bCompleted.Load())
+			{
+				bDone = true;
+				OnComplete.Broadcast();
+				RemoveFromRoot();
+				return false;
+			}
+			return true;
+		}),
+		0.01f
+	);
+}
+
+UAsyncFileResult* UProcessIOHelper::ReadTextFile(const FString& FilePath)
+{
+	UAsyncFileResult* Result = NewObject<UAsyncFileResult>();
+	Result->AddToRoot();
+
+	FString PathCopy = FilePath;
+	Async(EAsyncExecution::ThreadPool, [Result, PathCopy]()
 	{
-		return Content;
-	}
-	return FString();
+		FString Content;
+		bool bOk = FFileHelper::LoadFileToString(Content, *PathCopy);
+		Result->Content = MoveTemp(Content);
+		Result->bSuccess = bOk;
+		Result->bCompleted.Store(true);
+	});
+
+	Result->StartPolling();
+	return Result;
 }
 
-bool UProcessIOHelper::FileExists(const FString& FilePath)
+UAsyncFileResult* UProcessIOHelper::FileExists(const FString& FilePath)
 {
-	return FPaths::FileExists(FilePath);
+	UAsyncFileResult* Result = NewObject<UAsyncFileResult>();
+	Result->AddToRoot();
+
+	FString PathCopy = FilePath;
+	Async(EAsyncExecution::ThreadPool, [Result, PathCopy]()
+	{
+		Result->bSuccess = FPaths::FileExists(PathCopy);
+		Result->bCompleted.Store(true);
+	});
+
+	Result->StartPolling();
+	return Result;
 }
 
-bool UProcessIOHelper::WriteTextFile(const FString& FilePath, const FString& Content)
+UAsyncFileResult* UProcessIOHelper::WriteTextFile(const FString& FilePath, const FString& Content)
 {
-	// 自动创建目录
-	FString Dir = FPaths::GetPath(FilePath);
-	if (!Dir.IsEmpty())
+	UAsyncFileResult* Result = NewObject<UAsyncFileResult>();
+	Result->AddToRoot();
+
+	FString PathCopy = FilePath;
+	FString ContentCopy = Content;
+	Async(EAsyncExecution::ThreadPool, [Result, PathCopy, ContentCopy]()
+	{
+		FString Dir = FPaths::GetPath(PathCopy);
+		if (!Dir.IsEmpty())
+		{
+			IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+			PlatformFile.CreateDirectoryTree(*Dir);
+		}
+		Result->bSuccess = FFileHelper::SaveStringToFile(ContentCopy, *PathCopy, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
+		Result->bCompleted.Store(true);
+	});
+
+	Result->StartPolling();
+	return Result;
+}
+
+UAsyncFileResult* UProcessIOHelper::MakeDirTree(const FString& Path)
+{
+	UAsyncFileResult* Result = NewObject<UAsyncFileResult>();
+	Result->AddToRoot();
+
+	FString PathCopy = Path;
+	Async(EAsyncExecution::ThreadPool, [Result, PathCopy]()
 	{
 		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-		PlatformFile.CreateDirectoryTree(*Dir);
-	}
+		Result->bSuccess = PlatformFile.CreateDirectoryTree(*PathCopy);
+		Result->bCompleted.Store(true);
+	});
 
-	return FFileHelper::SaveStringToFile(Content, *FilePath, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
-}
-
-bool UProcessIOHelper::MakeDirTree(const FString& Path)
-{
-	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
-	return PlatformFile.CreateDirectoryTree(*Path);
+	Result->StartPolling();
+	return Result;
 }
 
 bool UProcessIOHelper::IsStdinTTY()

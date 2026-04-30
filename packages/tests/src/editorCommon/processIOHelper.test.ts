@@ -4,6 +4,14 @@ import { describe, it, expect, afterAll } from '../testRunner';
 const projectDir = UE.JsRunHelper.GetProjectDir();
 const tempDir = `${projectDir}Intermediate/TestProcessIO`;
 
+function waitResult(result: UE.AsyncFileResult): Promise<UE.AsyncFileResult> {
+	return new Promise((resolve) => {
+		result.OnComplete.Add(() => {
+			resolve(result);
+		});
+	});
+}
+
 // 测试结束后清理临时文件和目录
 afterAll(() => {
 	// 清理方式：写入空内容覆盖测试文件（UE 没有提供删除 API）
@@ -14,50 +22,53 @@ describe('ProcessIOHelper - File Operations', () => {
 	const testFile = `${tempDir}/test.txt`;
 	const testContent = 'Hello, ProcessIOHelper!';
 
-	it('WriteTextFile should write the file and return true', () => {
-		const result = UE.ProcessIOHelper.WriteTextFile(testFile, testContent);
-		expect(result).toBe(true);
+	it('WriteTextFile should write the file and return true', async () => {
+		const result = await waitResult(UE.ProcessIOHelper.WriteTextFile(testFile, testContent));
+		expect(result.bSuccess).toBe(true);
 	});
 
-	it('FileExists should return true for an existing file', () => {
-		UE.ProcessIOHelper.WriteTextFile(testFile, testContent);
-		expect(UE.ProcessIOHelper.FileExists(testFile)).toBe(true);
+	it('FileExists should return true for an existing file', async () => {
+		await waitResult(UE.ProcessIOHelper.WriteTextFile(testFile, testContent));
+		const result = await waitResult(UE.ProcessIOHelper.FileExists(testFile));
+		expect(result.bSuccess).toBe(true);
 	});
 
-	it('FileExists should return false for a non-existent file', () => {
-		expect(UE.ProcessIOHelper.FileExists(`${tempDir}/nonexistent_file.txt`)).toBe(false);
+	it('FileExists should return false for a non-existent file', async () => {
+		const result = await waitResult(UE.ProcessIOHelper.FileExists(`${tempDir}/nonexistent_file.txt`));
+		expect(result.bSuccess).toBe(false);
 	});
 
-	it('ReadTextFile should read back the written content correctly', () => {
-		UE.ProcessIOHelper.WriteTextFile(testFile, testContent);
-		const content = UE.ProcessIOHelper.ReadTextFile(testFile);
-		expect(content).toBe(testContent);
+	it('ReadTextFile should read back the written content correctly', async () => {
+		await waitResult(UE.ProcessIOHelper.WriteTextFile(testFile, testContent));
+		const result = await waitResult(UE.ProcessIOHelper.ReadTextFile(testFile));
+		expect(result.Content).toBe(testContent);
 	});
 
-	it('ReadTextFile should return an empty string for a non-existent file', () => {
-		const content = UE.ProcessIOHelper.ReadTextFile(`${tempDir}/nonexistent_file.txt`);
-		expect(content).toBe('');
+	it('ReadTextFile should return an empty string for a non-existent file', async () => {
+		const result = await waitResult(UE.ProcessIOHelper.ReadTextFile(`${tempDir}/nonexistent_file.txt`));
+		expect(result.Content).toBe('');
 	});
 
-	it('WriteTextFile should automatically create missing nested directories', () => {
+	it('WriteTextFile should automatically create missing nested directories', async () => {
 		const deepFile = `${tempDir}/deep/nested/dir/file.txt`;
-		const result = UE.ProcessIOHelper.WriteTextFile(deepFile, 'deep content');
-		expect(result).toBe(true);
-		expect(UE.ProcessIOHelper.ReadTextFile(deepFile)).toBe('deep content');
+		const writeResult = await waitResult(UE.ProcessIOHelper.WriteTextFile(deepFile, 'deep content'));
+		expect(writeResult.bSuccess).toBe(true);
+		const readResult = await waitResult(UE.ProcessIOHelper.ReadTextFile(deepFile));
+		expect(readResult.Content).toBe('deep content');
 	});
 
-	it('MakeDirTree should create nested directories successfully', () => {
+	it('MakeDirTree should create nested directories successfully', async () => {
 		const dirPath = `${tempDir}/a/b/c`;
-		const result = UE.ProcessIOHelper.MakeDirTree(dirPath);
-		expect(result).toBe(true);
+		const result = await waitResult(UE.ProcessIOHelper.MakeDirTree(dirPath));
+		expect(result.bSuccess).toBe(true);
 	});
 
-	it('should handle UTF-8 Chinese content correctly', () => {
+	it('should handle UTF-8 Chinese content correctly', async () => {
 		const chineseFile = `${tempDir}/chinese.txt`;
 		const chineseContent = '你好，世界！这是一段中文测试内容。';
-		UE.ProcessIOHelper.WriteTextFile(chineseFile, chineseContent);
-		const readBack = UE.ProcessIOHelper.ReadTextFile(chineseFile);
-		expect(readBack).toBe(chineseContent);
+		await waitResult(UE.ProcessIOHelper.WriteTextFile(chineseFile, chineseContent));
+		const result = await waitResult(UE.ProcessIOHelper.ReadTextFile(chineseFile));
+		expect(result.Content).toBe(chineseContent);
 	});
 });
 
