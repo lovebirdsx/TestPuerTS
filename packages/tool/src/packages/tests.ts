@@ -23,9 +23,17 @@ gulp.task('tests:clean', async () => {
 gulp.task(
 	'tests:build',
 	withCache(
-		{ taskName: 'tests:build', inputGlobs: ['packages/tests/src/**/*.ts', 'packages/tests/tsconfig.json'] },
+		{
+			taskName: 'tests:build',
+			inputGlobs: [
+				'packages/editor/src/**/*.{ts,tsx}',
+				'packages/editor/tsconfig.json',
+				'packages/tests/src/**/*.ts',
+				'packages/tests/tsconfig.json',
+			],
+		},
 		async () => {
-			await exec('tsc', {
+			await exec('tsc -b', {
 				workingDir,
 				logPrefix: '[tests:build] ',
 			});
@@ -36,8 +44,19 @@ gulp.task(
 gulp.task(
 	'tests:typecheck',
 	withCache(
-		{ taskName: 'tests:typecheck', inputGlobs: ['packages/tests/src/**/*.ts', 'packages/tests/tsconfig.json'] },
+		{
+			taskName: 'tests:typecheck',
+			inputGlobs: [
+				'packages/editor/src/**/*.{ts,tsx}',
+				'packages/editor/tsconfig.json',
+				'packages/tests/src/**/*.ts',
+				'packages/tests/tsconfig.json',
+			],
+		},
 		async () => {
+			// editor must be built first so its .d.ts files exist for tests to reference
+			const editorDir = path.join(config.packagesPath, 'editor');
+			await exec('tsc -b', { workingDir: editorDir, logPrefix: '[tests:typecheck/editor] ' });
 			await exec('tsc --noEmit', {
 				workingDir,
 				logPrefix: '[tests:typecheck] ',
@@ -74,7 +93,7 @@ gulp.task('tests:watch', async () => {
 		// 先执行一次构建
 		const buildOnChange = () => {
 			info(`${blue(prefix)}${green('Building...')}`);
-			const build = spawn('npx', ['tsc'], { shell: true, cwd: workingDir });
+			const build = spawn('npx', ['tsc', '-b'], { shell: true, cwd: workingDir });
 
 			build.on('close', (code) => {
 				if (code === 0) {

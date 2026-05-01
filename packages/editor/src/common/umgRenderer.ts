@@ -12,7 +12,12 @@ function propsToString(props: unknown): string {
 	return JSON.stringify(props, ['id', 'key', 'Text', 'DefaultOptions', 'SelectedOption']);
 }
 
-class UEWidget {
+export interface IWidgetRoot {
+	appendChild(child: UEWidget): void;
+	removeChild(child: UEWidget): void;
+}
+
+export class UEWidget {
 	public type: string;
 
 	public callbackRemovers: Record<string, () => void>;
@@ -240,7 +245,7 @@ class UEWidget {
 	}
 }
 
-class UEWidgetRoot {
+export class UEWidgetRoot implements IWidgetRoot {
 	public readonly nativePtr: UE.UMGRoot;
 
 	public constructor(nativePtr: UE.UMGRoot) {
@@ -258,7 +263,7 @@ class UEWidgetRoot {
 	}
 }
 
-function compareWidgetProps<T>(x: T, y: T): boolean {
+export function compareWidgetProps<T>(x: T, y: T): boolean {
 	if (x === y) {
 		return true;
 	}
@@ -290,7 +295,7 @@ function compareWidgetProps<T>(x: T, y: T): boolean {
 	return true;
 }
 
-function createHostConfig(): any {
+export function createHostConfig(): any {
 	// 优先级状态必须有实际存储，reconciler commit 阶段会读写它
 	let currentUpdatePriority = 0;
 
@@ -438,6 +443,49 @@ function createHostConfig(): any {
 		},
 
 		clearContainer(_container: UEWidgetRoot) {},
+	};
+}
+
+export function createRendererForTest(root: IWidgetRoot): {
+	render(element: React.ReactNode): void;
+	unmount(): void;
+	flushSync(fn: () => void): void;
+} {
+	const reconciler = Reconciler(createHostConfig());
+	const container = (reconciler.createContainer as (...args: unknown[]) => unknown)(
+		root,
+		0,
+		null,
+		false,
+		false,
+		'',
+		(err: unknown) => {
+			console.error('ReactUMG uncaught error:', err);
+		},
+		(err: unknown) => {
+			console.error('ReactUMG caught error:', err);
+		},
+		(err: unknown) => {
+			console.error('ReactUMG recoverable error:', err);
+		},
+		null,
+	);
+	const reconcilerInternal = reconciler as unknown as Record<string, (...args: unknown[]) => unknown>;
+
+	return {
+		render(element: React.ReactNode): void {
+			reconcilerInternal.flushSyncFromReconciler(() => {
+				reconciler.updateContainer(element, container, null, null);
+			});
+		},
+		unmount(): void {
+			reconcilerInternal.flushSyncFromReconciler(() => {
+				reconciler.updateContainer(null, container, null, null);
+			});
+		},
+		flushSync(fn: () => void): void {
+			reconcilerInternal.flushSyncFromReconciler(fn);
+		},
 	};
 }
 

@@ -1,7 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../../Content/JavaScript/editor"
+    "rootDir": "./src",
+    "outDir": "../../Content/JavaScript/editor",
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true
   },
   "include": [
     "src/**/*"

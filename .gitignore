@@ -22,13 +22,14 @@ Content/JavaScript/react-umg/
 *.so
 *.dylib
 
-# Ignore build directories
+# Ignore build
 Binaries/
 Build/
 DerivedDataCache/
 Intermediate/
 Saved/
 obj/
+tsconfig.tsbuildinfo
 
 # Ignore user-specific files
 *.user

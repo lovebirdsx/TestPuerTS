@@ -2,9 +2,13 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "../../Content/JavaScript/tests"
+    "outDir": "../../Content/JavaScript/tests",
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
   },
   "include": [
     "src/**/*"
+  ],
+  "references": [
+    { "path": "../editor" }
   ]
 }

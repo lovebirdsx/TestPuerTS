@@ -1,7 +1,8 @@
 {
   "name": "editor",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "../../Content/JavaScript/editor/index.js",
+  "types": "../../Content/JavaScript/editor/index.d.ts",
   "license": "MIT",
   "scripts": {
     "test": "vitest run",
