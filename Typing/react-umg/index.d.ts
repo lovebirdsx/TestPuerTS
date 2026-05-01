@@ -533,6 +533,7 @@ declare module "react-umg" {
     }
 
     interface PanelWidgetProps extends WidgetProps {
+        children?: React.ReactNode;
     }
 
     class PanelWidget extends React.Component<PanelWidgetProps> {
@@ -540,6 +541,7 @@ declare module "react-umg" {
     }
 
     interface ContentWidgetProps extends PanelWidgetProps {
+        children?: React.ReactNode;
     }
 
     class ContentWidget extends React.Component<ContentWidgetProps> {
@@ -547,6 +549,7 @@ declare module "react-umg" {
     }
 
     interface BackgroundBlurProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         Padding?: Margin;
         HorizontalAlignment?: EHorizontalAlignment;
         VerticalAlignment?: EVerticalAlignment;
@@ -575,6 +578,7 @@ declare module "react-umg" {
     }
 
     interface BorderProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         HorizontalAlignment?: EHorizontalAlignment;
         VerticalAlignment?: EVerticalAlignment;
         bShowEffectWhenDisabled?: boolean;
@@ -621,6 +625,7 @@ declare module "react-umg" {
     type EButtonTouchMethod = UE.EButtonTouchMethod;
     type EButtonPressMethod = UE.EButtonPressMethod;
     interface ButtonProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         WidgetStyle?: ButtonStyle;
         ColorAndOpacity?: LinearColor;
         BackgroundColor?: LinearColor;
@@ -640,6 +645,7 @@ declare module "react-umg" {
     }
 
     interface CanvasPanelProps extends PanelWidgetProps {
+        children?: React.ReactNode;
     }
 
     class CanvasPanel extends React.Component<CanvasPanelProps> {
@@ -680,6 +686,7 @@ declare module "react-umg" {
     }
 
     interface CheckBoxProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         CheckedState?: ECheckBoxState;
         CheckedStateDelegate?: () => ECheckBoxState;
         WidgetStyle?: CheckBoxStyle;
@@ -997,6 +1004,7 @@ declare module "react-umg" {
     }
 
     interface GridPanelProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         ColumnFill?: TArray<number>;
         RowFill?: TArray<number>;
     }
@@ -1006,6 +1014,7 @@ declare module "react-umg" {
     }
 
     interface HorizontalBoxProps extends PanelWidgetProps {
+        children?: React.ReactNode;
     }
 
     class HorizontalBox extends React.Component<HorizontalBoxProps> {
@@ -1056,6 +1065,7 @@ declare module "react-umg" {
     }
 
     interface InvalidationBoxProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         bCanCache?: boolean;
     }
 
@@ -1065,6 +1075,7 @@ declare module "react-umg" {
 
     type EMenuPlacement = UE.EMenuPlacement;
     interface MenuAnchorProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         Placement?: EMenuPlacement;
         bFitInWindow?: boolean;
         ShouldDeferPaintingAfterWindowContent?: boolean;
@@ -1133,6 +1144,7 @@ declare module "react-umg" {
     }
 
     interface NamedSlotProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         bExposeOnInstanceOnly?: boolean;
         SlotGuid?: Guid;
     }
@@ -1149,6 +1161,7 @@ declare module "react-umg" {
     }
 
     interface OverlayProps extends PanelWidgetProps {
+        children?: React.ReactNode;
     }
 
     class Overlay extends React.Component<OverlayProps> {
@@ -1196,6 +1209,7 @@ declare module "react-umg" {
     }
 
     interface RetainerBoxProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         bRetainRender?: boolean;
         RenderOnInvalidation?: boolean;
         RenderOnPhase?: boolean;
@@ -1224,6 +1238,7 @@ declare module "react-umg" {
     }
 
     interface SafeZoneProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         PadLeft?: boolean;
         PadRight?: boolean;
         PadTop?: boolean;
@@ -1237,6 +1252,7 @@ declare module "react-umg" {
     type EStretch = UE.EStretch;
     type EStretchDirection = UE.EStretchDirection;
     interface ScaleBoxProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         Stretch?: EStretch;
         StretchDirection?: EStretchDirection;
         UserSpecifiedScale?: number;
@@ -1273,6 +1289,7 @@ declare module "react-umg" {
     type EDescendantScrollDestination = UE.EDescendantScrollDestination;
     type EScrollWhenFocusChanges = UE.EScrollWhenFocusChanges;
     interface ScrollBoxProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         ScrollAnimationInterpolationSpeed?: number;
         bEnableTouchScrolling?: boolean;
         WidgetStyle?: ScrollBoxStyle;
@@ -1302,6 +1319,7 @@ declare module "react-umg" {
     }
 
     interface SizeBoxProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         WidthOverride?: number;
         HeightOverride?: number;
         MinDesiredWidth?: number;
@@ -1407,6 +1425,7 @@ declare module "react-umg" {
     }
 
     interface StackBoxProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         Orientation?: EOrientation;
     }
 
@@ -1469,6 +1488,7 @@ declare module "react-umg" {
     }
 
     interface UniformGridPanelProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         SlotPadding?: Margin;
         MinDesiredSlotWidth?: number;
         MinDesiredSlotHeight?: number;
@@ -1479,6 +1499,7 @@ declare module "react-umg" {
     }
 
     interface VerticalBoxProps extends PanelWidgetProps {
+        children?: React.ReactNode;
     }
 
     class VerticalBox extends React.Component<VerticalBoxProps> {
@@ -1486,6 +1507,7 @@ declare module "react-umg" {
     }
 
     interface ViewportProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         BackgroundColor?: LinearColor;
     }
 
@@ -1494,6 +1516,7 @@ declare module "react-umg" {
     }
 
     interface WidgetSwitcherProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         ActiveWidgetIndex?: number;
     }
 
@@ -1502,6 +1525,7 @@ declare module "react-umg" {
     }
 
     interface WindowTitleBarAreaProps extends ContentWidgetProps {
+        children?: React.ReactNode;
         bWindowButtonsEnabled?: boolean;
         bDoubleClickTogglesFullscreen?: boolean;
     }
@@ -1511,6 +1535,7 @@ declare module "react-umg" {
     }
 
     interface WrapBoxProps extends PanelWidgetProps {
+        children?: React.ReactNode;
         InnerSlotPadding?: Vector2D;
         WrapSize?: number;
         bExplicitWrapSize?: boolean;
@@ -1619,6 +1644,7 @@ declare module "react-umg" {
     }
 
     interface EditorUtilityButtonProps extends ButtonProps {
+        children?: React.ReactNode;
     }
 
     class EditorUtilityButton extends React.Component<EditorUtilityButtonProps> {
@@ -1626,6 +1652,7 @@ declare module "react-umg" {
     }
 
     interface EditorUtilityCheckBoxProps extends CheckBoxProps {
+        children?: React.ReactNode;
     }
 
     class EditorUtilityCheckBox extends React.Component<EditorUtilityCheckBoxProps> {
@@ -1717,6 +1744,7 @@ declare module "react-umg" {
     }
 
     interface EditorUtilityScrollBoxProps extends ScrollBoxProps {
+        children?: React.ReactNode;
     }
 
     class EditorUtilityScrollBox extends React.Component<EditorUtilityScrollBoxProps> {

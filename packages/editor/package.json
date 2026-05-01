@@ -9,13 +9,13 @@
   },
   "dependencies": {
     "mocha": "^10.7.0",
-    "react": "^16.0.2",
-    "react-reconciler": "^0.23.0"
+    "react": "^19.0.0",
+    "react-reconciler": "^0.31.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.7",
-    "@types/react": "^17.0.38",
-    "@types/react-reconciler": "^0.18.0",
+    "@types/react": "^19.0.0",
+    "@types/react-reconciler": "^0.28.0",
     "tsx": "^4.17.0",
     "typescript": "^5.8.2"
   }

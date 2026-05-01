@@ -5,6 +5,8 @@
 #include "EditorCommonModule.h"
 #include "Components/Widget.h"
 #include "EditorUtilityWidgetBlueprint.h"
+#include "Widgets/Docking/SDockTab.h"
+#include "Engine/World.h"
 
 FName UReactUMGStarter::Start(UEditorUtilityWidgetBlueprint *EditorUtilityWidgetBlueprint)
 {
@@ -48,5 +50,46 @@ void UReactUMGStarter::SetContent(UWidget* Content)
 
 UWorld* UReactUMGStarter::GetWorld() const
 {
+	// UObject::GetWorld() 对普通 UObject 返回 nullptr
+	// 编辑器环境下从 GEditor 获取可用的 PIE 或编辑器 World
+	if (GEditor)
+	{
+		if (UWorld* PIEWorld = GEditor->GetPIEWorldContext() ? GEditor->GetPIEWorldContext()->World() : nullptr)
+		{
+			return PIEWorld;
+		}
+		return GEditor->GetEditorWorldContext().World();
+	}
 	return UObject::GetWorld();
+}
+
+FName UReactUMGStarter::StartWithName(FName InTabName, const FText& InTabLabel)
+{
+	TabName = InTabName;
+
+	const FLevelEditorModule& LevelEditorModule = FModuleManager::GetModuleChecked<FLevelEditorModule>(TEXT("LevelEditor"));
+	const TSharedPtr<FTabManager> TabManager = LevelEditorModule.GetLevelEditorTabManager();
+
+	// Tab 已存在则直接返回
+	if (TabManager->FindExistingLiveTab(TabName).IsValid())
+	{
+		return TabName;
+	}
+
+	// 尚未注册则先注册
+	if (!TabManager->HasTabSpawner(TabName))
+	{
+		FText CapturedLabel = InTabLabel;
+		TabManager->RegisterTabSpawner(TabName, FOnSpawnTab::CreateLambda(
+			[CapturedLabel](const FSpawnTabArgs&) -> TSharedRef<SDockTab>
+			{
+				return SNew(SDockTab)
+					.TabRole(ETabRole::NomadTab)
+					.Label(CapturedLabel);
+			}))
+			.SetDisplayName(InTabLabel);
+	}
+
+	TabManager->TryInvokeTab(TabName);
+	return TabName;
 }

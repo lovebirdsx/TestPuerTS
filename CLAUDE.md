@@ -104,12 +104,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
 
 ## 架构说明
 
-- **Gulp 任务编排**：任务按包定义在 `packages/tool/src/packages/` 中，在 `gulpfile.ts` 中组合。
-- **根目录启动流程**：`npm run dev` 通过 `nodemon` 监听 `packages/tool/src`，变更后先执行 `gulp tool:build`，再执行 `gulp dev --verbose`；`gulp dev` 本身会先运行 `ue:build`，随后启动 `watch`。
-- **`ue:build:watch`** 使用两个独立的 `gulp.watch` 实例：头文件（`.h`）触发构建 + gen_typing；其他文件（`.cpp`、`.cs`、`.uplugin`、`.uproject`）仅触发构建。排除 `**/Intermediate/**` 和 `**/Binaries/**`。
-- **`tests:watch`** 启动 `tsc -w`，解析 stdout 中的 "Found 0 errors"，然后自动触发 `ue:test`。
-- **引擎路径解析**：`ue.ts` 中的 `getEngineRoot()` 读取 `.uproject` 的 EngineAssociation，从 `LauncherInstalled.dat` 查找安装路径。
-- **JsRunnerCommandlet**：创建 `FJsEnv`，运行指定 JS 模块（`-module=` 必填），通过 `FTSTicker` tick 循环等待 `MarkDone()` 异步完成。支持 `-module=X` 和 `-timeout=N` 参数。
+- **Gulp 任务编排**：任务按包定义在 `packages/tool/src/packages/` 中，在 `gulpfile.ts` 中组合。加入了自定义的缓存机制，可以通过 `--no-cache` 强制跳过缓存。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。

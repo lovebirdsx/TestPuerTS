@@ -4,23 +4,12 @@ import * as Reconciler from 'react-reconciler';
 import { ComboBoxStringProps, TArray } from 'react-umg';
 import * as UE from 'ue';
 
-import { error, log } from 'console';
-
-let world: UE.World = undefined;
-let reactUMGStarter: UE.ReactUMGStarter = undefined;
-let isDebug = false;
-
-function log1(...data: string[]): void {
-	if (isDebug) {
-		log(data.join(','));
-	}
-}
+// 加载蓝图组件路径表（非 Native Widget 需通过资源路径动态加载）
+const reactUmgModule = require('react-umg') as { lazyloadComponents: Record<string, string> };
 
 function propsToString(props: unknown): string {
 	return JSON.stringify(props, ['id', 'key', 'Text', 'DefaultOptions', 'SelectedOption']);
 }
-
-declare const exports: { lazyloadComponents: Record<string, string> };
 
 class UEWidget {
 	public type: string;
@@ -55,10 +44,12 @@ class UEWidget {
 	}
 
 	private init(type: string, props: Record<string, unknown>): void {
-		const classPath = exports.lazyloadComponents[type];
+		const classPath = reactUmgModule.lazyloadComponents[type];
 		if (classPath) {
+			// 蓝图 Widget：必须通过 UE.Class.Load 动态加载资源
 			this.nativePtr = UE.NewObject(UE.Class.Load(classPath)) as UE.Widget;
 		} else {
+			// Native Widget：直接实例化
 			const classObj = (UE as Record<string, unknown>)[type];
 			this.nativePtr = new (classObj as new () => UE.Widget)();
 		}
@@ -146,6 +137,7 @@ class UEWidget {
 	private bind<T extends (...args: unknown[]) => unknown>(name: string, callback: T): void {
 		const { nativePtr } = this;
 		const nativeObj = nativePtr as unknown as Record<string, unknown>;
+
 		const muticastProp = nativeObj[name] as UE.$MulticastDelegate<T>;
 		if (typeof muticastProp.Add === 'function') {
 			muticastProp.Add(callback);
@@ -164,7 +156,7 @@ class UEWidget {
 			return;
 		}
 
-		error(`unsupport callback ${name}`);
+		console.error(`unsupport callback ${name}`);
 	}
 
 	public updateProps(oldProps: Record<string, unknown>, newProps: Record<string, unknown>): void {
@@ -211,13 +203,12 @@ class UEWidget {
 
 	public appendChild(child: UEWidget): void {
 		if (this.childs.includes(child)) {
-			error(
+			console.error(
 				`${this.toString()} append ${child.toString()} failed: UMG do not support appending child already exist`,
 			);
 			return;
 		}
 
-		log1(`${this.toString()} append ${child.toString()}`);
 		const widget = this.nativePtr as UE.PanelWidget;
 		const nativeSlot = widget.AddChild(child.nativePtr);
 		child.setNativeSlot(nativeSlot);
@@ -228,16 +219,12 @@ class UEWidget {
 		const ueParent = this.nativePtr as UE.PanelWidget;
 		const ueChild = child.nativePtr;
 		const id = this.childs.indexOf(beforeChild);
-		log1(
-			`${this.toString()} insertBefore: at->${id} child->${child.toString()} before->${beforeChild.toString()} `,
-		);
 		const nativeSlot = UE.UMGManager.InsertWidget(ueParent, id, ueChild);
 		child.setNativeSlot(nativeSlot);
 		this.childs.splice(id, 0, child);
 	}
 
 	public removeChild(child: UEWidget): void {
-		log1(`${this.toString()} remove ${child.toString()}`);
 		child.unbindAll();
 		(this.nativePtr as UE.PanelWidget).RemoveChild(child.nativePtr);
 		this.childs.splice(this.childs.indexOf(child), 1);
@@ -253,35 +240,20 @@ class UEWidget {
 }
 
 class UEWidgetRoot {
-	public readonly nativePtr: UE.ReactWidget;
+	public readonly nativePtr: UE.UMGRoot;
 
-	private added: boolean;
-
-	public constructor(nativePtr: UE.ReactWidget) {
+	public constructor(nativePtr: UE.UMGRoot) {
 		this.nativePtr = nativePtr;
 	}
 
 	public appendChild(child: UEWidget): void {
-		log1(`[Root] appendChild: ${child.toString()}`);
 		const nativeSlot = this.nativePtr.AddChild(child.nativePtr);
 		child.setNativeSlot(nativeSlot);
 	}
 
 	public removeChild(child: UEWidget): void {
-		log1(`[Root] removeChild: ${child.toString()}`);
 		child.unbindAll();
 		this.nativePtr.RemoveChild(child.nativePtr);
-	}
-
-	public addToViewport(z: number): void {
-		if (!this.added) {
-			this.nativePtr.AddToViewport(z);
-			this.added = true;
-		}
-	}
-
-	public removeFromViewport(): void {
-		this.nativePtr.RemoveFromViewport();
 	}
 }
 
@@ -317,149 +289,199 @@ function compareWidgetProps<T>(x: T, y: T): boolean {
 	return true;
 }
 
-const hostConfig: Reconciler.HostConfig<
-	string,
-	unknown,
-	UEWidgetRoot,
-	UEWidget,
-	UEWidget,
-	unknown,
-	unknown,
-	unknown,
-	unknown,
-	unknown,
-	unknown,
-	unknown
-> = {
-	// useSyncScheduling: true,
-	supportsMutation: true,
-	isPrimaryRenderer: true,
-	supportsPersistence: false,
-	supportsHydration: false,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function createHostConfig(): any {
+	// 优先级状态必须有实际存储，reconciler commit 阶段会读写它
+	let currentUpdatePriority = 0;
 
-	shouldDeprioritizeSubtree: undefined,
-	setTimeout: undefined,
-	clearTimeout: undefined,
-	cancelDeferredCallback: undefined,
-	noTimeout: undefined,
-	scheduleDeferredCallback: undefined,
+	return {
+		supportsMutation: true,
+		isPrimaryRenderer: true,
+		supportsPersistence: false,
+		supportsHydration: false,
 
-	getRootHostContext() {
-		return {};
-	},
+		// react-reconciler 0.31 要求的调度接口
+		scheduleTimeout: setTimeout,
+		cancelTimeout: clearTimeout,
+		noTimeout: -1,
 
-	// CanvasPanel()的parentHostContext是getRootHostContext返回的值
-	getChildHostContext(parentHostContext: unknown) {
-		return parentHostContext; // no use, share one
-	},
+		// 优先级接口：resolveUpdatePriority 返回 SyncLane(2) 确保同步路径
+		setCurrentUpdatePriority(priority: number) {
+			currentUpdatePriority = priority;
+		},
+		getCurrentUpdatePriority() {
+			return currentUpdatePriority;
+		},
+		resolveUpdatePriority() {
+			return currentUpdatePriority !== 0 ? currentUpdatePriority : 2; // SyncLane = 2
+		},
+		shouldAttemptEagerTransition() {
+			return false;
+		},
 
-	appendInitialChild(parent: UEWidget, child: UEWidget) {
-		parent.appendChild(child);
-	},
+		detachDeletedInstance(_instance: UEWidget) {},
 
-	appendChildToContainer(container: UEWidgetRoot, child: UEWidget) {
-		container.appendChild(child);
-	},
+		// react-reconciler 0.31 需要提供以下字段，否则 render/commit 阶段会抛 TypeError
+		getInstanceFromNode(_node: unknown) { return null; },
+		beforeActiveInstanceBlur() {},
+		afterActiveInstanceBlur() {},
+		prepareScopeUpdate(_scopeInstance: unknown, _inst: unknown) {},
+		getInstanceFromScope(_scopeInstance: unknown) { return null; },
+		// maySuspendCommit 在 render 阶段被直接调用，必须返回 boolean
+		maySuspendCommit(_type: string, _props: unknown) { return false; },
+		preloadInstance(_type: string, _props: unknown) { return true; },
+		startSuspendingCommit() {},
+		suspendInstance(_type: string, _props: unknown) {},
+		waitForCommitToBeReady() { return null; },
+		preparePortalMount(_containerInfo: unknown) {},
+		// PuerTS 环境无 queueMicrotask，禁用微任务调度
+		supportsMicrotasks: false,
 
-	appendChild(parent: UEWidget, child: UEWidget) {
-		parent.appendChild(child);
-	},
+		getRootHostContext() {
+			return {};
+		},
 
-	insertBefore(parent: UEWidget, child: UEWidget, beforeChild: UEWidget) {
-		parent.insertBefore(child, beforeChild);
-	},
+		getChildHostContext(parentHostContext: unknown) {
+			return parentHostContext;
+		},
 
-	createInstance(type: string, props: Record<string, unknown>) {
-		return new UEWidget(type, props);
-	},
+		appendInitialChild(parent: UEWidget, child: UEWidget) {
+			parent.appendChild(child);
+		},
 
-	createTextInstance(text: string) {
-		return new UEWidget('TextBlock', { Text: text });
-	},
+		appendChildToContainer(container: UEWidgetRoot, child: UEWidget) {
+			container.appendChild(child);
+		},
 
-	finalizeInitialChildren() {
-		return false;
-	},
+		appendChild(parent: UEWidget, child: UEWidget) {
+			parent.appendChild(child);
+		},
 
-	getPublicInstance(instance: UEWidget) {
-		return instance;
-	},
+		insertBefore(parent: UEWidget, child: UEWidget, beforeChild: UEWidget) {
+			parent.insertBefore(child, beforeChild);
+		},
 
-	now: Date.now,
+		insertInContainerBefore(container: UEWidgetRoot, child: UEWidget, _beforeChild: UEWidget) {
+			// UMGRoot 只有单根节点，不支持 insertBefore，此处降级为 appendChild
+			container.appendChild(child);
+		},
 
-	prepareForCommit() {
-		// log('prepareForCommit');
-	},
+		createInstance(type: string, props: Record<string, unknown>) {
+			return new UEWidget(type, props);
+		},
 
-	resetAfterCommit(container: UEWidgetRoot) {
-		container.addToViewport(0);
-	},
+		createTextInstance(text: string) {
+			return new UEWidget('TextBlock', { Text: text });
+		},
 
-	resetTextContent() {
-		error('resetTextContent not implemented!');
-	},
+		finalizeInitialChildren() {
+			return false;
+		},
 
-	shouldSetTextContent(_type, _props) {
-		return false;
-	},
+		getPublicInstance(instance: UEWidget) {
+			return instance;
+		},
 
-	commitTextUpdate(textInstance: UEWidget, oldText: string, newText: string) {
-		if (oldText !== newText) {
-			textInstance.updateProps({}, { Text: newText });
-		}
-	},
+		// prepareForCommit 必须返回 null 或 Instance
+		prepareForCommit(_containerInfo: UEWidgetRoot) {
+			return null;
+		},
 
-	// return false表示不更新,真值将会出现到commitUpdate的updatePayload里头
-	prepareUpdate(_instance: UEWidget, _type: string, oldProps: unknown, newProps: unknown) {
-		return !compareWidgetProps(oldProps, newProps);
-	},
+		resetAfterCommit(_container: UEWidgetRoot) {},
 
-	commitUpdate(
-		instance: UEWidget,
-		_updatePayload: unknown,
-		_type: string,
-		oldProps: Record<string, unknown>,
-		newProps: Record<string, unknown>,
-	) {
-		instance.updateProps(oldProps, newProps);
-	},
+		resetTextContent() {
+			console.error('resetTextContent not implemented!');
+		},
 
-	removeChildFromContainer(container: UEWidgetRoot, child: UEWidget) {
-		container.removeChild(child);
-	},
+		shouldSetTextContent(_type, _props) {
+			return false;
+		},
 
-	removeChild(parent: UEWidget, child: UEWidget) {
-		parent.removeChild(child);
-	},
-};
+		commitTextUpdate(textInstance: UEWidget, oldText: string, newText: string) {
+			if (oldText !== newText) {
+				textInstance.updateProps({}, { Text: newText });
+			}
+		},
 
-const reconciler = Reconciler(hostConfig);
-let umgRoot: UE.UMGRoot = undefined;
+		// react-reconciler 0.31 实际调用：commitUpdate(stateNode, type, oldProps, newProps, finishedWork)
+		// 注意：0.31 之前的签名是 (instance, updatePayload, type, oldProps, newProps)，此版本已变更
+		prepareUpdate(_instance: UEWidget, _type: string, oldProps: unknown, newProps: unknown) {
+			return !compareWidgetProps(oldProps, newProps);
+		},
 
-export const ReactUMG = {
-	render(reactElement: React.ReactNode): void {
-		if (!reactUMGStarter) {
+		commitUpdate(
+			instance: UEWidget,
+			_type: string,
+			oldProps: Record<string, unknown>,
+			newProps: Record<string, unknown>,
+			_finishedWork: unknown,
+		) {
+			instance.updateProps(oldProps, newProps);
+		},
+
+		removeChildFromContainer(container: UEWidgetRoot, child: UEWidget) {
+			container.removeChild(child);
+		},
+
+		removeChild(parent: UEWidget, child: UEWidget) {
+			parent.removeChild(child);
+		},
+
+		clearContainer(_container: UEWidgetRoot) {},
+	};
+}
+
+export class ReactUMGInstance {
+	private starter: UE.ReactUMGStarter;
+	private umgRoot: UE.UMGRoot;
+	private reconciler: ReturnType<typeof Reconciler>;
+
+	public init(starter: UE.ReactUMGStarter): void {
+		this.starter = starter;
+		this.umgRoot = UE.UMGRoot.CreateUmgRoot(starter.GetWorld());
+		this.umgRoot.bIsFocusable = true;
+		this.reconciler = Reconciler(createHostConfig());
+	}
+
+	public render(reactElement: React.ReactNode): void {
+		if (!this.starter) {
 			throw new Error('init with ReactUMGStarter first!');
 		}
 
-		const root = new UEWidgetRoot(umgRoot as unknown as UE.ReactWidget);
-		const container = reconciler.createContainer(root, false, false);
-		reconciler.updateContainer(reactElement, container, undefined, undefined);
-		reactUMGStarter.SetContent(root.nativePtr);
-	},
+		const root = new UEWidgetRoot(this.umgRoot);
 
-	init(starter: UE.ReactUMGStarter): void {
-		world = starter.GetWorld();
-		umgRoot = UE.UMGRoot.CreateUmgRoot(world);
-		umgRoot.bIsFocusable = true;
-		reactUMGStarter = starter;
-	},
+		// react-reconciler 0.31 createContainer 签名：
+		// (containerInfo, tag, hydrationCallbacks, isStrictMode, concurrentUpdatesByDefaultOverride,
+		//  identifierPrefix, onUncaughtError, onCaughtError, onRecoverableError, transitionCallbacks)
+		const container = (this.reconciler.createContainer as (...args: unknown[]) => unknown)(
+			root,
+			0,   // LegacyRoot
+			null,
+			false,
+			false,
+			'',
+			// onUncaughtError / onCaughtError 不能 throw：
+			// commit 阶段出错后 reconciler 会调这些回调再重新调度，若再 throw 会无限循环
+			(err: unknown) => { console.error('ReactUMG uncaught error:', err); },
+			(err: unknown) => { console.error('ReactUMG caught error:', err); },
+			(err: unknown) => { console.error('ReactUMG recoverable error:', err); },
+			null,
+		);
 
-	getRoot(): UE.UMGRoot {
-		return umgRoot;
-	},
-};
+		// 用 flushSyncFromReconciler 包裹 updateContainer 强制同步提交：
+		// updateContainer 在 0.31 中依赖 Scheduler 的 MessageChannel 异步驱动，
+		// PuerTS 环境 JS 调用未返回时消息循环不会运转，渲染永远不会执行。
+		// flushSyncFromReconciler 在 finally 里立即调用 flushSyncWorkAcrossRoots_impl，
+		// 确保 widget 树在此函数返回前完成提交。
+		const reconcilerInternal = this.reconciler as unknown as Record<string, (...args: unknown[]) => unknown>;
+		reconcilerInternal.flushSyncFromReconciler(() => {
+			this.reconciler.updateContainer(reactElement, container, null, null);
+		});
 
-export function toggleUMGDebug(): void {
-	isDebug = !isDebug;
+		this.starter.SetContent(root.nativePtr);
+	}
+
+	public getRoot(): UE.UMGRoot {
+		return this.umgRoot;
+	}
 }

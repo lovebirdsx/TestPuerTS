@@ -80211,6 +80211,7 @@ declare module "ue" {
         GetWorld() : World;
         SetContent(Content: $Nullable<UE.Widget>) : void;
         Start(EditorUtilityWidgetBlueprint: $Nullable<UE.EditorUtilityWidgetBlueprint>) : string;
+        StartWithName(InTabName: string, InTabLabel: string) : string;
         static StaticClass(): Class;
         static Find(OrigInName: string, Outer?: Object): ReactUMGStarter;
         static Load(InName: string): ReactUMGStarter;

@@ -1,7 +1,10 @@
+import * as React from 'react';
 import { watch } from './common/watcher';
 import { TsEditorLibrary, EditorUtilityWidgetBlueprint, EditorCommonLibrary } from 'ue';
 import { bindMainEUWClass } from './mixin/mainEuw';
 import { runUnitTests } from './tests/runTest';
+import { openReactTab, ReactTabHandle } from './common/reactTab';
+import { SamplePanel } from './components/SamplePanel';
 
 function startWatch() {
 	const watcher = watch(__dirname, () => {
@@ -43,9 +46,28 @@ function showMainEUW() {
 	});
 }
 
+function showReactTab() {
+	let handle: ReactTabHandle | undefined;
+
+	const open = () => {
+		handle = openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel));
+	};
+
+	if (EditorCommonLibrary.IsMainFrameCreationFinished()) {
+		open();
+	} else {
+		EditorCommonLibrary.GetEditorEvent().OnOnMainFrameCreationFinished.Add(open);
+	}
+
+	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
+		handle?.close();
+	});
+}
+
 function main() {
 	startWatch();
 	showMainEUW();
+	showReactTab();
 
 	const editorSettings = TsEditorLibrary.GetTsEditorSettings();
 	if (editorSettings.bAutoRunUnitTests) {

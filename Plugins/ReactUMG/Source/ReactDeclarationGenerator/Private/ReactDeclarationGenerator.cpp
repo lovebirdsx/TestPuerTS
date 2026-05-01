@@ -6,6 +6,7 @@
 #include "CoreUObject.h"
 #include "TypeScriptDeclarationGenerator.h"
 #include "Components/PanelSlot.h"
+#include "Components/PanelWidget.h"
 #include "Components/Widget.h"
 
 
@@ -143,10 +144,12 @@ void FReactDeclarationGenerator::GenReactDeclaration()
 }    
     )";
 
+    // 生成完整的 index.js，包含 lazyloadComponents 映射和组件名导出
+    // 消费方通过 require('react-umg') 直接获取所有导出，无需手动维护额外文件
     FFileHelper::SaveStringToFile(ToString(),
         *(FPaths::ProjectDir() / TEXT("Typing/react-umg/index.d.ts")),
         FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
-    FFileHelper::SaveStringToFile(Components, *(FPaths::ProjectContentDir() / TEXT("JavaScript/react-umg/components.js")),
+    FFileHelper::SaveStringToFile(Components, *(FPaths::ProjectContentDir() / TEXT("JavaScript/react-umg/index.js")),
         FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM);
 }
 
@@ -197,6 +200,13 @@ void FReactDeclarationGenerator::GenClass(UClass* Class)
     }
 
     StringBuffer << " {\n";
+
+    // PanelWidget 派生类（能包含子节点的容器）需要声明 children prop
+    // React 19 移除了 React.Component 上的隐式 children，必须在 Props 中显式声明
+    if (IsWidget && Class->IsChildOf(UPanelWidget::StaticClass()))
+    {
+        StringBuffer << "    " << "    children?: React.ReactNode;\n";
+    }
 
     for (TFieldIterator<PropertyMacro> PropertyIt(Class, EFieldIteratorFlags::ExcludeSuper); PropertyIt; ++PropertyIt)
     {

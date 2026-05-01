@@ -13,6 +13,9 @@ public:
 	FName Start(class UEditorUtilityWidgetBlueprint *EditorUtilityWidgetBlueprint);
 
 	UFUNCTION(BlueprintCallable, Category = "EditorCommon")
+	FName StartWithName(FName InTabName, const FText& InTabLabel);
+
+	UFUNCTION(BlueprintCallable, Category = "EditorCommon")
 	void SetContent(class UWidget* Content);
 
 	UFUNCTION(BlueprintCallable, Category = "EditorCommon")

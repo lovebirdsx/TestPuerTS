@@ -96,7 +96,8 @@ bool DefaultJSModuleLoader::Search(const FString& RequiredDir, const FString& Re
     {
         return true;
     }
-    if (RequiredDir != TEXT("") && !RequiredModule.GetCharArray().Contains('/') && !RequiredModule.EndsWith(TEXT(".js")) &&
+    // 相对路径（../）不向上冒泡；package subpath（如 prop-types/checkPropTypes）含 / 但需要冒泡
+    if (RequiredDir != TEXT("") && !RequiredModule.StartsWith(TEXT("../")) && !RequiredModule.EndsWith(TEXT(".js")) &&
         !RequiredModule.EndsWith(TEXT(".mjs")))
     {
         // 调用require的文件所在的目录往上找
