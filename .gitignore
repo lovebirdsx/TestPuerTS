@@ -13,6 +13,7 @@ TestPuerTS.code-workspace
 Content/JavaScript/editor/
 Content/JavaScript/tests/
 Content/JavaScript/acp-client/
+Content/JavaScript/react-umg/
 
 # Ignore binary files
 *.exe

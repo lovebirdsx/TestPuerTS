@@ -10,10 +10,12 @@ export const SamplePanel = (): React.ReactElement => {
 	return (
 		<VerticalBox>
 			<TextBlock Text={`Hello from ReactUMG! Count: ${count}`} />
-			<Button OnClicked={() => {
-				setCount(count + 1);
-				console.log('Button clicked, count is now', count);
-			}}>
+			<Button
+				OnClicked={() => {
+					setCount(count + 1);
+					console.log('Button clicked, count is now', count);
+				}}
+			>
 				<TextBlock Text="Click me" />
 			</Button>
 		</VerticalBox>

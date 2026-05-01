@@ -5,6 +5,7 @@ import { ComboBoxStringProps, TArray } from 'react-umg';
 import * as UE from 'ue';
 
 // 加载蓝图组件路径表（非 Native Widget 需通过资源路径动态加载）
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const reactUmgModule = require('react-umg') as { lazyloadComponents: Record<string, string> };
 
 function propsToString(props: unknown): string {
@@ -289,7 +290,6 @@ function compareWidgetProps<T>(x: T, y: T): boolean {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function createHostConfig(): any {
 	// 优先级状态必须有实际存储，reconciler commit 阶段会读写它
 	let currentUpdatePriority = 0;
@@ -322,17 +322,27 @@ function createHostConfig(): any {
 		detachDeletedInstance(_instance: UEWidget) {},
 
 		// react-reconciler 0.31 需要提供以下字段，否则 render/commit 阶段会抛 TypeError
-		getInstanceFromNode(_node: unknown) { return null; },
+		getInstanceFromNode(_node: unknown) {
+			return null;
+		},
 		beforeActiveInstanceBlur() {},
 		afterActiveInstanceBlur() {},
 		prepareScopeUpdate(_scopeInstance: unknown, _inst: unknown) {},
-		getInstanceFromScope(_scopeInstance: unknown) { return null; },
+		getInstanceFromScope(_scopeInstance: unknown) {
+			return null;
+		},
 		// maySuspendCommit 在 render 阶段被直接调用，必须返回 boolean
-		maySuspendCommit(_type: string, _props: unknown) { return false; },
-		preloadInstance(_type: string, _props: unknown) { return true; },
+		maySuspendCommit(_type: string, _props: unknown) {
+			return false;
+		},
+		preloadInstance(_type: string, _props: unknown) {
+			return true;
+		},
 		startSuspendingCommit() {},
 		suspendInstance(_type: string, _props: unknown) {},
-		waitForCommitToBeReady() { return null; },
+		waitForCommitToBeReady() {
+			return null;
+		},
 		preparePortalMount(_containerInfo: unknown) {},
 		// PuerTS 环境无 queueMicrotask，禁用微任务调度
 		supportsMicrotasks: false,
@@ -455,16 +465,22 @@ export class ReactUMGInstance {
 		//  identifierPrefix, onUncaughtError, onCaughtError, onRecoverableError, transitionCallbacks)
 		const container = (this.reconciler.createContainer as (...args: unknown[]) => unknown)(
 			root,
-			0,   // LegacyRoot
+			0, // LegacyRoot
 			null,
 			false,
 			false,
 			'',
 			// onUncaughtError / onCaughtError 不能 throw：
 			// commit 阶段出错后 reconciler 会调这些回调再重新调度，若再 throw 会无限循环
-			(err: unknown) => { console.error('ReactUMG uncaught error:', err); },
-			(err: unknown) => { console.error('ReactUMG caught error:', err); },
-			(err: unknown) => { console.error('ReactUMG recoverable error:', err); },
+			(err: unknown) => {
+				console.error('ReactUMG uncaught error:', err);
+			},
+			(err: unknown) => {
+				console.error('ReactUMG caught error:', err);
+			},
+			(err: unknown) => {
+				console.error('ReactUMG recoverable error:', err);
+			},
 			null,
 		);
 
