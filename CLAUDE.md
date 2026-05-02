@@ -11,10 +11,9 @@ Source/                       # C++ 模块
   TsEditor/                   # 编辑器模块
 Plugins/                      # UE 插件（包含 Puerts）
   EditorCommon/               # 编辑器通用插件
-    IPCTransport.*            # UIPCTransport：Windows 命名管道传输层（FTSTicker 驱动）
-    ProcessIOHelper.*         # UProcessIOHelper：stdin/stdout/stderr、文件 I/O、环境变量
-    JsRunHelper.*             # UJsRunHelper：MarkDone(exitCode) 供 JS 异步通知完成
-    JsRunnerCommandlet.*      # UJsRunnerCommandlet：通过 FJsEnv 运行 JS 模块（-run=JsRunner -module=xxx）
+  EditorHelper/               # 编辑器辅助功能插件
+  ReactUMG/                   # React UMG 插件
+  Puerts/                     # PuerTS 核心插件
 Content/JavaScript/           # JS 输出（编译后的 TS 输出到此处）
   editor/                     # 编辑器端 TS 输出
   tests/                      # 测试包 TS 输出（tsc 编译）
@@ -22,38 +21,8 @@ Typing/                       # PuerTS 生成的 d.ts 文件（ue.d.ts、ue_bp.d
 packages/                     # npm 工作区（yarn/npm）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
   tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
-    src/ipc/                  # IPC/RPC 相关代码
-      ueIpcSocket.ts          # UIPCTransport → ISocket 适配器
-      testService.ts          # 测试用 RPC 服务定义（CalculatorService）
-      testRpcClient.ts        # PuerTS 作为 Client 的测试用例
-      testRpcServer.ts        # PuerTS 作为 Server 的测试用例
-    src/standalone/           # 独立 Node.js 进程脚本
-      nodeServer.ts           # Node.js RPC Server（配合 testRpcClient）
-      nodeClient.ts           # Node.js RPC Client（配合 testRpcServer）
-    src/puertsPolyfill.ts     # PuerTS 环境 polyfill（setTimeout 等）
   acp-client/                 # ACP 协议客户端（移植到 PuerTS 环境）
-    src/
-      index.ts                # 入口：初始化、连接 ACP server、REPL 或单次 prompt
-      cli.ts                  # 命令行参数解析（通过 CommandArgs 传入）
-      client.ts               # ACPClient + ACPClientHandler：ACP 协议核心
-      jsonrpc.ts              # JSON-RPC 2.0 over ndjson（替代 @agentclientprotocol/sdk）
-      ueTransport.ts          # UIPCTransport → NdJsonTransport 适配器
-      renderer.ts             # 协议消息和会话更新渲染
-      repl.ts                 # 交互式 REPL（基于 C++ stdin API）
-      format.ts               # 终端颜色格式化（picocolors）
-      bridge.ts               # Node.js 桥接脚本：命名管道 ↔ ACP server stdio
-  universe-lib/               # IPC 框架库（Protocol、IPCClient/Server、ProxyChannel）
   tool/                       # 构建工具（gulp 任务、工具函数）
-    src/
-      gulpfile.ts             # 顶层 gulp 任务组合
-      config.ts               # CLI 参数 + 路径配置
-      common/exec.ts          # exec 辅助函数，带输出格式化
-      common/util.ts          # 文件工具函数、颜色辅助函数
-      packages/               # 按包定义的 gulp 任务
-        ue.ts                 # ue:build, ue:gen_vscode_settings, ue:test, ue:gen_typing, ue:build:watch, ue:build:clean
-        editor.ts             # editor:build, editor:watch, editor:test, editor:typecheck, editor:lint, editor:lint:fix
-        tests.ts              # tests:build, tests:watch, tests:typecheck, tests:lint, tests:lint:fix, tests:rpc-server-test, tests:rpc-client-test, acp-client:build, ue:acp-client
-        tool.ts               # tool:build, tool:watch, tool:test, tool:typecheck, tool:lint, tool:lint:fix
 ```
 
 ## 常用命令
@@ -126,6 +95,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
 ## 注意
 
 - 回答请使用中文
+- Plugins和packages的每个包都有自己独立的CLAUDE.md，你在完成功能后，若有需要，请务必更新对应的CLAUDE.md，保持文档与代码同步
 - 完成feature后，请执行 `npm run check` 来检查
 
 ## PuerTS 环境注意事项
