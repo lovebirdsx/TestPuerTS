@@ -51470,6 +51470,7 @@ declare module "ue" {
     enum ETransitionGetter { AnimationAsset_GetCurrentTime, AnimationAsset_GetLength, AnimationAsset_GetCurrentTimeFraction, AnimationAsset_GetTimeFromEnd, AnimationAsset_GetTimeFromEndFraction, CurrentState_ElapsedTime, CurrentState_GetBlendWeight, CurrentTransitionDuration, ArbitraryState_GetBlendWeight, ETransitionGetter_MAX, __typeKeyDoNoAccess}
     enum ETranslucentSortPolicy { SortByDistance, SortByProjectedZ, SortAlongAxis, ETranslucentSortPolicy_MAX, __typeKeyDoNoAccess}
     enum ETriggerEventsSupported { None, Instant, Uninterruptible, Ongoing, All, ETriggerEventsSupported_MAX, __typeKeyDoNoAccess}
+    enum ETsEditorState { Stopped, Starting, Running, Failed, Restarting, ETsEditorState_MAX, __typeKeyDoNoAccess}
     enum ETwitterIntegrationDelegate { TID_AuthorizeComplete, TID_TweetUIComplete, TID_RequestComplete, TID_MAX, __typeKeyDoNoAccess}
     enum ETwitterRequestMethod { TRM_Get, TRM_Post, TRM_Delete, TRM_MAX, __typeKeyDoNoAccess}
     enum ETypeAdvanceAnim { ETAA_Default, ETAA_Finished, ETAA_Looped, ETAA_MAX, __typeKeyDoNoAccess}
@@ -88601,17 +88602,21 @@ declare module "ue" {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         OnStarted: $MulticastDelegate<() => void>;
         OnStopped: $MulticastDelegate<() => void>;
+        OnStartFailed: $MulticastDelegate<(Value: string) => void>;
         OnLogError: $MulticastDelegate<(Value: string) => void>;
         bWaitJSDebug: boolean;
         ModuleName: string;
         DebugPort: number;
         CurrentStackTrace() : string;
         Event0__DelegateSignature() : void;
+        GetLastStartError() : string;
+        GetState() : UE.ETsEditorState;
         IsRunning() : boolean;
         LogEvent__DelegateSignature(Value: string) : void;
         Restart() : void;
         Start() : void;
         Stop() : void;
+        TryStart() : boolean;
         static StaticClass(): Class;
         static Find(OrigInName: string, Outer?: Object): TsEditor;
         static Load(InName: string): TsEditor;
