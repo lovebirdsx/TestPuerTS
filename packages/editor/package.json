@@ -4,10 +4,6 @@
 	"main": "../../Content/JavaScript/editor/index.js",
 	"types": "../../Content/JavaScript/editor/index.d.ts",
 	"license": "MIT",
-	"scripts": {
-		"test": "vitest run",
-		"dev:test": "vitest --watch"
-	},
 	"dependencies": {
 		"@universe-agent/acp-client-puerts": "*",
 		"mocha": "^10.7.0",
