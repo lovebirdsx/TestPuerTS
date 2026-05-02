@@ -47,10 +47,9 @@ function registerMenus() {
 			onExecute: () => openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel)),
 		},
 		{
-			id: 'editor.tabs.openAcpClient',
+			id: 'editor.openAcpClient',
 			label: 'Open ACP Client',
 			tooltip: 'Open the ACP Client editor tab',
-			path: ['Panels'],
 			sortOrder: 10,
 			onExecute: () => openReactTab('AcpClientTab', 'ACP Client', React.createElement(AcpClientPanel)),
 		},
