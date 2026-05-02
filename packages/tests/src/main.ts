@@ -13,9 +13,13 @@ import './ipc/rpcServer.test';
 import './editorCommon/processIOHelper.test';
 import './editorCommon/childProcess.test';
 import './editor/persistence.test';
+import './editor/acp/reducer.test';
+import './editor/acp/panel.test';
+import './editor/acp/e2e.test';
 import './reactUmg/compareWidgetProps.test';
 import './reactUmg/umgWidget.test';
 import './reactUmg/reconciler.test';
+import './reactUmg/testing.smoke.test';
 
 async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;

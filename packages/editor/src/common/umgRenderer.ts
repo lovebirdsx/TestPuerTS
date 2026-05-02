@@ -28,9 +28,9 @@ export class UEWidget {
 
 	private nativeSlotPtr: UE.PanelSlot;
 
-	private _childs?: UEWidget[];
+	private _childs: UEWidget[] = [];
 
-	private props: Record<string, unknown>;
+	private _props: Record<string, unknown> = {};
 
 	public constructor(type: string, props: Record<string, unknown>) {
 		this.type = type;
@@ -39,14 +39,21 @@ export class UEWidget {
 	}
 
 	public toString(): string {
-		return `[${this.type}]:${this.childs.length} ${propsToString(this.props)}`;
+		return `[${this.type}]:${this._childs.length} ${propsToString(this._props)}`;
 	}
 
 	private get childs(): UEWidget[] {
-		if (!this._childs) {
-			this._childs = [];
-		}
 		return this._childs;
+	}
+
+	// 测试用：只读访问 JS 侧维护的子节点列表（与 nativePtr 容器子节点同步）
+	public get children(): readonly UEWidget[] {
+		return this._childs;
+	}
+
+	// 测试用：只读访问当前 props 快照（不包含 children/Slot/事件回调）
+	public get props(): Readonly<Record<string, unknown>> {
+		return this._props;
 	}
 
 	private init(type: string, props: Record<string, unknown>): void {
@@ -72,7 +79,7 @@ export class UEWidget {
 			}
 		}
 
-		this.props = myProps;
+		this._props = myProps;
 		puerts.merge(this.nativePtr, myProps);
 
 		this.synchronizeWidgetProperties(this.nativePtr, type, props);
@@ -190,6 +197,8 @@ export class UEWidget {
 			this.synchronizeWidgetProperties(this.nativePtr, this.type, myProps);
 			UE.UMGManager.SynchronizeWidgetProperties(this.nativePtr);
 		}
+		// 同步快照供测试查询读取（包含本次变更的非 Slot / 非函数 props）
+		Object.assign(this._props, myProps);
 	}
 
 	private unbind(name: string): void {

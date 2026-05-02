@@ -4,6 +4,7 @@ import { HorizontalBox, SizeBox } from 'react-umg';
 import type {
 	AcpPermissionStrategy,
 	AcpUiController,
+	AcpUiControllerOptions,
 	AcpUiEvent,
 	JsonRpcMessage,
 	PendingPermissionRequest,
@@ -67,12 +68,24 @@ interface AcpPanelState {
 	error: string | undefined;
 }
 
+export type { AcpPanelState, ChatMessage, ToolRecord, MessageRole, InspectorTab };
+
 let nextMessageId = 1;
 let nextProtocolId = 1;
 
 const DEFAULT_COMMAND = 'npx universe-agent-acp';
 
-export const AcpClientPanel = (): React.ReactElement => {
+export type AcpControllerFactory = (options: AcpUiControllerOptions) => AcpUiController;
+
+const defaultControllerFactory: AcpControllerFactory = (options) => new Controller(options);
+
+export interface AcpClientPanelProps {
+	// 测试或调试用：覆盖默认的 AcpUiController 工厂；不传则使用真实 Controller。
+	controllerFactory?: AcpControllerFactory;
+}
+
+export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
+	const controllerFactory = props.controllerFactory ?? defaultControllerFactory;
 	const [command, setCommand] = React.useState(DEFAULT_COMMAND);
 	const [workspace, setWorkspace] = React.useState(UE.JsRunHelper.GetProjectDir());
 	const [extraArgs, setExtraArgs] = React.useState('');
@@ -95,7 +108,7 @@ export const AcpClientPanel = (): React.ReactElement => {
 	}, []);
 
 	const connect = React.useCallback(() => {
-		const next = new Controller({
+		const next = controllerFactory({
 			command,
 			args: splitArgs(extraArgs),
 			workspace,
@@ -111,7 +124,7 @@ export const AcpClientPanel = (): React.ReactElement => {
 				addMessage({ ...prev, status: 'error', error: errorMessage(err) }, 'error', errorMessage(err)),
 			);
 		});
-	}, [command, extraArgs, handleEvent, permission, protocolEnabled, workspace]);
+	}, [command, controllerFactory, extraArgs, handleEvent, permission, protocolEnabled, workspace]);
 
 	const disconnect = React.useCallback(() => {
 		controller?.disconnect();
@@ -731,3 +744,6 @@ function errorMessage(err: unknown): string {
 function shortId(id: string): string {
 	return id.length > 12 ? `${id.slice(0, 12)}...` : id;
 }
+
+// 测试用：导出 reducer 与初始状态工厂，便于 L1 纯函数测试覆盖
+export { reduceEvent, createInitialState, splitArgs, addMessage, appendStreamMessage, upsertTool, errorMessage };

@@ -1,5 +1,13 @@
 export { ACPClient } from './client';
-export type { JsonRpcMessage } from './jsonrpc';
+export { JsonRpcConnection } from './jsonrpc';
+export type {
+	JsonRpcMessage,
+	JsonRpcRequest,
+	JsonRpcResponse,
+	JsonRpcNotification,
+	JsonRpcError,
+	NdJsonTransport,
+} from './jsonrpc';
 export type {
 	AgentCapabilities,
 	InitializeResponse,

@@ -14,3 +14,23 @@ export {
 	getPersistenceRoot,
 } from './common/persistence';
 export type { ChangeListener, DefineStoreOptions, IFileIO } from './common/persistence';
+
+// 组件 + reducer（供测试引用）
+export { AcpClientPanel } from './components/AcpClientPanel';
+export {
+	reduceEvent,
+	createInitialState,
+	splitArgs,
+	addMessage,
+	appendStreamMessage,
+	upsertTool,
+} from './components/AcpClientPanel';
+export type {
+	AcpClientPanelProps,
+	AcpControllerFactory,
+	AcpPanelState,
+	ChatMessage,
+	ToolRecord,
+	MessageRole,
+	InspectorTab,
+} from './components/AcpClientPanel';
