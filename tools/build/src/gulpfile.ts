@@ -19,12 +19,12 @@ gulp.task(
 gulp.task('typecheck', gulp.parallel('tool:typecheck', 'editor:typecheck', 'tests:typecheck', 'acp-client:typecheck'));
 gulp.task('lint', gulp.parallel('tool:lint', 'editor:lint', 'tests:lint', 'acp-client:lint'));
 gulp.task('lint:fix', gulp.parallel('tool:lint:fix', 'editor:lint:fix', 'tests:lint:fix', 'acp-client:lint:fix'));
-gulp.task('unittest', gulp.parallel('tool:test', 'editor:test', 'ue:test'));
+gulp.task('unittest', gulp.parallel('tool:test', 'ue:test'));
 gulp.task('check', gulp.series('build', 'typecheck', 'lint', 'unittest'));
 
 // 兼容任务
-gulp.task('test', gulp.parallel('tool:test', 'editor:test', 'ue:test'));
-gulp.task('test:watch', gulp.parallel('tool:test:watch', 'editor:test:watch'));
+gulp.task('test', gulp.parallel('tool:test', 'ue:test'));
+gulp.task('test:watch', gulp.parallel('tool:test:watch'));
 
 // 开发任务
 gulp.task('watch', gulp.parallel('editor:watch', 'tests:watch', 'ue:build:watch'));

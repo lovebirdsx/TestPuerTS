@@ -8,15 +8,17 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 
 **关键文件：**
 
-| 文件                    | 说明                                             |
-| ----------------------- | ------------------------------------------------ |
-| `src/main.ts`           | 测试入口，动态导入所有测试文件                   |
-| `src/testRunner.ts`     | 测试执行编排                                     |
-| `src/puertsPolyfill.ts` | PuerTS 环境 polyfill（setTimeout 等）            |
-| `src/ipc/`              | IPC/RPC 通信测试（client/server/service）        |
-| `src/editorCommon/`     | EditorCommon 插件测试（ProcessIO、ChildProcess） |
-| `src/reactUmg/`         | ReactUMG 集成测试（reconciler、widget）          |
-| `src/standalone/`       | 独立 Node.js 进程脚本（配合 RPC 测试）           |
+| 文件                    | 说明                                                                         |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| `src/main.ts`           | 测试入口，动态导入所有测试文件                                               |
+| `src/testRunner.ts`     | 测试执行编排（vitest 风 DSL，含 `it.skip`/`describe.skip`/`expect.toThrow`） |
+| `src/puertsPolyfill.ts` | PuerTS 环境 polyfill（setTimeout 等）                                        |
+| `src/ueBindings/`       | PuerTS ↔ UE 绑定测试（基础类型、容器、delegate、actor、async）               |
+| `src/ipc/`              | IPC/RPC 通信测试（client/server/service）                                    |
+| `src/editorCommon/`     | EditorCommon 插件测试（ProcessIO、ChildProcess）                             |
+| `src/editor/`           | editor 包功能测试（如 persistence）                                          |
+| `src/reactUmg/`         | ReactUMG 集成测试（reconciler、widget）                                      |
+| `src/standalone/`       | 独立 Node.js 进程脚本（配合 RPC 测试）                                       |
 
 **运行方式：**
 

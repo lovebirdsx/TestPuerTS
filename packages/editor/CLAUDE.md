@@ -21,15 +21,13 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 
 **测试：**
 
-- `src/unittests/` — vitest 单元测试（`npx gulp editor:test`）
-- `src/tests/` — 集成测试
+editor 包不再持有独立的测试套件。所有需要在 PuerTS 引擎中验证 editor 行为的测试（包括 persistence）统一放在 `packages/tests/src/`，通过 `npx gulp ue:test` 运行。
 
 **常用命令：**
 
 ```bash
 npx gulp editor:build       # 编译
 npx gulp editor:watch       # 监听
-npx gulp editor:test        # 运行 vitest 测试
 npx gulp editor:typecheck   # 类型检查 + 循环依赖检查
 npx gulp editor:lint:fix    # lint 自动修复
 ```

@@ -3,6 +3,11 @@ import * as UE from 'ue';
 import { runTests } from './testRunner';
 
 // 导入测试文件（describe 在导入时注册）
+import './ueBindings/basic.test';
+import './ueBindings/actor.test';
+import './ueBindings/async.test';
+import './ueBindings/container.test';
+import './ueBindings/delegate.test';
 import './ipc/rpcClient.test';
 import './ipc/rpcServer.test';
 import './editorCommon/processIOHelper.test';

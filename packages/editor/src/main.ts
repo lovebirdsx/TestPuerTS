@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { watch } from './common/watcher';
 import { TsEditorLibrary, EditorCommonLibrary } from 'ue';
-import { runUnitTests } from './tests/runTest';
 import { openReactTab } from './common/reactTab';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
-import { runBasicTest } from './tests/basicTest';
 import { flushAllPersistence } from './common/persistence';
 
 let menuDisposable: { dispose(): void } | undefined;
@@ -26,20 +24,6 @@ function startWatch() {
 
 function registerMenus() {
 	menuDisposable = registerEditorMenus([
-		{
-			id: 'editor.tests.runUnitTests',
-			label: 'Run Unit Tests',
-			tooltip: 'Run editor package unit tests',
-			path: ['Tests'],
-			onExecute: () => runUnitTests(),
-		},
-		{
-			id: 'editor.tests.runBasicTest',
-			label: 'Run Basic Test',
-			tooltip: 'Run puerts basic tests',
-			path: ['Tests'],
-			onExecute: () => runBasicTest(),
-		},
 		{
 			id: 'editor.tabs.openSampleReactPanel',
 			label: 'Open Sample React Panel',
@@ -76,11 +60,6 @@ function main() {
 	startWatch();
 	registerMenus();
 	registerExitHooks();
-
-	const editorSettings = TsEditorLibrary.GetTsEditorSettings();
-	if (editorSettings.bAutoRunUnitTests) {
-		runUnitTests();
-	}
 }
 
 main();

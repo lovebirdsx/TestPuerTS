@@ -6,6 +6,7 @@ interface TestCase {
 	name: string;
 	fn: TestFn;
 	fullName: string;
+	skipped?: boolean;
 }
 
 interface Suite {
@@ -17,6 +18,7 @@ interface Suite {
 	afterAll: TestFn[];
 	beforeEach: TestFn[];
 	afterEach: TestFn[];
+	skipped?: boolean;
 }
 
 // ===== 内部状态 =====
@@ -36,7 +38,17 @@ let currentSuite: Suite = rootSuite;
 
 // ===== 公开 API =====
 
-export function describe(name: string, fn: () => void): void {
+interface DescribeFn {
+	(name: string, fn: () => void): void;
+	skip(name: string, fn: () => void): void;
+}
+
+interface ItFn {
+	(name: string, fn: TestFn): void;
+	skip(name: string, fn?: TestFn): void;
+}
+
+function describeImpl(name: string, fn: () => void, skipped: boolean): void {
 	const suite: Suite = {
 		name,
 		fullName: currentSuite.fullName ? `${currentSuite.fullName} > ${name}` : name,
@@ -46,6 +58,7 @@ export function describe(name: string, fn: () => void): void {
 		afterAll: [],
 		beforeEach: [],
 		afterEach: [],
+		skipped: skipped || currentSuite.skipped,
 	};
 	currentSuite.children.push(suite);
 
@@ -55,13 +68,32 @@ export function describe(name: string, fn: () => void): void {
 	currentSuite = parent;
 }
 
-export function it(name: string, fn: TestFn): void {
-	currentSuite.tests.push({
-		name,
-		fn,
-		fullName: currentSuite.fullName ? `${currentSuite.fullName} > ${name}` : name,
-	});
-}
+export const describe: DescribeFn = Object.assign((name: string, fn: () => void) => describeImpl(name, fn, false), {
+	skip(name: string, fn: () => void) {
+		describeImpl(name, fn, true);
+	},
+});
+
+export const it: ItFn = Object.assign(
+	(name: string, fn: TestFn) => {
+		currentSuite.tests.push({
+			name,
+			fn,
+			fullName: currentSuite.fullName ? `${currentSuite.fullName} > ${name}` : name,
+			skipped: currentSuite.skipped,
+		});
+	},
+	{
+		skip(name: string, fn?: TestFn) {
+			currentSuite.tests.push({
+				name,
+				fn: fn ?? (() => {}),
+				fullName: currentSuite.fullName ? `${currentSuite.fullName} > ${name}` : name,
+				skipped: true,
+			});
+		},
+	},
+);
 
 export const test = it;
 
@@ -100,6 +132,7 @@ interface Matchers {
 	toBeLessThan(n: number): void;
 	toBeUndefined(): void;
 	toBeNull(): void;
+	toThrow(expected?: string | RegExp): void;
 	not: Matchers;
 }
 
@@ -145,6 +178,30 @@ function createMatchers(actual: unknown, negated: boolean): Matchers {
 		toBeNull() {
 			assert(actual === null, `expected ${JSON.stringify(actual)} to be null`);
 		},
+		toThrow(expected?: string | RegExp) {
+			if (typeof actual !== 'function') {
+				throw new ExpectError('toThrow requires a function');
+			}
+			let thrown: unknown;
+			let didThrow = false;
+			try {
+				(actual as () => unknown)();
+			} catch (err) {
+				thrown = err;
+				didThrow = true;
+			}
+			if (!didThrow) {
+				assert(false, 'expected function to throw');
+				return;
+			}
+			if (expected === undefined) {
+				assert(true, 'expected function not to throw');
+				return;
+			}
+			const msg = thrown instanceof Error ? thrown.message : String(thrown);
+			const matched = expected instanceof RegExp ? expected.test(msg) : msg.includes(expected);
+			assert(matched, `expected thrown message ${JSON.stringify(msg)} to match ${String(expected)}`);
+		},
 		get not(): Matchers {
 			return createMatchers(actual, !negated);
 		},
@@ -161,6 +218,7 @@ export function expect(actual: unknown): Matchers {
 interface TestResult {
 	name: string;
 	passed: boolean;
+	skipped?: boolean;
 	error?: string;
 }
 
@@ -179,6 +237,18 @@ async function runSuite(
 	const allBeforeEach = [...parentBeforeEach, ...suite.beforeEach];
 	const allAfterEach = [...suite.afterEach, ...parentAfterEach];
 
+	// 整个 suite 被 skip：不跑钩子，所有 test 标记为 skipped，但仍递归子 suite（保持输出结构）
+	if (suite.skipped) {
+		for (const t of suite.tests) {
+			results.push({ name: t.fullName, passed: true, skipped: true });
+		}
+		for (const child of suite.children) {
+			const childResults = await runSuite(child, filter, allBeforeEach, allAfterEach);
+			results.push(...childResults);
+		}
+		return results;
+	}
+
 	// beforeAll
 	for (const fn of suite.beforeAll) {
 		try {
@@ -195,6 +265,10 @@ async function runSuite(
 
 	// 运行测试
 	for (const test of suite.tests) {
+		if (test.skipped) {
+			results.push({ name: test.fullName, passed: true, skipped: true });
+			continue;
+		}
 		try {
 			for (const fn of allBeforeEach) await fn();
 			await test.fn();
@@ -242,8 +316,12 @@ export async function runTests(filter?: string): Promise<number> {
 	// 输出结果
 	let passed = 0;
 	let failed = 0;
+	let skipped = 0;
 	for (const r of results) {
-		if (r.passed) {
+		if (r.skipped) {
+			console.log(` ↷ ${r.name} (skipped)`);
+			skipped++;
+		} else if (r.passed) {
 			console.log(` ✓ ${r.name}`);
 			passed++;
 		} else {
@@ -253,6 +331,6 @@ export async function runTests(filter?: string): Promise<number> {
 		}
 	}
 
-	console.log(`\n结果: ${passed} passed, ${failed} failed, ${results.length} total`);
+	console.log(`\n结果: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
 	return failed > 0 ? 1 : 0;
 }

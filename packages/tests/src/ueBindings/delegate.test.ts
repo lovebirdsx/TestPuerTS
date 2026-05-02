@@ -1,12 +1,12 @@
-import * as assert from 'assert';
 import { $ref, $set, $unref } from 'puerts';
 import * as ue from 'ue';
+import { describe, it, expect } from '../testRunner';
 
-suite('Delegate', () => {
-	test('muticast', () => {
+describe('UeBindings > Delegate', () => {
+	it('muticast', () => {
 		const obj = new ue.MainObject();
-		let result1: number = 0;
-		let result2: number = 0;
+		let result1 = 0;
+		let result2 = 0;
 
 		obj.NotifyWithInt.Add((i) => {
 			result1 = i;
@@ -17,25 +17,25 @@ suite('Delegate', () => {
 		});
 
 		obj.NotifyWithInt.Broadcast(100);
-		assert.strictEqual(result1, 100);
-		assert.strictEqual(result2, 100);
+		expect(result1).toBe(100);
+		expect(result2).toBe(100);
 	});
 
-	test('delegate', () => {
+	it('delegate', () => {
 		const obj = new ue.MainObject();
-		let result: string = '';
+		let result = '';
 
-		assert.strictEqual(obj.NotifyWithString.IsBound(), false);
+		expect(obj.NotifyWithString.IsBound()).toBe(false);
 		obj.NotifyWithString.Bind((value) => {
 			result = value;
 		});
 
 		obj.NotifyWithString.Execute('hello');
-		assert.strictEqual(result, 'hello');
-		assert.strictEqual(obj.NotifyWithString.IsBound(), true);
+		expect(result).toBe('hello');
+		expect(obj.NotifyWithString.IsBound()).toBe(true);
 	});
 
-	test('ref', () => {
+	it('ref', () => {
 		const obj = new ue.MainObject();
 		obj.NotifyWithRefString.Bind((strRef) => {
 			const outerStr = $unref(strRef);
@@ -44,16 +44,16 @@ suite('Delegate', () => {
 
 		const strRef = $ref('hello');
 		obj.NotifyWithRefString.Execute(strRef);
-		assert.strictEqual($unref(strRef), 'hello-out');
+		expect($unref(strRef)).toBe('hello-out');
 	});
 
-	test('return value', () => {
+	it('return value', () => {
 		const obj = new ue.MainObject();
 		obj.NotifyWithStringRet.Bind((str) => {
 			return str + '-result';
 		});
 
 		const result = obj.NotifyWithStringRet.Execute('test');
-		assert.strictEqual(result, 'test-result');
+		expect(result).toBe('test-result');
 	});
 });

@@ -54,7 +54,6 @@ npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
 
 npx gulp editor:build           # 编译编辑器包 TS
 npx gulp editor:watch           # 监听编辑器 TS
-npx gulp editor:test            # 运行编辑器 vitest 测试
 npx gulp editor:typecheck       # 类型检查 + 循环依赖检查（madge）
 npx gulp editor:lint            # 检查编辑器包代码规范
 npx gulp editor:lint:fix        # 自动修复编辑器包代码规范
@@ -68,12 +67,16 @@ npx gulp tool:lint:fix          # 自动修复工具包代码规范
 npx gulp typecheck              # 并行运行所有包的类型检查
 npx gulp lint                   # 并行运行所有包的 lint 检查
 npx gulp lint:fix               # 并行运行所有包的 lint 自动修复
-npx gulp unittest               # 并行运行 tool + editor 的单元测试
+npx gulp unittest               # 并行运行 tool 单元测试 + ue:test（commandlet 测试）
 npx gulp check                  # 串行运行 build → typecheck → lint → unittest
 ```
 
 ## 架构说明
 
+- **测试体系**：项目只有两条测试线。
+  - `tool:test`（vitest）—— `tools/build` 自身的纯 Node 单元测试。
+  - `ue:test`（JsRunnerCommandlet + 自实现 vitest 风 runner）—— 所有需要 PuerTS/UE 引擎的测试（含 UE 绑定、IPC、ReactUMG、persistence 等），代码在 `packages/tests/`。
+  - editor 包不再持有任何独立测试入口；所有"在 PuerTS 引擎里测 UE 绑定"的用例统一在 `packages/tests/src/ueBindings/`。
 - **Gulp 任务编排**：任务按包定义在 `tools/build/src/packages/` 中，在 `gulpfile.ts` 中组合。加入了自定义的缓存机制，可以通过 `--no-cache` 强制跳过缓存。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。

@@ -1,9 +1,9 @@
-import * as assert from 'assert';
 import { $Nullable, toDelegate } from 'puerts';
 import * as ue from 'ue';
+import { describe, it, expect } from '../testRunner';
 
-suite('Actor', () => {
-	test('basic', () => {
+describe('UeBindings > Actor', () => {
+	it('basic', () => {
 		ue.EditorCommonLibrary.TempWorldTest(
 			toDelegate(undefined, (world: $Nullable<ue.World>) => {
 				const actor = ue.GameplayStatics.BeginDeferredActorSpawnFromClass(
@@ -13,9 +13,9 @@ suite('Actor', () => {
 				);
 				ue.GameplayStatics.FinishSpawningActor(actor, undefined);
 
-				assert.ok(actor != undefined);
-				assert.ok(actor.GetName().startsWith('MainActor'));
-				assert.strictEqual(actor.K2_GetActorLocation().ToString(), 'X=0.000 Y=0.000 Z=0.000');
+				expect(actor !== undefined).toBeTruthy();
+				expect(actor.GetName().startsWith('MainActor')).toBeTruthy();
+				expect(actor.K2_GetActorLocation().ToString()).toBe('X=0.000 Y=0.000 Z=0.000');
 
 				actor.K2_DestroyActor();
 			}),

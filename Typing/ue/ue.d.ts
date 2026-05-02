@@ -88629,7 +88629,6 @@ declare module "ue" {
         ModuleName: string;
         DebugPort: number;
         bWaitJSDebug: boolean;
-        bAutoRunUnitTests: boolean;
         static StaticClass(): Class;
         static Find(OrigInName: string, Outer?: Object): TsEditorSettings;
         static Load(InName: string): TsEditorSettings;
