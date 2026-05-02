@@ -334,12 +334,12 @@ function Sidebar(props: {
 			/>
 			<Section Title="Commands">
 				{props.commands.length === 0 ? <Text Text="No commands" /> : undefined}
-				{props.commands.map((command) => (
-					<Text
-						key={command.name}
-						Text={`/${command.name}${command.description ? ` - ${command.description}` : ''}`}
-					/>
-				))}
+				<SidebarTextArea
+					Text={props.commands
+						.map((c) => `/${c.name}${c.description ? ` - ${c.description}` : ''}`)
+						.join('\n')}
+					bIsReadOnly
+				/>
 			</Section>
 		</VBox>
 	);
@@ -453,6 +453,7 @@ function PromptBox(props: {
 				HintText="Ask the agent..."
 				OnTextChanged={props.onPrompt}
 				bIsReadOnly={props.disabled}
+				OnTextCommitted={props.onSend}
 			/>
 			<HBox>
 				<Btn OnClicked={props.onSend} bIsEnabled={!props.disabled && !!props.prompt.trim()}>
