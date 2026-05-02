@@ -13,7 +13,7 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 | `src/common/umgRenderer.ts` | 核心 React reconciler for UMG（16KB）        |
 | `src/common/reactTab.ts`    | Tab 管理组件                                 |
 | `src/common/watcher.ts`     | 文件/属性监听                                |
-| `src/components/`           | UI 组件（SamplePanel 等）                    |
+| `src/components/`           | UI 组件（SamplePanel、AcpClientPanel 等）    |
 | `src/components/ui.tsx`     | 通用 UI 封装组件（Panel/VBox/HBox/Btn/Text） |
 | `src/mixin/mainEuw.ts`      | UE 主窗口集成                                |
 
@@ -31,3 +31,9 @@ npx gulp editor:test        # 运行 vitest 测试
 npx gulp editor:typecheck   # 类型检查 + 循环依赖检查
 npx gulp editor:lint:fix    # lint 自动修复
 ```
+
+**ACP Client UI：**
+
+- `src/components/AcpClientPanel.tsx` 在独立编辑器 Tab 中提供 ACP 客户端界面。
+- 协议和权限逻辑来自 `@universe-agent/acp-client-puerts` 的 `AcpUiController`。
+- Tab 生命周期由 `main.ts` 管理，编辑器停止时关闭 Tab 并触发控制器清理。

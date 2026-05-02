@@ -1,8 +1,12 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "outDir": "../../Content/JavaScript/acp-client",
-    "rootDir": "src"
-  },
-  "include": ["src"]
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"outDir": "../../Content/JavaScript/acp-client",
+		"rootDir": "src",
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		"tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+	},
+	"include": ["src"]
 }

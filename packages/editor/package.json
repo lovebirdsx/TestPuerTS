@@ -1,23 +1,24 @@
 {
-  "name": "editor",
-  "version": "1.0.0",
-  "main": "../../Content/JavaScript/editor/index.js",
-  "types": "../../Content/JavaScript/editor/index.d.ts",
-  "license": "MIT",
-  "scripts": {
-    "test": "vitest run",
-    "dev:test": "vitest --watch"
-  },
-  "dependencies": {
-    "mocha": "^10.7.0",
-    "react": "^19.0.0",
-    "react-reconciler": "^0.31.0"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.7",
-    "@types/react": "^19.0.0",
-    "@types/react-reconciler": "^0.28.0",
-    "tsx": "^4.17.0",
-    "typescript": "^5.8.2"
-  }
+	"name": "editor",
+	"version": "1.0.0",
+	"main": "../../Content/JavaScript/editor/index.js",
+	"types": "../../Content/JavaScript/editor/index.d.ts",
+	"license": "MIT",
+	"scripts": {
+		"test": "vitest run",
+		"dev:test": "vitest --watch"
+	},
+	"dependencies": {
+		"@universe-agent/acp-client-puerts": "*",
+		"mocha": "^10.7.0",
+		"react": "^19.0.0",
+		"react-reconciler": "^0.31.0"
+	},
+	"devDependencies": {
+		"@types/mocha": "^10.0.7",
+		"@types/react": "^19.0.0",
+		"@types/react-reconciler": "^0.28.0",
+		"tsx": "^4.17.0",
+		"typescript": "^5.8.2"
+	}
 }

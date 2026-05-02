@@ -23,10 +23,17 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'editor:build',
-			inputGlobs: ['packages/editor/src/**/*.{ts,tsx}', 'packages/editor/tsconfig.json'],
+			inputGlobs: [
+				'packages/editor/src/**/*.{ts,tsx}',
+				'packages/editor/tsconfig.json',
+				'packages/editor/package.json',
+				'packages/acp-client/src/**/*.ts',
+				'packages/acp-client/tsconfig.json',
+				'packages/acp-client/package.json',
+			],
 		},
 		async () => {
-			await exec('tsc', { workingDir, logPrefix: '[editor:build] ' });
+			await exec('tsc -b', { workingDir, logPrefix: '[editor:build] ' });
 		},
 	),
 );
@@ -60,7 +67,14 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'editor:typecheck',
-			inputGlobs: ['packages/editor/src/**/*.{ts,tsx}', 'packages/editor/tsconfig.json'],
+			inputGlobs: [
+				'packages/editor/src/**/*.{ts,tsx}',
+				'packages/editor/tsconfig.json',
+				'packages/editor/package.json',
+				'packages/acp-client/src/**/*.ts',
+				'packages/acp-client/tsconfig.json',
+				'packages/acp-client/package.json',
+			],
 		},
 		async () => {
 			await exec('tsc --noEmit', {

@@ -15,7 +15,11 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'acp-client:typecheck',
-			inputGlobs: ['packages/acp-client/src/**/*.ts', 'packages/acp-client/tsconfig.json'],
+			inputGlobs: [
+				'packages/acp-client/src/**/*.ts',
+				'packages/acp-client/tsconfig.json',
+				'packages/acp-client/package.json',
+			],
 		},
 		async () => {
 			await exec('tsc --noEmit', {
@@ -55,7 +59,11 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'acp-client:build',
-			inputGlobs: ['packages/acp-client/src/**/*.ts', 'packages/acp-client/tsconfig.json'],
+			inputGlobs: [
+				'packages/acp-client/src/**/*.ts',
+				'packages/acp-client/tsconfig.json',
+				'packages/acp-client/package.json',
+			],
 		},
 		async () => {
 			await exec('tsc', {

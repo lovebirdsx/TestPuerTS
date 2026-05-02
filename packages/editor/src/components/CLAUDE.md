@@ -9,3 +9,15 @@
 | `Private/Styling/UMGCoreStyle.cpp`      | UMG 默认样式（固定色，不跟主题）                         |
 | `Public/Styling/CoreStyle.h`            | `ButtonMargins`、`InputFocusThickness` 等常量            |
 | `Public/Styling/SlateBrush.h`           | `ESlateBrushDrawType` 枚举（NoDrawType=0、RoundedBox=4） |
+
+**组件约定：**
+
+- 基础布局和按钮使用 `Panel` / `VBox` / `HBox` / `Btn` / `ToolbarButton` / `Text`。
+- 表单和工作台界面使用 `Input` / `TextArea` / `ScrollArea` / `Select` / `Section` / `Badge` / `Tabs` / `ModalPanel`。
+- `VBox` / `HBox` 的 `Gap` 通过 child `Slot.Padding` 实现，业务组件不要重复手写间距逻辑。
+
+**ACP Client Panel：**
+
+- `AcpClientPanel.tsx` 是编辑器内 ACP 客户端主界面。
+- UI 只消费 `AcpUiController` 的事件，不直接处理 JSON-RPC transport。
+- 权限请求以 `ModalPanel` 展示，必须调用 pending permission 的 `resolve()` 或 `cancel()`。

@@ -1,12 +1,29 @@
 import * as React from 'react';
-import { Border, Button, HorizontalBox, TextBlock, VerticalBox } from 'react-umg';
+import {
+	Border,
+	Button,
+	CheckBox,
+	ComboBoxString,
+	EditableTextBox,
+	HorizontalBox,
+	MultiLineEditableTextBox,
+	ScrollBox,
+	TextBlock,
+	VerticalBox,
+} from 'react-umg';
 import type {
 	BorderProps,
 	ButtonProps,
 	ButtonStyle,
+	CheckBoxProps,
+	ComboBoxStringProps,
+	EditableTextBoxStyle,
+	EditableTextBoxProps,
 	HorizontalBoxProps,
 	LinearColor,
 	Margin,
+	MultiLineEditableTextBoxProps,
+	ScrollBoxProps,
 	SlateBrush,
 	SlateColor,
 	SlateFontInfo,
@@ -34,6 +51,10 @@ const COL_DROPDOWN: LinearColor = { R: 0.0396, G: 0.0396, B: 0.0396, A: 1.0 };
 const COL_FOREGROUND: LinearColor = { R: 0.533, G: 0.533, B: 0.533, A: 1.0 };
 /** ForegroundHover #FFFFFF → 按钮/高亮文字色 */
 const COL_FOREGROUND_HOVER: LinearColor = { R: 1.0, G: 1.0, B: 1.0, A: 1.0 };
+const COL_PANEL: LinearColor = { R: 0.015, G: 0.015, B: 0.015, A: 1.0 };
+const COL_ACCENT: LinearColor = { R: 0.034, G: 0.16, B: 0.32, A: 1.0 };
+const COL_WARNING: LinearColor = { R: 0.55, G: 0.37, B: 0.08, A: 1.0 };
+const COL_ERROR: LinearColor = { R: 0.45, G: 0.06, B: 0.05, A: 1.0 };
 
 // ── DrawAs 枚举值（ESlateBrushDrawType，来源于 SlateBrush.h） ──
 
@@ -66,6 +87,7 @@ const DEFAULT_TEXT_COLOR: SlateColor = { SpecifiedColor: COL_FOREGROUND };
 
 const DEFAULT_PANEL_PADDING = { Left: 4, Top: 4, Right: 4, Bottom: 4 };
 const DEFAULT_PANEL_BACKGROUND: SlateBrush = { DrawAs: DRAW_AS_NO_DRAW as any };
+const SECTION_BACKGROUND: SlateBrush = roundedBrush(COL_PANEL, COL_INPUT);
 const DEFAULT_BOX_CHILD_GAP = 2;
 
 const DEFAULT_BUTTON_STYLE: ButtonStyle = {
@@ -79,6 +101,12 @@ const DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	DisabledForeground: { SpecifiedColor: COL_FOREGROUND },
 	NormalPadding: { Left: 12, Top: 1.5, Right: 12, Bottom: 1.5 },
 	PressedPadding: { Left: 12, Top: 2.5, Right: 12, Bottom: 0.5 },
+};
+
+const COMPACT_BUTTON_STYLE: ButtonStyle = {
+	...DEFAULT_BUTTON_STYLE,
+	NormalPadding: { Left: 8, Top: 1, Right: 8, Bottom: 1 },
+	PressedPadding: { Left: 8, Top: 2, Right: 8, Bottom: 0 },
 };
 
 // ── 工具函数 ──
@@ -108,6 +136,8 @@ function mergeDeep<T>(defaults: T, overrides?: Partial<T>): T {
 type BoxSpacingProps = {
 	Gap?: number;
 };
+
+type SectionTone = 'normal' | 'accent' | 'warning' | 'error';
 
 type SlottedChildProps = {
 	Slot?: {
@@ -169,6 +199,15 @@ export const Btn = (props: ButtonProps): React.ReactElement => {
 	);
 };
 
+export const ToolbarButton = (props: ButtonProps): React.ReactElement => {
+	const { children, WidgetStyle, ...rest } = props;
+	return (
+		<Btn WidgetStyle={mergeDeep(COMPACT_BUTTON_STYLE, WidgetStyle)} {...rest}>
+			{children}
+		</Btn>
+	);
+};
+
 export const Text = (props: TextBlockProps): React.ReactElement => {
 	const { Font, ColorAndOpacity, ...rest } = props;
 	return (
@@ -177,5 +216,134 @@ export const Text = (props: TextBlockProps): React.ReactElement => {
 			ColorAndOpacity={ColorAndOpacity ?? DEFAULT_TEXT_COLOR}
 			{...rest}
 		/>
+	);
+};
+
+export const Section = (
+	props: BorderProps & { Title?: string; Tone?: SectionTone; Gap?: number },
+): React.ReactElement => {
+	const { children, Title, Tone = 'normal', Gap = 4, Background, Padding, ...rest } = props;
+	const toneBrush =
+		Tone === 'accent'
+			? roundedBrush(COL_ACCENT, COL_INPUT)
+			: Tone === 'warning'
+				? roundedBrush(COL_WARNING, COL_INPUT)
+				: Tone === 'error'
+					? roundedBrush(COL_ERROR, COL_INPUT)
+					: SECTION_BACKGROUND;
+	return (
+		<Border
+			Background={Background ?? toneBrush}
+			Padding={Padding ?? { Left: 6, Top: 6, Right: 6, Bottom: 6 }}
+			{...rest}
+		>
+			<VBox Gap={Gap}>
+				{Title ? (
+					<Text Text={Title} Font={{ Size: 10 }} ColorAndOpacity={{ SpecifiedColor: COL_FOREGROUND_HOVER }} />
+				) : null}
+				{children}
+			</VBox>
+		</Border>
+	);
+};
+
+export const Divider = (): React.ReactElement => (
+	<Border
+		Background={roundedBrush(COL_INPUT, COL_INPUT)}
+		Padding={{ Left: 0, Top: 0, Right: 0, Bottom: 0 }}
+		Slot={{ Size: { SizeRule: 0, Value: 1 } }}
+	/>
+);
+
+export const Badge = (props: { Text: string; Tone?: SectionTone }): React.ReactElement => {
+	const tone = props.Tone ?? 'normal';
+	return (
+		<Border
+			Background={
+				tone === 'accent'
+					? roundedBrush(COL_ACCENT, COL_ACCENT)
+					: tone === 'warning'
+						? roundedBrush(COL_WARNING, COL_WARNING)
+						: tone === 'error'
+							? roundedBrush(COL_ERROR, COL_ERROR)
+							: roundedBrush(COL_SECONDARY, COL_SECONDARY)
+			}
+			Padding={{ Left: 6, Top: 1, Right: 6, Bottom: 1 }}
+		>
+			<Text Text={props.Text} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_FOREGROUND_HOVER }} />
+		</Border>
+	);
+};
+
+const DEFAULT_INPUT_STYLE: EditableTextBoxStyle = {
+	BackgroundImageNormal: roundedBrush(COL_RECESSED, COL_INPUT),
+	BackgroundImageHovered: roundedBrush(COL_SECONDARY, COL_INPUT),
+	BackgroundImageFocused: roundedBrush(COL_SECONDARY, COL_ACCENT),
+	BackgroundImageReadOnly: roundedBrush(COL_RECESSED, COL_RECESSED),
+	Padding: { Left: 6, Top: 3, Right: 6, Bottom: 3 },
+	Font: DEFAULT_FONT,
+	ForegroundColor: { SpecifiedColor: COL_FOREGROUND_HOVER },
+	BackgroundColor: { SpecifiedColor: COL_RECESSED },
+};
+
+export const Input = (props: EditableTextBoxProps): React.ReactElement => {
+	const { WidgetStyle, ...rest } = props;
+	return <EditableTextBox WidgetStyle={mergeDeep(DEFAULT_INPUT_STYLE, WidgetStyle)} {...rest} />;
+};
+
+export const TextArea = (props: MultiLineEditableTextBoxProps): React.ReactElement => {
+	const { WidgetStyle, TextStyle, ...rest } = props;
+	return (
+		<MultiLineEditableTextBox
+			WidgetStyle={mergeDeep(DEFAULT_INPUT_STYLE, WidgetStyle)}
+			TextStyle={mergeDeep({ Font: DEFAULT_FONT, ColorAndOpacity: DEFAULT_TEXT_COLOR }, TextStyle)}
+			{...rest}
+		/>
+	);
+};
+
+export const ScrollArea = (props: ScrollBoxProps): React.ReactElement => {
+	const { children, ...rest } = props;
+	return <ScrollBox {...rest}>{children}</ScrollBox>;
+};
+
+export const Select = (props: ComboBoxStringProps): React.ReactElement => {
+	const { ...rest } = props;
+	return <ComboBoxString {...rest} />;
+};
+
+export const Check = (props: CheckBoxProps): React.ReactElement => {
+	return <CheckBox {...props} />;
+};
+
+export const Tabs = (props: {
+	Items: { id: string; label: string }[];
+	ActiveId: string;
+	OnSelect: (id: string) => void;
+}): React.ReactElement => (
+	<HBox Gap={2}>
+		{props.Items.map((item) => (
+			<ToolbarButton key={item.id} OnClicked={() => props.OnSelect(item.id)}>
+				<Text
+					Text={item.label}
+					ColorAndOpacity={{
+						SpecifiedColor: item.id === props.ActiveId ? COL_FOREGROUND_HOVER : COL_FOREGROUND,
+					}}
+				/>
+			</ToolbarButton>
+		))}
+	</HBox>
+);
+
+export const ModalPanel = (props: BorderProps): React.ReactElement => {
+	const { children, ...rest } = props;
+	return (
+		<Border
+			Background={roundedBrush(COL_HEADER, COL_ACCENT)}
+			Padding={{ Left: 8, Top: 8, Right: 8, Bottom: 8 }}
+			{...rest}
+		>
+			{children}
+		</Border>
 	);
 };

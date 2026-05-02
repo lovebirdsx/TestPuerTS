@@ -173,8 +173,8 @@ export class Repl {
 		switch (subCmd) {
 			case 'new':
 				try {
-					const sessionId = await this.client.newSession();
-					UE.ProcessIOHelper.WriteStderr(fmt.green(`New session created: ${sessionId}\n`));
+					const session = await this.client.newSession();
+					UE.ProcessIOHelper.WriteStderr(fmt.green(`New session created: ${session.sessionId}\n`));
 				} catch (err) {
 					UE.ProcessIOHelper.WriteStderr(
 						fmt.error(`Failed to create session: ${err instanceof Error ? err.message : String(err)}\n`),
@@ -189,8 +189,8 @@ export class Repl {
 					break;
 				}
 				try {
-					const sessionId = await this.client.loadSession(id);
-					UE.ProcessIOHelper.WriteStderr(fmt.green(`Session loaded: ${sessionId}\n`));
+					const session = await this.client.loadSession(id);
+					UE.ProcessIOHelper.WriteStderr(fmt.green(`Session loaded: ${session.sessionId}\n`));
 				} catch (err) {
 					UE.ProcessIOHelper.WriteStderr(
 						fmt.error(`Failed to load session: ${err instanceof Error ? err.message : String(err)}\n`),

@@ -1,6 +1,6 @@
 import * as UE from 'ue';
 import type { JsonRpcMessage } from './jsonrpc';
-import type { SessionNotification } from './client';
+import type { SessionNotification } from './types';
 import { fmt, colorizeJson } from './format';
 
 export interface RendererOptions {

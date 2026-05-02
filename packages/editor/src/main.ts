@@ -5,6 +5,7 @@ import { bindMainEUWClass } from './mixin/mainEuw';
 import { runUnitTests } from './tests/runTest';
 import { openReactTab, ReactTabHandle } from './common/reactTab';
 import { SamplePanel } from './components/SamplePanel';
+import { AcpClientPanel } from './components/AcpClientPanel';
 
 function startWatch() {
 	const watcher = watch(__dirname, () => {
@@ -48,9 +49,11 @@ function showMainEUW() {
 
 function showReactTab() {
 	let handle: ReactTabHandle | undefined;
+	let acpHandle: ReactTabHandle | undefined;
 
 	const open = () => {
 		handle = openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel));
+		acpHandle = openReactTab('AcpClientTab', 'ACP Client', React.createElement(AcpClientPanel));
 	};
 
 	if (EditorCommonLibrary.IsMainFrameCreationFinished()) {
@@ -61,6 +64,7 @@ function showReactTab() {
 
 	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
 		handle?.close();
+		acpHandle?.close();
 	});
 }
 

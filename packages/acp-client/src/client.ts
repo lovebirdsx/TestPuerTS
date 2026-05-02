@@ -3,66 +3,36 @@ import { JsonRpcConnection } from './jsonrpc';
 import { spawnAcpServer } from './ueTransport';
 import { Renderer } from './renderer';
 import type { CliOptions } from './cli';
+import {
+	PROTOCOL_VERSION,
+	type InitializeResponse,
+	type ListSessionsResponse,
+	type RequestPermissionRequest,
+	type RequestPermissionResponse,
+	type SessionConfigOption,
+	type SessionInfo,
+	type SessionModeState,
+	type SessionNotification,
+	type SessionStartResponse,
+} from './types';
+
+export { PROTOCOL_VERSION };
+export type {
+	AgentCapabilities,
+	InitializeResponse,
+	ListSessionsResponse,
+	RequestPermissionRequest,
+	RequestPermissionResponse,
+	SessionConfigOption,
+	SessionInfo,
+	SessionMode,
+	SessionModeState,
+	SessionNotification,
+	SessionStartResponse,
+	SessionUpdate,
+} from './types';
 
 // --- ACP 协议类型定义（从 @agentclientprotocol/sdk 提取） ---
-
-export const PROTOCOL_VERSION = 1;
-
-export interface InitializeResponse {
-	protocolVersion: number;
-	agentInfo?: {
-		name: string;
-		version?: string;
-	};
-	capabilities?: Record<string, unknown>;
-}
-
-export interface SessionNotification {
-	sessionId: string;
-	update: SessionUpdate;
-}
-
-export type SessionUpdate =
-	| { sessionUpdate: 'agent_message_chunk'; content: { type: string; text?: string } }
-	| { sessionUpdate: 'agent_thought_chunk'; content: { type: string; text?: string } }
-	| { sessionUpdate: 'user_message_chunk'; content: { type: string; text?: string } }
-	| {
-			sessionUpdate: 'tool_call';
-			toolCallId: string;
-			title: string;
-			kind?: string;
-			status?: string;
-			rawInput?: unknown;
-	  }
-	| {
-			sessionUpdate: 'tool_call_update';
-			toolCallId: string;
-			status?: string | null;
-			rawOutput?: unknown;
-			content?: unknown;
-			title?: string | null;
-	  }
-	| { sessionUpdate: 'plan'; entries: { content: string; status: string; priority: string }[] }
-	| { sessionUpdate: 'available_commands_update'; availableCommands: { name: string; description?: string }[] }
-	| { sessionUpdate: 'current_mode_update'; currentModeId: string }
-	| { sessionUpdate: 'usage_update'; size: number; used: number }
-	| { sessionUpdate: string };
-
-export interface RequestPermissionRequest {
-	toolCall: {
-		toolCallId: string;
-		title?: string;
-		rawInput?: unknown;
-	};
-	options: { optionId: string; name: string; kind: string }[];
-}
-
-export interface RequestPermissionResponse {
-	outcome: {
-		outcome: string;
-		optionId: string;
-	};
-}
 
 // ACP 方法常量
 const AGENT_METHODS = {
@@ -72,6 +42,8 @@ const AGENT_METHODS = {
 	session_prompt: 'session/prompt',
 	session_cancel: 'session/cancel',
 	session_set_mode: 'session/set_mode',
+	session_set_config_option: 'session/set_config_option',
+	session_list: 'session/list',
 } as const;
 
 const CLIENT_METHODS = {
@@ -104,10 +76,17 @@ export class ACPClientHandler {
 	private options: CliOptions;
 	private terminals = new Map<string, ManagedTerminal>();
 	private nextTerminalId = 1;
+	private permissionHandler: ((params: RequestPermissionRequest) => Promise<RequestPermissionResponse>) | null = null;
 
 	constructor(renderer: Renderer, options: CliOptions) {
 		this.renderer = renderer;
 		this.options = options;
+	}
+
+	setPermissionHandler(
+		handler: ((params: RequestPermissionRequest) => Promise<RequestPermissionResponse>) | null,
+	): void {
+		this.permissionHandler = handler;
 	}
 
 	async handleRequest(method: string, params: any): Promise<unknown> {
@@ -142,6 +121,10 @@ export class ACPClientHandler {
 	}
 
 	private async requestPermission(params: RequestPermissionRequest): Promise<RequestPermissionResponse> {
+		if (this.permissionHandler) {
+			return this.permissionHandler(params);
+		}
+
 		const { permission } = this.options;
 
 		if (permission === 'auto-approve') {
@@ -382,6 +365,9 @@ export class ACPClient {
 
 	sessionId: string | null = null;
 	initResult: InitializeResponse | null = null;
+	configOptions: SessionConfigOption[] = [];
+	modes: SessionModeState | null = null;
+	sessionInfo: SessionInfo | null = null;
 
 	constructor(renderer: Renderer, options: CliOptions) {
 		this.renderer = renderer;
@@ -437,29 +423,39 @@ export class ACPClient {
 		return result;
 	}
 
-	async newSession(): Promise<string> {
+	async newSession(): Promise<SessionStartResponse> {
 		if (!this.connection) throw new Error('Not connected');
 
-		const result = await this.connection.sendRequest<{ sessionId: string }>(AGENT_METHODS.session_new, {
+		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_new, {
 			cwd: this.options.workspace,
 			mcpServers: [],
 		});
 
-		this.sessionId = result.sessionId;
-		return result.sessionId;
+		this.applySessionStartResponse(result);
+		return result;
 	}
 
-	async loadSession(sessionId: string): Promise<string> {
+	async loadSession(sessionId: string): Promise<SessionStartResponse> {
 		if (!this.connection) throw new Error('Not connected');
 
-		const result = await this.connection.sendRequest<{ sessionId: string }>(AGENT_METHODS.session_load, {
+		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_load, {
 			sessionId,
 			cwd: this.options.workspace,
 			mcpServers: [],
 		});
 
-		this.sessionId = result.sessionId;
-		return result.sessionId;
+		this.applySessionStartResponse(result);
+		return result;
+	}
+
+	async listSessions(cursor?: string): Promise<ListSessionsResponse> {
+		if (!this.connection) throw new Error('Not connected');
+
+		return this.connection.sendRequest<ListSessionsResponse>(AGENT_METHODS.session_list, {
+			cursor,
+			cwd: this.options.workspace,
+			mcpServers: [],
+		});
 	}
 
 	async prompt(text: string): Promise<{ stopReason: string }> {
@@ -491,14 +487,41 @@ export class ACPClient {
 		});
 	}
 
+	async setConfigOption(optionId: string, valueId: string | boolean): Promise<SessionConfigOption[]> {
+		if (!this.connection || !this.sessionId) {
+			throw new Error('No active session');
+		}
+
+		const params =
+			typeof valueId === 'boolean'
+				? { sessionId: this.sessionId, optionId, value: valueId }
+				: { sessionId: this.sessionId, optionId, valueId };
+		const result = await this.connection.sendRequest<{ configOptions?: SessionConfigOption[] }>(
+			AGENT_METHODS.session_set_config_option,
+			params,
+		);
+		this.configOptions = result.configOptions ?? this.configOptions;
+		return this.configOptions;
+	}
+
 	async disconnect(): Promise<void> {
 		this.handler.cleanup();
 		this.connection?.dispose();
 		this.connection = null;
 		this.sessionId = null;
+		this.configOptions = [];
+		this.modes = null;
+		this.sessionInfo = null;
 	}
 
 	get closed(): Promise<void> | undefined {
 		return this.connection?.closed;
+	}
+
+	private applySessionStartResponse(result: SessionStartResponse): void {
+		this.sessionId = result.sessionId;
+		this.configOptions = result.configOptions ?? [];
+		this.modes = result.modes ?? null;
+		this.sessionInfo = result.sessionInfo ?? { sessionId: result.sessionId };
 	}
 }
