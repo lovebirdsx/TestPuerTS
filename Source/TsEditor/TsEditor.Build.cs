@@ -20,10 +20,13 @@ public class TsEditor : ModuleRules
                 "Engine",
                 "Slate",
                 "SlateCore",
+                "InputCore",
                 "DeveloperSettings",
                 "UnrealEd",
+                "LevelEditor",
                 "Blutility",
                 "UMG",
+                "ToolMenus",
                 "JsEnv",
                 "EditorCommon",
             }

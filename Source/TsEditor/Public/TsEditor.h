@@ -9,6 +9,16 @@
 
 class FLoggerForJs;
 
+UENUM(BlueprintType)
+enum class ETsEditorState : uint8
+{
+	Stopped,
+	Starting,
+	Running,
+	Failed,
+	Restarting,
+};
+
 UCLASS(BlueprintType)
 class TSEDITOR_API UTsEditor: public  UObject
 {
@@ -17,14 +27,17 @@ public:
 	UTsEditor();	
 	
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FEvent0);
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLogEvent, FString, Value);	
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLogEvent, FString, Value);
 
 	UFUNCTION(BlueprintCallable, Category = "TsEditor")
 	void Start();
 
 	UFUNCTION(BlueprintCallable, Category = "TsEditor")
+	bool TryStart();
+
+	UFUNCTION(BlueprintCallable, Category = "TsEditor")
 	void Stop();
-	
+
 	UFUNCTION(BlueprintCallable, Category = "TsEditor")
 	void Restart();
 
@@ -34,6 +47,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "TsEditor")
 	FString CurrentStackTrace();
 
+	UFUNCTION(BlueprintCallable, Category = "TsEditor")
+	FString GetLastStartError() const;
+
+	UFUNCTION(BlueprintCallable, Category = "TsEditor")
+	ETsEditorState GetState() const;
+
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category="TsEditor", meta=( IsBindableEvent="True" ))
 	FEvent0 OnStarted;
 
@@ -41,7 +60,10 @@ public:
 	FEvent0 OnStopped;
 
 	UPROPERTY(EditAnywhere, BlueprintAssignable, Category="TsEditor", meta=( IsBindableEvent="True" ))
-	FLogEvent OnLogError;	
+	FLogEvent OnStartFailed;
+
+	UPROPERTY(EditAnywhere, BlueprintAssignable, Category="TsEditor", meta=( IsBindableEvent="True" ))
+	FLogEvent OnLogError;
 
 	UPROPERTY(EditAnywhere, Category = "TsEditor")
 	bool bWaitJSDebug;
@@ -56,8 +78,11 @@ private:
 	friend class FLoggerForJs;
 
 	bool bIsRestarting = false;
+	ETsEditorState State = ETsEditorState::Stopped;
+	FString LastStartError;
 
-	TSharedPtr<puerts::FJsEnv> JsEnv;			
+	TSharedPtr<puerts::FJsEnv> JsEnv;
 
 	void FireLogErrorEvent(const FString& Message);
+	void SetState(ETsEditorState InState);
 };

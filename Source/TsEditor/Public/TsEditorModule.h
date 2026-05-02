@@ -22,6 +22,13 @@ public:
 
 private:
     UTsEditor *TsEditor;
+    TSharedPtr<class FUICommandList> PluginCommands;
+    bool bCommandsRegistered = false;
 
     void SyncSettingsToEditor();
+    void RegisterCommands();
+    void UnregisterCommands();
+    void RegisterMenus();
+    void RestartTsEditor();
+    void ShowTsEditorNotification(const FText& Message, bool bIsError) const;
 };
