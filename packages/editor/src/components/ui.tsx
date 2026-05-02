@@ -17,6 +17,7 @@ import type {
 	ButtonStyle,
 	CheckBoxProps,
 	ComboBoxStringProps,
+	ComboBoxStyle,
 	EditableTextBoxStyle,
 	EditableTextBoxProps,
 	HorizontalBoxProps,
@@ -27,6 +28,7 @@ import type {
 	SlateBrush,
 	SlateColor,
 	SlateFontInfo,
+	TableRowStyle,
 	TextBlockProps,
 	VerticalBoxProps,
 } from 'react-umg';
@@ -82,6 +84,7 @@ function roundedBrush(fill: LinearColor, outline: LinearColor): SlateBrush {
 // ── 默认样式 ──
 
 const DEFAULT_FONT: SlateFontInfo = { Size: 10 };
+const DEFAULT_CONTROL_FONT: SlateFontInfo = { Size: 9 };
 
 const DEFAULT_TEXT_COLOR: SlateColor = { SpecifiedColor: COL_FOREGROUND };
 
@@ -280,15 +283,21 @@ const DEFAULT_INPUT_STYLE: EditableTextBoxStyle = {
 	BackgroundImageHovered: roundedBrush(COL_SECONDARY, COL_INPUT),
 	BackgroundImageFocused: roundedBrush(COL_SECONDARY, COL_ACCENT),
 	BackgroundImageReadOnly: roundedBrush(COL_RECESSED, COL_RECESSED),
-	Padding: { Left: 6, Top: 3, Right: 6, Bottom: 3 },
-	Font: DEFAULT_FONT,
+	Padding: { Left: 5, Top: 2, Right: 5, Bottom: 2 },
+	Font: DEFAULT_CONTROL_FONT,
+	TextStyle: {
+		Font: DEFAULT_CONTROL_FONT,
+		ColorAndOpacity: { SpecifiedColor: COL_FOREGROUND_HOVER },
+	},
 	ForegroundColor: { SpecifiedColor: COL_FOREGROUND_HOVER },
 	BackgroundColor: { SpecifiedColor: COL_RECESSED },
 };
 
 export const Input = (props: EditableTextBoxProps): React.ReactElement => {
 	const { WidgetStyle, ...rest } = props;
-	return <EditableTextBox WidgetStyle={mergeDeep(DEFAULT_INPUT_STYLE, WidgetStyle)} {...rest} />;
+	return (
+		<EditableTextBox WidgetStyle={mergeDeep(DEFAULT_INPUT_STYLE, WidgetStyle)} bIsFontDeprecationDone {...rest} />
+	);
 };
 
 export const TextArea = (props: MultiLineEditableTextBoxProps): React.ReactElement => {
@@ -296,7 +305,8 @@ export const TextArea = (props: MultiLineEditableTextBoxProps): React.ReactEleme
 	return (
 		<MultiLineEditableTextBox
 			WidgetStyle={mergeDeep(DEFAULT_INPUT_STYLE, WidgetStyle)}
-			TextStyle={mergeDeep({ Font: DEFAULT_FONT, ColorAndOpacity: DEFAULT_TEXT_COLOR }, TextStyle)}
+			TextStyle={mergeDeep({ Font: DEFAULT_CONTROL_FONT, ColorAndOpacity: DEFAULT_TEXT_COLOR }, TextStyle)}
+			bIsFontDeprecationDone
 			{...rest}
 		/>
 	);
@@ -307,9 +317,47 @@ export const ScrollArea = (props: ScrollBoxProps): React.ReactElement => {
 	return <ScrollBox {...rest}>{children}</ScrollBox>;
 };
 
+const DEFAULT_SELECT_STYLE: ComboBoxStyle = {
+	ComboButtonStyle: {
+		ButtonStyle: COMPACT_BUTTON_STYLE,
+		MenuBorderBrush: roundedBrush(COL_PANEL, COL_INPUT),
+		MenuBorderPadding: { Left: 1, Top: 1, Right: 1, Bottom: 1 },
+		ContentPadding: { Left: 5, Top: 1, Right: 5, Bottom: 1 },
+		DownArrowPadding: { Left: 4, Top: 0, Right: 2, Bottom: 0 },
+	},
+	ContentPadding: { Left: 5, Top: 1, Right: 5, Bottom: 1 },
+	MenuRowPadding: { Left: 0, Top: 0, Right: 0, Bottom: 0 },
+};
+
+const DEFAULT_SELECT_ITEM_STYLE: TableRowStyle = {
+	SelectorFocusedBrush: roundedBrush(COL_HOVER, COL_ACCENT),
+	ActiveHoveredBrush: roundedBrush(COL_HOVER, COL_INPUT),
+	ActiveBrush: roundedBrush(COL_SECONDARY, COL_ACCENT),
+	InactiveHoveredBrush: roundedBrush(COL_HOVER, COL_INPUT),
+	InactiveBrush: roundedBrush(COL_PANEL, COL_PANEL),
+	EvenRowBackgroundHoveredBrush: roundedBrush(COL_HOVER, COL_INPUT),
+	EvenRowBackgroundBrush: roundedBrush(COL_PANEL, COL_PANEL),
+	OddRowBackgroundHoveredBrush: roundedBrush(COL_HOVER, COL_INPUT),
+	OddRowBackgroundBrush: roundedBrush(COL_PANEL, COL_PANEL),
+	TextColor: { SpecifiedColor: COL_FOREGROUND },
+	SelectedTextColor: { SpecifiedColor: COL_FOREGROUND_HOVER },
+	ActiveHighlightedBrush: roundedBrush(COL_HOVER, COL_ACCENT),
+	InactiveHighlightedBrush: roundedBrush(COL_HOVER, COL_INPUT),
+};
+
 export const Select = (props: ComboBoxStringProps): React.ReactElement => {
-	const { ...rest } = props;
-	return <ComboBoxString {...rest} />;
+	const { WidgetStyle, ItemStyle, ContentPadding, Font, ForegroundColor, MaxListHeight, ...rest } = props;
+	return (
+		<ComboBoxString
+			WidgetStyle={mergeDeep(DEFAULT_SELECT_STYLE, WidgetStyle)}
+			ItemStyle={mergeDeep(DEFAULT_SELECT_ITEM_STYLE, ItemStyle)}
+			ContentPadding={ContentPadding ?? { Left: 5, Top: 1, Right: 5, Bottom: 1 }}
+			Font={mergeDeep(DEFAULT_CONTROL_FONT, Font)}
+			ForegroundColor={ForegroundColor ?? DEFAULT_TEXT_COLOR}
+			MaxListHeight={MaxListHeight ?? 320}
+			{...rest}
+		/>
+	);
 };
 
 export const Check = (props: CheckBoxProps): React.ReactElement => {
