@@ -17,7 +17,6 @@ import {
 	Btn,
 	Divider,
 	HBox,
-	Input,
 	ModalPanel,
 	Panel,
 	ScrollArea,
@@ -43,7 +42,7 @@ interface ToolRecord {
 	id: string;
 	title: string;
 	kind?: string;
-	status?: string | null;
+	status?: string | undefined;
 	rawInput?: unknown;
 	rawOutput?: unknown;
 	content?: unknown;
@@ -53,19 +52,19 @@ interface AcpPanelState {
 	status: string;
 	agentName: string;
 	agentVersion: string;
-	sessionId: string | null;
+	sessionId: string | undefined;
 	configOptions: SessionConfigOption[];
-	modes: SessionModeState | null;
-	sessionInfo: SessionInfo | null;
+	modes: SessionModeState | undefined;
+	sessionInfo: SessionInfo | undefined;
 	isPrompting: boolean;
 	messages: ChatMessage[];
 	plan: { content: string; status: string; priority: string }[];
 	tools: ToolRecord[];
 	commands: { name: string; description?: string }[];
 	protocol: { id: number; direction: 'send' | 'recv'; message: JsonRpcMessage }[];
-	usage: { size: number; used: number } | null;
-	pendingPermission: PendingPermissionRequest | null;
-	error: string | null;
+	usage: { size: number; used: number } | undefined;
+	pendingPermission: PendingPermissionRequest | undefined;
+	error: string | undefined;
 }
 
 let nextMessageId = 1;
@@ -82,7 +81,7 @@ export const AcpClientPanel = (): React.ReactElement => {
 	const [permission, setPermission] = React.useState<AcpPermissionStrategy>('interactive');
 	const [protocolEnabled, setProtocolEnabled] = React.useState(false);
 	const [inspector, setInspector] = React.useState<InspectorTab>('plan');
-	const [controller, setController] = React.useState<AcpUiController | null>(null);
+	const [controller, setController] = React.useState<AcpUiController | undefined>(undefined);
 	const [state, setState] = React.useState<AcpPanelState>(() => createInitialState());
 
 	React.useEffect(() => {
@@ -116,7 +115,7 @@ export const AcpClientPanel = (): React.ReactElement => {
 
 	const disconnect = React.useCallback(() => {
 		controller?.disconnect();
-		setController(null);
+		setController(undefined);
 	}, [controller]);
 
 	const createSession = React.useCallback(() => {
@@ -180,8 +179,8 @@ export const AcpClientPanel = (): React.ReactElement => {
 					onDisconnect={disconnect}
 					onCancel={cancel}
 				/>
-				<HorizontalBox>
-					<SizeBox WidthOverride={260} Slot={{ Padding: { Right: 6 } }}>
+				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+					<SizeBox WidthOverride={260} bOverride_WidthOverride Slot={{ Padding: { Right: 6 } }}>
 						<Sidebar
 							command={command}
 							workspace={workspace}
@@ -216,7 +215,7 @@ export const AcpClientPanel = (): React.ReactElement => {
 							onCancel={cancel}
 						/>
 					</VBox>
-					<SizeBox WidthOverride={340}>
+					<SizeBox WidthOverride={340} bOverride_WidthOverride>
 						<Inspector active={inspector} state={state} onSelect={setInspector} />
 					</SizeBox>
 				</HorizontalBox>
@@ -224,10 +223,10 @@ export const AcpClientPanel = (): React.ReactElement => {
 					<PermissionPanel
 						permission={state.pendingPermission}
 						onResolved={() => {
-							setState((prev) => ({ ...prev, pendingPermission: null }));
+							setState((prev) => ({ ...prev, pendingPermission: undefined }));
 						}}
 					/>
-				) : null}
+				) : undefined}
 			</VBox>
 		</Panel>
 	);
@@ -237,7 +236,7 @@ function Toolbar(props: {
 	status: string;
 	agentName: string;
 	agentVersion: string;
-	sessionId: string | null;
+	sessionId: string | undefined;
 	isPrompting: boolean;
 	connected: boolean;
 	onConnect: () => void;
@@ -270,7 +269,7 @@ function Sidebar(props: {
 	permission: AcpPermissionStrategy;
 	protocolEnabled: boolean;
 	connected: boolean;
-	modes: SessionModeState | null;
+	modes: SessionModeState | undefined;
 	configOptions: SessionConfigOption[];
 	commands: { name: string; description?: string }[];
 	onCommand: (value: string) => void;
@@ -288,11 +287,19 @@ function Sidebar(props: {
 		<VBox Gap={6}>
 			<Section Title="Connection">
 				<Text Text="Command" />
-				<Input Text={props.command} OnTextChanged={props.onCommand} IsReadOnly={props.connected} />
+				<SidebarTextArea Text={props.command} OnTextChanged={props.onCommand} bIsReadOnly={props.connected} />
 				<Text Text="Workspace" />
-				<Input Text={props.workspace} OnTextChanged={props.onWorkspace} IsReadOnly={props.connected} />
+				<SidebarTextArea
+					Text={props.workspace}
+					OnTextChanged={props.onWorkspace}
+					bIsReadOnly={props.connected}
+				/>
 				<Text Text="Extra Args" />
-				<Input Text={props.extraArgs} OnTextChanged={props.onExtraArgs} IsReadOnly={props.connected} />
+				<SidebarTextArea
+					Text={props.extraArgs}
+					OnTextChanged={props.onExtraArgs}
+					bIsReadOnly={props.connected}
+				/>
 			</Section>
 			<Section Title="Session">
 				<HBox>
@@ -303,7 +310,11 @@ function Sidebar(props: {
 						<Text Text="Load" />
 					</Btn>
 				</HBox>
-				<Input Text={props.sessionToLoad} HintText="session id" OnTextChanged={props.onSessionToLoad} />
+				<SidebarTextArea
+					Text={props.sessionToLoad}
+					HintText="session id"
+					OnTextChanged={props.onSessionToLoad}
+				/>
 			</Section>
 			<Section Title="Policy">
 				<Select
@@ -322,7 +333,7 @@ function Sidebar(props: {
 				onSetConfig={props.onSetConfig}
 			/>
 			<Section Title="Commands">
-				{props.commands.length === 0 ? <Text Text="No commands" /> : null}
+				{props.commands.length === 0 ? <Text Text="No commands" /> : undefined}
 				{props.commands.map((command) => (
 					<Text
 						key={command.name}
@@ -334,8 +345,12 @@ function Sidebar(props: {
 	);
 }
 
+function SidebarTextArea(props: React.ComponentProps<typeof TextArea>): React.ReactElement {
+	return <TextArea AutoWrapText WrapTextAt={230} {...props} />;
+}
+
 function SessionOptions(props: {
-	modes: SessionModeState | null;
+	modes: SessionModeState | undefined;
 	configOptions: SessionConfigOption[];
 	onSetMode: (mode: string) => void;
 	onSetConfig: (optionId: string, value: string | boolean) => void;
@@ -352,11 +367,13 @@ function SessionOptions(props: {
 						OnSelectionChanged={props.onSetMode}
 					/>
 				</>
-			) : null}
+			) : undefined}
 			{props.configOptions.map((option) => (
 				<ConfigOptionControl key={option.id} option={option} onChange={props.onSetConfig} />
 			))}
-			{modeOptions.length === 0 && props.configOptions.length === 0 ? <Text Text="No session options" /> : null}
+			{modeOptions.length === 0 && props.configOptions.length === 0 ? (
+				<Text Text="No session options" />
+			) : undefined}
 		</Section>
 	);
 }
@@ -395,11 +412,11 @@ function ConfigOptionControl(props: {
 function MessageStream(props: { messages: ChatMessage[] }): React.ReactElement {
 	return (
 		<Section Title="Conversation" Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<ScrollArea AlwaysShowScrollbar>
+			<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<VBox Gap={4}>
 					{props.messages.length === 0 ? (
 						<Text Text="Connect, create a session, then send a prompt." />
-					) : null}
+					) : undefined}
 					{props.messages.map((message) => (
 						<MessageRow key={message.id} message={message} />
 					))}
@@ -455,7 +472,7 @@ function Inspector(props: {
 	onSelect: (tab: InspectorTab) => void;
 }): React.ReactElement {
 	return (
-		<Section>
+		<Section Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<Tabs
 				Items={[
 					{ id: 'plan', label: 'Plan' },
@@ -467,19 +484,19 @@ function Inspector(props: {
 				OnSelect={(id) => props.onSelect(id as InspectorTab)}
 			/>
 			<Divider />
-			{props.active === 'plan' ? <PlanView plan={props.state.plan} /> : null}
-			{props.active === 'tools' ? <ToolsView tools={props.state.tools} /> : null}
-			{props.active === 'protocol' ? <ProtocolView protocol={props.state.protocol} /> : null}
-			{props.active === 'settings' ? <StateView state={props.state} /> : null}
+			{props.active === 'plan' ? <PlanView plan={props.state.plan} /> : undefined}
+			{props.active === 'tools' ? <ToolsView tools={props.state.tools} /> : undefined}
+			{props.active === 'protocol' ? <ProtocolView protocol={props.state.protocol} /> : undefined}
+			{props.active === 'settings' ? <StateView state={props.state} /> : undefined}
 		</Section>
 	);
 }
 
 function PlanView(props: { plan: AcpPanelState['plan'] }): React.ReactElement {
 	return (
-		<ScrollArea AlwaysShowScrollbar>
+		<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<VBox Gap={4}>
-				{props.plan.length === 0 ? <Text Text="No plan yet" /> : null}
+				{props.plan.length === 0 ? <Text Text="No plan yet" /> : undefined}
 				{props.plan.map((entry, index) => (
 					<Text key={index} Text={`${entry.status} ${entry.priority}: ${entry.content}`} AutoWrapText />
 				))}
@@ -490,9 +507,9 @@ function PlanView(props: { plan: AcpPanelState['plan'] }): React.ReactElement {
 
 function ToolsView(props: { tools: ToolRecord[] }): React.ReactElement {
 	return (
-		<ScrollArea AlwaysShowScrollbar>
+		<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<VBox Gap={4}>
-				{props.tools.length === 0 ? <Text Text="No tool calls" /> : null}
+				{props.tools.length === 0 ? <Text Text="No tool calls" /> : undefined}
 				{props.tools.map((tool) => (
 					<Section key={tool.id} Title={tool.title}>
 						<Text Text={`${tool.kind ?? 'tool'} ${tool.status ?? ''}`} />
@@ -506,9 +523,9 @@ function ToolsView(props: { tools: ToolRecord[] }): React.ReactElement {
 
 function ProtocolView(props: { protocol: AcpPanelState['protocol'] }): React.ReactElement {
 	return (
-		<ScrollArea AlwaysShowScrollbar>
+		<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<VBox Gap={4}>
-				{props.protocol.length === 0 ? <Text Text="Protocol log is empty" /> : null}
+				{props.protocol.length === 0 ? <Text Text="Protocol log is empty" /> : undefined}
 				{props.protocol.map((item) => (
 					<Text key={item.id} Text={`${item.direction} ${formatUnknown(item.message)}`} AutoWrapText />
 				))}
@@ -527,7 +544,7 @@ function StateView(props: { state: AcpPanelState }): React.ReactElement {
 			/>
 			<Text Text={`Messages: ${props.state.messages.length}`} />
 			<Text Text={`Tools: ${props.state.tools.length}`} />
-			{props.state.error ? <Text Text={`Error: ${props.state.error}`} /> : null}
+			{props.state.error ? <Text Text={`Error: ${props.state.error}`} /> : undefined}
 		</VBox>
 	);
 }
@@ -570,19 +587,19 @@ function createInitialState(): AcpPanelState {
 		status: 'disconnected',
 		agentName: '',
 		agentVersion: '',
-		sessionId: null,
+		sessionId: undefined,
 		configOptions: [],
-		modes: null,
-		sessionInfo: null,
+		modes: undefined,
+		sessionInfo: undefined,
 		isPrompting: false,
 		messages: [],
 		plan: [],
 		tools: [],
 		commands: [],
 		protocol: [],
-		usage: null,
-		pendingPermission: null,
-		error: null,
+		usage: undefined,
+		pendingPermission: undefined,
+		error: undefined,
 	};
 }
 
@@ -602,7 +619,7 @@ function reduceEvent(state: AcpPanelState, event: AcpUiEvent): AcpPanelState {
 					...state,
 					sessionId: event.session.sessionId,
 					configOptions: event.session.configOptions ?? [],
-					modes: event.session.modes ?? null,
+					modes: event.session.modes ?? undefined,
 					sessionInfo: event.session.sessionInfo ?? { sessionId: event.session.sessionId },
 				},
 				'system',
@@ -691,16 +708,16 @@ function splitArgs(input: string): string[] {
 		.filter(Boolean);
 }
 
-function toTArray(values: string[]): any {
+function toTArray(values: string[]): UE.TArray<string> {
 	const array = UE.NewArray(UE.BuiltinString);
 	values.forEach((value) => array.Add(value));
 	return array;
 }
 
 function formatUnknown(value: unknown): string {
-	if (value === undefined || value === null) return '';
+	if (value === undefined || value === undefined) return '';
 	try {
-		return JSON.stringify(value, null, 2);
+		return JSON.stringify(value, undefined, 2);
 	} catch {
 		return String(value);
 	}
