@@ -12,6 +12,7 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 | `src/main.ts`               | 编辑器初始化入口                             |
 | `src/common/umgRenderer.ts` | 核心 React reconciler for UMG（16KB）        |
 | `src/common/reactTab.ts`    | Tab 管理组件                                 |
+| `src/common/menu.ts`        | TsEditor 动态菜单注册封装                    |
 | `src/common/watcher.ts`     | 文件/属性监听                                |
 | `src/components/`           | UI 组件（SamplePanel、AcpClientPanel 等）    |
 | `src/components/ui.tsx`     | 通用 UI 封装组件（Panel/VBox/HBox/Btn/Text） |

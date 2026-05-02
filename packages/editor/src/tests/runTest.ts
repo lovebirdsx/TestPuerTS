@@ -1,11 +1,8 @@
-import { containerTest } from './containerTest';
-import { mixinTest } from './mixinTest';
 import * as Mocha from 'mocha';
 import * as path from 'path';
 import * as util from 'util';
 
 import * as fs from 'fs';
-import { basicTest } from './basicTest';
 
 function findTestFiles(dir: string): string[] {
 	let results: string[] = [];
@@ -58,25 +55,4 @@ export function runUnitTests() {
 
 	console.log('Running unit tests...');
 	mocha.run();
-}
-
-export function runTest(test: string) {
-	switch (test) {
-		case 'UnitTest':
-			runUnitTests();
-			break;
-		case 'BasicTest':
-			basicTest();
-			break;
-		case 'ContainerTest':
-			containerTest();
-			break;
-		case 'MixinTest':
-			mixinTest();
-			break;
-
-		default:
-			console.log('Unknown test:', test);
-			break;
-	}
 }

@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { watch } from './common/watcher';
-import { TsEditorLibrary, EditorUtilityWidgetBlueprint, EditorCommonLibrary } from 'ue';
-import { bindMainEUWClass } from './mixin/mainEuw';
+import { TsEditorLibrary } from 'ue';
 import { runUnitTests } from './tests/runTest';
-import { openReactTab, ReactTabHandle } from './common/reactTab';
+import { openReactTab } from './common/reactTab';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
+import { registerEditorMenus } from './common/menu';
+import { runBasicTest } from './tests/basicTest';
+
+let menuDisposable: { dispose(): void } | undefined;
 
 function startWatch() {
 	const watcher = watch(__dirname, () => {
@@ -20,58 +23,48 @@ function startWatch() {
 	return watcher;
 }
 
-function showMainEUW() {
-	let tabId: string | undefined = undefined;
-	let unBind: () => void;
-
-	if (EditorCommonLibrary.IsMainFrameCreationFinished()) {
-		const path = '/Game/Editor/W_Main.W_Main';
-		unBind = bindMainEUWClass(path + '_C');
-		tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
-	} else {
-		const editorEvent = EditorCommonLibrary.GetEditorEvent();
-		editorEvent.OnOnMainFrameCreationFinished.Add(() => {
-			const path = '/Game/Editor/W_Main.W_Main';
-			unBind = bindMainEUWClass(path + '_C');
-			tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
-			EditorCommonLibrary.CloseEditorWidget(tabId);
-			tabId = EditorCommonLibrary.ShowEditorWidget(EditorUtilityWidgetBlueprint.Load(path));
-		});
-	}
-
-	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
-		if (tabId) {
-			EditorCommonLibrary.CloseEditorWidget(tabId);
-		}
-		unBind?.();
-	});
-}
-
-function showReactTab() {
-	let handle: ReactTabHandle | undefined;
-	let acpHandle: ReactTabHandle | undefined;
-
-	const open = () => {
-		handle = openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel));
-		acpHandle = openReactTab('AcpClientTab', 'ACP Client', React.createElement(AcpClientPanel));
-	};
-
-	if (EditorCommonLibrary.IsMainFrameCreationFinished()) {
-		open();
-	} else {
-		EditorCommonLibrary.GetEditorEvent().OnOnMainFrameCreationFinished.Add(open);
-	}
+function registerMenus() {
+	menuDisposable = registerEditorMenus([
+		{
+			id: 'editor.tests.runUnitTests',
+			label: 'Run Unit Tests',
+			tooltip: 'Run editor package unit tests',
+			path: ['Tests'],
+			onExecute: () => runUnitTests(),
+		},
+		{
+			id: 'editor.tests.runBasicTest',
+			label: 'Run Basic Test',
+			tooltip: 'Run puerts basic tests',
+			path: ['Tests'],
+			onExecute: () => runBasicTest(),
+		},
+		{
+			id: 'editor.tabs.openSampleReactPanel',
+			label: 'Open Sample React Panel',
+			tooltip: 'Open the sample React UMG editor tab',
+			path: ['Panels'],
+			onExecute: () => openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel)),
+		},
+		{
+			id: 'editor.tabs.openAcpClient',
+			label: 'Open ACP Client',
+			tooltip: 'Open the ACP Client editor tab',
+			path: ['Panels'],
+			sortOrder: 10,
+			onExecute: () => openReactTab('AcpClientTab', 'ACP Client', React.createElement(AcpClientPanel)),
+		},
+	]);
 
 	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
-		handle?.close();
-		acpHandle?.close();
+		menuDisposable?.dispose();
+		menuDisposable = undefined;
 	});
 }
 
 function main() {
 	startWatch();
-	showMainEUW();
-	showReactTab();
+	registerMenus();
 
 	const editorSettings = TsEditorLibrary.GetTsEditorSettings();
 	if (editorSettings.bAutoRunUnitTests) {

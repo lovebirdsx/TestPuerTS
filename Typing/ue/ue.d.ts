@@ -88648,6 +88648,38 @@ declare module "ue" {
         __tid_TsEditorLibrary_0__: boolean;
     }
     
+    class TsEditorMenuEntryConfig {
+        constructor();
+        constructor(Id: string, Owner: string, Path: TArray<string>, Section: string, Label: string, ToolTip: string, SortOrder: number, bCloseAfterSelection: boolean);
+        Id: string;
+        Owner: string;
+        Path: TArray<string>;
+        Section: string;
+        Label: string;
+        ToolTip: string;
+        SortOrder: number;
+        bCloseAfterSelection: boolean;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_TsEditorMenuEntryConfig_0__: boolean;
+    }
+    
+    class TsEditorMenuLibrary extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static RefreshMenus() : void;
+        static RegisterMenuEntry(Config: UE.TsEditorMenuEntryConfig, Execute: $Delegate<(Id: string) => void>, CanExecute: $Delegate<(Id: string) => boolean>) : boolean;
+        static UnregisterMenuEntriesByOwner(Owner: string) : number;
+        static UnregisterMenuEntry(Id: string) : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): TsEditorMenuLibrary;
+        static Load(InName: string): TsEditorMenuLibrary;
+    
+        __tid_TsEditorMenuLibrary_0__: boolean;
+    }
+    
     class TsGameInstance extends UE.GameInstance {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         static StaticClass(): Class;

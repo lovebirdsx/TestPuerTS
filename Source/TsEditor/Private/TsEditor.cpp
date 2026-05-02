@@ -91,6 +91,10 @@ void UTsEditor::Stop()
 	if (JsEnv.IsValid())
 	{
 		OnStopped.Broadcast();
+		if (FModuleManager::Get().IsModuleLoaded("TsEditor"))
+		{
+			FModuleManager::GetModuleChecked<FTsEditorModule>("TsEditor").UnregisterMenuEntriesByOwner(TEXT("TsEditorJS"));
+		}
 		JsEnv.Reset();
 	}
 	SetState(ETsEditorState::Stopped);

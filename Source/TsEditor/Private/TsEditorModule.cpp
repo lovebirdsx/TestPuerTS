@@ -1,6 +1,7 @@
 #include "TsEditorModule.h"
 
 #include "Framework/Commands/UICommandList.h"
+#include "Framework/Commands/UIAction.h"
 #include "Framework/Notifications/NotificationManager.h"
 #include "ISettingsModule.h"
 #include "LevelEditor.h"
@@ -151,6 +152,7 @@ void FTsEditorModule::RegisterMenus()
 
 	FToolMenuSection& Section = TsEditorMenu->FindOrAddSection("TsEditor", LOCTEXT("TsEditorMenuSection", "TsEditor"));
 	Section.AddMenuEntryWithCommandList(FTsEditorCommands::Get().Restart, PluginCommands);
+	AddRegisteredMenuEntries(TsEditorMenu);
 }
 
 void FTsEditorModule::RestartTsEditor()
@@ -169,6 +171,165 @@ void FTsEditorModule::RestartTsEditor()
 	else
 	{
 		ShowTsEditorNotification(LOCTEXT("TsEditorRestartFailed", "TsEditor failed to restart. Check LogTsEditor for details."), true);
+	}
+}
+
+bool FTsEditorModule::RegisterMenuEntry(const FTsEditorMenuEntryConfig& Config, FTsEditorMenuExecute Execute, FTsEditorMenuCanExecute CanExecute)
+{
+	if (Config.Id.IsNone())
+	{
+		UE_LOG(LogTsEditor, Error, TEXT("Can not register TsEditor menu entry without Id"));
+		return false;
+	}
+
+	FTsEditorRegisteredMenuEntry Entry;
+	Entry.Config = Config;
+	if (Entry.Config.Owner.IsNone())
+	{
+		Entry.Config.Owner = TEXT("TsEditorJS");
+	}
+	if (Entry.Config.Section.IsNone())
+	{
+		Entry.Config.Section = TEXT("Dynamic");
+	}
+	if (Entry.Config.Label.IsEmpty())
+	{
+		Entry.Config.Label = Entry.Config.Id.ToString();
+	}
+	Entry.Execute = Execute;
+	Entry.CanExecute = CanExecute;
+
+	RegisteredMenuEntries.Add(Entry.Config.Id, Entry);
+	RefreshMenus();
+	return true;
+}
+
+bool FTsEditorModule::UnregisterMenuEntry(FName Id)
+{
+	const bool bRemoved = RegisteredMenuEntries.Remove(Id) > 0;
+	if (bRemoved)
+	{
+		RefreshMenus();
+	}
+	return bRemoved;
+}
+
+int32 FTsEditorModule::UnregisterMenuEntriesByOwner(FName Owner)
+{
+	if (Owner.IsNone())
+	{
+		Owner = TEXT("TsEditorJS");
+	}
+
+	int32 RemovedCount = 0;
+	for (auto It = RegisteredMenuEntries.CreateIterator(); It; ++It)
+	{
+		if (It.Value().Config.Owner == Owner)
+		{
+			It.RemoveCurrent();
+			++RemovedCount;
+		}
+	}
+
+	if (RemovedCount > 0)
+	{
+		RefreshMenus();
+	}
+	return RemovedCount;
+}
+
+void FTsEditorModule::RefreshMenus()
+{
+	if (!bCommandsRegistered || !UToolMenus::IsToolMenuUIEnabled())
+	{
+		return;
+	}
+
+	UToolMenus::UnregisterOwner(this);
+	RegisterMenus();
+	UToolMenus::Get()->RefreshAllWidgets();
+}
+
+void FTsEditorModule::ExecuteRegisteredMenuEntry(FName Id)
+{
+	if (FTsEditorRegisteredMenuEntry* Entry = RegisteredMenuEntries.Find(Id))
+	{
+		Entry->Execute.ExecuteIfBound(Id);
+	}
+}
+
+bool FTsEditorModule::CanExecuteRegisteredMenuEntry(FName Id)
+{
+	if (FTsEditorRegisteredMenuEntry* Entry = RegisteredMenuEntries.Find(Id))
+	{
+		return !Entry->CanExecute.IsBound() || Entry->CanExecute.Execute(Id);
+	}
+	return false;
+}
+
+void FTsEditorModule::AddRegisteredMenuEntries(UToolMenu* TsEditorMenu)
+{
+	if (!TsEditorMenu)
+	{
+		return;
+	}
+
+	TArray<FTsEditorRegisteredMenuEntry> Entries;
+	RegisteredMenuEntries.GenerateValueArray(Entries);
+	Entries.Sort([](const FTsEditorRegisteredMenuEntry& Left, const FTsEditorRegisteredMenuEntry& Right)
+	{
+		const FString LeftPath = FString::Join(Left.Config.Path, TEXT("/"));
+		const FString RightPath = FString::Join(Right.Config.Path, TEXT("/"));
+		if (LeftPath != RightPath)
+		{
+			return LeftPath < RightPath;
+		}
+		if (Left.Config.SortOrder != Right.Config.SortOrder)
+		{
+			return Left.Config.SortOrder < Right.Config.SortOrder;
+		}
+		return Left.Config.Id.LexicalLess(Right.Config.Id);
+	});
+
+	TMap<FString, UToolMenu*> CreatedSubMenus;
+	for (const FTsEditorRegisteredMenuEntry& Entry : Entries)
+	{
+		UToolMenu* CurrentMenu = TsEditorMenu;
+		FString MenuKey;
+		for (const FString& Segment : Entry.Config.Path)
+		{
+			if (Segment.IsEmpty())
+			{
+				continue;
+			}
+
+			MenuKey = MenuKey.IsEmpty() ? Segment : MenuKey / Segment;
+			if (UToolMenu** ExistingMenu = CreatedSubMenus.Find(MenuKey))
+			{
+				CurrentMenu = *ExistingMenu;
+				continue;
+			}
+
+			const FName SubMenuName(*MenuKey);
+			CurrentMenu = CurrentMenu->AddSubMenu(
+				this,
+				TEXT("Dynamic"),
+				SubMenuName,
+				FText::FromString(Segment),
+				FText::FromString(Segment));
+			CreatedSubMenus.Add(MenuKey, CurrentMenu);
+		}
+
+		FToolMenuSection& DynamicSection = CurrentMenu->FindOrAddSection(Entry.Config.Section);
+		FToolMenuEntry& MenuEntry = DynamicSection.AddMenuEntry(
+			Entry.Config.Id,
+			FText::FromString(Entry.Config.Label),
+			FText::FromString(Entry.Config.ToolTip),
+			FSlateIcon(),
+			FUIAction(
+				FExecuteAction::CreateRaw(this, &FTsEditorModule::ExecuteRegisteredMenuEntry, Entry.Config.Id),
+				FCanExecuteAction::CreateRaw(this, &FTsEditorModule::CanExecuteRegisteredMenuEntry, Entry.Config.Id)));
+		MenuEntry.bShouldCloseWindowAfterMenuSelection = Entry.Config.bCloseAfterSelection;
 	}
 }
 

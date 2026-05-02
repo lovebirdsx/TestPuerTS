@@ -21,6 +21,10 @@ export function openReactTab(tabName: string, tabLabel: string, component: React
 	instance.init(starter);
 	instance.render(component);
 
+	UE.TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
+		UE.EditorCommonLibrary.CloseEditorWidget(tabId);
+	});
+
 	return {
 		tabId,
 		close() {
