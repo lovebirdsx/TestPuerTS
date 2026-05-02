@@ -25,6 +25,8 @@ Content/JavaScript/react-umg/
 # Ignore build
 Binaries/
 Build/
+!tools/build/
+!tools/build/**
 DerivedDataCache/
 Intermediate/
 Saved/

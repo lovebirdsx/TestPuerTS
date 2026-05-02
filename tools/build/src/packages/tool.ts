@@ -10,7 +10,7 @@ import { cleanDirAsync } from '../common/util';
 import { withCache } from '../common/taskCache';
 
 const config = getConfig();
-const workingDir = path.join(config.packagesPath, 'tool');
+const workingDir = config.buildToolsPath;
 
 gulp.task('tool:clean', async () => {
 	await cleanDirAsync(path.join(workingDir, 'node_modules'));
@@ -20,7 +20,7 @@ gulp.task('tool:clean', async () => {
 gulp.task(
 	'tool:build',
 	withCache(
-		{ taskName: 'tool:build', inputGlobs: ['packages/tool/src/**/*.ts', 'packages/tool/tsconfig.json'] },
+		{ taskName: 'tool:build', inputGlobs: ['tools/build/src/**/*.ts', 'tools/build/tsconfig.json'] },
 		async () => {
 			await exec('tsc', { workingDir, logPrefix: '[tool:build] ' });
 		},
@@ -29,7 +29,7 @@ gulp.task(
 
 gulp.task(
 	'tool:test',
-	withCache({ taskName: 'tool:test', inputGlobs: ['packages/tool/src/**/*.ts'] }, async () => {
+	withCache({ taskName: 'tool:test', inputGlobs: ['tools/build/src/**/*.ts'] }, async () => {
 		await exec('npx vitest run', { workingDir, logPrefix: '[tool:test] ', formatText: formatVitestOutput });
 	}),
 );
@@ -50,7 +50,7 @@ gulp.task('tool:watch', async () => {
 gulp.task(
 	'tool:typecheck',
 	withCache(
-		{ taskName: 'tool:typecheck', inputGlobs: ['packages/tool/src/**/*.ts', 'packages/tool/tsconfig.json'] },
+		{ taskName: 'tool:typecheck', inputGlobs: ['tools/build/src/**/*.ts', 'tools/build/tsconfig.json'] },
 		async () => {
 			await exec('tsc --noEmit', {
 				workingDir,
@@ -68,7 +68,7 @@ gulp.task(
 
 gulp.task(
 	'tool:lint',
-	withCache({ taskName: 'tool:lint', inputGlobs: ['packages/tool/src/**/*.ts', 'eslint.config.mjs'] }, async () => {
+	withCache({ taskName: 'tool:lint', inputGlobs: ['tools/build/src/**/*.ts', 'eslint.config.mjs'] }, async () => {
 		await exec('eslint src', {
 			workingDir,
 			logPrefix: '[tool:lint] ',

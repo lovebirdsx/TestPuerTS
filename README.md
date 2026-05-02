@@ -10,7 +10,7 @@ npm ci
 
 安装依赖后，`postinstall` 会自动：
 
-- 编译 `packages/tool`
+- 编译 `tools/build`
 - 构建 `TestPuerTSEditor`
 - 生成 VS Code 所需的 Unreal C++ 配置文件
 

@@ -1,1 +1,1 @@
-require('./packages/tool/out/gulpfile');
+require('./tools/build/out/gulpfile');

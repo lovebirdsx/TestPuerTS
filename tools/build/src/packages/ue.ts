@@ -11,7 +11,7 @@ import { green } from '../common/util';
 import { withCache } from '../common/taskCache';
 
 const config = getConfig();
-export const projectRoot = path.resolve(config.packagesPath, '..');
+export const projectRoot = config.projectRoot;
 const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
 
 interface LauncherEntry {

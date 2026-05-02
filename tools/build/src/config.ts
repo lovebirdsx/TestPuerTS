@@ -4,15 +4,21 @@ import { setExecVerbose } from './common/exec';
 
 interface IConfig extends ICmdArgs {
 	localJsEnvPorts: number[];
+	projectRoot: string;
 	packagesPath: string;
+	buildToolsPath: string;
 }
+
+const projectRoot = path.resolve(__dirname, '../../..');
 
 const config: IConfig = {
 	noClear: true,
 	verbose: false,
 	noCache: false,
 	localJsEnvPorts: [9229, 9230],
-	packagesPath: path.resolve(__dirname, '../../'),
+	projectRoot,
+	packagesPath: path.join(projectRoot, 'packages'),
+	buildToolsPath: path.join(projectRoot, 'tools', 'build'),
 };
 
 let isInit = false;

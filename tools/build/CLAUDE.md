@@ -1,8 +1,10 @@
 ## CLAUDE.md
 
-Gulp 构建编排工具，定义所有包的 build/watch/lint/typecheck/test 任务。
+仓库级 Gulp 构建编排工具，定义所有包的 build/watch/lint/typecheck/test 任务。
 
 **构建输出：** `out/`
+
+**目录定位：** 位于 `tools/build`，属于开发工具 workspace，不属于 `packages/` 下的运行时/业务包。
 
 **关键文件：**
 

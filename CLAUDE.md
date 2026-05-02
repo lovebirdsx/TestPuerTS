@@ -22,7 +22,8 @@ packages/                     # npm 工作区（yarn/npm）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
   tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
   acp-client/                 # ACP 协议客户端（移植到 PuerTS 环境）
-  tool/                       # 构建工具（gulp 任务、工具函数）
+tools/                        # 仓库级开发工具
+  build/                      # 构建工具（gulp 任务、工具函数）
 ```
 
 ## 常用命令
@@ -73,7 +74,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
 
 ## 架构说明
 
-- **Gulp 任务编排**：任务按包定义在 `packages/tool/src/packages/` 中，在 `gulpfile.ts` 中组合。加入了自定义的缓存机制，可以通过 `--no-cache` 强制跳过缓存。
+- **Gulp 任务编排**：任务按包定义在 `tools/build/src/packages/` 中，在 `gulpfile.ts` 中组合。加入了自定义的缓存机制，可以通过 `--no-cache` 强制跳过缓存。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。

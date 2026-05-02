@@ -32,7 +32,7 @@ gulp.task('dev', gulp.series('ue:build', 'watch'));
 
 // 缓存管理
 gulp.task('cache:clear', async () => {
-	const projectRoot = path.resolve(getConfig().packagesPath, '..');
+	const projectRoot = getConfig().projectRoot;
 	await cleanDirAsync(path.join(projectRoot, '.gulp-cache'));
 	info(green('[cache:clear] Cache cleared'));
 });

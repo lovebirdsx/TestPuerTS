@@ -11,7 +11,7 @@ import { withCache } from '../common/taskCache';
 
 const config = getConfig();
 const workingDir = path.join(config.packagesPath, 'tests');
-const projectRoot = path.resolve(config.packagesPath, '..');
+const projectRoot = config.projectRoot;
 const outDir = path.join(projectRoot, 'Content/JavaScript/tests');
 
 gulp.task('tests:clean', async () => {

@@ -7,13 +7,14 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "tools/*"
   ],
   "scripts": {
-    "postinstall": "cd packages/tool && tsc && gulp ue:build --verbose && gulp ue:gen_vscode_settings --verbose",
-    "tool:build": "cd packages/tool && tsc",
-    "dev": "nodemon -w packages/tool/src -e ts -x \"cd packages/tool && tsc && gulp dev --verbose\"",
-    "check": "cd packages/tool && tsc && gulp check"
+    "postinstall": "npm --workspace @test-puerts/build-tools run build && npx gulp ue:build --verbose && npx gulp ue:gen_vscode_settings --verbose",
+    "tool:build": "npm --workspace @test-puerts/build-tools run build",
+    "dev": "nodemon -w tools/build/src -e ts -x \"npm --workspace @test-puerts/build-tools run build && npx gulp dev --verbose\"",
+    "check": "npm --workspace @test-puerts/build-tools run build && npx gulp check"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

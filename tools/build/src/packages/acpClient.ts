@@ -6,7 +6,7 @@ import { exec, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 
 const config = getConfig();
 const workingDir = path.join(config.packagesPath, 'acp-client');
-export const projectRoot = path.resolve(config.packagesPath, '..');
+export const projectRoot = config.projectRoot;
 const acpClientDir = path.join(config.packagesPath, 'acp-client');
 export const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
 

@@ -23,7 +23,7 @@ interface CacheEntry {
 
 function getProjectRoot(): string {
 	const config = getConfig();
-	return path.resolve(config.packagesPath, '..');
+	return config.projectRoot;
 }
 
 function getCachePath(taskName: string): string {
