@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Button, HorizontalBox, TextBlock, VerticalBox } from 'react-umg';
+import { Border, Button, HorizontalBox, TextBlock, VerticalBox } from 'react-umg';
 import type {
+	BorderProps,
 	ButtonProps,
 	ButtonStyle,
 	HorizontalBoxProps,
 	LinearColor,
+	Margin,
 	SlateBrush,
 	SlateColor,
 	SlateFontInfo,
@@ -35,6 +37,7 @@ const COL_FOREGROUND_HOVER: LinearColor = { R: 1.0, G: 1.0, B: 1.0, A: 1.0 };
 
 // ── DrawAs 枚举值（ESlateBrushDrawType，来源于 SlateBrush.h） ──
 
+const DRAW_AS_NO_DRAW = 0; // ESlateBrushDrawType::NoDrawType
 const DRAW_AS_ROUNDED_BOX = 4; // ESlateBrushDrawType::RoundedBox
 
 // ── 圆角按钮 Brush 辅助 ──
@@ -60,6 +63,10 @@ function roundedBrush(fill: LinearColor, outline: LinearColor): SlateBrush {
 const DEFAULT_FONT: SlateFontInfo = { Size: 10 };
 
 const DEFAULT_TEXT_COLOR: SlateColor = { SpecifiedColor: COL_FOREGROUND };
+
+const DEFAULT_PANEL_PADDING = { Left: 4, Top: 4, Right: 4, Bottom: 4 };
+const DEFAULT_PANEL_BACKGROUND: SlateBrush = { DrawAs: DRAW_AS_NO_DRAW as any };
+const DEFAULT_BOX_CHILD_GAP = 2;
 
 const DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	Normal: roundedBrush(COL_SECONDARY, COL_INPUT),
@@ -98,16 +105,59 @@ function mergeDeep<T>(defaults: T, overrides?: Partial<T>): T {
 	return result as T;
 }
 
-// ── 组件 ──
-
-export const VBox = (props: VerticalBoxProps): React.ReactElement => {
-	const { children, ...rest } = props;
-	return <VerticalBox {...rest}>{children}</VerticalBox>;
+type BoxSpacingProps = {
+	Gap?: number;
 };
 
-export const HBox = (props: HorizontalBoxProps): React.ReactElement => {
-	const { children, ...rest } = props;
-	return <HorizontalBox {...rest}>{children}</HorizontalBox>;
+type SlottedChildProps = {
+	Slot?: {
+		Padding?: Margin;
+	};
+};
+
+function withChildGap(children: React.ReactNode, padding: Margin): React.ReactNode {
+	const childArray = React.Children.toArray(children);
+	return childArray.map((child, index) => {
+		if (index === childArray.length - 1 || !React.isValidElement<SlottedChildProps>(child)) {
+			return child;
+		}
+
+		const slot = child.props.Slot;
+		return React.cloneElement(child, {
+			Slot: {
+				...slot,
+				Padding: {
+					...padding,
+					...slot?.Padding,
+				},
+			},
+		});
+	});
+}
+
+// ── 组件 ──
+
+export const Panel = (props: BorderProps): React.ReactElement => {
+	const { children, Background, Padding, ...rest } = props;
+	return (
+		<Border
+			Background={Background ?? DEFAULT_PANEL_BACKGROUND}
+			Padding={Padding ?? DEFAULT_PANEL_PADDING}
+			{...rest}
+		>
+			{children}
+		</Border>
+	);
+};
+
+export const VBox = (props: VerticalBoxProps & BoxSpacingProps): React.ReactElement => {
+	const { children, Gap = DEFAULT_BOX_CHILD_GAP, ...rest } = props;
+	return <VerticalBox {...rest}>{withChildGap(children, { Bottom: Gap })}</VerticalBox>;
+};
+
+export const HBox = (props: HorizontalBoxProps & BoxSpacingProps): React.ReactElement => {
+	const { children, Gap = DEFAULT_BOX_CHILD_GAP, ...rest } = props;
+	return <HorizontalBox {...rest}>{withChildGap(children, { Right: Gap })}</HorizontalBox>;
 };
 
 export const Btn = (props: ButtonProps): React.ReactElement => {

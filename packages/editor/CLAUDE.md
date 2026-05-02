@@ -6,21 +6,21 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 
 **关键文件：**
 
-| 文件                        | 说明                                      |
-| --------------------------- | ----------------------------------------- |
-| `src/index.ts`              | 公共 API 导出（IWidgetRoot、UEWidget 等） |
-| `src/main.ts`               | 编辑器初始化入口                          |
-| `src/common/umgRenderer.ts` | 核心 React reconciler for UMG（16KB）     |
-| `src/common/reactTab.ts`    | Tab 管理组件                              |
-| `src/common/watcher.ts`     | 文件/属性监听                             |
-| `src/components/`           | UI 组件（SamplePanel 等）                 |
-| `src/components/ui.tsx`     | 通用 UI 封装组件（VBox/HBox/Btn/Text）    |
-| `src/mixin/mainEuw.ts`      | UE 主窗口集成                             |
+| 文件                        | 说明                                         |
+| --------------------------- | -------------------------------------------- |
+| `src/index.ts`              | 公共 API 导出（IWidgetRoot、UEWidget 等）    |
+| `src/main.ts`               | 编辑器初始化入口                             |
+| `src/common/umgRenderer.ts` | 核心 React reconciler for UMG（16KB）        |
+| `src/common/reactTab.ts`    | Tab 管理组件                                 |
+| `src/common/watcher.ts`     | 文件/属性监听                                |
+| `src/components/`           | UI 组件（SamplePanel 等）                    |
+| `src/components/ui.tsx`     | 通用 UI 封装组件（Panel/VBox/HBox/Btn/Text） |
+| `src/mixin/mainEuw.ts`      | UE 主窗口集成                                |
 
 **测试：**
 
-* `src/unittests/` — vitest 单元测试（`npx gulp editor:test`）
-* `src/tests/` — 集成测试
+- `src/unittests/` — vitest 单元测试（`npx gulp editor:test`）
+- `src/tests/` — 集成测试
 
 **常用命令：**
 
