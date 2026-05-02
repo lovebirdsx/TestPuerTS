@@ -8,7 +8,8 @@
 		"@universe-agent/acp-client-puerts": "*",
 		"mocha": "^10.7.0",
 		"react": "^19.0.0",
-		"react-reconciler": "^0.31.0"
+		"react-reconciler": "^0.31.0",
+		"zod": "^4.0.0"
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.7",

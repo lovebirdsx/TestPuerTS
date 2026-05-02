@@ -7,6 +7,7 @@ import './ipc/rpcClient.test';
 import './ipc/rpcServer.test';
 import './editorCommon/processIOHelper.test';
 import './editorCommon/childProcess.test';
+import './editor/persistence.test';
 import './reactUmg/compareWidgetProps.test';
 import './reactUmg/umgWidget.test';
 import './reactUmg/reconciler.test';

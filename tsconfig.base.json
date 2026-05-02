@@ -5,9 +5,10 @@
     "experimentalDecorators": true,
     "jsx": "react",
     "sourceMap": true,
+    "skipLibCheck": true,
     "typeRoots": [
       "Typing",
       "./node_modules/@types"
     ]
-  }  
+  }
 }
