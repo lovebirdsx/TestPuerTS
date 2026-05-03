@@ -2,12 +2,37 @@ import * as React from 'react';
 import { watch } from './common/watcher';
 import { TsEditorLibrary, EditorCommonLibrary } from 'ue';
 import { openReactTab } from './common/reactTab';
+import { registerTabFactory, restoreOpenTabs } from './common/tabSession';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
 import { flushAllPersistence } from '@universe-agent/editor-common';
 
 let menuDisposable: { dispose(): void } | undefined;
+
+// Tab 元数据：tabName → label（注册工厂和菜单共用）
+const TAB_CONFIGS = [
+	{
+		tabName: 'SampleReactTab',
+		tabLabel: 'Sample React Panel',
+		factory: () => React.createElement(SamplePanel),
+		menuId: 'editor.tabs.openSampleReactPanel',
+		menuLabel: 'Open Sample React Panel',
+		menuTooltip: 'Open the sample React UMG editor tab',
+		menuPath: ['Panels'] as string[],
+		menuSortOrder: undefined as number | undefined,
+	},
+	{
+		tabName: 'AcpClientTab',
+		tabLabel: 'ACP Client',
+		factory: () => React.createElement(AcpClientPanel),
+		menuId: 'editor.openAcpClient',
+		menuLabel: 'Open ACP Client',
+		menuTooltip: 'Open the ACP Client editor tab',
+		menuPath: undefined as string[] | undefined,
+		menuSortOrder: 10,
+	},
+] as const;
 
 function startWatch() {
 	const watcher = watch(__dirname, () => {
@@ -23,26 +48,36 @@ function startWatch() {
 }
 
 function registerMenus() {
-	menuDisposable = registerEditorMenus([
-		{
-			id: 'editor.tabs.openSampleReactPanel',
-			label: 'Open Sample React Panel',
-			tooltip: 'Open the sample React UMG editor tab',
-			path: ['Panels'],
-			onExecute: () => openReactTab('SampleReactTab', 'Sample React Panel', React.createElement(SamplePanel)),
-		},
-		{
-			id: 'editor.openAcpClient',
-			label: 'Open ACP Client',
-			tooltip: 'Open the ACP Client editor tab',
-			sortOrder: 10,
-			onExecute: () => openReactTab('AcpClientTab', 'ACP Client', React.createElement(AcpClientPanel)),
-		},
-	]);
+	// 同步注册工厂，供恢复时使用
+	for (const cfg of TAB_CONFIGS) {
+		registerTabFactory(cfg.tabName, cfg.factory);
+	}
+
+	menuDisposable = registerEditorMenus(
+		TAB_CONFIGS.map((cfg) => ({
+			id: cfg.menuId,
+			label: cfg.menuLabel,
+			tooltip: cfg.menuTooltip,
+			path: cfg.menuPath,
+			sortOrder: cfg.menuSortOrder,
+			onExecute: () => openReactTab(cfg.tabName, cfg.tabLabel, cfg.factory()),
+		})),
+	);
 
 	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
 		menuDisposable?.dispose();
 		menuDisposable = undefined;
+	});
+}
+
+function restoreTabsOnStart() {
+	TsEditorLibrary.GetTsEditor().OnStarted.Add(() => {
+		void restoreOpenTabs((tabName, factory) => {
+			const cfg = TAB_CONFIGS.find((c) => c.tabName === tabName);
+			if (cfg) {
+				openReactTab(tabName, cfg.tabLabel, factory());
+			}
+		});
 	});
 }
 
@@ -59,6 +94,7 @@ function registerExitHooks() {
 function main() {
 	startWatch();
 	registerMenus();
+	restoreTabsOnStart();
 	registerExitHooks();
 }
 

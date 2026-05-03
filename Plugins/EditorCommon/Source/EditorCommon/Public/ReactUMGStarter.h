@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Widgets/Docking/SDockTab.h"
 #include "ReactUMGStarter.generated.h"
 
 UCLASS(BlueprintType)
@@ -21,6 +22,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "EditorCommon")
 	virtual UWorld* GetWorld() const override;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTabClosedEvent);
+
+	UPROPERTY(BlueprintAssignable, Category = "EditorCommon")
+	FOnTabClosedEvent OnTabClosed;
+
 private:
 	FName TabName;
+	void OnDockTabClosed(TSharedRef<SDockTab> Tab);
 };

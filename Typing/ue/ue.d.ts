@@ -80205,11 +80205,13 @@ declare module "ue" {
     
     class ReactUMGStarter extends UE.Object {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        OnTabClosed: $MulticastDelegate<() => void>;
         GetWorld() : UE.World;
         /**
          * @deprecated Unsupported super overloads.
          */
         GetWorld() : World;
+        OnTabClosedEvent__DelegateSignature() : void;
         SetContent(Content: $Nullable<UE.Widget>) : void;
         Start(EditorUtilityWidgetBlueprint: $Nullable<UE.EditorUtilityWidgetBlueprint>) : string;
         StartWithName(InTabName: string, InTabLabel: string) : string;

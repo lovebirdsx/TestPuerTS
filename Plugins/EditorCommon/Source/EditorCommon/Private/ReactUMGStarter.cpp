@@ -91,5 +91,18 @@ FName UReactUMGStarter::StartWithName(FName InTabName, const FText& InTabLabel)
 	}
 
 	TabManager->TryInvokeTab(TabName);
+
+	// 绑定 Tab 关闭回调，用于通知 JS 层用户主动关闭了 Tab
+	if (const TSharedPtr<SDockTab> DockTab = TabManager->FindExistingLiveTab(TabName); DockTab.IsValid())
+	{
+		DockTab->SetOnTabClosed(SDockTab::FOnTabClosedCallback::CreateUObject(
+			this, &UReactUMGStarter::OnDockTabClosed));
+	}
+
 	return TabName;
+}
+
+void UReactUMGStarter::OnDockTabClosed(TSharedRef<SDockTab> Tab)
+{
+	OnTabClosed.Broadcast();
 }
