@@ -1,5 +1,5 @@
 import type { JsonRpcMessage } from './jsonrpc';
-import { ACPClient } from './client';
+import { ACPClient, type AcpTransportFactory } from './client';
 import { Renderer } from './renderer';
 import type {
 	InitializeResponse,
@@ -179,8 +179,9 @@ export class AcpUiController {
 	private nextPermissionId = 1;
 	private pendingPermissions = new Map<number, { resolve: (response: RequestPermissionResponse) => void }>();
 	private mcpServers: McpServerEntry[] = [];
+	private transportFactory: AcpTransportFactory | undefined;
 
-	constructor(options: AcpUiControllerOptions) {
+	constructor(options: AcpUiControllerOptions, transportFactory?: AcpTransportFactory) {
 		this.options = {
 			...options,
 			args: options.args ?? [],
@@ -205,6 +206,7 @@ export class AcpUiController {
 			verbose: this.options.verbose ?? false,
 		});
 		this.mcpServers = options.mcpServers ?? [];
+		this.transportFactory = transportFactory;
 	}
 
 	/**
@@ -246,7 +248,9 @@ export class AcpUiController {
 
 		this.setStatus('connecting');
 		this.state = { ...this.state, error: null };
-		const client = new ACPClient(this.renderer, this.toCliOptions());
+		const client = this.transportFactory
+			? new ACPClient(this.renderer, this.toCliOptions(), this.transportFactory)
+			: new ACPClient(this.renderer, this.toCliOptions());
 		client.getHandler().setPermissionHandler((params) => this.resolvePermission(params));
 		client.setMcpServers(this.mcpServers);
 		this.client = client;

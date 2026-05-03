@@ -69,3 +69,4 @@ npx gulp editor:lint:fix    # lint 自动修复
 - 真正的 MCP 协议处理在 editor 进程（PuerTS）中（`@universe-agent/mcp-server-ue`），bridge 只做 stdio↔pipe 透明中继。
 - session 关闭 / panel unmount 时务必调 `mcpManager.stopSession()` 释放命名管道。
 - 修改 `mcp-servers.json` 后需重新打开 session（`McpManager.loadConfig(true)` 强刷或重启 panel）。
+- `McpManager` 与 `config.ts` 的集成测试在 `packages/tests/src/acpClient/mcpManager.test.ts`（生命周期、配置缓存/解析失败/schema 警告、ue-editor entry 拼装、env record 转换）。

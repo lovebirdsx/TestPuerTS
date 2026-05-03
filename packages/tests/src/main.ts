@@ -22,6 +22,12 @@ import './reactUmg/reconciler.test';
 import './reactUmg/testing.smoke.test';
 import './mcp/bridgeTransport.test';
 import './mcp/mcpServer.test';
+import './acpClient/jsonrpc.test';
+import './acpClient/acpClient.test';
+import './acpClient/acpClientHandler.test';
+import './acpClient/mcpManager.test';
+import './acpClient/controllerIntegration.test';
+import './acpClient/acpClient.realProcess.test';
 
 async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;

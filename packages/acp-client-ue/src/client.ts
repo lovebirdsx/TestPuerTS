@@ -1,6 +1,6 @@
 import * as UE from 'ue';
-import { JsonRpcConnection } from './jsonrpc';
-import { spawnAcpServer } from './ueTransport';
+import { JsonRpcConnection, type NdJsonTransport } from './jsonrpc';
+import { spawnAcpServer, type AcpServerOptions } from './ueTransport';
 import { Renderer } from './renderer';
 import type { CliOptions } from './cli';
 import {
@@ -371,11 +371,28 @@ export class ACPClientHandler {
 
 // --- ACP Client ---
 
+/**
+ * 把 CliOptions 转成 spawnAcpServer 需要的 executable/args/workspace。
+ * Windows 上 npx/node 等命令为 .cmd 脚本，需通过 cmd /c 执行；这里把整套命令拼接成一段字符串。
+ * 抽成纯函数便于在测试中校验拼接逻辑。
+ */
+export function buildSpawnArgs(options: CliOptions): AcpServerOptions {
+	const { command, args, workspace } = options;
+	const allArgs = [...args].join(' ');
+	const fullCommand = allArgs
+		? `${command} --workspace ${workspace} ${allArgs}`
+		: `${command} --workspace ${workspace}`;
+	return { executable: 'cmd', args: `/c ${fullCommand}`, workspace };
+}
+
+export type AcpTransportFactory = (options: AcpServerOptions) => NdJsonTransport;
+
 export class ACPClient {
 	private connection: JsonRpcConnection | null = null;
 	private handler: ACPClientHandler;
 	private renderer: Renderer;
 	private options: CliOptions;
+	private transportFactory: AcpTransportFactory;
 	private mcpServers: McpServerEntry[] = [];
 
 	sessionId: string | null = null;
@@ -384,10 +401,11 @@ export class ACPClient {
 	modes: SessionModeState | null = null;
 	sessionInfo: SessionInfo | null = null;
 
-	constructor(renderer: Renderer, options: CliOptions) {
+	constructor(renderer: Renderer, options: CliOptions, transportFactory: AcpTransportFactory = spawnAcpServer) {
 		this.renderer = renderer;
 		this.options = options;
 		this.handler = new ACPClientHandler(renderer, options);
+		this.transportFactory = transportFactory;
 	}
 
 	getHandler(): ACPClientHandler {
@@ -408,16 +426,7 @@ export class ACPClient {
 	}
 
 	async connect(): Promise<void> {
-		const { command, args, workspace } = this.options;
-
-		// 组装完整命令参数
-		const allArgs = [...args].join(' ');
-		const fullCommand = allArgs
-			? `${command} --workspace ${workspace} ${allArgs}`
-			: `${command} --workspace ${workspace}`;
-
-		// Windows 上 npx/node 等命令为 .cmd 脚本，需通过 cmd /c 执行
-		const transport = spawnAcpServer({ executable: 'cmd', args: `/c ${fullCommand}`, workspace });
+		const transport = this.transportFactory(buildSpawnArgs(this.options));
 
 		// 创建 JSON-RPC 连接
 		this.connection = new JsonRpcConnection(transport);

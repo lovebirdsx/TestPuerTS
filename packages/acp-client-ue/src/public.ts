@@ -1,4 +1,5 @@
-export { ACPClient } from './client';
+export { ACPClient, ACPClientHandler, buildSpawnArgs, type AcpTransportFactory } from './client';
+export { ChildProcessTransport, spawnAcpServer, type AcpServerOptions } from './ueTransport';
 export { JsonRpcConnection } from './jsonrpc';
 export type {
 	JsonRpcMessage,

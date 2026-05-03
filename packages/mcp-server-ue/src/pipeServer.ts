@@ -46,6 +46,11 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 		resolveBridge = resolve;
 		rejectBridge = reject;
 	});
+	// 防御：dispose-before-bridge 场景下 reject 可能没有 .then 链路监听，
+	// 这里挂一个 no-op catch 避免 unhandledRejection；真正的等待方会另外注册 then/catch。
+	bridgePromise.catch(() => {
+		// ignore
+	});
 
 	let socket: UeIpcSocket | null = null;
 	const onDidClientDisconnect = new Emitter<void>();

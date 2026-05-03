@@ -19,6 +19,7 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 | `src/editor/`           | editor 包功能测试（如 persistence）                                          |
 | `src/reactUmg/`         | ReactUMG 集成测试（reconciler、widget）                                      |
 | `src/mcp/`              | mcp-server-ue 测试（BridgeTransport、SDK Client ↔ McpServer 内存对环测试）   |
+| `src/acpClient/`        | ACP 客户端集成测试（jsonrpc / ACPClient / Handler / McpManager / UiController；含 env 门控的真实子进程 smoke） |
 | `src/standalone/`       | 独立 Node.js 进程脚本（配合 RPC 测试）                                       |
 
 **运行方式：**
