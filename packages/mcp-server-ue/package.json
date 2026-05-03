@@ -1,0 +1,16 @@
+{
+	"name": "@universe-agent/mcp-server-ue",
+	"version": "1.0.0",
+	"description": "In-PuerTS MCP server that exposes UE editor capabilities as MCP tools",
+	"main": "../../../Content/JavaScript/mcp-server-ue/index.js",
+	"types": "../../../Content/JavaScript/mcp-server-ue/index.d.ts",
+	"license": "MIT",
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.29.0",
+		"@universe-agent/mcp-bridge": "*",
+		"zod": "^4.0.0"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.2"
+	}
+}

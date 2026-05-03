@@ -2,7 +2,7 @@ import * as React from 'react';
 import { describe, it, expect } from '../../testRunner';
 import { render, fireEvent } from '../../reactUmg/testing';
 import { AcpClientPanel } from 'editor';
-import { MockAcpUiController, asController } from './mockController';
+import { MockAcpUiController, MockMcpManager, asController, asMcpManager } from './mockController';
 
 function flushMicrotasks(): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, 0));
@@ -129,12 +129,14 @@ describe('AcpClientPanel - connect / disconnect', () => {
 describe('AcpClientPanel - sessions and prompts', () => {
 	it('clicking New session calls controller.newSession()', async () => {
 		let mock!: MockAcpUiController;
+		const mcpManager = new MockMcpManager();
 		const view = render(
 			<AcpClientPanel
 				controllerFactory={(opts) => {
 					mock = new MockAcpUiController(opts);
 					return asController(mock);
 				}}
+				mcpManagerFactory={() => asMcpManager(mcpManager)}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
@@ -142,6 +144,8 @@ describe('AcpClientPanel - sessions and prompts', () => {
 		view.act(() => mock.emit({ type: 'status_changed', status: 'connected' }));
 
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'New')));
+		await flushMicrotasks();
+		await flushMicrotasks();
 		expect(mock.newSessionCalls).toBe(1);
 	});
 

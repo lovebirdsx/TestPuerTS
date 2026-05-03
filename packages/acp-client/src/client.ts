@@ -7,6 +7,7 @@ import {
 	PROTOCOL_VERSION,
 	type InitializeResponse,
 	type ListSessionsResponse,
+	type McpServerEntry,
 	type RequestPermissionRequest,
 	type RequestPermissionResponse,
 	type SessionConfigOption,
@@ -21,6 +22,7 @@ export type {
 	AgentCapabilities,
 	InitializeResponse,
 	ListSessionsResponse,
+	McpServerEntry,
 	RequestPermissionRequest,
 	RequestPermissionResponse,
 	SessionConfigOption,
@@ -362,6 +364,7 @@ export class ACPClient {
 	private handler: ACPClientHandler;
 	private renderer: Renderer;
 	private options: CliOptions;
+	private mcpServers: McpServerEntry[] = [];
 
 	sessionId: string | null = null;
 	initResult: InitializeResponse | null = null;
@@ -377,6 +380,19 @@ export class ACPClient {
 
 	getHandler(): ACPClientHandler {
 		return this.handler;
+	}
+
+	/**
+	 * 注入 MCP server 列表，发送 `session/new`/`session/load`/`session/list` 时一并下发。
+	 * editor 在 `controller.startSession()` 之前调用，把内置 ue-editor 与项目级配置合并后传入。
+	 * 传空数组（默认）即"无 MCP"。
+	 */
+	setMcpServers(servers: McpServerEntry[]): void {
+		this.mcpServers = servers ?? [];
+	}
+
+	getMcpServers(): McpServerEntry[] {
+		return this.mcpServers;
 	}
 
 	async connect(): Promise<void> {
@@ -428,7 +444,7 @@ export class ACPClient {
 
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_new, {
 			cwd: this.options.workspace,
-			mcpServers: [],
+			mcpServers: this.mcpServers,
 		});
 
 		this.applySessionStartResponse(result);
@@ -441,7 +457,7 @@ export class ACPClient {
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_load, {
 			sessionId,
 			cwd: this.options.workspace,
-			mcpServers: [],
+			mcpServers: this.mcpServers,
 		});
 
 		this.applySessionStartResponse(result);
@@ -454,7 +470,7 @@ export class ACPClient {
 		return this.connection.sendRequest<ListSessionsResponse>(AGENT_METHODS.session_list, {
 			cursor,
 			cwd: this.options.workspace,
-			mcpServers: [],
+			mcpServers: this.mcpServers,
 		});
 	}
 

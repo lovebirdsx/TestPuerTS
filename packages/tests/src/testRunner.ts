@@ -173,10 +173,10 @@ function createMatchers(actual: unknown, negated: boolean): Matchers {
 			assert((actual as number) < n, `expected ${actual} to be less than ${n}`);
 		},
 		toBeUndefined() {
-			assert(actual === undefined, `expected ${JSON.stringify(actual)} to be undefined`);
+			assert(actual === undefined, `expected ${actual} to be undefined`);
 		},
 		toBeNull() {
-			assert(actual === null, `expected ${JSON.stringify(actual)} to be null`);
+			assert(actual === null, `expected ${actual} to be null`);
 		},
 		toThrow(expected?: string | RegExp) {
 			if (typeof actual !== 'function') {

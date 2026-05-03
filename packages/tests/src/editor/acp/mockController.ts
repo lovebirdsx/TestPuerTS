@@ -5,6 +5,7 @@ import type {
 	AcpUiEvent,
 	AcpUiState,
 	ListSessionsResponse,
+	McpServerEntry,
 } from '@universe-agent/acp-client-puerts';
 
 type Listener = (event: AcpUiEvent) => void;
@@ -24,6 +25,7 @@ export class MockAcpUiController {
 	public lastProtocolEnabled?: boolean;
 	public lastMode?: string;
 	public lastConfigOption?: { optionId: string; value: string | boolean };
+	public mcpServersCalls: McpServerEntry[][] = [];
 
 	private listeners = new Set<Listener>();
 	private state: AcpUiState;
@@ -113,6 +115,43 @@ export class MockAcpUiController {
 	async setConfigOption(optionId: string, value: string | boolean): Promise<void> {
 		this.lastConfigOption = { optionId, value };
 	}
+
+	setMcpServers(servers: McpServerEntry[]): void {
+		this.mcpServersCalls.push(servers);
+	}
+}
+
+// 极简 MockMcpManager：buildSessionMcpList 直接返回空 servers，不触发任何 IO。
+// 通过 `as unknown as McpManager` 在 panel 测试里塞进 mcpManagerFactory。
+export class MockMcpManager {
+	public buildCalls: string[] = [];
+	public stopCalls: string[] = [];
+	public disposeCalls = 0;
+
+	async buildSessionMcpList(sessionId: string): Promise<{
+		servers: unknown[];
+		warnings: string[];
+	}> {
+		this.buildCalls.push(sessionId);
+		return { servers: [], warnings: [] };
+	}
+
+	stopSession(sessionId: string): void {
+		this.stopCalls.push(sessionId);
+	}
+
+	hasSession(): boolean {
+		return false;
+	}
+
+	dispose(): void {
+		this.disposeCalls++;
+	}
+}
+
+// 类型断言辅助：把 MockMcpManager 当作真 McpManager 注入 mcpManagerFactory
+export function asMcpManager<T>(mock: MockMcpManager): T {
+	return mock as unknown as T;
 }
 
 // 类型断言辅助：把 mock 当作真 controller 注入 controllerFactory

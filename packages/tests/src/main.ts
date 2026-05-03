@@ -20,6 +20,8 @@ import './reactUmg/compareWidgetProps.test';
 import './reactUmg/umgWidget.test';
 import './reactUmg/reconciler.test';
 import './reactUmg/testing.smoke.test';
+import './mcp/bridgeTransport.test';
+import './mcp/mcpServer.test';
 
 async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;

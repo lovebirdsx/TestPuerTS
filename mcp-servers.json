@@ -1,0 +1,9 @@
+{
+	"enabled": true,
+	"builtin": {
+		"ueEditor": {
+			"enabled": true
+		}
+	},
+	"external": {}
+}

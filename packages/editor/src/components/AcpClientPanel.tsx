@@ -29,6 +29,7 @@ import {
 	ToolbarButton,
 	VBox,
 } from './ui';
+import { McpManager } from '../mcp/manager';
 
 type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
 type InspectorTab = 'plan' | 'tools' | 'protocol' | 'settings';
@@ -79,13 +80,20 @@ export type AcpControllerFactory = (options: AcpUiControllerOptions) => AcpUiCon
 
 const defaultControllerFactory: AcpControllerFactory = (options) => new Controller(options);
 
+export type AcpMcpManagerFactory = () => McpManager;
+
+const defaultMcpManagerFactory: AcpMcpManagerFactory = () => new McpManager();
+
 export interface AcpClientPanelProps {
 	// 测试或调试用：覆盖默认的 AcpUiController 工厂；不传则使用真实 Controller。
 	controllerFactory?: AcpControllerFactory;
+	// 测试用：覆盖默认的 McpManager 工厂；不传则使用真实 McpManager。
+	mcpManagerFactory?: AcpMcpManagerFactory;
 }
 
 export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
 	const controllerFactory = props.controllerFactory ?? defaultControllerFactory;
+	const mcpManagerFactory = props.mcpManagerFactory ?? defaultMcpManagerFactory;
 	const [command, setCommand] = React.useState(DEFAULT_COMMAND);
 	const [workspace, setWorkspace] = React.useState(UE.JsRunHelper.GetProjectDir());
 	const [extraArgs, setExtraArgs] = React.useState('');
@@ -96,10 +104,22 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 	const [inspector, setInspector] = React.useState<InspectorTab>('plan');
 	const [controller, setController] = React.useState<AcpUiController | undefined>(undefined);
 	const [state, setState] = React.useState<AcpPanelState>(() => createInitialState());
+	const mcpManagerRef = React.useRef<McpManager | undefined>(undefined);
+	const mcpSessionIdRef = React.useRef<string | undefined>(undefined);
+
+	function getMcpManager(): McpManager {
+		if (!mcpManagerRef.current) {
+			mcpManagerRef.current = mcpManagerFactory();
+		}
+		return mcpManagerRef.current;
+	}
 
 	React.useEffect(() => {
 		return () => {
 			controller?.disconnect();
+			mcpManagerRef.current?.dispose();
+			mcpManagerRef.current = undefined;
+			mcpSessionIdRef.current = undefined;
 		};
 	}, [controller]);
 
@@ -129,20 +149,49 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 	const disconnect = React.useCallback(() => {
 		controller?.disconnect();
 		setController(undefined);
+		const sessionId = mcpSessionIdRef.current;
+		if (sessionId) {
+			mcpManagerRef.current?.stopSession(sessionId);
+			mcpSessionIdRef.current = undefined;
+		}
 	}, [controller]);
+
+	const prepareMcpForSession = React.useCallback(
+		async (sessionKey: string) => {
+			const manager = getMcpManager();
+			const previous = mcpSessionIdRef.current;
+			if (previous && previous !== sessionKey) {
+				manager.stopSession(previous);
+			}
+			mcpSessionIdRef.current = sessionKey;
+			const result = await manager.buildSessionMcpList(sessionKey);
+			controller?.setMcpServers(result.servers);
+			for (const warning of result.warnings) {
+				setState((prev) => addMessage(prev, 'system', `MCP config: ${warning}`));
+			}
+		},
+		[controller, getMcpManager],
+	);
 
 	const createSession = React.useCallback(() => {
-		controller?.newSession().catch((err) => {
-			setState((prev) => addMessage(prev, 'error', errorMessage(err)));
-		});
-	}, [controller]);
+		if (!controller) return;
+		const sessionKey = `new-${Date.now().toString(36)}`;
+		prepareMcpForSession(sessionKey)
+			.then(() => controller.newSession())
+			.catch((err) => {
+				setState((prev) => addMessage(prev, 'error', errorMessage(err)));
+			});
+	}, [controller, prepareMcpForSession]);
 
 	const loadSession = React.useCallback(() => {
-		if (!sessionToLoad.trim()) return;
-		controller?.loadSession(sessionToLoad.trim()).catch((err) => {
-			setState((prev) => addMessage(prev, 'error', errorMessage(err)));
-		});
-	}, [controller, sessionToLoad]);
+		const sessionId = sessionToLoad.trim();
+		if (!sessionId || !controller) return;
+		prepareMcpForSession(sessionId)
+			.then(() => controller.loadSession(sessionId))
+			.catch((err) => {
+				setState((prev) => addMessage(prev, 'error', errorMessage(err)));
+			});
+	}, [controller, prepareMcpForSession, sessionToLoad]);
 
 	const sendPrompt = React.useCallback(() => {
 		const text = prompt.trim();

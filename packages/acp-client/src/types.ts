@@ -1,5 +1,18 @@
 export const PROTOCOL_VERSION = 1;
 
+/**
+ * ACP `session/new` 与 `session/load` 请求中 `mcpServers` 数组的元素类型。
+ *
+ * 命令 + 参数构成一个 stdio 子进程命令，agent 自行 spawn 并通过 stdin/stdout 走 MCP JSON-RPC。
+ * 与 MCP 标准一致；env 用 `{ name, value }` 数组（ACP 协议要求），不是 `Record<string,string>`。
+ */
+export interface McpServerEntry {
+	name: string;
+	command: string;
+	args?: string[];
+	env?: { name: string; value: string }[];
+}
+
 export interface InitializeResponse {
 	protocolVersion: number;
 	agentInfo?: {

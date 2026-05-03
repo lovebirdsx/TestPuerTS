@@ -4,6 +4,7 @@ import { Renderer } from './renderer';
 import type {
 	InitializeResponse,
 	ListSessionsResponse,
+	McpServerEntry,
 	RequestPermissionRequest,
 	RequestPermissionResponse,
 	SessionConfigOption,
@@ -29,6 +30,8 @@ export interface AcpUiControllerOptions {
 	model?: string;
 	apiKey?: string;
 	baseUrl?: string;
+	/** 初始 MCP server 列表；后续可通过 `setMcpServers()` 替换。 */
+	mcpServers?: McpServerEntry[];
 }
 
 export interface PendingPermissionRequest {
@@ -175,6 +178,7 @@ export class AcpUiController {
 	private state: AcpUiState;
 	private nextPermissionId = 1;
 	private pendingPermissions = new Map<number, { resolve: (response: RequestPermissionResponse) => void }>();
+	private mcpServers: McpServerEntry[] = [];
 
 	constructor(options: AcpUiControllerOptions) {
 		this.options = {
@@ -200,6 +204,20 @@ export class AcpUiController {
 			protocol: this.options.protocol ?? false,
 			verbose: this.options.verbose ?? false,
 		});
+		this.mcpServers = options.mcpServers ?? [];
+	}
+
+	/**
+	 * 替换 MCP server 列表，下次发起 `newSession`/`loadSession`/`listSessions` 时生效。
+	 * 已建立的会话不会被重置；如需让 agent 重新加载 MCP，调用方需 disconnect → connect → newSession。
+	 */
+	setMcpServers(servers: McpServerEntry[]): void {
+		this.mcpServers = servers ?? [];
+		this.client?.setMcpServers(this.mcpServers);
+	}
+
+	getMcpServers(): McpServerEntry[] {
+		return [...this.mcpServers];
 	}
 
 	subscribe(listener: Listener): () => void {
@@ -230,6 +248,7 @@ export class AcpUiController {
 		this.state = { ...this.state, error: null };
 		const client = new ACPClient(this.renderer, this.toCliOptions());
 		client.getHandler().setPermissionHandler((params) => this.resolvePermission(params));
+		client.setMcpServers(this.mcpServers);
 		this.client = client;
 
 		try {

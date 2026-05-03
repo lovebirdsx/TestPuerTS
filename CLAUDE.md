@@ -46,11 +46,19 @@ npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 
 npx gulp tests:typecheck        # 类型检查
 npx gulp tests:lint             # 检查代码规范
 npx gulp tests:lint:fix         # 自动修复代码规范
-npx gulp tests:rpc-server-test  # RPC 测试：Node.js Server + PuerTS Client
-npx gulp tests:rpc-client-test  # RPC 测试：PuerTS Server + Node.js Client
 
 npx gulp acp-client:build       # 编译 ACP 客户端 TS（PuerTS 端 + Node.js 桥接）
 npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
+
+npx gulp mcp-bridge:build       # 编译 MCP stdio↔pipe 桥接（Node CommonJS）
+npx gulp mcp-bridge:typecheck   # 类型检查
+npx gulp mcp-bridge:lint        # 检查代码规范
+npx gulp mcp-bridge:lint:fix    # 自动修复代码规范
+
+npx gulp mcp-server-ue:build    # 编译 PuerTS 内 MCP Server
+npx gulp mcp-server-ue:typecheck
+npx gulp mcp-server-ue:lint
+npx gulp mcp-server-ue:lint:fix
 
 npx gulp editor:build           # 编译编辑器包 TS
 npx gulp editor:watch           # 监听编辑器 TS
@@ -88,6 +96,12 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
   - `@agentclientprotocol/sdk` 是 ESM-only 且依赖 Web Streams，因此自实现了 JSON-RPC 2.0 层（`jsonrpc.ts`）替代 SDK 的 `ClientSideConnection`/`ndJsonStream`。
   - 通过 Node.js 桥接脚本（`bridge.ts`）启动 ACP Server（`@universe-agent/acp`），PuerTS 通过命名管道与桥接通信，桥接在管道和 ACP Server stdio 之间双向中继 ndjson。
   - C++ `ProcessIOHelper` 提供 PuerTS 缺失的 API：stdin 非阻塞读取、stdout/stderr 写入、文件 I/O。
+- **MCP 集成（editor → agent）**：editor 把 UE 编辑器能力作为 MCP server 暴露给 ACP agent。
+  - `packages/mcp-server-ue/` 基于 `@modelcontextprotocol/sdk` 的 `McpServer` 实现，配合 `BridgeTransport` 把命名管道的 ndjson 帧适配为 SDK Transport。
+  - `packages/mcp-bridge/` 是 Node.js stdio↔命名管道桥接进程；agent 视角看到一个标准 stdio MCP server，bridge 内部把帧透明中继到 editor。
+  - `packages/editor/src/mcp/` 的 `McpManager` 在 ACP `session/new`/`session/load` 之前为 session 启动管道 server 并组装 mcpServers entry，`AcpClientPanel` 自动调用。
+  - 项目根 `mcp-servers.json` 配置启用 / 禁用内置 server 与追加外部 MCP server。
+
 
 ## 代码风格
 

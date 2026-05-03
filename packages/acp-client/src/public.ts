@@ -12,6 +12,7 @@ export type {
 	AgentCapabilities,
 	InitializeResponse,
 	ListSessionsResponse,
+	McpServerEntry,
 	RequestPermissionRequest,
 	RequestPermissionResponse,
 	SessionConfigOption,

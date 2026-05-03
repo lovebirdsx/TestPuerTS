@@ -6,6 +6,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"@universe-agent/acp-client-puerts": "*",
+		"@universe-agent/mcp-server-ue": "*",
 		"react": "^19.0.0",
 		"react-reconciler": "^0.31.0",
 		"zod": "^4.0.0"

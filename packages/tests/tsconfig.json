@@ -3,12 +3,19 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "../../Content/JavaScript/tests",
-    "tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@modelcontextprotocol/sdk/dist/cjs/*": [
+        "../../node_modules/@modelcontextprotocol/sdk/dist/esm/*"
+      ]
+    }
   },
   "include": [
     "src/**/*"
   ],
   "references": [
-    { "path": "../editor" }
+    { "path": "../editor" },
+    { "path": "../mcp-server-ue" }
   ]
 }

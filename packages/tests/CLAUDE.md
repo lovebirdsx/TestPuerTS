@@ -18,16 +18,15 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 | `src/editorCommon/`     | EditorCommon 插件测试（ProcessIO、ChildProcess）                             |
 | `src/editor/`           | editor 包功能测试（如 persistence）                                          |
 | `src/reactUmg/`         | ReactUMG 集成测试（reconciler、widget）                                      |
+| `src/mcp/`              | mcp-server-ue 测试（BridgeTransport、SDK Client ↔ McpServer 内存对环测试）   |
 | `src/standalone/`       | 独立 Node.js 进程脚本（配合 RPC 测试）                                       |
 
 **运行方式：**
 
 ```bash
-npx gulp tests:build          # 编译
-npx gulp ue:test              # 通过 JsRunnerCommandlet 运行测试
-npx gulp tests:watch          # 监听编译，成功后自动运行 ue:test
-npx gulp tests:rpc-server-test  # RPC 测试：Node Server + PuerTS Client
-npx gulp tests:rpc-client-test  # RPC 测试：PuerTS Server + Node Client
+npx gulp tests:build          	# 编译
+npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试
+npx gulp tests:watch          	# 监听编译，成功后自动运行 ue:test
 ```
 
 **注意：** `universe-lib` 通过 `ExtraSearchPaths`（指向项目根目录）在运行时解析模块。

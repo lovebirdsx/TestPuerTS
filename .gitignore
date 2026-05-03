@@ -14,6 +14,7 @@ Content/JavaScript/editor/
 Content/JavaScript/tests/
 Content/JavaScript/acp-client/
 Content/JavaScript/react-umg/
+Content/JavaScript/mcp-server-ue/
 
 # Ignore binary files
 *.exe
@@ -25,6 +26,7 @@ Content/JavaScript/react-umg/
 # Ignore build
 Binaries/
 Build/
+dist/
 !tools/build/
 !tools/build/**
 DerivedDataCache/

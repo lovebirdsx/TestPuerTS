@@ -1,0 +1,25 @@
+{
+	"name": "@universe-agent/mcp-bridge",
+	"version": "1.0.0",
+	"description": "stdio↔named-pipe bridge that lets ACP agents talk to the in-editor MCP server",
+	"main": "dist/main.js",
+	"bin": {
+		"ue-mcp-bridge": "dist/main.js"
+	},
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc",
+		"typecheck": "tsc --noEmit",
+		"lint": "eslint src",
+		"lint:fix": "eslint --fix src",
+		"clean": "tsc --build --clean"
+	},
+	"dependencies": {
+		"universe-lib": "*"
+	},
+	"devDependencies": {
+		"eslint": "^9.0.0",
+		"typescript": "^5.8.2",
+		"@types/node": "*"
+	}
+}
