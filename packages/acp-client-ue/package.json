@@ -2,8 +2,8 @@
 	"name": "@universe-agent/acp-client-ue",
 	"version": "1.0.0",
 	"description": "ACP protocol client for PuerTS environment",
-	"main": "../../../Content/JavaScript/acp-client/public.js",
-	"types": "../../../Content/JavaScript/acp-client/public.d.ts",
+	"main": "../../../Content/JavaScript/acp-client-ue/public.js",
+	"types": "../../../Content/JavaScript/acp-client-ue/public.d.ts",
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc --build && tsc -p tsconfig.bridge.json",

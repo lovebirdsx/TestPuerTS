@@ -21,7 +21,7 @@ Typing/                       # PuerTS 生成的 d.ts 文件（ue.d.ts、ue_bp.d
 packages/                     # npm 工作区（yarn/npm）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
   tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
-  acp-client/                 # ACP 协议客户端（移植到 PuerTS 环境）
+  acp-client-ue/                 # ACP 协议客户端（移植到 PuerTS 环境）
 tools/                        # 仓库级开发工具
   build/                      # 构建工具（gulp 任务、工具函数）
 ```

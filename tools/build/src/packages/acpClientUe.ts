@@ -5,26 +5,26 @@ import { withCache } from '../common/taskCache';
 import { exec, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 
 const config = getConfig();
-const workingDir = path.join(config.packagesPath, 'acp-client');
+const workingDir = path.join(config.packagesPath, 'acp-client-ue');
 export const projectRoot = config.projectRoot;
-const acpClientDir = path.join(config.packagesPath, 'acp-client');
+const acpClientDir = path.join(config.packagesPath, 'acp-client-ue');
 export const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
 
 gulp.task(
-	'acp-client:typecheck',
+	'acp-client-ue:typecheck',
 	withCache(
 		{
-			taskName: 'acp-client:typecheck',
+			taskName: 'acp-client-ue:typecheck',
 			inputGlobs: [
-				'packages/acp-client/src/**/*.ts',
-				'packages/acp-client/tsconfig.json',
-				'packages/acp-client/package.json',
+				'packages/acp-client-ue/src/**/*.ts',
+				'packages/acp-client-ue/tsconfig.json',
+				'packages/acp-client-ue/package.json',
 			],
 		},
 		async () => {
 			await exec('tsc --noEmit', {
 				workingDir,
-				logPrefix: '[acp-client:typecheck] ',
+				logPrefix: '[acp-client-ue:typecheck] ',
 				formatText: formatTscCheckOutput,
 			});
 		},
@@ -32,43 +32,43 @@ gulp.task(
 );
 
 gulp.task(
-	'acp-client:lint',
+	'acp-client-ue:lint',
 	withCache(
-		{ taskName: 'acp-client:lint', inputGlobs: ['packages/acp-client/src/**/*.ts', 'eslint.config.mjs'] },
+		{ taskName: 'acp-client-ue:lint', inputGlobs: ['packages/acp-client-ue/src/**/*.ts', 'eslint.config.mjs'] },
 		async () => {
 			await exec('eslint src', {
 				workingDir,
-				logPrefix: '[acp-client:lint] ',
+				logPrefix: '[acp-client-ue:lint] ',
 				formatText: formatLintOutput,
 			});
 		},
 	),
 );
 
-gulp.task('acp-client:lint:fix', async () => {
+gulp.task('acp-client-ue:lint:fix', async () => {
 	await exec('eslint src --fix', {
 		workingDir,
-		logPrefix: '[acp-client:lint:fix] ',
+		logPrefix: '[acp-client-ue:lint:fix] ',
 		formatText: formatLintOutput,
 		noThrow: true,
 	});
 });
 
 gulp.task(
-	'acp-client:build',
+	'acp-client-ue:build',
 	withCache(
 		{
-			taskName: 'acp-client:build',
+			taskName: 'acp-client-ue:build',
 			inputGlobs: [
-				'packages/acp-client/src/**/*.ts',
-				'packages/acp-client/tsconfig.json',
-				'packages/acp-client/package.json',
+				'packages/acp-client-ue/src/**/*.ts',
+				'packages/acp-client-ue/tsconfig.json',
+				'packages/acp-client-ue/package.json',
 			],
 		},
 		async () => {
 			await exec('tsc', {
 				workingDir: acpClientDir,
-				logPrefix: '[acp-client:build] ',
+				logPrefix: '[acp-client-ue:build] ',
 			});
 		},
 	),

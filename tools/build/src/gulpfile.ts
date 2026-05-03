@@ -6,7 +6,7 @@ import './packages/tool';
 import './packages/editor';
 import './packages/ue';
 import './packages/tests';
-import './packages/acpClient';
+import './packages/acpClientUe';
 import './packages/mcpBridge';
 import './packages/mcpServerUe';
 
@@ -21,7 +21,7 @@ gulp.task(
 		// mcp-server-ue 通过 import '@universe-agent/mcp-bridge/dist/shared' 依赖
 		// mcp-bridge 的构建产物，必须先编译 mcp-bridge。
 		'mcp-bridge:build',
-		gulp.parallel('tool:build', 'editor:build', 'tests:build', 'acp-client:build', 'mcp-server-ue:build'),
+		gulp.parallel('tool:build', 'editor:build', 'tests:build', 'acp-client-ue:build', 'mcp-server-ue:build'),
 	),
 );
 gulp.task(
@@ -33,7 +33,7 @@ gulp.task(
 			'tool:typecheck',
 			'editor:typecheck',
 			'tests:typecheck',
-			'acp-client:typecheck',
+			'acp-client-ue:typecheck',
 			'mcp-bridge:typecheck',
 			'mcp-server-ue:typecheck',
 		),
@@ -41,7 +41,14 @@ gulp.task(
 );
 gulp.task(
 	'lint',
-	gulp.parallel('tool:lint', 'editor:lint', 'tests:lint', 'acp-client:lint', 'mcp-bridge:lint', 'mcp-server-ue:lint'),
+	gulp.parallel(
+		'tool:lint',
+		'editor:lint',
+		'tests:lint',
+		'acp-client-ue:lint',
+		'mcp-bridge:lint',
+		'mcp-server-ue:lint',
+	),
 );
 gulp.task(
 	'lint:fix',
@@ -49,7 +56,7 @@ gulp.task(
 		'tool:lint:fix',
 		'editor:lint:fix',
 		'tests:lint:fix',
-		'acp-client:lint:fix',
+		'acp-client-ue:lint:fix',
 		'mcp-bridge:lint:fix',
 		'mcp-server-ue:lint:fix',
 	),

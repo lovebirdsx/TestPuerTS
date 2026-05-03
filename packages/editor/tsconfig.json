@@ -9,5 +9,5 @@
 		"declarationMap": true
 	},
 	"include": ["src/**/*"],
-	"references": [{ "path": "../acp-client" }, { "path": "../mcp-server-ue" }]
+	"references": [{ "path": "../acp-client-ue" }, { "path": "../mcp-server-ue" }]
 }

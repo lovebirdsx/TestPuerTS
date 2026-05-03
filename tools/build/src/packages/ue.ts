@@ -189,7 +189,7 @@ gulp.task(
 	withCache(
 		{
 			taskName: 'ue:acp-client',
-			inputGlobs: ['packages/acp-client/src/**/*.ts', ...UE_BUILD_FILES],
+			inputGlobs: ['packages/acp-client-ue/src/**/*.ts', ...UE_BUILD_FILES],
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
@@ -197,7 +197,7 @@ gulp.task(
 			const args = [
 				`"${uprojectPath}"`,
 				'-run=JsRunner',
-				'-module=acp-client/index',
+				'-module=acp-client-ue/index',
 				'-timeout=600',
 				'-nopause',
 				'-DisablePlugins=EditorDataStorage',

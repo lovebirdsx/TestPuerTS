@@ -1,7 +1,7 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"outDir": "../../Content/JavaScript/acp-client",
+		"outDir": "../../Content/JavaScript/acp-client-ue",
 		"rootDir": "src",
 		"composite": true,
 		"declaration": true,
