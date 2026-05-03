@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as UE from 'ue';
+import { z } from 'zod';
 import { HorizontalBox, SizeBox } from 'react-umg';
 import type {
 	AcpPermissionStrategy,
@@ -13,6 +14,7 @@ import type {
 	SessionModeState,
 } from '@universe-agent/acp-client-ue';
 import { AcpUiController as Controller } from '@universe-agent/acp-client-ue';
+import { defineStore } from '@universe-agent/editor-common';
 import {
 	Badge,
 	Btn,
@@ -30,6 +32,7 @@ import {
 	VBox,
 } from './ui';
 import { McpManager } from '../mcp/manager';
+import { usePersistedState } from '../hooks/usePersistedState';
 
 type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
 type InspectorTab = 'plan' | 'tools' | 'protocol' | 'settings';
@@ -76,6 +79,18 @@ let nextProtocolId = 1;
 
 const DEFAULT_COMMAND = 'npx universe-agent-acp';
 
+const acpPanelConfigStore = defineStore(
+	'acp-client-panel',
+	z.object({
+		command: z.string().default(DEFAULT_COMMAND),
+		workspace: z.string().default(''),
+		extraArgs: z.string().default(''),
+		permission: z.enum(['interactive', 'auto-approve', 'deny-all']).default('interactive'),
+		protocolEnabled: z.boolean().default(false),
+		inspector: z.enum(['plan', 'tools', 'protocol', 'settings']).default('plan'),
+	}),
+);
+
 export type AcpControllerFactory = (options: AcpUiControllerOptions) => AcpUiController;
 
 const defaultControllerFactory: AcpControllerFactory = (options) => new Controller(options);
@@ -94,14 +109,31 @@ export interface AcpClientPanelProps {
 export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
 	const controllerFactory = props.controllerFactory ?? defaultControllerFactory;
 	const mcpManagerFactory = props.mcpManagerFactory ?? defaultMcpManagerFactory;
-	const [command, setCommand] = React.useState(DEFAULT_COMMAND);
-	const [workspace, setWorkspace] = React.useState(UE.JsRunHelper.GetProjectDir());
-	const [extraArgs, setExtraArgs] = React.useState('');
+	const [config, updateConfig] = usePersistedState(acpPanelConfigStore);
+	const command = config.command !== '' ? config.command : DEFAULT_COMMAND;
+	const workspace = config.workspace !== '' ? config.workspace : UE.JsRunHelper.GetProjectDir();
+	const extraArgs = config.extraArgs;
+	const permission = config.permission;
+	const protocolEnabled = config.protocolEnabled;
+	const inspector = config.inspector;
+	const setCommand = (value: string) =>
+		updateConfig((s) => {
+			s.command = value;
+		});
+	const setWorkspace = (value: string) =>
+		updateConfig((s) => {
+			s.workspace = value;
+		});
+	const setExtraArgs = (value: string) =>
+		updateConfig((s) => {
+			s.extraArgs = value;
+		});
+	const setInspector = (value: InspectorTab) =>
+		updateConfig((s) => {
+			s.inspector = value;
+		});
 	const [sessionToLoad, setSessionToLoad] = React.useState('');
 	const [prompt, setPrompt] = React.useState('');
-	const [permission, setPermission] = React.useState<AcpPermissionStrategy>('interactive');
-	const [protocolEnabled, setProtocolEnabled] = React.useState(false);
-	const [inspector, setInspector] = React.useState<InspectorTab>('plan');
 	const [controller, setController] = React.useState<AcpUiController | undefined>(undefined);
 	const [state, setState] = React.useState<AcpPanelState>(() => createInitialState());
 	const mcpManagerRef = React.useRef<McpManager | undefined>(undefined);
@@ -211,18 +243,22 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 	const changePermission = React.useCallback(
 		(value: string) => {
 			const next = value as AcpPermissionStrategy;
-			setPermission(next);
+			updateConfig((s) => {
+				s.permission = next;
+			});
 			controller?.setPermissionStrategy(next);
 		},
-		[controller],
+		[controller, updateConfig],
 	);
 
 	const changeProtocol = React.useCallback(
 		(value: boolean) => {
-			setProtocolEnabled(value);
+			updateConfig((s) => {
+				s.protocolEnabled = value;
+			});
 			controller?.setProtocolEnabled(value);
 		},
-		[controller],
+		[controller, updateConfig],
 	);
 
 	const connected = state.status === 'connected';

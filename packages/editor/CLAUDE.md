@@ -16,6 +16,7 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 | `src/common/watcher.ts`             | 文件/属性监听                                          |
 | `src/components/`                   | UI 组件（SamplePanel、AcpClientPanel 等）              |
 | `src/components/ui.tsx`             | 通用 UI 封装组件（Panel/VBox/HBox/Btn/Text）           |
+| `src/hooks/usePersistedState.ts`    | 通用 hook：将 PersistenceStore 桥接为 React state      |
 | `src/mixin/mainEuw.ts`              | UE 主窗口集成                                          |
 
 **测试：**
