@@ -11,8 +11,8 @@ import type {
 	SessionConfigOption,
 	SessionInfo,
 	SessionModeState,
-} from '@universe-agent/acp-client-puerts';
-import { AcpUiController as Controller } from '@universe-agent/acp-client-puerts';
+} from '@universe-agent/acp-client-ue';
+import { AcpUiController as Controller } from '@universe-agent/acp-client-ue';
 import {
 	Badge,
 	Btn,

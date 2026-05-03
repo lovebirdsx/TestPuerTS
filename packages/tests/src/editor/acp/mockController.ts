@@ -6,7 +6,7 @@ import type {
 	AcpUiState,
 	ListSessionsResponse,
 	McpServerEntry,
-} from '@universe-agent/acp-client-puerts';
+} from '@universe-agent/acp-client-ue';
 
 type Listener = (event: AcpUiEvent) => void;
 

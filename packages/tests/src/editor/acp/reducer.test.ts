@@ -8,7 +8,7 @@ import {
 	upsertTool,
 	type AcpPanelState,
 } from 'editor';
-import type { AcpUiEvent } from '@universe-agent/acp-client-puerts';
+import type { AcpUiEvent } from '@universe-agent/acp-client-ue';
 
 function init(): AcpPanelState {
 	return createInitialState();

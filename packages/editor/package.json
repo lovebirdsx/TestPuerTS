@@ -5,7 +5,7 @@
 	"types": "../../Content/JavaScript/editor/index.d.ts",
 	"license": "MIT",
 	"dependencies": {
-		"@universe-agent/acp-client-puerts": "*",
+		"@universe-agent/acp-client-ue": "*",
 		"@universe-agent/mcp-server-ue": "*",
 		"react": "^19.0.0",
 		"react-reconciler": "^0.31.0",

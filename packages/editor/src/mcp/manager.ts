@@ -11,7 +11,7 @@
  */
 import * as UE from 'ue';
 import { startUeMcpServer, type UeMcpServerHandle } from '@universe-agent/mcp-server-ue';
-import type { McpServerEntry } from '@universe-agent/acp-client-puerts';
+import type { McpServerEntry } from '@universe-agent/acp-client-ue';
 import type { McpServersConfig } from './config';
 import { DEFAULT_MCP_CONFIG, loadMcpServersConfig } from './config';
 

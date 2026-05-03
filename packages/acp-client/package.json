@@ -1,5 +1,5 @@
 {
-	"name": "@universe-agent/acp-client-puerts",
+	"name": "@universe-agent/acp-client-ue",
 	"version": "1.0.0",
 	"description": "ACP protocol client for PuerTS environment",
 	"main": "../../../Content/JavaScript/acp-client/public.js",

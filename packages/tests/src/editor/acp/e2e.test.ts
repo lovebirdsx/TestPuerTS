@@ -1,5 +1,5 @@
 import { describe, it, expect } from '../../testRunner';
-import { JsonRpcConnection, type NdJsonTransport, type JsonRpcMessage } from '@universe-agent/acp-client-puerts';
+import { JsonRpcConnection, type NdJsonTransport, type JsonRpcMessage } from '@universe-agent/acp-client-ue';
 
 // 内存双向 ndjson transport：构造一对相互连接的 transport，模拟 client/server 链路。
 // 这样可以把真 JsonRpcConnection 跑在测试里，验证编码/解码、请求/响应/通知的端到端路径。

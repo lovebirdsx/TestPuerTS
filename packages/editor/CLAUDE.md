@@ -35,7 +35,7 @@ npx gulp editor:lint:fix    # lint 自动修复
 **ACP Client UI：**
 
 - `src/components/AcpClientPanel.tsx` 在独立编辑器 Tab 中提供 ACP 客户端界面。
-- 协议和权限逻辑来自 `@universe-agent/acp-client-puerts` 的 `AcpUiController`。
+- 协议和权限逻辑来自 `@universe-agent/acp-client-ue` 的 `AcpUiController`。
 - Tab 生命周期由 `main.ts` 管理，编辑器停止时关闭 Tab 并触发控制器清理。
 - 新建 / 加载 session 时自动通过 `McpManager`（见下文）启动内置 ue-editor MCP server，并把 entry 注入 `controller.setMcpServers(...)`，传递给 ACP `session/new`。
 
