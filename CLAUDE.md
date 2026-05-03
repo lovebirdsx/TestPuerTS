@@ -19,6 +19,7 @@ Content/JavaScript/           # JS 输出（编译后的 TS 输出到此处）
   tests/                      # 测试包 TS 输出（tsc 编译）
 Typing/                       # PuerTS 生成的 d.ts 文件（ue.d.ts、ue_bp.d.ts）
 packages/                     # npm 工作区（yarn/npm）
+  editor-common/              # editor/mcp-server-ue/tests 共享 Unreal 公共模块（IPC + persistence）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
   tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
   acp-client-ue/                 # ACP 协议客户端（移植到 PuerTS 环境）
@@ -101,6 +102,9 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
   - `packages/mcp-bridge/` 是 Node.js stdio↔命名管道桥接进程；agent 视角看到一个标准 stdio MCP server，bridge 内部把帧透明中继到 editor。
   - `packages/editor/src/mcp/` 的 `McpManager` 在 ACP `session/new`/`session/load` 之前为 session 启动管道 server 并组装 mcpServers entry，`AcpClientPanel` 自动调用。
   - 项目根 `mcp-servers.json` 配置启用 / 禁用内置 server 与追加外部 MCP server。
+- **公共模块抽取（editor-common）**：
+  - `packages/editor-common/` 承载 editor、mcp-server-ue、tests 共享的 Unreal 相关基础模块。
+  - 当前包含 `ipc`（`BridgeLink`、`UeIpcSocket`）和 `persistence`（`defineStore`、`PersistenceStore`、`ueFileIO`）两类能力。  
 
 
 ## 代码风格

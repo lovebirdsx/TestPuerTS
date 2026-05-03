@@ -8,18 +8,15 @@
 
 **关键文件：**
 
-| 文件                      | 说明                                        |
-| ------------------------- | ------------------------------------------- |
-| `src/gulpfile.ts`         | 顶层任务组合（build、check、watch、dev 等） |
-| `src/config.ts`           | CLI 参数 + 路径配置                         |
-| `src/cmdArgs.ts`          | 命令行参数解析                              |
-| `src/common/exec.ts`      | exec 辅助函数，带输出格式化                 |
-| `src/common/util.ts`      | 文件工具、颜色辅助函数                      |
-| `src/common/taskCache.ts` | 构建缓存机制（--no-cache 跳过）             |
-| `src/packages/ue.ts`      | UE 相关任务（build、gen_typing、test）      |
-| `src/packages/editor.ts`  | editor 包任务                               |
-| `src/packages/tests.ts`   | tests 包 + acp-client 任务                  |
-| `src/packages/tool.ts`    | tool 包自身任务                             |
+| 文件                      | 说明                                                 |
+| ------------------------- | ---------------------------------------------------- |
+| `src/gulpfile.ts`         | 顶层任务组合（build、check、watch、dev 等）          |
+| `src/config.ts`           | CLI 参数 + 路径配置                                  |
+| `src/cmdArgs.ts`          | 命令行参数解析                                       |
+| `src/common/exec.ts`      | exec 辅助函数，带输出格式化                          |
+| `src/common/util.ts`      | 文件工具、颜色辅助函数                               |
+| `src/common/taskCache.ts` | 构建缓存机制（--no-cache 跳过）                      |
+| `src/packages/*.ts`       | 包任务定义文件（如 editor、editor-common、tests 等） |
 
 **任务编排规则：**
 
@@ -31,6 +28,4 @@
 
 ```bash
 npx gulp check    # 串行：build → typecheck → lint → unittest
-npx gulp watch    # 启动所有包的监听器
-npx gulp dev      # watch + 初始构建
 ```

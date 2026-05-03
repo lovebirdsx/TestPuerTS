@@ -1790,13 +1790,6 @@ declare module "react-umg" {
         nativePtr: UE.ToolMenuWidget;
     }
 
-    interface TakeRecorderOverlayWidgetProps extends UserWidgetProps {
-    }
-
-    class TakeRecorderOverlayWidget extends React.Component<TakeRecorderOverlayWidgetProps> {
-        nativePtr: UE.TakeRecorderOverlayWidget;
-    }
-
     interface AudioMaterialWidgetStyle extends SlateWidgetStyle {
         DesiredSize?: Vector2f;
     }
@@ -2229,6 +2222,13 @@ declare module "react-umg" {
 
     class SynthKnob extends React.Component<SynthKnobProps> {
         nativePtr: UE.SynthKnob;
+    }
+
+    interface TakeRecorderOverlayWidgetProps extends UserWidgetProps {
+    }
+
+    class TakeRecorderOverlayWidget extends React.Component<TakeRecorderOverlayWidgetProps> {
+        nativePtr: UE.TakeRecorderOverlayWidget;
     }
 
     interface ReactWidgetProps extends UserWidgetProps {

@@ -1,0 +1,20 @@
+{
+  "name": "@universe-agent/editor-common",
+  "version": "1.0.0",
+  "main": "../../Content/JavaScript/editor-common/index.js",
+  "types": "../../Content/JavaScript/editor-common/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "dependencies": {
+    "universe-lib": "0.1.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

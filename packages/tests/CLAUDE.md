@@ -4,7 +4,7 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 
 **构建输出：** `Content/JavaScript/tests/`（tsc 编译，CommonJS 多文件输出）
 
-**依赖：** `editor` 包（类型引用）、`universe-lib`（IPC 框架）
+**依赖：** `editor`（UI/reducer 导出）、`@universe-agent/editor-common`（IPC/persistence 公共实现）、`universe-lib`（IPC 框架）
 
 **关键文件：**
 

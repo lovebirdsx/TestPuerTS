@@ -1,4 +1,4 @@
-import type { BridgeLink } from '@universe-agent/mcp-server-ue';
+import type { BridgeLink } from '@universe-agent/editor-common';
 
 /**
  * 创建一对内存中互联的 BridgeLink，模拟 mcp-bridge ↔ editor 之间的 ndjson 通道。

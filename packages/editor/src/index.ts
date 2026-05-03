@@ -5,16 +5,6 @@ export { UEWidget, UEWidgetRoot, compareWidgetProps, createRendererForTest } fro
 export type { Disposable, EditorMenuRegistration } from './common/menu';
 export { registerEditorMenu, registerEditorMenus, unregisterEditorMenu } from './common/menu';
 
-// 持久化模块（基于 zod）
-export {
-	defineStore,
-	PersistenceStore,
-	flushAllPersistence,
-	setPersistenceRoot,
-	getPersistenceRoot,
-} from './common/persistence';
-export type { ChangeListener, DefineStoreOptions, IFileIO } from './common/persistence';
-
 // 组件 + reducer（供测试引用）
 export { AcpClientPanel } from './components/AcpClientPanel';
 export {

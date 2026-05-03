@@ -18,16 +18,15 @@ agent stdio  ──►  mcp-bridge (Node)  ──►  pipeServer  ──►  Bri
 
 **关键文件：**
 
-| 文件                          | 说明                                                                                           |
-| ----------------------------- | ---------------------------------------------------------------------------------------------- |
-| `src/index.ts`                | 公共 API：`startUeMcpServer(options)` 一站式入口；返回 `UeMcpServerHandle`                     |
-| `src/bridgeTransport.ts`      | `BridgeLink` ↔ SDK `Transport` 适配：ndjson 行 ↔ `JSONRPCMessage`                              |
-| `src/pipeServer.ts`           | `serveOnPipe(name)`：把 universe-lib 双向通道适配为 `BridgeLink`（包含 `BridgeLink` 接口定义） |
-| `src/ueIpcSocket.ts`          | `UE.IPCTransport` → `ISocket` 适配（与 `tests/src/ipc/ueIpcSocket.ts` 等价的独立副本）         |
-| `src/tools/echo.ts`           | 内置 tool：connectivity 探活                                                                   |
-| `src/tools/listAssets.ts`     | 内置 tool：`EditorAssetSubsystem.ListAssets`（仅 editor 模式可用）                             |
-| `src/tools/getProjectInfo.ts` | 内置 tool：`UE.JsRunHelper.GetProjectDir()`                                                    |
-| `src/tools/index.ts`          | `registerBuiltinTools(server)` 集中注册                                                        |
+| 文件                          | 说明                                                                       |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `src/index.ts`                | 公共 API：`startUeMcpServer(options)` 一站式入口；返回 `UeMcpServerHandle` |
+| `src/bridgeTransport.ts`      | `BridgeLink` ↔ SDK `Transport` 适配：ndjson 行 ↔ `JSONRPCMessage`          |
+| `src/pipeServer.ts`           | `serveOnPipe(name)`：把 universe-lib 双向通道适配为 `BridgeLink`           |
+| `src/tools/echo.ts`           | 内置 tool：connectivity 探活                                               |
+| `src/tools/listAssets.ts`     | 内置 tool：`EditorAssetSubsystem.ListAssets`（仅 editor 模式可用）         |
+| `src/tools/getProjectInfo.ts` | 内置 tool：`UE.JsRunHelper.GetProjectDir()`                                |
+| `src/tools/index.ts`          | `registerBuiltinTools(server)` 集中注册                                    |
 
 **新增 Tool 流程：**
 

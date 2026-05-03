@@ -1,5 +1,5 @@
 {
-	"name": "editor",
+	"name": "@universe-agent/editor",
 	"version": "1.0.0",
 	"main": "../../Content/JavaScript/editor/index.js",
 	"types": "../../Content/JavaScript/editor/index.d.ts",
@@ -7,6 +7,7 @@
 	"dependencies": {
 		"@universe-agent/acp-client-ue": "*",
 		"@universe-agent/mcp-server-ue": "*",
+		"@universe-agent/editor-common": "*",
 		"react": "^19.0.0",
 		"react-reconciler": "^0.31.0",
 		"zod": "^4.0.0"

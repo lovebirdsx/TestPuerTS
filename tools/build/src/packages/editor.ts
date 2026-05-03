@@ -22,6 +22,9 @@ gulp.task(
 		{
 			taskName: 'editor:build',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
+				'packages/editor-common/package.json',
 				'packages/editor/src/**/*.{ts,tsx}',
 				'packages/editor/tsconfig.json',
 				'packages/editor/package.json',
@@ -46,6 +49,9 @@ gulp.task(
 		{
 			taskName: 'editor:typecheck',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
+				'packages/editor-common/package.json',
 				'packages/editor/src/**/*.{ts,tsx}',
 				'packages/editor/tsconfig.json',
 				'packages/editor/package.json',

@@ -18,8 +18,8 @@
  * ```
  */
 import { z } from 'zod';
-import type { IFileIO } from '../common/persistence/fileIO';
-import { ueFileIO } from '../common/persistence/fileIO';
+import type { IFileIO } from '@universe-agent/editor-common';
+import { ueFileIO } from '@universe-agent/editor-common';
 
 export const McpServersConfigSchema = z
 	.object({

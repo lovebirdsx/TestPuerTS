@@ -26,6 +26,8 @@ gulp.task(
 		{
 			taskName: 'tests:build',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
 				'packages/editor/src/**/*.{ts,tsx}',
 				'packages/editor/tsconfig.json',
 				'packages/tests/src/**/*.ts',
@@ -47,6 +49,8 @@ gulp.task(
 		{
 			taskName: 'tests:typecheck',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
 				'packages/editor/src/**/*.{ts,tsx}',
 				'packages/editor/tsconfig.json',
 				'packages/tests/src/**/*.ts',
@@ -54,6 +58,8 @@ gulp.task(
 			],
 		},
 		async () => {
+			const editorCommonDir = path.join(config.packagesPath, 'editor-common');
+			await exec('tsc -b', { workingDir: editorCommonDir, logPrefix: '[tests:typecheck/editor-common] ' });
 			// editor must be built first so its .d.ts files exist for tests to reference
 			const editorDir = path.join(config.packagesPath, 'editor');
 			await exec('tsc -b', { workingDir: editorDir, logPrefix: '[tests:typecheck/editor] ' });

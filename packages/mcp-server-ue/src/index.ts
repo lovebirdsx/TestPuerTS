@@ -9,7 +9,8 @@
  *   handle.dispose();
  */
 import { McpServer } from '@modelcontextprotocol/sdk/dist/cjs/server/mcp';
-import { serveOnPipe, type BridgeLink, type PipeServerHandle } from './pipeServer';
+import type { BridgeLink } from '@universe-agent/editor-common';
+import { serveOnPipe, type PipeServerHandle } from './pipeServer';
 import { BridgeTransport } from './bridgeTransport';
 import { registerBuiltinTools } from './tools';
 
@@ -73,7 +74,8 @@ export function startUeMcpServer(options: StartMcpServerOptions): UeMcpServerHan
 	};
 }
 
-export { serveOnPipe, type BridgeLink, type PipeServerHandle } from './pipeServer';
+export { serveOnPipe, type PipeServerHandle } from './pipeServer';
+export type { BridgeLink } from '@universe-agent/editor-common';
 export { BridgeTransport } from './bridgeTransport';
 export { registerBuiltinTools } from './tools';
 export { McpServer } from '@modelcontextprotocol/sdk/dist/cjs/server/mcp';

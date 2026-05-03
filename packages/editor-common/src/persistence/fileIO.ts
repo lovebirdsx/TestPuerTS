@@ -1,8 +1,5 @@
-// 仅引入类型，避免在 vitest 等非 PuerTS 环境模块加载时触发 'ue' 解析失败。
-// 真正的运行时 require 推迟到方法首次调用。
 import type * as UEType from 'ue';
 
-// 抽象文件 IO 接口，便于在 vitest 中替换为内存实现
 export interface IFileIO {
 	readText(filePath: string): Promise<string | undefined>;
 	writeText(filePath: string, content: string): Promise<void>;

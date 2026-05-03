@@ -1,7 +1,7 @@
 import * as UE from 'ue';
 import { NetIPCClient, Protocol } from 'universe-lib';
 import { describe, it, expect, beforeAll, afterAll } from '../testRunner';
-import { connectUeIpc } from './ueIpcSocket';
+import { connectUeIpc } from '@universe-agent/editor-common';
 import { PIPE_NAME, CHANNEL_NAME, createCalculatorProxy, type ICalculatorService } from './testService';
 
 // Node.js standalone 脚本路径（相对于 UE 项目根目录）

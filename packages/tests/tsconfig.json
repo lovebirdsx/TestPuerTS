@@ -8,13 +8,15 @@
     "paths": {
       "@modelcontextprotocol/sdk/dist/cjs/*": [
         "../../node_modules/@modelcontextprotocol/sdk/dist/esm/*"
-      ]
+      ],
+      "@universe-agent/editor-common": ["../editor-common/src/index.ts"]
     }
   },
   "include": [
     "src/**/*"
   ],
   "references": [
+    { "path": "../editor-common" },
     { "path": "../editor" },
     { "path": "../mcp-server-ue" }
   ]

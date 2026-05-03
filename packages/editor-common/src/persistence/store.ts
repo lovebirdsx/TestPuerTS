@@ -9,13 +9,11 @@ export type ChangeListener<T> = (state: Readonly<T>) => void;
 
 export interface DefineStoreOptions {
 	debounceMs?: number;
-	// 内部/测试用：替换底层 IO 与路径解析
 	fileIO?: IFileIO;
 	resolveFilePath?: (name: string) => string;
 	resolveCorruptPath?: (name: string, timestamp: number) => string;
 }
 
-// 通过 structuredClone（PuerTS 不一定支持）退化到 JSON 深拷贝
 function deepClone<T>(value: T): T {
 	return JSON.parse(JSON.stringify(value)) as T;
 }
@@ -56,7 +54,6 @@ export class PersistenceStore<T> {
 	}
 
 	private parseDefaults(): T {
-		// 优先尝试从空对象 parse（适用于 z.object({...}).default(...) 或字段都有 .default()）
 		const tryEmpty = this.schema.safeParse(undefined);
 		if (tryEmpty.success) {
 			return tryEmpty.data;
@@ -72,7 +69,6 @@ export class PersistenceStore<T> {
 		);
 	}
 
-	// 触发懒加载，幂等
 	ready(): Promise<void> {
 		if (!this.loadPromise) {
 			this.loadPromise = this.load();
@@ -127,7 +123,6 @@ export class PersistenceStore<T> {
 		}
 		this.state = this.parseDefaults();
 		this.loaded = true;
-		// 标记为 dirty，防抖写入将以默认值覆盖损坏的原文件
 		this.markDirty();
 	}
 
@@ -194,7 +189,6 @@ export class PersistenceStore<T> {
 		if (this.debounceTimer) {
 			clearTimeout(this.debounceTimer);
 		}
-		// 注意：PuerTS setTimeout 必须显式传入延迟参数
 		this.debounceTimer = setTimeout(() => {
 			this.debounceTimer = undefined;
 			void this.persist();
@@ -203,7 +197,6 @@ export class PersistenceStore<T> {
 
 	private async persist(): Promise<void> {
 		if (!this.dirty) return;
-		// 合并并发的 persist 调用
 		if (this.pendingFlush) {
 			await this.pendingFlush;
 			if (!this.dirty) return;
@@ -224,7 +217,6 @@ export class PersistenceStore<T> {
 				await this.io.writeText(path, json);
 			} catch (err) {
 				console.error(`[persistence:${this.name}] write failed: ${(err as Error).message}`);
-				// 把 dirty 重新立起来，下次有机会再写
 				this.dirty = true;
 			} finally {
 				this.pendingFlush = undefined;
@@ -233,7 +225,6 @@ export class PersistenceStore<T> {
 		await this.pendingFlush;
 	}
 
-	// 立即写入挂起的修改并等待完成
 	async flush(): Promise<void> {
 		if (this.debounceTimer) {
 			clearTimeout(this.debounceTimer);
@@ -247,7 +238,6 @@ export class PersistenceStore<T> {
 		}
 	}
 
-	// 主要供测试使用：解除注册并停止接受写入
 	dispose(): void {
 		this.disposed = true;
 		if (this.debounceTimer) {
@@ -269,7 +259,6 @@ export function defineStore<S extends ZodType>(
 	}
 	const store = new PersistenceStore<z.infer<S>>(name, schema as unknown as ZodType<z.infer<S>>, options);
 	registerStore(name, store);
-	// 立刻触发加载，调用方可选地 await store.ready()
 	void store.ready();
 	return store;
 }

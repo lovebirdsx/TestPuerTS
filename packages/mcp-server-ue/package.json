@@ -8,6 +8,7 @@
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"@universe-agent/mcp-bridge": "*",
+		"@universe-agent/editor-common": "*",
 		"zod": "^4.0.0"
 	},
 	"devDependencies": {

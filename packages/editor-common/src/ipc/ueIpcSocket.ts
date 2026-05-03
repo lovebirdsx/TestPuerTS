@@ -1,11 +1,7 @@
-import type { ISocket, SocketCloseEvent, IDisposable } from 'universe-lib';
-import { Emitter, VSBuffer, SocketDiagnosticsEventType } from 'universe-lib';
+import type { IDisposable, ISocket, SocketCloseEvent } from 'universe-lib';
+import { Emitter, SocketDiagnosticsEventType, VSBuffer } from 'universe-lib';
 import * as UE from 'ue';
 
-/**
- * 将 C++ UIPCTransport 包装为 universe-lib 的 ISocket 接口。
- * 使 PuerTS 端能复用 universe-lib 的 Protocol / IPCClient / IPCServer。
- */
 export class UeIpcSocket implements ISocket {
 	private readonly _onData = new Emitter<VSBuffer>();
 	private readonly _onClose = new Emitter<SocketCloseEvent>();
@@ -16,8 +12,6 @@ export class UeIpcSocket implements ISocket {
 	constructor(transport: UE.IPCTransport) {
 		this.transport = transport;
 
-		// C++ 端在 Tick 中轮询管道数据，有数据时触发 OnDataAvailable
-		// JS 在回调中调用 ReadBuffer() 获取 ArrayBuffer 数据
 		transport.OnDataAvailable.Add(() => {
 			if (this.disposed) return;
 			const ab: ArrayBuffer = transport.ReadBuffer();
@@ -47,7 +41,6 @@ export class UeIpcSocket implements ISocket {
 
 	write(buffer: VSBuffer): void {
 		if (this.disposed) return;
-		// VSBuffer → ArrayBuffer → C++ SendBuffer(FArrayBuffer)
 		const uint8 = buffer.buffer;
 		const ab =
 			uint8.byteOffset === 0 && uint8.byteLength === uint8.buffer.byteLength
@@ -64,6 +57,10 @@ export class UeIpcSocket implements ISocket {
 
 	drain(): Promise<void> {
 		return Promise.resolve();
+	}
+
+	close(): void {
+		this.dispose();
 	}
 
 	dispose(): void {

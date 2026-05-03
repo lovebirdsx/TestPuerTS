@@ -3,6 +3,7 @@ import * as path from 'path';
 import { info } from 'gulplog';
 
 import './packages/tool';
+import './packages/editorCommon';
 import './packages/editor';
 import './packages/ue';
 import './packages/tests';
@@ -21,6 +22,7 @@ gulp.task(
 		// mcp-server-ue 通过 import '@universe-agent/mcp-bridge/dist/shared' 依赖
 		// mcp-bridge 的构建产物，必须先编译 mcp-bridge。
 		'mcp-bridge:build',
+		'editor-common:build',
 		gulp.parallel('tool:build', 'editor:build', 'tests:build', 'acp-client-ue:build', 'mcp-server-ue:build'),
 	),
 );
@@ -29,8 +31,10 @@ gulp.task(
 	gulp.series(
 		// typecheck 也需要 mcp-bridge 的 dist/shared.d.ts 存在
 		'mcp-bridge:build',
+		'editor-common:build',
 		gulp.parallel(
 			'tool:typecheck',
+			'editor-common:typecheck',
 			'editor:typecheck',
 			'tests:typecheck',
 			'acp-client-ue:typecheck',
@@ -43,6 +47,7 @@ gulp.task(
 	'lint',
 	gulp.parallel(
 		'tool:lint',
+		'editor-common:lint',
 		'editor:lint',
 		'tests:lint',
 		'acp-client-ue:lint',
@@ -54,6 +59,7 @@ gulp.task(
 	'lint:fix',
 	gulp.parallel(
 		'tool:lint:fix',
+		'editor-common:lint:fix',
 		'editor:lint:fix',
 		'tests:lint:fix',
 		'acp-client-ue:lint:fix',

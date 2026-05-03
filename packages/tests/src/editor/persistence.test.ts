@@ -1,6 +1,6 @@
 import * as UE from 'ue';
 import { z } from 'zod';
-import { defineStore, setPersistenceRoot, flushAllPersistence, PersistenceStore } from 'editor';
+import { defineStore, setPersistenceRoot, flushAllPersistence, PersistenceStore } from '@universe-agent/editor-common';
 import { describe, it, expect, beforeAll, afterAll } from '../testRunner';
 
 // 把测试用持久化目录强制指向 Intermediate 下，避免污染用户 AppData

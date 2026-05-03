@@ -5,7 +5,7 @@ import { openReactTab } from './common/reactTab';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
-import { flushAllPersistence } from './common/persistence';
+import { flushAllPersistence } from '@universe-agent/editor-common';
 
 let menuDisposable: { dispose(): void } | undefined;
 

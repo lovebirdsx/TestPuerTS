@@ -1,7 +1,7 @@
 import * as UE from 'ue';
 import { IPCServer, Protocol, Emitter, type ClientConnectionEvent } from 'universe-lib';
 import { describe, it, expect, beforeAll, afterAll } from '../testRunner';
-import { UeIpcSocket } from './ueIpcSocket';
+import { UeIpcSocket } from '@universe-agent/editor-common';
 import { PIPE_NAME, CHANNEL_NAME, CalculatorService, createCalculatorServerChannel } from './testService';
 
 // Node.js standalone 脚本路径（相对于 UE 项目根目录）

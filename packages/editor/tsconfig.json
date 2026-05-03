@@ -6,8 +6,12 @@
 		"tsBuildInfoFile": "./tsconfig.tsbuildinfo",
 		"composite": true,
 		"declaration": true,
-		"declarationMap": true
+		"declarationMap": true,
+		"baseUrl": ".",
+		"paths": {
+			"@universe-agent/editor-common": ["../editor-common/src/index.ts"]
+		}
 	},
 	"include": ["src/**/*"],
-	"references": [{ "path": "../acp-client-ue" }, { "path": "../mcp-server-ue" }]
+	"references": [{ "path": "../editor-common" }, { "path": "../acp-client-ue" }, { "path": "../mcp-server-ue" }]
 }

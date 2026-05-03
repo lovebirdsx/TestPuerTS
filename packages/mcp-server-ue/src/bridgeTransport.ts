@@ -1,6 +1,6 @@
 import type { Transport, TransportSendOptions } from '@modelcontextprotocol/sdk/dist/cjs/shared/transport';
 import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/dist/cjs/types';
-import type { BridgeLink } from './pipeServer';
+import type { BridgeLink } from '@universe-agent/editor-common';
 
 export class BridgeTransport implements Transport {
 	onmessage?: (msg: JSONRPCMessage) => void;

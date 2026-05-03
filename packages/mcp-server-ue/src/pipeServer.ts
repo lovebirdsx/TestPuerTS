@@ -23,19 +23,7 @@ import {
 	type IMcpBridgeCallback,
 	type IMcpBridgeService,
 } from '@universe-agent/mcp-bridge/dist/shared';
-import { UeIpcSocket } from './ueIpcSocket';
-
-/** 与 bridge 之间的双向 ndjson 链路。MCP 协议层不关心底层是 stdio、命名管道还是内存队列。 */
-export interface BridgeLink {
-	/** 推送一行 ndjson 到 agent（不含末尾换行）。 */
-	send(line: string): void;
-	/** 注册接收 agent 发来的 ndjson 行的回调（不含末尾换行，已 trim）。 */
-	onMessage(handler: (line: string) => void): void;
-	/** 注册链路关闭事件。 */
-	onClose(handler: () => void): void;
-	/** 关闭链路。 */
-	close(): void;
-}
+import { type BridgeLink, UeIpcSocket } from '@universe-agent/editor-common';
 
 export interface PipeServerHandle {
 	/** universe-lib 服务器（编辑器侧管理 dispose） */

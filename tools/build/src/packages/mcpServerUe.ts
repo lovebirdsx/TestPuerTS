@@ -13,6 +13,9 @@ gulp.task(
 		{
 			taskName: 'mcp-server-ue:typecheck',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
+				'packages/editor-common/package.json',
 				'packages/mcp-server-ue/src/**/*.ts',
 				'packages/mcp-server-ue/tsconfig.json',
 				'packages/mcp-server-ue/package.json',
@@ -57,6 +60,9 @@ gulp.task(
 		{
 			taskName: 'mcp-server-ue:build',
 			inputGlobs: [
+				'packages/editor-common/src/**/*.ts',
+				'packages/editor-common/tsconfig.json',
+				'packages/editor-common/package.json',
 				'packages/mcp-server-ue/src/**/*.ts',
 				'packages/mcp-server-ue/tsconfig.json',
 				'packages/mcp-server-ue/package.json',
