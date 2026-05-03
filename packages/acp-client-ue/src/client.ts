@@ -60,6 +60,18 @@ const CLIENT_METHODS = {
 	terminal_release: 'terminal/release',
 } as const;
 
+// zMcpServerStdio 要求 args 和 env 必须为数组（非 optional）
+function normalizeMcpServers(
+	servers: McpServerEntry[],
+): { name: string; command: string; args: string[]; env: { name: string; value: string }[] }[] {
+	return servers.map((s) => ({
+		name: s.name,
+		command: s.command,
+		args: s.args ?? [],
+		env: s.env ?? [],
+	}));
+}
+
 // --- 终端管理 ---
 
 interface ManagedTerminal {
@@ -444,7 +456,7 @@ export class ACPClient {
 
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_new, {
 			cwd: this.options.workspace,
-			mcpServers: this.mcpServers,
+			mcpServers: normalizeMcpServers(this.mcpServers),
 		});
 
 		this.applySessionStartResponse(result);
@@ -457,7 +469,7 @@ export class ACPClient {
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_load, {
 			sessionId,
 			cwd: this.options.workspace,
-			mcpServers: this.mcpServers,
+			mcpServers: normalizeMcpServers(this.mcpServers),
 		});
 
 		this.applySessionStartResponse(result);
@@ -470,7 +482,7 @@ export class ACPClient {
 		return this.connection.sendRequest<ListSessionsResponse>(AGENT_METHODS.session_list, {
 			cursor,
 			cwd: this.options.workspace,
-			mcpServers: this.mcpServers,
+			mcpServers: normalizeMcpServers(this.mcpServers),
 		});
 	}
 

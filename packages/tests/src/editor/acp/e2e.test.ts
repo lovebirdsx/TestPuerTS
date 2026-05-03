@@ -40,6 +40,74 @@ function createTransportPair(): { a: NdJsonTransport; b: NdJsonTransport } {
 	return { a, b };
 }
 
+// 模拟 ACP SDK 的 zMcpServerStdio 校验：args 和 env 必须为数组
+function validateMcpServersParams(params: unknown): void {
+	const p = params as any;
+	for (const s of p?.mcpServers ?? []) {
+		if (!Array.isArray(s.args)) {
+			const err: any = new Error('Invalid params');
+			err.code = -32602;
+			throw err;
+		}
+		if (!Array.isArray(s.env)) {
+			const err: any = new Error('Invalid params');
+			err.code = -32602;
+			throw err;
+		}
+	}
+}
+
+describe('session/new mcpServers args/env normalization', () => {
+	it('server rejects session/new when mcpServer.args is missing (reproduces Invalid params bug)', async () => {
+		const { a, b } = createTransportPair();
+		const client = new JsonRpcConnection(a);
+		const server = new JsonRpcConnection(b);
+
+		server.onRequest(async (method, params) => {
+			if (method === 'session/new') {
+				validateMcpServersParams(params);
+				return { sessionId: 'test' };
+			}
+			throw new Error(`unexpected: ${method}`);
+		});
+
+		// McpServerEntry 缺少 args 和 env → 服务端报 Invalid params（复现 bug）
+		let caught: unknown;
+		try {
+			await client.sendRequest('session/new', {
+				cwd: '/workspace',
+				mcpServers: [{ name: 'ue-editor', command: 'node' }],
+			});
+		} catch (err) {
+			caught = err;
+		}
+
+		expect(caught instanceof Error).toBe(true);
+		expect((caught as Error).message).toBe('Invalid params');
+	});
+
+	it('server accepts session/new when mcpServer has args:[] and env:[]', async () => {
+		const { a, b } = createTransportPair();
+		const client = new JsonRpcConnection(a);
+		const server = new JsonRpcConnection(b);
+
+		server.onRequest(async (method, params) => {
+			if (method === 'session/new') {
+				validateMcpServersParams(params);
+				return { sessionId: 'test-sess' };
+			}
+			throw new Error(`unexpected: ${method}`);
+		});
+
+		// 规范化后的参数（args:[] 和 env:[]）→ 通过服务端校验
+		const result = await client.sendRequest<{ sessionId: string }>('session/new', {
+			cwd: '/workspace',
+			mcpServers: [{ name: 'ue-editor', command: 'node', args: [], env: [] }],
+		});
+		expect(result.sessionId).toBe('test-sess');
+	});
+});
+
 describe('ACP JSON-RPC end-to-end via in-memory transport', () => {
 	it('initialize request from client receives server response', async () => {
 		const { a, b } = createTransportPair();
