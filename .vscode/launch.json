@@ -16,34 +16,24 @@
           "type": "node"
       },
       {
-          "name": "Run gulp ue:test",
+          "name": "Debug Tests",
           "type": "node",
-          "request": "launch",
-          "runtimeExecutable": "npx",
-          "args": ["gulp", "ue:test", "--verbose"],
-          "console": "integratedTerminal",
-          "cwd": "${workspaceFolder}",
+          "request": "attach",
+          "port": 9229,
+          "address": "127.0.0.1",
+          "restart": true,
+          "preLaunchTask": "ue:test:debug",
           "sourceMaps": true,
           "outFiles": [
-              "${workspaceFolder}/packages/tool/out/**/*.js",
-              "${workspaceFolder}/Content/JavaScript/**/*.js",
+              "${workspaceFolder}/Content/JavaScript/tests/**/*.js",
+              "${workspaceFolder}/Content/JavaScript/editor-common/**/*.js",
+              "${workspaceFolder}/Content/JavaScript/editor/**/*.js",
+              "${workspaceFolder}/Content/JavaScript/mcp-server-ue/**/*.js",
               "!**/node_modules/**"
+          ],
+          "skipFiles": [
+              "<node_internals>/**"
           ]
-      },
-      {
-          "name": "Run gulp editor:watch",
-          "type": "node",
-          "request": "launch",
-          "runtimeExecutable": "npx",
-          "args": ["gulp", "editor:watch", "--verbose"],
-          "console": "integratedTerminal",
-          "cwd": "${workspaceFolder}",
-          "sourceMaps": true,
-          "outFiles": [
-              "${workspaceFolder}/packages/tool/out/**/*.js",
-              "${workspaceFolder}/Content/JavaScript/**/*.js",
-              "!**/node_modules/**"
-          ]
-      },
+      }
   ]
 }

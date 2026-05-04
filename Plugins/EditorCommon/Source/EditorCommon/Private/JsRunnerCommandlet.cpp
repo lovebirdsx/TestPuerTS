@@ -56,13 +56,27 @@ int32 UJsRunnerCommandlet::Main(const FString& Params)
 
 	UJsRunHelper::CommandArgs = JsRawArgs;
 
+	// -JsEnvDebugPort=<port> 启用 V8 Inspector，-waitDebugger 阻塞直到调试器连接
+	int32 DebugPort = -1;
+	if (ParamMap.Contains(TEXT("JsEnvDebugPort")))
+	{
+		DebugPort = FCString::Atoi(*ParamMap[TEXT("JsEnvDebugPort")]);
+	}
+	const bool bWaitDebugger = Switches.Contains(TEXT("waitDebugger"));
+
 	{
 		auto Loader = std::make_shared<puerts::DefaultJSModuleLoader>(TEXT("JavaScript"));
 		Loader->AddSearchPath(FPaths::ProjectDir());
 
 		puerts::FJsEnv JsEnv(
 			Loader,
-			std::make_shared<puerts::FDefaultLogger>(), -1);
+			std::make_shared<puerts::FDefaultLogger>(), DebugPort);
+
+		if (bWaitDebugger)
+		{
+			UE_LOG(LogJsRunner, Display, TEXT("JsRunner: Waiting for debugger on port %d..."), DebugPort);
+			JsEnv.WaitDebugger(0);
+		}
 
 		if (!JsEnv.Start(ModuleName))
 		{
