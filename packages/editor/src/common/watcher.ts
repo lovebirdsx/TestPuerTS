@@ -1,4 +1,7 @@
 import * as fs from 'fs';
+import { createLogger } from '@universe-agent/editor-common';
+
+const logger = createLogger('editor:watcher');
 
 /**
  * 监控文件夹，当文件夹内文件发生变化时，调用回调函数
@@ -10,7 +13,7 @@ export function watch(dir: string, callback: () => void) {
 	let timeoutId: NodeJS.Timeout | null = null;
 
 	const watcher = fs.watch(dir, { recursive: true }, (eventType, filename) => {
-		console.log(`File ${filename} has been changed: ${eventType}`);
+		logger.info(`File ${filename} has been changed: ${eventType}`);
 
 		// 使用去抖动机制防止多次连续触发
 		if (timeoutId) {
@@ -24,7 +27,7 @@ export function watch(dir: string, callback: () => void) {
 	});
 
 	watcher.on('error', (error) => {
-		console.error(`Watcher error: ${error}`);
+		logger.error(`Watcher error: ${error}`);
 	});
 
 	return () => {

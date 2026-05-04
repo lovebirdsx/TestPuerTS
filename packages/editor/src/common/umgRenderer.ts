@@ -3,6 +3,9 @@ import * as React from 'react';
 import * as Reconciler from 'react-reconciler';
 import { ComboBoxStringProps, TArray } from 'react-umg';
 import * as UE from 'ue';
+import { createLogger } from '@universe-agent/editor-common';
+
+const logger = createLogger('editor:umgRenderer');
 
 // 加载蓝图组件路径表（非 Native Widget 需通过资源路径动态加载）
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -169,7 +172,7 @@ export class UEWidget {
 			return;
 		}
 
-		console.error(`unsupport callback ${name}`);
+		logger.error(`unsupport callback ${name}`);
 	}
 
 	public updateProps(oldProps: Record<string, unknown>, newProps: Record<string, unknown>): void {
@@ -218,7 +221,7 @@ export class UEWidget {
 
 	public appendChild(child: UEWidget): void {
 		if (this.childs.includes(child)) {
-			console.error(
+			logger.error(
 				`${this.toString()} append ${child.toString()} failed: UMG do not support appending child already exist`,
 			);
 			return;
@@ -414,7 +417,7 @@ export function createHostConfig(): any {
 		resetAfterCommit(_container: UEWidgetRoot) {},
 
 		resetTextContent() {
-			console.error('resetTextContent not implemented!');
+			logger.error('resetTextContent not implemented!');
 		},
 
 		shouldSetTextContent(_type, _props) {
@@ -469,13 +472,13 @@ export function createRendererForTest(root: IWidgetRoot): {
 		false,
 		'',
 		(err: unknown) => {
-			console.error('ReactUMG uncaught error:', err);
+			logger.error('ReactUMG uncaught error:', err);
 		},
 		(err: unknown) => {
-			console.error('ReactUMG caught error:', err);
+			logger.error('ReactUMG caught error:', err);
 		},
 		(err: unknown) => {
-			console.error('ReactUMG recoverable error:', err);
+			logger.error('ReactUMG recoverable error:', err);
 		},
 		null,
 	);
@@ -530,13 +533,13 @@ export class ReactUMGInstance {
 			// onUncaughtError / onCaughtError 不能 throw：
 			// commit 阶段出错后 reconciler 会调这些回调再重新调度，若再 throw 会无限循环
 			(err: unknown) => {
-				console.error('ReactUMG uncaught error:', err);
+				logger.error('ReactUMG uncaught error:', err);
 			},
 			(err: unknown) => {
-				console.error('ReactUMG caught error:', err);
+				logger.error('ReactUMG caught error:', err);
 			},
 			(err: unknown) => {
-				console.error('ReactUMG recoverable error:', err);
+				logger.error('ReactUMG recoverable error:', err);
 			},
 			null,
 		);

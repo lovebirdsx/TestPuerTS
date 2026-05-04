@@ -1,4 +1,5 @@
 import { z, ZodError, type ZodType } from 'zod';
+import { createLogger } from '../logging';
 import { ueFileIO, type IFileIO } from './fileIO';
 import { getCorruptBackupPath, getStoreFilePath } from './paths';
 import { registerStore, unregisterStore } from './registry';
@@ -39,6 +40,7 @@ export class PersistenceStore<T> {
 	private readonly io: IFileIO;
 	private readonly filePath: () => string;
 	private readonly corruptPath: (timestamp: number) => string;
+	private readonly logger: ReturnType<typeof createLogger>;
 
 	constructor(
 		readonly name: string,
@@ -51,6 +53,7 @@ export class PersistenceStore<T> {
 		const resolveCorrupt = options.resolveCorruptPath ?? getCorruptBackupPath;
 		this.filePath = () => resolveFile(name);
 		this.corruptPath = (ts: number) => resolveCorrupt(name, ts);
+		this.logger = createLogger(`editor-common:persistence:${name}`);
 	}
 
 	private parseDefaults(): T {
@@ -82,7 +85,7 @@ export class PersistenceStore<T> {
 		try {
 			raw = await this.io.readText(path);
 		} catch (err) {
-			console.warn(`[persistence:${this.name}] read failed, using defaults: ${(err as Error).message}`);
+			this.logger.warn(`read failed, using defaults: ${(err as Error).message}`);
 			this.state = this.parseDefaults();
 			this.loaded = true;
 			return;
@@ -115,11 +118,11 @@ export class PersistenceStore<T> {
 	private async handleCorrupt(originalText: string, reason: string): Promise<void> {
 		const ts = Date.now();
 		const backupPath = this.corruptPath(ts);
-		console.warn(`[persistence:${this.name}] corrupt file (${reason}); backing up to ${backupPath}`);
+		this.logger.warn(`corrupt file (${reason}); backing up to ${backupPath}`);
 		try {
 			await this.io.writeText(backupPath, originalText);
 		} catch (err) {
-			console.warn(`[persistence:${this.name}] failed to write backup: ${(err as Error).message}`);
+			this.logger.warn(`failed to write backup: ${(err as Error).message}`);
 		}
 		this.state = this.parseDefaults();
 		this.loaded = true;
@@ -178,7 +181,7 @@ export class PersistenceStore<T> {
 			try {
 				l(snapshot);
 			} catch (err) {
-				console.error(`[persistence:${this.name}] listener error: ${(err as Error).message}`);
+				this.logger.error(`listener error: ${(err as Error).message}`);
 			}
 		}
 	}
@@ -205,9 +208,7 @@ export class PersistenceStore<T> {
 		const stateAtWrite = deepClone(this.state);
 		const result = this.schema.safeParse(stateAtWrite);
 		if (!result.success) {
-			console.error(
-				`[persistence:${this.name}] state failed schema validation, skipping write: ${summarizeZodError(result.error)}`,
-			);
+			this.logger.error(`state failed schema validation, skipping write: ${summarizeZodError(result.error)}`);
 			return;
 		}
 		const json = JSON.stringify(result.data, null, 2);
@@ -216,7 +217,7 @@ export class PersistenceStore<T> {
 			try {
 				await this.io.writeText(path, json);
 			} catch (err) {
-				console.error(`[persistence:${this.name}] write failed: ${(err as Error).message}`);
+				this.logger.error(`write failed: ${(err as Error).message}`);
 				this.dirty = true;
 			} finally {
 				this.pendingFlush = undefined;

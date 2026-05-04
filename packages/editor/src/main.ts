@@ -6,7 +6,12 @@ import { registerTabFactory, restoreOpenTabs } from './common/tabSession';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
-import { flushAllPersistence } from '@universe-agent/editor-common';
+import { createLogger, flushAllPersistence, installConsoleOverride } from '@universe-agent/editor-common';
+
+// 把 globalThis.console 重定向到 UJsLogHelper，让所有 JS 输出走 UE_LOG。
+installConsoleOverride('editor');
+
+const logger = createLogger('editor:main');
 
 let menuDisposable: { dispose(): void } | undefined;
 
@@ -38,12 +43,12 @@ function startWatch() {
 	const watcher = watch(__dirname, () => {
 		const editor = TsEditorLibrary.GetTsEditor();
 		if (editor) {
-			console.log('Restarting editor...');
+			logger.info('Restarting editor...');
 			editor.Restart();
 		}
 	});
 
-	console.log('Editor watcher: watching for changes...');
+	logger.info('Editor watcher: watching for changes...');
 	return watcher;
 }
 
@@ -86,7 +91,7 @@ function registerExitHooks() {
 	const editorEvent = EditorCommonLibrary.GetEditorEvent();
 	editorEvent.OnPreExit.Add(() => {
 		flushAllPersistence().catch((err) => {
-			console.error(`flushAllPersistence failed: ${(err as Error).message ?? err}`);
+			logger.error(`flushAllPersistence failed: ${(err as Error).message ?? err}`);
 		});
 	});
 }

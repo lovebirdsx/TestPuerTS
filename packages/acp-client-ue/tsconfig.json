@@ -6,7 +6,12 @@
 		"composite": true,
 		"declaration": true,
 		"declarationMap": true,
-		"tsBuildInfoFile": "./tsconfig.tsbuildinfo"
+		"tsBuildInfoFile": "./tsconfig.tsbuildinfo",
+		"baseUrl": ".",
+		"paths": {
+			"@universe-agent/editor-common": ["../editor-common/src/index.ts"]
+		}
 	},
-	"include": ["src"]
+	"include": ["src"],
+	"references": [{ "path": "../editor-common" }]
 }

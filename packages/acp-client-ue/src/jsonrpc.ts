@@ -4,6 +4,10 @@
  * 不依赖 Web Streams API，可在 PuerTS 环境中运行。
  */
 
+import { createLogger } from '@universe-agent/editor-common';
+
+const logger = createLogger('acp-client:jsonrpc');
+
 // --- JSON-RPC 消息类型 ---
 
 export interface JsonRpcRequest {
@@ -168,7 +172,7 @@ export class JsonRpcConnection {
 				this.messageObserver?.('recv', msg);
 				this.dispatch(msg);
 			} catch (err) {
-				console.error('[JsonRpcConnection] Failed to parse JSON:', trimmed, err);
+				logger.error('Failed to parse JSON:', trimmed, err);
 			}
 		}
 	}
@@ -224,7 +228,7 @@ export class JsonRpcConnection {
 	private handleResponse(res: JsonRpcResponse): void {
 		const pending = this.pendingRequests.get(res.id);
 		if (!pending) {
-			console.error('[JsonRpcConnection] Received response for unknown id:', res.id);
+			logger.error('Received response for unknown id:', res.id);
 			return;
 		}
 

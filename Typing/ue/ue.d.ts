@@ -57268,6 +57268,19 @@ declare module "ue" {
         __tid_JSGeneratedFunction_0__: boolean;
     }
     
+    class JsLogHelper extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        static Error(Category: string, Message: string) : void;
+        static Info(Category: string, Message: string) : void;
+        static Log(Category: string, Message: string) : void;
+        static Warn(Category: string, Message: string) : void;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): JsLogHelper;
+        static Load(InName: string): JsLogHelper;
+    
+        __tid_JsLogHelper_0__: boolean;
+    }
+    
     class JsRunHelper extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*

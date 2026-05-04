@@ -1,5 +1,6 @@
 import './puertsPolyfill';
 import * as UE from 'ue';
+import { createLogger } from '@universe-agent/editor-common';
 import { runTests } from './testRunner';
 
 // 导入测试文件（describe 在导入时注册）
@@ -33,7 +34,7 @@ async function main() {
 	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;
 	const exitCode = await runTests(filter);
 
-	console.log(`=== 测试结束，退出码: ${exitCode} ===`);
+	createLogger('test:main').info(`=== 测试结束，退出码: ${exitCode} ===`);
 	UE.JsRunHelper.MarkDone(exitCode);
 }
 

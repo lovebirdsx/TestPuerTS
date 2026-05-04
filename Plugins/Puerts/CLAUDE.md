@@ -22,3 +22,7 @@ PuerTS 核心运行时插件（第三方，一般不修改）。为 UE 提供 Ty
 * `npx gulp ue:gen_typing` 通过 DeclarationGenerator 生成项目 d.ts
 
 **注意：** 此插件为上游依赖，修改前需充分评估影响。
+
+**本仓库改动：**
+
+* `Content/JavaScript/puerts/log.js`：移除了 `console.log/info/warn/error` 中 `if (console_org) console_org.xxx(...)` 的旁路双写。原实现会同时把日志通过 Node 原生 `console_org`（直写 stdout fd）和 `sendRequestSync` → `UE_LOG` 输出，两路在 Windows 管道上并发 `WriteFile` 不互斥，导致 `ue:test:watch` 的 stdout 字节级交错。改后 PuerTS 的 `console.*` 仅走 `sendRequestSync` → `FDefaultLogger`（GLog 受锁保护）。配合 `packages/editor-common/src/logging/installConsoleOverride()` 在每个 PuerTS 入口覆盖 `globalThis.console`，第三方库的 `console.*` 也会被重定向到 `UJsLogHelper`。

@@ -1,5 +1,8 @@
 // vitest 风格测试运行器，适配 PuerTS Commandlet 环境
+import { createLogger } from '@universe-agent/editor-common';
 import { green, red } from './util';
+
+const logger = createLogger('test:runner');
 
 type TestFn = () => Promise<void> | void;
 
@@ -291,7 +294,7 @@ async function runSuite(
 		try {
 			await fn();
 		} catch (err: any) {
-			console.error(`afterAll failed in "${suite.fullName}": ${err.message || err}`);
+			logger.error(`afterAll failed in "${suite.fullName}": ${err.message || err}`);
 		}
 	}
 
@@ -299,18 +302,18 @@ async function runSuite(
 }
 
 export async function runTests(filter?: string): Promise<number> {
-	console.log('=== PuerTS Test Runner ===');
+	logger.info('=== PuerTS Test Runner ===');
 
 	const results = await runSuite(rootSuite, filter, [], []);
 
 	if (results.length === 0) {
 		if (filter) {
-			console.error(`未找到匹配的测试套件: "${filter}"`);
+			logger.error(`未找到匹配的测试套件: "${filter}"`);
 			const names = rootSuite.children.map((s) => s.name);
-			console.log(`可用的测试套件: ${names.join(', ')}`);
+			logger.info(`可用的测试套件: ${names.join(', ')}`);
 			return 1;
 		}
-		console.log('没有注册任何测试');
+		logger.info('没有注册任何测试');
 		return 0;
 	}
 
@@ -320,29 +323,29 @@ export async function runTests(filter?: string): Promise<number> {
 	let skipped = 0;
 	for (const r of results) {
 		if (r.skipped) {
-			console.log(` ↷ ${r.name} (skipped)`);
+			logger.info(` ↷ ${r.name} (skipped)`);
 			skipped++;
 		} else if (r.passed) {
-			console.log(` ${green('✓')} ${r.name}`);
+			logger.info(` ${green('✓')} ${r.name}`);
 			passed++;
 		} else {
-			console.error(` ${red('✗')} ${r.name}`);
-			console.error(`   ${r.error}`);
+			logger.error(` ${red('✗')} ${r.name}`);
+			logger.error(`   ${r.error}`);
 			failed++;
 		}
 	}
 
-	console.log(`\nResult: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
+	logger.info(`\nResult: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
 
 	// 再次输出失败的测试名称，方便 CI 搜集
 	if (failed > 0) {
-		console.log('\nFailed tests:');
+		logger.info('\nFailed tests:');
 		for (const r of results) {
 			if (!r.passed && !r.skipped) {
-				console.log(` ${red('✗')} ${r.name}`);
+				logger.info(` ${red('✗')} ${r.name}`);
 			}
 		}
-		console.log('');
+		logger.info('');
 	}
 
 	return failed > 0 ? 1 : 0;
