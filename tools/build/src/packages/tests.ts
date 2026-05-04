@@ -8,6 +8,7 @@ import { getConfig } from '../config';
 import { cleanDirAsync, rmFileAsync } from '../common/util';
 import { blue, green, red } from '../common/util';
 import { withCache } from '../common/taskCache';
+import { getEditorCmdPath } from './ue';
 
 const config = getConfig();
 const workingDir = path.join(config.packagesPath, 'tests');
@@ -136,6 +137,71 @@ gulp.task('tests:watch', async () => {
 
 		watcher.on('error', (err) => {
 			reject(err);
+		});
+	});
+});
+
+// 仅 tsc -b -w，配合 ue:test:watch 使用（commandlet 自感知 JS 产物变化）
+gulp.task('tests:tsc:watch', async () => {
+	const prefix = '[tests:tsc:watch] ';
+
+	return new Promise<void>((_resolve, reject) => {
+		const proc = spawn('npx', ['tsc', '-b', '-w'], { shell: true, cwd: workingDir });
+
+		proc.stdout?.on('data', (data: Buffer) => {
+			const text = data.toString().trimEnd();
+			if (text) info(`${blue(prefix)}${text}`);
+		});
+		proc.stderr?.on('data', (data: Buffer) => {
+			const text = data.toString().trimEnd();
+			if (text) info(`${blue(prefix)}${red(text)}`);
+		});
+		proc.on('error', (err) => reject(err));
+		proc.on('close', (code) => {
+			info(`${blue(prefix)}tsc exited with ${code ?? 'null'}`);
+			_resolve();
+		});
+	});
+});
+
+// 长驻 commandlet：JsEnv 内 -watch 模式，检测 Content/JavaScript 变化自动重启 JsEnv 重跑测试
+gulp.task('ue:test:watch', async () => {
+	const editorCmd = getEditorCmdPath();
+	const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
+	const args = [
+		`"${uprojectPath}"`,
+		'-run=JsRunner',
+		'-module=tests/main',
+		'-watch',
+		'-timeout=120',
+		'-nopause',
+		'-DisablePlugins=EditorDataStorage',
+	];
+
+	info(`${blue('[ue:test:watch] ')}Starting watch mode commandlet`);
+	info(`${blue('[ue:test:watch] ')}Stop with: touch Content/JavaScript/.watch-stop  (or Ctrl+C)`);
+
+	await new Promise<void>((resolve, reject) => {
+		const proc = spawn(`"${editorCmd}"`, args, {
+			shell: true,
+			cwd: projectRoot,
+			stdio: ['inherit', 'pipe', 'pipe'],
+			env: { ...process.env },
+		});
+
+		proc.stdout?.on('data', (data: Buffer) => {
+			process.stdout.write(data);
+		});
+		proc.stderr?.on('data', (data: Buffer) => {
+			process.stderr.write(red(data.toString()));
+		});
+
+		proc.on('close', (code) => {
+			if (code !== 0 && code !== null) {
+				reject(new Error(`ue:test:watch exited with code ${code}`));
+			} else {
+				resolve();
+			}
 		});
 	});
 });

@@ -1,7 +1,11 @@
 #include "ProcessIOHelper.h"
 #include "HAL/PlatformProcess.h"
+#include "HAL/FileManager.h"
+#include "HAL/PlatformFileManager.h"
+#include "GenericPlatform/GenericPlatformFile.h"
 #include "Misc/FileHelper.h"
 #include "Misc/Paths.h"
+#include "Misc/DateTime.h"
 #include "Async/Async.h"
 
 #include "Windows/AllowWindowsPlatformTypes.h"
@@ -327,6 +331,92 @@ bool UProcessIOHelper::IsStdinTTY()
 FString UProcessIOHelper::GetEnvVar(const FString& Name)
 {
 	return FPlatformMisc::GetEnvironmentVariable(*Name);
+}
+
+TArray<FFileTimestampEntry> UProcessIOHelper::ListFilesRecursive(
+	const FString& RootDir,
+	const TArray<FString>& Extensions)
+{
+	TArray<FFileTimestampEntry> Result;
+
+	IFileManager& FileManager = IFileManager::Get();
+	if (!FileManager.DirectoryExists(*RootDir))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ListFilesRecursive: directory does not exist: %s"), *RootDir);
+		return Result;
+	}
+
+	// 规范化 Root，便于 MakePathRelativeTo
+	FString NormalizedRoot = RootDir;
+	FPaths::NormalizeDirectoryName(NormalizedRoot);
+	FString RootPrefix = NormalizedRoot;
+	if (!RootPrefix.EndsWith(TEXT("/")))
+	{
+		RootPrefix.AppendChar(TEXT('/'));
+	}
+
+	// 准备扩展名过滤集合（小写，带点）
+	TSet<FString> ExtSet;
+	ExtSet.Reserve(Extensions.Num());
+	for (const FString& Ext : Extensions)
+	{
+		FString E = Ext.ToLower();
+		if (!E.IsEmpty() && !E.StartsWith(TEXT(".")))
+		{
+			E = TEXT(".") + E;
+		}
+		if (!E.IsEmpty())
+		{
+			ExtSet.Add(E);
+		}
+	}
+	const bool bFilter = ExtSet.Num() > 0;
+
+	FileManager.IterateDirectoryStatRecursively(
+		*NormalizedRoot,
+		[&Result, &RootPrefix, &ExtSet, bFilter](const TCHAR* FilenameOrDir, const FFileStatData& StatData) -> bool
+		{
+			if (StatData.bIsDirectory)
+			{
+				return true;
+			}
+
+			FString FullPath(FilenameOrDir);
+			FPaths::NormalizeFilename(FullPath);
+
+			if (bFilter)
+			{
+				const FString Ext = FPaths::GetExtension(FullPath, /*bIncludeDot*/ true).ToLower();
+				if (!ExtSet.Contains(Ext))
+				{
+					return true;
+				}
+			}
+
+			FString Relative = FullPath;
+			if (Relative.StartsWith(RootPrefix))
+			{
+				Relative = Relative.RightChop(RootPrefix.Len());
+			}
+			else
+			{
+				FPaths::MakePathRelativeTo(Relative, *RootPrefix);
+			}
+
+			FFileTimestampEntry Entry;
+			Entry.RelativePath = Relative;
+			Entry.ModifiedTicks = StatData.ModificationTime.GetTicks();
+			Entry.SizeBytes = StatData.FileSize;
+			Result.Add(MoveTemp(Entry));
+			return true;
+		});
+
+	Result.Sort([](const FFileTimestampEntry& A, const FFileTimestampEntry& B)
+	{
+		return A.RelativePath < B.RelativePath;
+	});
+
+	return Result;
 }
 
 #include "Windows/HideWindowsPlatformTypes.h"

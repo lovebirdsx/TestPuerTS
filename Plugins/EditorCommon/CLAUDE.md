@@ -9,9 +9,9 @@
 | 文件                           | 说明                                                                       |
 | ------------------------------ | -------------------------------------------------------------------------- |
 | `Public/IPCTransport.h`        | UIPCTransport：Windows 命名管道传输层，FTSTicker 驱动轮询                  |
-| `Public/ProcessIOHelper.h`     | UProcessIOHelper：stdin/stdout/stderr 读写、文件 I/O、环境变量             |
+| `Public/ProcessIOHelper.h`     | UProcessIOHelper：stdin/stdout/stderr 读写、文件 I/O、环境变量、`ListFilesRecursive` 同步快照（递归列文件 + mtime） |
 | `Public/JsRunHelper.h`         | UJsRunHelper：供 JS 调用 MarkDone(exitCode) 通知异步完成                   |
-| `Public/JsRunnerCommandlet.h`  | UJsRunnerCommandlet：通过 FJsEnv 运行 JS 模块（-run=JsRunner -module=xxx） |
+| `Public/JsRunnerCommandlet.h`  | UJsRunnerCommandlet：通过 FJsEnv 运行 JS 模块（`-run=JsRunner -module=xxx`），支持 `-watch` 长驻模式（C++ 端轮询 Content/JavaScript 变化自动重建 JsEnv 重跑） |
 | `Public/ChildProcess.h`        | UChildProcess：子进程创建与管理                                            |
 | `Public/ReactUMGStarter.h`     | UReactUMGStarter：ReactUMG 初始化入口                                      |
 | `Public/EditorEvent.h`         | UEditorEvent：编辑器生命周期事件（OnPreExit 等）                           |

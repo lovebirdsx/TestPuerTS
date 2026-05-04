@@ -52142,6 +52142,20 @@ declare module "ue" {
         __tid_FileServerCommandlet_0__: boolean;
     }
     
+    class FileTimestampEntry {
+        constructor();
+        constructor(RelativePath: string, ModifiedTicks: bigint, SizeBytes: bigint);
+        RelativePath: string;
+        ModifiedTicks: bigint;
+        SizeBytes: bigint;
+        /**
+         * @deprecated use StaticStruct instead.
+         */
+        static StaticClass(): ScriptStruct;
+        static StaticStruct(): ScriptStruct;
+        __tid_FileTimestampEntry_0__: boolean;
+    }
+    
     class FilmStockSettings {
         constructor();
         constructor(Slope: number, Toe: number, Shoulder: number, BlackClip: number, WhiteClip: number);
@@ -79244,6 +79258,13 @@ declare module "ue" {
          *stdin 是否是 TTY
          */
         static IsStdinTTY() : boolean;
+        /*
+         *同步递归枚举 RootDir 下的文件，返回相对路径 + mtime + size
+         *Extensions 元素形如 "js"（不带点）；为空则不过滤
+         *返回值按 RelativePath 升序排序，便于 JS 端做稳定 diff
+         *用于 watch 场景的高频快照采集（实测百级文件 < 50ms）
+         */
+        static ListFilesRecursive(RootDir: string, Extensions: TArray<string>) : TArray<UE.FileTimestampEntry>;
         /*
          *异步创建目录树，完成后通过 OnComplete 通知，结果在 bSuccess 属性
          */

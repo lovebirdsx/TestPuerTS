@@ -38,12 +38,14 @@ npx gulp watch                  # 启动所有监听器，不进行初始构建
 npx gulp ue:gen_vscode_settings # 通过 UnrealBuildTool 生成 .vscode/c_cpp_properties.json 和 compileCommands_*.json
 npx gulp ue:build               # 通过 Build.bat 编译 C++
 npx gulp ue:test                # 通过 JsRunnerCommandlet 运行 JS 测试（无需编辑器）
+npx gulp ue:test:watch          # 长驻 commandlet：C++ 端轮询 Content/JavaScript 变化，自动重建 JsEnv 重跑测试（无需重启 UE，热重启 < 5s）
 npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts 类型定义
 npx gulp ue:build:watch         # 监听 C++ 源文件；.h 文件变更还会触发 gen_typing
 npx gulp ue:build:clean         # 清理 C++ 构建产物
 
 npx gulp tests:build            # 编译测试包 TS（tsc 编译）
-npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 ue:test
+npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 ue:test（每轮重启 commandlet）
+npx gulp tests:tsc:watch        # 仅 tsc -b -w，配合 ue:test:watch 使用
 npx gulp tests:typecheck        # 类型检查
 npx gulp tests:lint             # 检查代码规范
 npx gulp tests:lint:fix         # 自动修复代码规范

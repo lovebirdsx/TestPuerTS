@@ -72,6 +72,7 @@ gulp.task('test', gulp.parallel('tool:test', 'ue:test'));
 gulp.task('check', gulp.series('build', 'typecheck', 'lint', 'test'));
 
 // 开发任务
+gulp.task('test:watch', gulp.parallel('tests:tsc:watch', 'ue:test:watch'));
 gulp.task('watch', gulp.parallel('editor:watch', 'tests:watch', 'ue:build:watch'));
 gulp.task('dev', gulp.series('ue:build', 'watch'));
 

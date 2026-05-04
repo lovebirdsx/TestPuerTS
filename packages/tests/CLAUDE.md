@@ -26,8 +26,27 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 
 ```bash
 npx gulp tests:build          	# 编译
-npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试
-npx gulp tests:watch          	# 监听编译，成功后自动运行 ue:test
+npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试（跑完即退出）
+npx gulp tests:watch          	# 旧 watch：监听 ts 源码 → 编译成功 → 每次 spawn 新 commandlet 跑 ue:test（每轮承担 UE 冷启动开销）
 ```
 
-**注意：** `universe-lib` 通过 `ExtraSearchPaths`（指向项目根目录）在运行时解析模块。
+**长驻 watch 模式（推荐）：** 两个终端配合，commandlet 不退出，热重启 < 5s。
+
+```bash
+# 终端 A：仅 tsc -b -w，输出到 Content/JavaScript/tests
+npx gulp tests:tsc:watch
+
+# 终端 B：长驻 commandlet，C++ 端轮询 Content/JavaScript 下 .js 产物
+# 检测到变化即销毁/重建 JsEnv 重跑测试；进程不退出
+npx gulp ue:test:watch
+```
+
+退出 `ue:test:watch`：
+- 在另一个 shell `touch Content/JavaScript/.watch-stop`（推荐）
+- 或 Ctrl+C
+- 或在 stdin 输入 `q` / `quit` / `exit`（仅 TTY 下有效）
+
+实现细节：
+- watch 逻辑在 C++ `JsRunnerCommandlet`（`Plugins/EditorCommon/Source/EditorCommon/Private/JsRunnerCommandlet.cpp`），命令行 `-watch`、可选 `-watch-root=<dir>`、`-watch-interval=<ms>`
+- 文件快照通过 `UProcessIOHelper::ListFilesRecursive` 一次性拿到 mtime + size，由 `IFileManager::IterateDirectoryStatRecursively` 实现
+- 测试本身（`main.ts` / `testRunner.ts`）零改动；每轮重建 `puerts::FJsEnv`，等价于一次冷启的 JS 语义

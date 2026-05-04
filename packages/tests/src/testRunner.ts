@@ -1,4 +1,5 @@
 // vitest 风格测试运行器，适配 PuerTS Commandlet 环境
+import { green, red } from './util';
 
 type TestFn = () => Promise<void> | void;
 
@@ -322,15 +323,27 @@ export async function runTests(filter?: string): Promise<number> {
 			console.log(` ↷ ${r.name} (skipped)`);
 			skipped++;
 		} else if (r.passed) {
-			console.log(` ✓ ${r.name}`);
+			console.log(` ${green('✓')} ${r.name}`);
 			passed++;
 		} else {
-			console.error(` ✗ ${r.name}`);
+			console.error(` ${red('✗')} ${r.name}`);
 			console.error(`   ${r.error}`);
 			failed++;
 		}
 	}
 
-	console.log(`\n结果: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
+	console.log(`\nResult: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
+
+	// 再次输出失败的测试名称，方便 CI 搜集
+	if (failed > 0) {
+		console.log('\nFailed tests:');
+		for (const r of results) {
+			if (!r.passed && !r.skipped) {
+				console.log(` ${red('✗')} ${r.name}`);
+			}
+		}
+		console.log('');
+	}
+
 	return failed > 0 ? 1 : 0;
 }

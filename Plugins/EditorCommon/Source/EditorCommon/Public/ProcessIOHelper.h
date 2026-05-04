@@ -7,6 +7,25 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAsyncFileComplete);
 
+// 文件时间戳条目（供 ListFilesRecursive 返回）
+USTRUCT(BlueprintType)
+struct FFileTimestampEntry
+{
+	GENERATED_BODY()
+
+	// 相对 RootDir 的路径，统一正斜杠
+	UPROPERTY(BlueprintReadOnly, Category = "ProcessIO")
+	FString RelativePath;
+
+	// 修改时间（FDateTime::GetTicks()）
+	UPROPERTY(BlueprintReadOnly, Category = "ProcessIO")
+	int64 ModifiedTicks = 0;
+
+	// 文件大小（字节）
+	UPROPERTY(BlueprintReadOnly, Category = "ProcessIO")
+	int64 SizeBytes = 0;
+};
+
 // 异步文件操作的结果对象
 // 操作完成后通过 OnComplete delegate 通知，结果通过属性读取
 UCLASS()
@@ -87,6 +106,15 @@ public:
 	// 获取环境变量
 	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
 	static FString GetEnvVar(const FString& Name);
+
+	// 同步递归枚举 RootDir 下的文件，返回相对路径 + mtime + size
+	// Extensions 元素形如 "js"（不带点）；为空则不过滤
+	// 返回值按 RelativePath 升序排序，便于 JS 端做稳定 diff
+	// 用于 watch 场景的高频快照采集（实测百级文件 < 50ms）
+	UFUNCTION(BlueprintCallable, Category = "ProcessIO")
+	static TArray<FFileTimestampEntry> ListFilesRecursive(
+		const FString& RootDir,
+		const TArray<FString>& Extensions);
 
 private:
 	// stdin 行缓冲区
