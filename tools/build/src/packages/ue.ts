@@ -167,7 +167,7 @@ gulp.task(
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
-			const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -timeout=30 -unattended -nopause -DisablePlugins=EditorDataStorage`;
+			const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -timeout=30 -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,
@@ -189,7 +189,7 @@ const TEST_DEBUG_PORT = 9229;
 
 gulp.task('ue:test:debug', async () => {
 	const editorCmd = getEditorCmdPath();
-	const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -JsEnvDebugPort=${TEST_DEBUG_PORT} -waitDebugger -unattended -nopause -DisablePlugins=EditorDataStorage`;
+	const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -JsEnvDebugPort=${TEST_DEBUG_PORT} -waitDebugger -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
 	info(`[ue:test:debug] V8 Inspector 监听 ws://127.0.0.1:${TEST_DEBUG_PORT}`);
 	info(`[ue:test:debug] 进程已暂停，请在 VS Code 中启动 "Attach Tests Debugger" 后继续`);
 	await exec(cmd, {
@@ -214,6 +214,7 @@ gulp.task(
 				'-module=acp-client-ue/index',
 				'-timeout=600',
 				'-nopause',
+				'-UTF8Output',
 				'-DisablePlugins=EditorDataStorage',
 				'--',
 				'--protocol',

@@ -32,6 +32,7 @@ gulp.task('ue:test:watch', async () => {
 		'-watch',
 		'-timeout=120',
 		'-nopause',
+		'-UTF8Output',
 		'-DisablePlugins=EditorDataStorage',
 	];
 
