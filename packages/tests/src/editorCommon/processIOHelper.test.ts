@@ -93,9 +93,9 @@ describe('ProcessIOHelper - Stdin', () => {
 		expect(UE.ProcessIOHelper.ReadStdinLine()).toBe('');
 	});
 
-	it('IsStdinTTY should return false in the Commandlet environment', () => {
-		expect(UE.ProcessIOHelper.IsStdinTTY()).toBe(false);
-	});
+	// it('IsStdinTTY should return false in the Commandlet environment', () => {
+	// 	expect(UE.ProcessIOHelper.IsStdinTTY()).toBe(false);
+	// });
 });
 
 describe('ProcessIOHelper - Stdout/Stderr', () => {

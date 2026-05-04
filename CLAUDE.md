@@ -32,55 +32,42 @@ tools/                        # 仓库级开发工具
 ```bash
 npm ci                          # 安装依赖；postinstall 会编译 tool、构建 UE，并生成 VS Code C++ 配置
 npm run dev                     # 监听 tool 源码变更，自动重编译后执行 gulp dev
-npx gulp watch                  # 启动所有监听器，不进行初始构建
+npm run check                   # 串行：build → typecheck → lint → unittest
 
-# 单独的 gulp 任务
+# 顶层组合任务（注册表驱动，新增包不需要修改任务定义）
+npx gulp build                  # ue:gen_typing → workspace:build（根级一次 tsc -b）
+npx gulp typecheck              # workspace:build + 各包 madge fan-out
+npx gulp lint                   # 一次根级 eslint .（覆盖所有包）
+npx gulp lint:fix               # 一次根级 eslint . --fix
+npx gulp watch                  # workspace:watch（根级 tsc -b -w）+ ue:build:watch
+npx gulp test:watch             # workspace:watch + ue:test:watch（commandlet 热重启 < 5s）
+npx gulp check                  # 等价 npm run check
+npx gulp cache:clear            # 清理 .gulp-cache 目录
+
+# 按包薄包装（注册表自动生成；适合只关注一个包的开发）
+npx gulp <pkg>:lint             # eslint src，单包缓存
+npx gulp <pkg>:lint:fix         # eslint src --fix
+npx gulp <pkg>:typecheck        # = workspace:build [+ <pkg>:madge]
+npx gulp <pkg>:build            # = workspace:build（composite 图无法只构造单包）
+npx gulp <pkg>:watch            # 独立 tsc -w（仅 editor / tool 等开启了 hasWatch 的包）
+
+# UE 专属任务
 npx gulp ue:gen_vscode_settings # 通过 UnrealBuildTool 生成 .vscode/c_cpp_properties.json 和 compileCommands_*.json
 npx gulp ue:build               # 通过 Build.bat 编译 C++
 npx gulp ue:test                # 通过 JsRunnerCommandlet 运行 JS 测试（无需编辑器）
-npx gulp ue:test:watch          # 长驻 commandlet：C++ 端轮询 Content/JavaScript 变化，自动重建 JsEnv 重跑测试（无需重启 UE，热重启 < 5s）
+npx gulp ue:test:watch          # 长驻 commandlet：C++ 端轮询 Content/JavaScript 变化，自动重建 JsEnv 重跑测试
 npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts 类型定义
 npx gulp ue:build:watch         # 监听 C++ 源文件；.h 文件变更还会触发 gen_typing
 npx gulp ue:build:clean         # 清理 C++ 构建产物
-
-npx gulp tests:build            # 编译测试包 TS（tsc 编译）
-npx gulp tests:watch            # 监听测试 TS；编译成功后自动运行 ue:test（每轮重启 commandlet）
-npx gulp tests:tsc:watch        # 仅 tsc -b -w，配合 ue:test:watch 使用
-npx gulp tests:typecheck        # 类型检查
-npx gulp tests:lint             # 检查代码规范
-npx gulp tests:lint:fix         # 自动修复代码规范
-
-npx gulp acp-client:build       # 编译 ACP 客户端 TS（PuerTS 端 + Node.js 桥接）
 npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
 
-npx gulp mcp-bridge:build       # 编译 MCP stdio↔pipe 桥接（Node CommonJS）
-npx gulp mcp-bridge:typecheck   # 类型检查
-npx gulp mcp-bridge:lint        # 检查代码规范
-npx gulp mcp-bridge:lint:fix    # 自动修复代码规范
-
-npx gulp mcp-server-ue:build    # 编译 PuerTS 内 MCP Server
-npx gulp mcp-server-ue:typecheck
-npx gulp mcp-server-ue:lint
-npx gulp mcp-server-ue:lint:fix
-
-npx gulp editor:build           # 编译编辑器包 TS
-npx gulp editor:watch           # 监听编辑器 TS
-npx gulp editor:typecheck       # 类型检查 + 循环依赖检查（madge）
-npx gulp editor:lint            # 检查编辑器包代码规范
-npx gulp editor:lint:fix        # 自动修复编辑器包代码规范
-
-npx gulp tool:build             # 编译工具包（postinstall 时也会运行）
-npx gulp tool:typecheck         # 类型检查 + 循环依赖检查（madge）
-npx gulp tool:lint              # 检查工具包代码规范
-npx gulp tool:lint:fix          # 自动修复工具包代码规范
-
-# 统一组合任务
-npx gulp typecheck              # 并行运行所有包的类型检查
-npx gulp lint                   # 并行运行所有包的 lint 检查
-npx gulp lint:fix               # 并行运行所有包的 lint 自动修复
-npx gulp unittest               # 并行运行 tool 单元测试 + ue:test（commandlet 测试）
-npx gulp check                  # 串行运行 build → typecheck → lint → unittest
+# 其他
+npx gulp tool:test              # vitest 单元测试（tools/build 自身）
+npx gulp tool:test:watch        # vitest watch
 ```
+
+> 新增 workspace 包：仓库根 `tsconfig.workspace.json` 加一行 references + `tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 加一项即可。`gulpfile.ts` 不需修改。
+
 
 ## 架构说明
 
@@ -88,7 +75,7 @@ npx gulp check                  # 串行运行 build → typecheck → lint → 
   - `tool:test`（vitest）—— `tools/build` 自身的纯 Node 单元测试。
   - `ue:test`（JsRunnerCommandlet + 自实现 vitest 风 runner）—— 所有需要 PuerTS/UE 引擎的测试（含 UE 绑定、IPC、ReactUMG、persistence 等），代码在 `packages/tests/`。
   - editor 包不再持有任何独立测试入口；所有"在 PuerTS 引擎里测 UE 绑定"的用例统一在 `packages/tests/src/ueBindings/`。
-- **Gulp 任务编排**：任务按包定义在 `tools/build/src/packages/` 中，在 `gulpfile.ts` 中组合。加入了自定义的缓存机制，可以通过 `--no-cache` 强制跳过缓存。
+- **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源；`workspace.ts` 据此自动注册按包薄包装与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--no-cache` 强制跳过。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。

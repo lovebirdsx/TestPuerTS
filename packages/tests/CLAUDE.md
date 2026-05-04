@@ -25,21 +25,22 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 **运行方式：**
 
 ```bash
-npx gulp tests:build          	# 编译
+npx gulp tests:build          	# 编译（alias 到 workspace:build，跑根级 tsc -b）
 npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试（跑完即退出）
-npx gulp tests:watch          	# 旧 watch：监听 ts 源码 → 编译成功 → 每次 spawn 新 commandlet 跑 ue:test（每轮承担 UE 冷启动开销）
 ```
 
 **长驻 watch 模式（推荐）：** 两个终端配合，commandlet 不退出，热重启 < 5s。
 
 ```bash
-# 终端 A：仅 tsc -b -w，输出到 Content/JavaScript/tests
-npx gulp tests:tsc:watch
+# 终端 A：根级 tsc -b -w，覆盖 editor / editor-common / tests / mcp-server-ue / acp-client-ue 等所有 composite project
+npx gulp workspace:watch
 
 # 终端 B：长驻 commandlet，C++ 端轮询 Content/JavaScript 下 .js 产物
 # 检测到变化即销毁/重建 JsEnv 重跑测试；进程不退出
 npx gulp ue:test:watch
 ```
+
+或一条命令并行启两个：`npx gulp test:watch`。
 
 退出 `ue:test:watch`：
 - 在另一个 shell `touch Content/JavaScript/.watch-stop`（推荐）

@@ -1,0 +1,178 @@
+import * as gulp from 'gulp';
+import { spawn } from 'child_process';
+import { info } from 'gulplog';
+
+import { exec, formatCheckCircularText, formatLintOutput, formatTscCheckOutput } from '../common/exec';
+import { withCache } from '../common/taskCache';
+import { getConfig } from '../config';
+import { blue, red } from '../common/util';
+import { allSrcGlobs, allTsconfigGlobs, PackageDef, WORKSPACE_PACKAGES } from './registry';
+
+const config = getConfig();
+const projectRoot = config.projectRoot;
+const workspaceTsconfig = 'tsconfig.workspace.json';
+
+// #region workspace 级任务
+
+/**
+ * 整个 monorepo 一次 tsc -b。composite project references 自动按拓扑排序，
+ * 各包内部用 .tsbuildinfo 做细粒度增量，gulp 缓存只为省一次 spawn。
+ */
+gulp.task(
+	'workspace:build',
+	withCache(
+		{
+			taskName: 'workspace:build',
+			inputGlobs: [...allSrcGlobs(), ...allTsconfigGlobs()],
+		},
+		async () => {
+			await exec(`tsc -b ${workspaceTsconfig}`, {
+				workingDir: projectRoot,
+				logPrefix: '[workspace:build] ',
+				formatText: formatTscCheckOutput,
+			});
+		},
+	),
+);
+
+/**
+ * 一次根级 eslint .。eslint.config.mjs 已配置好整个仓库的 ignore 范围。
+ */
+gulp.task(
+	'workspace:lint',
+	withCache(
+		{
+			taskName: 'workspace:lint',
+			inputGlobs: [...allSrcGlobs(), 'eslint.config.mjs'],
+		},
+		async () => {
+			await exec('eslint .', {
+				workingDir: projectRoot,
+				logPrefix: '[workspace:lint] ',
+				formatText: formatLintOutput,
+			});
+		},
+	),
+);
+
+gulp.task('workspace:lint:fix', async () => {
+	await exec('eslint . --fix', {
+		workingDir: projectRoot,
+		logPrefix: '[workspace:lint:fix] ',
+		formatText: formatLintOutput,
+		noThrow: true,
+	});
+});
+
+/**
+ * 长驻 tsc -b -w。替代各 per-package 的 watch + tests:tsc:watch。
+ * Content/JavaScript/<pkg>/ 等输出位置不变，C++ 端 watch 仍然生效。
+ */
+gulp.task('workspace:watch', async () => {
+	const prefix = '[workspace:watch] ';
+
+	return new Promise<void>((_resolve, reject) => {
+		const proc = spawn('npx', ['tsc', '-b', '-w', workspaceTsconfig], {
+			shell: true,
+			cwd: projectRoot,
+		});
+
+		proc.stdout?.on('data', (data: Buffer) => {
+			const text = data.toString().trimEnd();
+			if (text) info(`${blue(prefix)}${text}`);
+		});
+		proc.stderr?.on('data', (data: Buffer) => {
+			const text = data.toString().trimEnd();
+			if (text) info(`${blue(prefix)}${red(text)}`);
+		});
+		proc.on('error', (err) => reject(err));
+		proc.on('close', (code) => {
+			info(`${blue(prefix)}tsc exited with ${code ?? 'null'}`);
+			_resolve();
+		});
+	});
+});
+
+// #endregion
+
+// #region per-package 注册（注册表驱动，新增包零样板）
+
+function registerPackage(pkg: PackageDef): void {
+	const lintEntry = pkg.lintEntry ?? 'src';
+	const madgeEntry = pkg.madgeEntry ?? './src';
+
+	// per-package lint：保留 per-package 缓存粒度，避免动一处刷整库
+	gulp.task(
+		`${pkg.name}:lint`,
+		withCache(
+			{
+				taskName: `${pkg.name}:lint`,
+				inputGlobs: [...pkg.srcGlob, 'eslint.config.mjs'],
+			},
+			async () => {
+				await exec(`eslint ${lintEntry}`, {
+					workingDir: pkg.dir,
+					logPrefix: `[${pkg.name}:lint] `,
+					formatText: formatLintOutput,
+				});
+			},
+		),
+	);
+
+	gulp.task(`${pkg.name}:lint:fix`, async () => {
+		await exec(`eslint ${lintEntry} --fix`, {
+			workingDir: pkg.dir,
+			logPrefix: `[${pkg.name}:lint:fix] `,
+			formatText: formatLintOutput,
+			noThrow: true,
+		});
+	});
+
+	// 单包 madge（可选）
+	if (pkg.enableMadge) {
+		gulp.task(`${pkg.name}:madge`, async () => {
+			await exec(`madge -c --extensions ts,tsx ${madgeEntry}`, {
+				workingDir: pkg.dir,
+				logPrefix: `[${pkg.name}:madge] `,
+				formatText: formatCheckCircularText,
+			});
+		});
+	}
+
+	// composite 图无法只构造单包，build/typecheck 全部 alias 到 workspace:build
+	// （typecheck 额外加该包的 madge 检查）
+	gulp.task(`${pkg.name}:build`, gulp.series('workspace:build'));
+
+	gulp.task(
+		`${pkg.name}:typecheck`,
+		pkg.enableMadge ? gulp.series('workspace:build', `${pkg.name}:madge`) : gulp.series('workspace:build'),
+	);
+
+	// 个别包提供独立 watch（开发时只关注一个包）
+	if (pkg.hasWatch) {
+		gulp.task(`${pkg.name}:watch`, async () => {
+			await exec('tsc -w', {
+				workingDir: pkg.dir,
+				logPrefix: `[${pkg.name}:watch] `,
+				formatText: formatTscCheckOutput,
+			});
+		});
+	}
+}
+
+WORKSPACE_PACKAGES.forEach(registerPackage);
+
+// #endregion
+
+// #region workspace:typecheck（依赖 per-package madge 任务，必须放在注册之后）
+
+const madgeFanout = WORKSPACE_PACKAGES.filter((p) => p.enableMadge).map((p) => `${p.name}:madge`);
+
+gulp.task(
+	'workspace:typecheck',
+	madgeFanout.length > 0
+		? gulp.series('workspace:build', gulp.parallel(...madgeFanout))
+		: gulp.series('workspace:build'),
+);
+
+// #endregion

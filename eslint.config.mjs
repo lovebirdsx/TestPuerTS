@@ -20,6 +20,16 @@ export default tseslint.config(
 			'**/index.d.ts',
 			'**/Typing/**',
 			'**/Content/JavaScript/**',
+			// 根级 eslint . 扫描时需要排除的 UE 工程目录与第三方插件
+			'Saved/**',
+			'Intermediate/**',
+			'Binaries/**',
+			'Build/**',
+			'DerivedDataCache/**',
+			'Plugins/**',
+			'Source/**',
+			'.gulp-cache/**',
+			'gulpfile.js',
 		],
 	},
 

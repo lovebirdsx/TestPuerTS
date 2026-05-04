@@ -1,0 +1,12 @@
+{
+	"files": [],
+	"references": [
+		{ "path": "./packages/editor-common" },
+		{ "path": "./packages/mcp-bridge" },
+		{ "path": "./packages/acp-client-ue" },
+		{ "path": "./packages/mcp-server-ue" },
+		{ "path": "./packages/editor" },
+		{ "path": "./packages/tests" },
+		{ "path": "./tools/build" }
+	]
+}

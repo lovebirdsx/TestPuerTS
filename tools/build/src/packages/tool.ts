@@ -2,30 +2,21 @@ import * as gulp from 'gulp';
 import * as path from 'path';
 import { info } from 'gulplog';
 
-import { exec, formatCheckCircularText, formatTscCheckOutput } from '../common/exec';
+import { exec, formatVitestOutput } from '../common/exec';
 import { getConfig } from '../config';
-import { formatLintOutput } from '../common/exec';
-import { formatVitestOutput } from '../common/exec';
 import { cleanDirAsync } from '../common/util';
 import { withCache } from '../common/taskCache';
 
 const config = getConfig();
 const workingDir = config.buildToolsPath;
 
+// build/typecheck/lint/lint:fix/watch 已由 workspace.ts 注册表统一处理。
+// 本文件仅保留 vitest 测试相关任务（workspace 抽象不覆盖测试）+ clean。
+
 gulp.task('tool:clean', async () => {
 	await cleanDirAsync(path.join(workingDir, 'node_modules'));
 	await cleanDirAsync(path.join(workingDir, 'out'));
 });
-
-gulp.task(
-	'tool:build',
-	withCache(
-		{ taskName: 'tool:build', inputGlobs: ['tools/build/src/**/*.ts', 'tools/build/tsconfig.json'] },
-		async () => {
-			await exec('tsc', { workingDir, logPrefix: '[tool:build] ' });
-		},
-	),
-);
 
 gulp.task(
 	'tool:test',
@@ -40,48 +31,5 @@ gulp.task('tool:test:watch', async () => {
 			path = path.replace(workingDir, '');
 			info(`[tool:test:watch] File ${path} was changed, running tasks...`);
 		});
-	});
-});
-
-gulp.task('tool:watch', async () => {
-	await exec('tsc -w', { workingDir, logPrefix: '[tool:watch] ', formatText: formatTscCheckOutput });
-});
-
-gulp.task(
-	'tool:typecheck',
-	withCache(
-		{ taskName: 'tool:typecheck', inputGlobs: ['tools/build/src/**/*.ts', 'tools/build/tsconfig.json'] },
-		async () => {
-			await exec('tsc --noEmit', {
-				workingDir,
-				logPrefix: '[tool:typecheck] ',
-				formatText: formatTscCheckOutput,
-			});
-			await exec('madge -c --extensions ts,tsx ./src', {
-				workingDir,
-				logPrefix: '[tool:madge] ',
-				formatText: formatCheckCircularText,
-			});
-		},
-	),
-);
-
-gulp.task(
-	'tool:lint',
-	withCache({ taskName: 'tool:lint', inputGlobs: ['tools/build/src/**/*.ts', 'eslint.config.mjs'] }, async () => {
-		await exec('eslint src', {
-			workingDir,
-			logPrefix: '[tool:lint] ',
-			formatText: formatLintOutput,
-		});
-	}),
-);
-
-gulp.task('tool:lint:fix', async () => {
-	await exec('eslint src --fix', {
-		workingDir,
-		logPrefix: '[tool:lint:fix] ',
-		formatText: formatLintOutput,
-		noThrow: true,
 	});
 });
