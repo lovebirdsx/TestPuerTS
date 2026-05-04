@@ -15,16 +15,16 @@ editor-common 是 editor、mcp-server-ue、tests 共享的 Unreal 关联基础�
 
 **关键文件：**
 
-| 文件                          | 说明                                  |
-| ----------------------------- | ------------------------------------- |
-| `src/index.ts`                | 包级导出入口                          |
+| 文件                          | 说明                                                                                                                      |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `src/index.ts`                | 包级导出入口                                                                                                              |
 | `src/logging/index.ts`        | `createLogger(category)` / `installConsoleOverride(rootCategory)`：包装 `UE.JsLogHelper` 让 JS 输出统一走 `UE_LOG(LogJs)` |
-| `src/ipc/bridgeLink.ts`       | bridge 双向链路接口定义               |
-| `src/ipc/ueIpcSocket.ts`      | `UE.IPCTransport` 到 `ISocket` 的适配 |
-| `src/persistence/store.ts`    | zod 驱动的类型化持久化 store 实现     |
-| `src/persistence/fileIO.ts`   | `UE.ProcessIOHelper` Promise 化封装   |
-| `src/persistence/paths.ts`    | 持久化根目录与文件路径解析            |
-| `src/persistence/registry.ts` | 进程级 store 注册与统一 flush         |
+| `src/ipc/bridgeLink.ts`       | bridge 双向链路接口定义                                                                                                   |
+| `src/ipc/ueIpcSocket.ts`      | `UE.IPCTransport` 到 `ISocket` 的适配                                                                                     |
+| `src/persistence/store.ts`    | zod 驱动的类型化持久化 store 实现                                                                                         |
+| `src/persistence/fileIO.ts`   | `UE.ProcessIOHelper` Promise 化封装                                                                                       |
+| `src/persistence/paths.ts`    | 持久化根目录与文件路径解析                                                                                                |
+| `src/persistence/registry.ts` | 进程级 store 注册与统一 flush                                                                                             |
 
 **常用命令：**
 
