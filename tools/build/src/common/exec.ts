@@ -190,3 +190,47 @@ export function formatCSharpOutput(data: string, isError: boolean) {
 
 	return data;
 }
+
+// UE 日志等级，Fatal/Error 级别标红
+const UE_VERBOSITY_ERROR = new Set(['Fatal', 'Error']);
+const UE_VERBOSITY_LEVELS = ['Fatal', 'Error', 'Warning', 'Display', 'Log', 'Verbose', 'VeryVerbose'];
+
+function stripUeLine(line: string): { text: string; isError: boolean } {
+	let s = line;
+
+	// 去掉时间戳前缀：[2026.05.05-01.02.54:297][  0]
+	if (s.startsWith('[')) {
+		const i1 = s.indexOf(']');
+		if (i1 > 0) {
+			const i2 = s.indexOf(']', i1 + 1);
+			if (i2 > 0) s = s.slice(i2 + 1);
+		}
+	}
+
+	// 去掉 LogCategory: Verbosity: 前缀
+	const sep = s.indexOf(': ');
+	if (sep > 0) {
+		const rest = s.slice(sep + 2);
+		for (const level of UE_VERBOSITY_LEVELS) {
+			if (rest.startsWith(level + ':')) {
+				const msg = rest.slice(level.length + 1);
+				const text = msg.startsWith(' ') ? msg.slice(1) : msg;
+				return { text: text.trimEnd(), isError: UE_VERBOSITY_ERROR.has(level) };
+			}
+		}
+	}
+
+	return { text: s.trimEnd(), isError: false };
+}
+
+export function formatUeOutput(data: string, isError: boolean): string {
+	if (isError) return red(data);
+
+	const lines = data.split('\n');
+	const formatted = lines.map((line) => {
+		const { text, isError: lineIsError } = stripUeLine(line);
+		return lineIsError ? red(text) : text;
+	});
+
+	return formatted.join('\n');
+}

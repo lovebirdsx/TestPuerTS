@@ -3,10 +3,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { info } from 'gulplog';
 
-import { exec, formatCSharpOutput } from '../common/exec';
+import { exec, formatCSharpOutput, formatUeOutput } from '../common/exec';
 import { getConfig } from '../config';
-import { loadDotEnv, readJsonFile, red } from '../common/util';
-import { green } from '../common/util';
+import { loadDotEnv, readJsonFile, green } from '../common/util';
 import { withCache } from '../common/taskCache';
 
 const config = getConfig();
@@ -140,6 +139,7 @@ async function genTyping() {
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
+		formatText: formatUeOutput,
 	});
 }
 
@@ -171,12 +171,10 @@ gulp.task(
 				workingDir: projectRoot,
 				originalLog: true,
 				formatText: (data: string, isError: boolean) => {
-					const text = data.toString();
-					if (text.includes('[ignore]')) {
+					if (data.includes('[ignore]')) {
 						return data;
 					}
-
-					return isError ? red(text) : text;
+					return formatUeOutput(data, isError);
 				},
 			});
 		},
@@ -194,6 +192,7 @@ gulp.task('ue:test:debug', async () => {
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
+		formatText: formatUeOutput,
 	});
 });
 
@@ -228,6 +227,7 @@ gulp.task(
 				passthrough: true,
 				interactive: true,
 				env: dotEnv,
+				formatText: formatUeOutput,
 			});
 		},
 	),
@@ -255,6 +255,7 @@ gulp.task('ue:test:watch', async () => {
 		originalLog: true,
 		passthrough: true,
 		interactive: true,
+		formatText: formatUeOutput,
 	});
 });
 
@@ -292,6 +293,7 @@ gulp.task('ue:build:clean', async () => {
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,
+		formatText: formatCSharpOutput,
 	});
 	info(green('[ue:build:clean] Clean build completed successfully'));
 });
