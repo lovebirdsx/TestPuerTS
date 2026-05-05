@@ -11,6 +11,11 @@ interface TaskCacheOptions {
 	taskName: string;
 	/** 输入文件 glob 模式（相对 projectRoot 解析） */
 	inputGlobs: string[];
+	/**
+	 * 返回 true 时绕过缓存：直接执行任务，不读不写缓存文件。
+	 * 适用于带 CLI 透传参数等"非输入文件维度"的影响因素。
+	 */
+	bypass?: () => boolean;
 }
 
 interface CacheEntry {
@@ -75,6 +80,12 @@ function resolveInputs(inputGlobs: string[]): { filesHash: string; mtime: number
 export function withCache(options: TaskCacheOptions, taskFn: () => Promise<void>): () => Promise<void> {
 	return async () => {
 		const config = getConfig();
+
+		if (options.bypass?.()) {
+			info(yellow(`[${options.taskName}] Cache bypassed (passthrough args present)`));
+			await taskFn();
+			return;
+		}
 
 		if (config.noCache) {
 			await taskFn();

@@ -8,18 +8,17 @@
 
 **关键文件：**
 
-| 文件                        | 说明                                                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `src/gulpfile.ts`           | 顶层任务组合（build/typecheck/lint/lint:fix/watch/check/dev），全部 alias 到 workspace:* 任务           |
-| `src/packages/registry.ts`  | **包注册表**：`WORKSPACE_PACKAGES` 数组 + `allSrcGlobs()`/`allTsconfigGlobs()` 聚合函数                 |
-| `src/packages/workspace.ts` | workspace 级任务（`workspace:build`/`:lint`/`:lint:fix`/`:watch`/`:typecheck`）+ 注册表驱动的按包薄包装 |
-| `src/packages/ue.ts`        | UE 专属任务（`ue:build`、`ue:gen_typing`、`ue:test`、`ue:build:watch`、`ue:test:watch` 等）             |
-| `src/packages/tool.ts`      | 仅保留 `tool:clean` / `tool:test` / `tool:test:watch`（vitest）                                         |
-| `src/config.ts`             | CLI 参数 + 路径配置                                                                                     |
-| `src/cmdArgs.ts`            | 命令行参数解析                                                                                          |
-| `src/common/exec.ts`        | exec 辅助函数，带输出格式化                                                                             |
-| `src/common/util.ts`        | 文件工具、颜色辅助函数                                                                                  |
-| `src/common/taskCache.ts`   | 构建缓存机制（`--no-cache` 跳过）                                                                       |
+* `src/gulpfile.ts`：顶层任务组合（build/typecheck/lint/lint:fix/watch/check/dev），全部 alias 到 workspace:* 任务
+* `src/packages/registry.ts`：**包注册表**：`WORKSPACE_PACKAGES` 数组 + `allSrcGlobs()`/`allTsconfigGlobs()` 聚合函数
+* `src/packages/workspace.ts`：workspace 级任务（`workspace:build`/`:lint`/`:lint:fix`/`:watch`/`:typecheck`）+ 注册表驱动的按包薄包装
+* `src/packages/ue.ts`：UE 专属任务（`ue:build`、`ue:gen_typing`、`ue:test`、`ue:build:watch`、`ue:test:watch` 等）。`ue:test*` 与 `ue:acp-client` 通过命名 flag 把额外参数透传给 PuerTS：测试任务用 `--filter`/`-t`/`--test-name-pattern`；ACP 用 `--acp-args="..."`。gulpfile 把它们以 ` -- <tokens>` 形式追加到 UE 命令行，C++ commandlet 按 `" -- "` 拆给 `UE.JsRunHelper.GetCommandArgs()`。
+* `src/packages/tool.ts`：仅保留 `tool:clean` / `tool:test` / `tool:test:watch`（vitest）
+* `src/config.ts`：CLI 参数 + 路径配置
+* `src/cmdArgs.ts`：命令行参数解析
+* `src/common/exec.ts`：exec 辅助函数，带输出格式化
+* `src/common/util.ts`：文件工具、颜色辅助函数
+* `src/common/taskCache.ts`：构建缓存机制（`--no-cache` 跳过；`bypass()` 选项允许任务在某些条件下强制执行）
+* `src/common/passthroughArgs.ts`：抽取 gulp 命令行上的命名 flag（`--filter`/`-t`/`--acp-args` 等），并提供 `quoteForCmd` 拼接到 shell 命令
 
 **workspace 抽象的工作机制：**
 

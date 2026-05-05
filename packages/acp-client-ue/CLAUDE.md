@@ -22,6 +22,7 @@ ACP 协议客户端，用于调试和测试 ACP 服务端；包含命令行 REPL
 - REPL 命令：`/session new`、`/mode`、`/protocol`、`/cancel` 等
 - UI 入口通过 `AcpUiController` 订阅 typed events，不直接写 stdout/stderr
 - 新版会话配置优先使用 `configOptions` / `session/set_config_option`，旧 `modes` 作为兼容路径
+- 通过 `npx gulp ue:acp-client --acp-args="<整段字符串>"` 透传 CLI 选项（gulp 5 不认 POSIX `--`，整段透传，acp-client 自己拆）。默认 `--protocol --verbose` 仍自动追加，例：`npx gulp ue:acp-client --acp-args="--mode auto-approve --session abc"`
 
 **测试：**
 

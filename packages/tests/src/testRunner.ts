@@ -229,6 +229,7 @@ interface TestResult {
 async function runSuite(
 	suite: Suite,
 	filter: string | undefined,
+	testNamePattern: RegExp | undefined,
 	parentBeforeEach: TestFn[],
 	parentAfterEach: TestFn[],
 ): Promise<TestResult[]> {
@@ -244,10 +245,11 @@ async function runSuite(
 	// 整个 suite 被 skip：不跑钩子，所有 test 标记为 skipped，但仍递归子 suite（保持输出结构）
 	if (suite.skipped) {
 		for (const t of suite.tests) {
+			if (testNamePattern && !testNamePattern.test(t.fullName)) continue;
 			results.push({ name: t.fullName, passed: true, skipped: true });
 		}
 		for (const child of suite.children) {
-			const childResults = await runSuite(child, filter, allBeforeEach, allAfterEach);
+			const childResults = await runSuite(child, filter, testNamePattern, allBeforeEach, allAfterEach);
 			results.push(...childResults);
 		}
 		return results;
@@ -261,6 +263,7 @@ async function runSuite(
 			// beforeAll 失败，标记该 suite 所有测试为失败
 			const msg = `beforeAll failed: ${err.message || err}`;
 			for (const test of suite.tests) {
+				if (testNamePattern && !testNamePattern.test(test.fullName)) continue;
 				results.push({ name: test.fullName, passed: false, error: msg });
 			}
 			return results;
@@ -269,6 +272,7 @@ async function runSuite(
 
 	// 运行测试
 	for (const test of suite.tests) {
+		if (testNamePattern && !testNamePattern.test(test.fullName)) continue;
 		if (test.skipped) {
 			results.push({ name: test.fullName, passed: true, skipped: true });
 			continue;
@@ -285,7 +289,7 @@ async function runSuite(
 
 	// 递归子 suite
 	for (const child of suite.children) {
-		const childResults = await runSuite(child, filter, allBeforeEach, allAfterEach);
+		const childResults = await runSuite(child, filter, testNamePattern, allBeforeEach, allAfterEach);
 		results.push(...childResults);
 	}
 
@@ -301,16 +305,28 @@ async function runSuite(
 	return results;
 }
 
-export async function runTests(filter?: string): Promise<number> {
+export interface RunOptions {
+	filter?: string;
+	testNamePattern?: RegExp;
+}
+
+export async function runTests(opts: RunOptions = {}): Promise<number> {
 	logger.info('=== PuerTS Test Runner ===');
 
-	const results = await runSuite(rootSuite, filter, [], []);
+	const { filter, testNamePattern } = opts;
+	if (filter) logger.info(`  filter: ${filter}`);
+	if (testNamePattern) logger.info(`  test-name-pattern: ${testNamePattern}`);
+
+	const results = await runSuite(rootSuite, filter, testNamePattern, [], []);
 
 	if (results.length === 0) {
-		if (filter) {
-			logger.error(`未找到匹配的测试套件: "${filter}"`);
+		const criteria: string[] = [];
+		if (filter) criteria.push(`filter="${filter}"`);
+		if (testNamePattern) criteria.push(`pattern=${testNamePattern}`);
+		if (criteria.length > 0) {
+			logger.error(`未找到匹配的测试 (${criteria.join(', ')})`);
 			const names = rootSuite.children.map((s) => s.name);
-			logger.info(`可用的测试套件: ${names.join(', ')}`);
+			logger.info(`可用的顶层测试套件: ${names.join(', ')}`);
 			return 1;
 		}
 		logger.info('没有注册任何测试');

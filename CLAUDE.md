@@ -68,6 +68,8 @@ npx gulp tool:test:watch        # vitest watch
 
 > 新增 workspace 包：仓库根 `tsconfig.workspace.json` 加一行 references + `tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 加一项即可。`gulpfile.ts` 不需修改。
 
+> CLI 透传：`ue:test` / `ue:test:debug` / `ue:test:watch` / `ue:acp-client` 支持把命名 flag 透传给跑在 PuerTS 里的 JS（gulp 5 的 yargs 不识别 POSIX `--`，所以走命名 flag 而非 `--`）。透传非空时会绕过 `withCache`，强制执行。
+> - 测试：`--filter <suite-prefix>` / `-t <regex>`（亦支持 `--test-name-pattern`），可组合：`npx gulp ue:test --filter ueBindings -t async`
 
 ## 架构说明
 

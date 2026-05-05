@@ -7,10 +7,21 @@ import { exec, formatCSharpOutput, formatUeOutput } from '../common/exec';
 import { getConfig } from '../config';
 import { loadDotEnv, readJsonFile, green } from '../common/util';
 import { withCache } from '../common/taskCache';
+import { quoteForCmd, getTestPassthroughTokens, getAcpPassthroughTokens } from '../common/passthroughArgs';
 
 const config = getConfig();
 export const projectRoot = config.projectRoot;
 const uprojectPath = path.join(projectRoot, 'TestPuerTS.uproject');
+
+/**
+ * 把测试任务的透传 token (`--filter X`、`-t X`) 拼到一行 shell 命令末尾。
+ * 用 ` -- ` 分隔，C++ `JsRunnerCommandlet::Main` 据此拆分到 `JsRawArgs`。
+ */
+function appendTestPassthrough(cmd: string): string {
+	const extra = getTestPassthroughTokens();
+	if (extra.length === 0) return cmd;
+	return `${cmd} -- ${extra.map(quoteForCmd).join(' ')}`;
+}
 
 interface LauncherEntry {
 	InstallLocation: string;
@@ -163,10 +174,12 @@ gulp.task(
 		{
 			taskName: 'ue:test',
 			inputGlobs: ['packages/tests/src/**/*.{ts,tsx}', ...UE_BUILD_FILES],
+			bypass: () => getTestPassthroughTokens().length > 0,
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
-			const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -timeout=30 -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
+			const baseCmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -timeout=30 -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
+			const cmd = appendTestPassthrough(baseCmd);
 			await exec(cmd, {
 				workingDir: projectRoot,
 				originalLog: true,
@@ -186,7 +199,8 @@ const TEST_DEBUG_PORT = 9229;
 
 gulp.task('ue:test:debug', async () => {
 	const editorCmd = getEditorCmdPath();
-	const cmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -JsEnvDebugPort=${TEST_DEBUG_PORT} -waitDebugger -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
+	const baseCmd = `"${editorCmd}" "${uprojectPath}" -run=JsRunner -module=tests/main -JsEnvDebugPort=${TEST_DEBUG_PORT} -waitDebugger -unattended -nopause -UTF8Output -DisablePlugins=EditorDataStorage`;
+	const cmd = appendTestPassthrough(baseCmd);
 	info(`[ue:test:debug] V8 Inspector 监听 ws://127.0.0.1:${TEST_DEBUG_PORT}`);
 	info(`[ue:test:debug] 进程已暂停，请在 VS Code 中启动 "Attach Tests Debugger" 后继续`);
 	await exec(cmd, {
@@ -202,10 +216,13 @@ gulp.task(
 		{
 			taskName: 'ue:acp-client',
 			inputGlobs: ['packages/acp-client-ue/src/**/*.ts', ...UE_BUILD_FILES],
+			bypass: () => getAcpPassthroughTokens().length > 0,
 		},
 		async () => {
 			const editorCmd = getEditorCmdPath();
 			// 交互式模式：透传 stdin，去掉 -unattended
+			// `-- --protocol --verbose` 是默认调试体验；用户透传参数追加在后面，可覆盖
+			const passthrough = getAcpPassthroughTokens();
 			const args = [
 				`"${uprojectPath}"`,
 				'-run=JsRunner',
@@ -217,6 +234,7 @@ gulp.task(
 				'--',
 				'--protocol',
 				'--verbose',
+				...passthrough.map(quoteForCmd),
 			];
 			// 读取 .env，通过子进程环境变量透传（ueTransport.ts 会将其注入 ACP Server）
 			const dotEnv = loadDotEnv(path.join(projectRoot, '.env'));
@@ -235,7 +253,7 @@ gulp.task(
 
 gulp.task('ue:test:watch', async () => {
 	const editorCmd = getEditorCmdPath();
-	const args = [
+	const baseArgs = [
 		`"${uprojectPath}"`,
 		'-run=JsRunner',
 		'-module=tests/main',
@@ -249,7 +267,7 @@ gulp.task('ue:test:watch', async () => {
 	info(`${green('[ue:test:watch] ')}Starting watch mode commandlet`);
 	info(`${green('[ue:test:watch] ')}Stop with: touch Content/JavaScript/.watch-stop  (or Ctrl+C)`);
 
-	const cmd = `"${editorCmd}" ${args.join(' ')}`;
+	const cmd = appendTestPassthrough(`"${editorCmd}" ${baseArgs.join(' ')}`);
 	await exec(cmd, {
 		workingDir: projectRoot,
 		originalLog: true,

@@ -27,7 +27,15 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 ```bash
 npx gulp tests:build          	# 编译（alias 到 workspace:build，跑根级 tsc -b）
 npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试（跑完即退出）
+
+# CLI 透传（命名 flag；gulp 5 的 yargs 不识别 POSIX `--`）
+npx gulp ue:test --filter ueBindings              # 只跑 fullName 以 "ueBindings" 开头的 suite
+npx gulp ue:test -t "loader|polyfill"             # 只跑 fullName 匹配 regex 的 it
+npx gulp ue:test --filter ueBindings -t async     # 两层都过
+# 同样适用 ue:test:debug / ue:test:watch
 ```
+
+`tools/build/src/common/passthroughArgs.ts` 的 `getTestPassthroughTokens()` 从 `process.argv` 抽出 `--filter <X>` / `-t <X>` / `--test-name-pattern <X>`（含 `=` 形式），按 `gulp ue:test ... -- <tokens>` 形式拼到 UE 命令行末尾；C++ commandlet 按 `" -- "` 拆给 `UE.JsRunHelper.GetCommandArgs()`；`packages/tests/src/cliArgs.ts` 的 `parseTestArgs(raw)` 解析。透传非空时 `withCache` 自动绕过，避免「输入文件没变所以跳过」的隐蔽坑。
 
 **新增测试文件：** 只需在 `src/` 下任意子目录创建 `*.test.ts`，编译后即自动被发现，无需修改任何其他文件。
 

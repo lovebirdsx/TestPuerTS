@@ -2,6 +2,7 @@ import './puertsPolyfill';
 import * as UE from 'ue';
 import { createLogger } from '@universe-agent/editor-common';
 import { runTests } from './testRunner';
+import { parseTestArgs } from './cliArgs';
 
 // 运行时扫描编译输出目录，自动 require 所有 *.test.js
 function loadTests() {
@@ -18,10 +19,21 @@ function loadTests() {
 }
 
 async function main() {
-	const filter = UE.JsRunHelper.GetCommandArgs() || undefined;
-	const exitCode = await runTests(filter);
+	const logger = createLogger('test:main');
+	const raw = UE.JsRunHelper.GetCommandArgs() || '';
 
-	createLogger('test:main').info(`=== 测试结束，退出码: ${exitCode} ===`);
+	let parsed;
+	try {
+		parsed = parseTestArgs(raw);
+	} catch (err) {
+		logger.error((err as Error).message);
+		UE.JsRunHelper.MarkDone(1);
+		return;
+	}
+
+	const exitCode = await runTests(parsed);
+
+	logger.info(`=== 测试结束，退出码: ${exitCode} ===`);
 	UE.JsRunHelper.MarkDone(exitCode);
 }
 
