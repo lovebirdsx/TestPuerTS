@@ -62,6 +62,11 @@ export class McpManager {
 		this.stopSession(sessionId);
 		const pipeName = makePipeName(sessionId);
 		const handle = startUeMcpServer({ pipeName });
+		// 主动触发 ready()：让 mcp.connect() 在 bridge 接入时立即完成，
+		// 避免 bridge 先于 handler 注册发帧时依赖 pending buffer 的窗口期。
+		handle.ready().catch(() => {
+			// bridge 未接入或 dispose 前 reject，忽略（dispose 会清理）
+		});
 		this.sessions.set(sessionId, { sessionId, pipeName, handle });
 		return {
 			name: 'ue-editor',

@@ -71,6 +71,7 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 
 	// 等到 IPCServer 拿到 connection 后，再构造 BridgeLink
 	let messageHandler: ((line: string) => void) | null = null;
+	const pendingMessages: string[] = [];
 	let closeHandler: (() => void) | null = null;
 	let closed = false;
 
@@ -88,6 +89,10 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 				},
 				onMessage(handler: (line: string) => void): void {
 					messageHandler = handler;
+					// flush 在 handler 注册前已到达的帧，消除 bridge 先于 mcp.connect 发帧的竞态
+					while (pendingMessages.length > 0) {
+						handler(pendingMessages.shift()!);
+					}
 				},
 				onClose(handler: () => void): void {
 					closeHandler = handler;
@@ -108,7 +113,12 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 			const bridgeService: IMcpBridgeService = {
 				async forwardFromAgent(line: string): Promise<void> {
 					if (closed) return;
-					messageHandler?.(line);
+					if (messageHandler) {
+						messageHandler(line);
+					} else {
+						// handler 尚未注册（ready() 的 Promise 链还未执行完），先入队
+						pendingMessages.push(line);
+					}
 				},
 			};
 			server.registerChannel(BRIDGE_CHANNEL, ProxyChannel.fromService(bridgeService));
