@@ -61,6 +61,8 @@ export async function exec(
 			if (sigintHandler) {
 				process.off('SIGINT', sigintHandler);
 			}
+			if (stdoutBuf.v) onOutput(stdoutBuf.v, false);
+			if (stderrBuf.v) onOutput(stderrBuf.v, true);
 			if (code !== 0 && code !== null && !noThrow) {
 				reject(new Error(`Error executing command: ${cmd}`));
 			} else {
@@ -93,12 +95,25 @@ export async function exec(
 			}
 		};
 
-		subProcess.stdout?.on('data', (data) => {
-			onOutput(data, false);
+		// 按行来进行格式化输出，避免自定义formatText会因为行截断导致格式出问题
+		// 譬如formatUeOutput中依赖行来去除UE日志前缀，如果行被截断了就无法正确识别了
+		const stdoutBuf = { v: '' };
+		const stderrBuf = { v: '' };
+
+		subProcess.stdout?.on('data', (data: Buffer) => {
+			const lines = (stdoutBuf.v + data.toString()).split('\n');
+			stdoutBuf.v = lines.pop() ?? '';
+			for (const line of lines) {
+				onOutput(line + '\n', false);
+			}
 		});
 
-		subProcess.stderr?.on('data', (data) => {
-			onOutput(data, true);
+		subProcess.stderr?.on('data', (data: Buffer) => {
+			const lines = (stderrBuf.v + data.toString()).split('\n');
+			stderrBuf.v = lines.pop() ?? '';
+			for (const line of lines) {
+				onOutput(line + '\n', true);
+			}
 		});
 	});
 }
