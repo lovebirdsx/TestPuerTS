@@ -43,6 +43,8 @@ private:
     void UnregisterCommands();
     void RegisterMenus();
     void RestartTsEditor();
+    void ToggleWaitJSDebug();
+    bool IsWaitJSDebugEnabled() const;
     void ExecuteRegisteredMenuEntry(FName Id);
     bool CanExecuteRegisteredMenuEntry(FName Id);
     void AddRegisteredMenuEntries(class UToolMenu* TsEditorMenu);

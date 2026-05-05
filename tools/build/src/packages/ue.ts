@@ -91,7 +91,7 @@ const UE_BUILD_FILES = [
 	'Plugins/EditorHelper/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/Puerts/Source/**/*.{h,cpp,cs,uplugin}',
 	'Plugins/ReactUMG/Source/**/*.{h,cpp,cs,uplugin}',
-	'/Source/TestPuerTS/**/*.{h,cpp,cs,uplugin}',
+	'Source/**/*.{h,cpp,cs,uplugin}',
 ];
 
 async function buildUe() {
