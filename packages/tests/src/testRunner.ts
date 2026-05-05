@@ -234,7 +234,7 @@ async function runSuite(
 	parentAfterEach: TestFn[],
 ): Promise<TestResult[]> {
 	// filter 匹配：如果指定了 filter，只运行名称匹配的顶层 suite
-	if (filter && suite !== rootSuite && suite.fullName !== filter && !suite.fullName.startsWith(filter + ' > ')) {
+	if (filter && suite !== rootSuite && !suite.fullName.startsWith(filter)) {
 		return [];
 	}
 
