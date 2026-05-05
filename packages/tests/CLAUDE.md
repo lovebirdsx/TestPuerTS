@@ -10,7 +10,7 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 
 | 文件                    | 说明                                                                         |
 | ----------------------- | ---------------------------------------------------------------------------- |
-| `src/main.ts`           | 测试入口，动态导入所有测试文件                                               |
+| `src/main.ts`           | 测试入口；运行时通过 `ProcessIOHelper.ListFilesRecursive` 扫描 `Content/JavaScript/tests/` 下所有 `*.test.js` 并 `require`，无需手工维护导入列表 |
 | `src/testRunner.ts`     | 测试执行编排（vitest 风 DSL，含 `it.skip`/`describe.skip`/`expect.toThrow`） |
 | `src/puertsPolyfill.ts` | PuerTS 环境 polyfill（setTimeout 等）                                        |
 | `src/ueBindings/`       | PuerTS ↔ UE 绑定测试（基础类型、容器、delegate、actor、async）               |
@@ -28,6 +28,8 @@ Commandlet 测试套件，通过 UE JsRunnerCommandlet 在引擎环境中运行�
 npx gulp tests:build          	# 编译（alias 到 workspace:build，跑根级 tsc -b）
 npx gulp ue:test              	# 通过 JsRunnerCommandlet 运行测试（跑完即退出）
 ```
+
+**新增测试文件：** 只需在 `src/` 下任意子目录创建 `*.test.ts`，编译后即自动被发现，无需修改任何其他文件。
 
 **长驻 watch 模式（推荐）：** 两个终端配合，commandlet 不退出，热重启 < 5s。
 
