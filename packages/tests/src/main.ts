@@ -33,7 +33,7 @@ async function main() {
 
 	const exitCode = await runTests(parsed);
 
-	logger.info(`=== 测试结束，退出码: ${exitCode} ===`);
+	logger.info(`=== Test Finished, Exit Code: ${exitCode} ===`);
 	UE.JsRunHelper.MarkDone(exitCode);
 }
 

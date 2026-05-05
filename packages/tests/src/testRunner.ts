@@ -2,7 +2,7 @@
 import { createLogger } from '@universe-agent/editor-common';
 import { green, red } from './util';
 
-const logger = createLogger('test:runner');
+const logger = createLogger();
 
 type TestFn = () => Promise<void> | void;
 

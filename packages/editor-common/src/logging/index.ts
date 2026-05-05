@@ -33,7 +33,7 @@ function format(args: unknown[]): string {
 	return args.map(formatArg).join(' ');
 }
 
-export function createLogger(category: string): Logger {
+export function createLogger(category = ''): Logger {
 	return {
 		log(...args: unknown[]) {
 			UE.JsLogHelper.Log(category, format(args));
