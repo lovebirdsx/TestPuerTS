@@ -10,9 +10,7 @@ import './packages/ue';
 
 // 不被 workspace 抽象覆盖的特殊任务：
 //   - tool: vitest 单元测试（tool:test / tool:test:watch / tool:clean）
-//   - tests: 仓库 commandlet watch（ue:test:watch）+ tests:clean
 import './packages/tool';
-import './packages/tests';
 
 import { getConfig } from './config';
 import { cleanDirAsync, green } from './common/util';

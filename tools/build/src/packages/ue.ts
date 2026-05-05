@@ -1,7 +1,6 @@
 import * as gulp from 'gulp';
 import * as fs from 'fs';
 import * as path from 'path';
-import { spawn } from 'child_process';
 import { info } from 'gulplog';
 
 import { exec, formatCSharpOutput } from '../common/exec';
@@ -222,32 +221,42 @@ gulp.task(
 			];
 			// 读取 .env，通过子进程环境变量透传（ueTransport.ts 会将其注入 ACP Server）
 			const dotEnv = loadDotEnv(path.join(projectRoot, '.env'));
-			await new Promise<void>((resolve, reject) => {
-				const proc = spawn(`"${editorCmd}"`, args, {
-					shell: true,
-					cwd: projectRoot,
-					stdio: ['inherit', 'pipe', 'pipe'],
-					env: { ...process.env, ...dotEnv },
-				});
-
-				proc.stdout?.on('data', (data: Buffer) => {
-					process.stdout.write(data);
-				});
-				proc.stderr?.on('data', (data: Buffer) => {
-					process.stderr.write(data);
-				});
-
-				proc.on('close', (code) => {
-					if (code !== 0) {
-						reject(new Error(`Error executing command: ${editorCmd} (exit code ${code})`));
-					} else {
-						resolve();
-					}
-				});
+			const cmd = `"${editorCmd}" ${args.join(' ')}`;
+			await exec(cmd, {
+				workingDir: projectRoot,
+				originalLog: true,
+				passthrough: true,
+				interactive: true,
+				env: dotEnv,
 			});
 		},
 	),
 );
+
+gulp.task('ue:test:watch', async () => {
+	const editorCmd = getEditorCmdPath();
+	const args = [
+		`"${uprojectPath}"`,
+		'-run=JsRunner',
+		'-module=tests/main',
+		'-watch',
+		'-timeout=120',
+		'-nopause',
+		'-UTF8Output',
+		'-DisablePlugins=EditorDataStorage',
+	];
+
+	info(`${green('[ue:test:watch] ')}Starting watch mode commandlet`);
+	info(`${green('[ue:test:watch] ')}Stop with: touch Content/JavaScript/.watch-stop  (or Ctrl+C)`);
+
+	const cmd = `"${editorCmd}" ${args.join(' ')}`;
+	await exec(cmd, {
+		workingDir: projectRoot,
+		originalLog: true,
+		passthrough: true,
+		interactive: true,
+	});
+});
 
 gulp.task('ue:build:watch', async () => {
 	const sourceDir = path.join(projectRoot, 'Source');

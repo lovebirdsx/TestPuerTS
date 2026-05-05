@@ -13,6 +13,15 @@ interface IExecOptions {
 	formatText?: (data: string, isError: boolean) => string;
 
 	noThrow?: boolean;
+
+	/** 透传所有输出，跳过 verbose 过滤（适合 watch/长驻模式） */
+	passthrough?: boolean;
+
+	/** 将 stdin 设为 inherit，支持 Ctrl+C 等交互操作 */
+	interactive?: boolean;
+
+	/** 追加或覆盖子进程环境变量（合并到 process.env） */
+	env?: NodeJS.ProcessEnv;
 }
 
 let execVerbose = false;
@@ -27,13 +36,18 @@ export function setExecVerbose(verbose: boolean): void {
  */
 export async function exec(
 	cmd: string,
-	{ logPrefix, originalLog, workingDir, noThrow, formatText }: IExecOptions,
+	{ logPrefix, originalLog, workingDir, noThrow, formatText, passthrough, interactive, env }: IExecOptions,
 ): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
-		const subProcess = spawn(cmd, { shell: true, cwd: workingDir });
+		const subProcess = spawn(cmd, {
+			shell: true,
+			cwd: workingDir,
+			stdio: interactive ? ['inherit', 'pipe', 'pipe'] : undefined,
+			env: env ? { ...process.env, ...env } : undefined,
+		});
 
 		subProcess.on('close', (code) => {
-			if (code !== 0 && !noThrow) {
+			if (code !== 0 && code !== null && !noThrow) {
 				reject(new Error(`Error executing command: ${cmd}`));
 			} else {
 				resolve();
@@ -53,7 +67,7 @@ export async function exec(
 			}
 
 			const formatedText = realFormatText(str, isError);
-			if (!execVerbose && !isRed(formatedText)) {
+			if (!passthrough && !execVerbose && !isRed(formatedText)) {
 				return;
 			}
 
