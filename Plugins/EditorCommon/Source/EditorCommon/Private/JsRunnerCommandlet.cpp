@@ -98,6 +98,12 @@ namespace
 
 		while (!UJsRunHelper::bDone)
 		{
+			if (IsEngineExitRequested())
+			{
+				UE_LOG(LogJsRunner, Display, TEXT("JsRunner: Engine exit requested, aborting current run"));
+				return 1;
+			}
+
 			FTaskGraphInterface::Get().ProcessThreadUntilIdle(ENamedThreads::GameThread);
 			FTSTicker::GetCoreTicker().Tick(FApp::GetDeltaTime());
 			FPlatformProcess::Sleep(0.01f);
@@ -184,7 +190,7 @@ int32 UJsRunnerCommandlet::Main(const FString& Params)
 	bool bShouldQuit = false;
 	bool bFirstRun = true;
 
-	while (!bShouldQuit)
+	while (!bShouldQuit && !IsEngineExitRequested())
 	{
 		UE_LOG(LogJsRunner, Display, TEXT("[watch] %s test run..."), bFirstRun ? TEXT("Initial") : TEXT("Re-running"));
 		bFirstRun = false;
@@ -194,6 +200,11 @@ int32 UJsRunnerCommandlet::Main(const FString& Params)
 		const double Elapsed = FPlatformTime::Seconds() - T0;
 		UE_LOG(LogJsRunner, Display, TEXT("[watch] Run done in %.2fs (exit=%d)"), Elapsed, Code);
 
+		if (IsEngineExitRequested())
+		{
+			break;
+		}
+
 		// 在重新拍快照前先驱动一次 ticker，让 JsEnv 销毁产生的清理任务跑完
 		FTaskGraphInterface::Get().ProcessThreadUntilIdle(ENamedThreads::GameThread);
 		FTSTicker::GetCoreTicker().Tick(0.01f);
@@ -201,7 +212,7 @@ int32 UJsRunnerCommandlet::Main(const FString& Params)
 		FFileSnapshot Snapshot = TakeSnapshot(WatchRoot, Exts);
 		UE_LOG(LogJsRunner, Display, TEXT("[watch] Watching %d files. Waiting for changes..."), Snapshot.Num());
 
-		while (!bShouldQuit)
+		while (!bShouldQuit && !IsEngineExitRequested())
 		{
 			if (CheckStopSignal(WatchRoot))
 			{

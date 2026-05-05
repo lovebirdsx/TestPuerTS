@@ -46,7 +46,21 @@ export async function exec(
 			env: env ? { ...process.env, ...env } : undefined,
 		});
 
+		// interactive 模式下，Ctrl+C 已经由控制台广播给整个进程组（包括子进程），
+		// 子进程会自行清理退出。这里安装一个空 SIGINT handler 覆盖 Node 的默认行为，
+		// 防止 gulp 父进程先于子进程退出，导致子进程的清理日志被截断或子进程变成孤儿。
+		let sigintHandler: (() => void) | undefined;
+		if (interactive) {
+			sigintHandler = () => {
+				// 故意空实现：等待子进程通过 'close' 事件正常结束
+			};
+			process.on('SIGINT', sigintHandler);
+		}
+
 		subProcess.on('close', (code) => {
+			if (sigintHandler) {
+				process.off('SIGINT', sigintHandler);
+			}
 			if (code !== 0 && code !== null && !noThrow) {
 				reject(new Error(`Error executing command: ${cmd}`));
 			} else {
