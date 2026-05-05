@@ -148,6 +148,12 @@ export class PersistenceStore<T> {
 		return deepClone(this.state) as Readonly<T>;
 	}
 
+	/** store 未 ready 时也安全：返回 schema 默认值（不读磁盘）。 */
+	getOrDefault(): Readonly<T> {
+		if (!this.loaded) return deepClone(this.parseDefaults()) as Readonly<T>;
+		return deepClone(this.state) as Readonly<T>;
+	}
+
 	set(next: T): void {
 		this.ensureLoadedSync();
 		const result = this.schema.safeParse(next);
