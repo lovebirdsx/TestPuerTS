@@ -83,7 +83,7 @@ describe('Persistence - End to End (real UE FS)', () => {
 		});
 		expect(writeResult.bSuccess).toBe(true);
 
-		const b = defineStore(name, sampleSchema);
+		const b = defineStore(name, sampleSchema, { silenceCorruptWarning: true });
 		await b.ready();
 		expect(b.get().theme).toBe('dark'); // 回退默认值
 		await b.flush();

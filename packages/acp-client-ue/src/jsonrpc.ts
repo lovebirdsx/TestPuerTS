@@ -172,7 +172,7 @@ export class JsonRpcConnection {
 				this.messageObserver?.('recv', msg);
 				this.dispatch(msg);
 			} catch (err) {
-				logger.error('Failed to parse JSON:', trimmed, err);
+				logger.log('Failed to parse JSON:', trimmed, err);
 			}
 		}
 	}
@@ -249,11 +249,13 @@ export class JsonRpcConnection {
 	}
 
 	private handleClose(): void {
-		// Reject 所有挂起的请求
+		if (!this.closedResolve) return; // 防止 dispose() 内部 transport.close() 触发 onClose 后再次调用
+		const resolve = this.closedResolve;
+		this.closedResolve = null;
 		for (const [, pending] of this.pendingRequests) {
 			pending.reject(new Error('Connection closed'));
 		}
 		this.pendingRequests.clear();
-		this.closedResolve?.();
+		resolve();
 	}
 }

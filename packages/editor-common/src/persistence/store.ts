@@ -13,6 +13,8 @@ export interface DefineStoreOptions {
 	fileIO?: IFileIO;
 	resolveFilePath?: (name: string) => string;
 	resolveCorruptPath?: (name: string, timestamp: number) => string;
+	/** 测试专用：加载到损坏文件时跳过 warn 日志，改为 log 级别 */
+	silenceCorruptWarning?: boolean;
 }
 
 function deepClone<T>(value: T): T {
@@ -41,6 +43,7 @@ export class PersistenceStore<T> {
 	private readonly filePath: () => string;
 	private readonly corruptPath: (timestamp: number) => string;
 	private readonly logger: ReturnType<typeof createLogger>;
+	private readonly silenceCorruptWarning: boolean;
 
 	constructor(
 		readonly name: string,
@@ -54,6 +57,7 @@ export class PersistenceStore<T> {
 		this.filePath = () => resolveFile(name);
 		this.corruptPath = (ts: number) => resolveCorrupt(name, ts);
 		this.logger = createLogger(`editor-common:persistence:${name}`);
+		this.silenceCorruptWarning = options.silenceCorruptWarning ?? false;
 	}
 
 	private parseDefaults(): T {
@@ -118,7 +122,8 @@ export class PersistenceStore<T> {
 	private async handleCorrupt(originalText: string, reason: string): Promise<void> {
 		const ts = Date.now();
 		const backupPath = this.corruptPath(ts);
-		this.logger.warn(`corrupt file (${reason}); backing up to ${backupPath}`);
+		const logFn = this.silenceCorruptWarning ? this.logger.log : this.logger.warn;
+		logFn(`corrupt file (${reason}); backing up to ${backupPath}`);
 		try {
 			await this.io.writeText(backupPath, originalText);
 		} catch (err) {
