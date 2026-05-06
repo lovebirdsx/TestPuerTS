@@ -91,6 +91,7 @@ export class ACPClientHandler {
 	private terminals = new Map<string, ManagedTerminal>();
 	private nextTerminalId = 1;
 	private permissionHandler: ((params: RequestPermissionRequest) => Promise<RequestPermissionResponse>) | null = null;
+	private availableCommands: { name: string; description?: string }[] = [];
 
 	constructor(renderer: Renderer, options: CliOptions) {
 		this.renderer = renderer;
@@ -101,6 +102,10 @@ export class ACPClientHandler {
 		handler: ((params: RequestPermissionRequest) => Promise<RequestPermissionResponse>) | null,
 	): void {
 		this.permissionHandler = handler;
+	}
+
+	getAvailableCommands(): { name: string; description?: string }[] {
+		return this.availableCommands;
 	}
 
 	async handleRequest(method: string, params: any): Promise<unknown> {
@@ -128,9 +133,14 @@ export class ACPClientHandler {
 
 	handleNotification(method: string, params: any): void {
 		switch (method) {
-			case CLIENT_METHODS.session_update:
+			case CLIENT_METHODS.session_update: {
 				this.renderer.renderSessionUpdate(params as SessionNotification);
+				const update = (params as SessionNotification).update as any;
+				if (update.sessionUpdate === 'available_commands_update') {
+					this.availableCommands = update.availableCommands ?? [];
+				}
 				break;
+			}
 		}
 	}
 
@@ -410,6 +420,10 @@ export class ACPClient {
 
 	getHandler(): ACPClientHandler {
 		return this.handler;
+	}
+
+	getAvailableCommands(): { name: string; description?: string }[] {
+		return this.handler.getAvailableCommands();
 	}
 
 	/**

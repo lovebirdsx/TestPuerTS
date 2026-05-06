@@ -120,7 +120,7 @@ export class Renderer {
 
 	private renderContentChunk(content: { type: string; text?: string }): void {
 		if (content.type === 'text' && content.text) {
-			writeStdout(content.text);
+			writeStderr(content.text);
 		}
 	}
 
@@ -187,16 +187,11 @@ export class Renderer {
 	}
 
 	ensureNewline(): void {
-		writeStdout('\n');
+		writeStderr('\n');
 	}
 }
 
 // --- 输出辅助函数 ---
-
-function writeStdout(text: string): void {
-	UE.ProcessIOHelper.WriteStdout(text);
-}
-
 function writeStderr(text: string): void {
 	UE.ProcessIOHelper.WriteStderr(text);
 }

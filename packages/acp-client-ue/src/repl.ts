@@ -113,7 +113,22 @@ export class Repl {
 				break;
 
 			case '/help':
-				UE.ProcessIOHelper.WriteStderr(HELP_TEXT + '\n\n');
+				UE.ProcessIOHelper.WriteStderr(HELP_TEXT + '\n');
+				{
+					const serverCommands = this.client.getAvailableCommands();
+					if (serverCommands.length > 0) {
+						UE.ProcessIOHelper.WriteStderr(
+							fmt.dim(
+								'\nServer commands:\n' +
+									serverCommands
+										.map((c) => `  /${c.name}${c.description ? '  ' + c.description : ''}`)
+										.join('\n') +
+									'\n',
+							),
+						);
+					}
+				}
+				UE.ProcessIOHelper.WriteStderr('\n');
 				break;
 
 			case '/session':
@@ -162,10 +177,32 @@ export class Repl {
 				UE.ProcessIOHelper.WriteStderr('\x1B[2J\x1B[H');
 				break;
 
-			default:
-				UE.ProcessIOHelper.WriteStderr(
-					fmt.error(`Unknown command: ${cmd}. Type /help for available commands.\n`),
-				);
+			default: {
+				const commandName = cmd.slice(1);
+				const serverCommands = this.client.getAvailableCommands();
+				const serverCmd = serverCommands.find((c) => c.name === commandName);
+				if (serverCmd) {
+					const promptText =
+						parts.length > 1 ? `/${commandName} ${parts.slice(1).join(' ')}` : `/${commandName}`;
+					this.prompting = true;
+					try {
+						const result = await this.client.prompt(promptText);
+						this.renderer.ensureNewline();
+						UE.ProcessIOHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n\n`));
+					} catch (err) {
+						this.renderer.ensureNewline();
+						UE.ProcessIOHelper.WriteStderr(
+							fmt.error(`Error: ${err instanceof Error ? err.message : String(err)}\n\n`),
+						);
+					} finally {
+						this.prompting = false;
+					}
+				} else {
+					UE.ProcessIOHelper.WriteStderr(
+						fmt.error(`Unknown command: ${cmd}. Type /help for available commands.\n`),
+					);
+				}
+			}
 		}
 	}
 
