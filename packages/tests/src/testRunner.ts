@@ -242,11 +242,23 @@ async function runSuite(
 	const allBeforeEach = [...parentBeforeEach, ...suite.beforeEach];
 	const allAfterEach = [...suite.afterEach, ...parentAfterEach];
 
+	function report(r: TestResult): void {
+		results.push(r);
+		if (r.skipped) {
+			logger.info(` ↷ ${r.name} (skipped)`);
+		} else if (r.passed) {
+			logger.info(` ${green('✓')} ${r.name}`);
+		} else {
+			logger.error(` ${red('✗')} ${r.name}`);
+			logger.error(`   ${r.error}`);
+		}
+	}
+
 	// 整个 suite 被 skip：不跑钩子，所有 test 标记为 skipped，但仍递归子 suite（保持输出结构）
 	if (suite.skipped) {
 		for (const t of suite.tests) {
 			if (testNamePattern && !testNamePattern.test(t.fullName)) continue;
-			results.push({ name: t.fullName, passed: true, skipped: true });
+			report({ name: t.fullName, passed: true, skipped: true });
 		}
 		for (const child of suite.children) {
 			const childResults = await runSuite(child, filter, testNamePattern, allBeforeEach, allAfterEach);
@@ -264,7 +276,7 @@ async function runSuite(
 			const msg = `beforeAll failed: ${err.message || err}`;
 			for (const test of suite.tests) {
 				if (testNamePattern && !testNamePattern.test(test.fullName)) continue;
-				results.push({ name: test.fullName, passed: false, error: msg });
+				report({ name: test.fullName, passed: false, error: msg });
 			}
 			return results;
 		}
@@ -274,16 +286,16 @@ async function runSuite(
 	for (const test of suite.tests) {
 		if (testNamePattern && !testNamePattern.test(test.fullName)) continue;
 		if (test.skipped) {
-			results.push({ name: test.fullName, passed: true, skipped: true });
+			report({ name: test.fullName, passed: true, skipped: true });
 			continue;
 		}
 		try {
 			for (const fn of allBeforeEach) await fn();
 			await test.fn();
 			for (const fn of allAfterEach) await fn();
-			results.push({ name: test.fullName, passed: true });
+			report({ name: test.fullName, passed: true });
 		} catch (err: any) {
-			results.push({ name: test.fullName, passed: false, error: err.message || String(err) });
+			report({ name: test.fullName, passed: false, error: err.message || String(err) });
 		}
 	}
 
@@ -333,22 +345,13 @@ export async function runTests(opts: RunOptions = {}): Promise<number> {
 		return 0;
 	}
 
-	// 输出结果
 	let passed = 0;
 	let failed = 0;
 	let skipped = 0;
 	for (const r of results) {
-		if (r.skipped) {
-			logger.info(` ↷ ${r.name} (skipped)`);
-			skipped++;
-		} else if (r.passed) {
-			logger.info(` ${green('✓')} ${r.name}`);
-			passed++;
-		} else {
-			logger.error(` ${red('✗')} ${r.name}`);
-			logger.error(`   ${r.error}`);
-			failed++;
-		}
+		if (r.skipped) skipped++;
+		else if (r.passed) passed++;
+		else failed++;
 	}
 
 	logger.info(`\nResult: ${passed} passed, ${failed} failed, ${skipped} skipped, ${results.length} total`);
