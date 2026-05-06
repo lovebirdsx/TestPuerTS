@@ -23,6 +23,8 @@ React UMG 编辑器组件库，基于 React 19 + react-reconciler 实现 UMG Wid
 
 editor 包不再持有独立的测试套件。所有需要在 PuerTS 引擎中验证 editor 行为的测试（包括 persistence）统一放在 `packages/tests/src/`，通过 `npx gulp ue:test` 运行。
 
+**入口注意：** `src/main.ts` 必须在最早期调用 `installPuertsTimerPolyfill()`（再 `installConsoleOverride('editor')`），否则 universe-lib / MCP SDK 等省略 delay 的 `setTimeout(fn)` 不会触发，会导致 ACP `session/new` 卡死至 60s 超时。
+
 **常用命令：**
 
 ```bash

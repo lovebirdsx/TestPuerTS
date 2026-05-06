@@ -7,8 +7,9 @@ editor-common 是 editor、mcp-server-ue、tests 共享的 Unreal 关联基础�
 **职责边界：**
 
 - 提供与 UE/PuerTS 运行时相关但不包含 UI 的公共实现。
-- 当前包含三类能力：
+- 当前包含四类能力：
   - 日志层：`createLogger`、`installConsoleOverride`
+  - PuerTS 运行时 polyfill：`installPuertsTimerPolyfill`
   - IPC 基础层：`BridgeLink`、`UeIpcSocket`
   - 持久化层：`defineStore`、`PersistenceStore`、`flushAllPersistence`、`ueFileIO`
 - 不承载 editor UI、MCP tool 业务逻辑、测试专用断言工具。
@@ -19,6 +20,7 @@ editor-common 是 editor、mcp-server-ue、tests 共享的 Unreal 关联基础�
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `src/index.ts`                | 包级导出入口                                                                                                              |
 | `src/logging/index.ts`        | `createLogger(category)` / `installConsoleOverride(rootCategory)`：包装 `UE.JsLogHelper` 让 JS 输出统一走 `UE_LOG(LogJs)` |
+| `src/puertsPolyfill.ts`       | `installPuertsTimerPolyfill()`：补齐 `setTimeout`/`setInterval` 缺省 delay；每个 PuerTS 入口最早期调用一次               |
 | `src/ipc/bridgeLink.ts`       | bridge 双向链路接口定义                                                                                                   |
 | `src/ipc/ueIpcSocket.ts`      | `UE.IPCTransport` 到 `ISocket` 的适配                                                                                     |
 | `src/persistence/store.ts`    | zod 驱动的类型化持久化 store 实现                                                                                         |
@@ -36,8 +38,8 @@ npx gulp editor-common:lint
 
 **注意事项：**
 
-- `setTimeout` 必须显式传入延迟参数。
+- `setTimeout` 必须显式传入延迟参数。每个 PuerTS 入口（editor `main.ts` / tests `puertsPolyfill.ts` / acp-client CLI `index.ts`）应在最早期调用 `installPuertsTimerPolyfill()`，让 universe-lib / MCP SDK / ACP SDK 等第三方代码省略 delay 的 `setTimeout(fn)` 也能按 0ms 调度，避免链路推不动直至命中默认 60s 超时。
 - `fileIO.ts` 与 `paths.ts` 通过延迟 `require('ue')` 避免非 PuerTS 环境导入时报错。
 - tests 中允许保留测试场景专用 helper，但底层 `UeIpcSocket` 不应再重复实现。
-- 业务代码请使用 `createLogger('<pkg>:<module>')` 取代直接 `console.*`；每个 PuerTS 入口（editor `main.ts` / tests `puertsPolyfill.ts`）应在最早期调用 `installConsoleOverride('<root>')`，让第三方库（universe-lib、ACP SDK、MCP SDK 等）的 `console.*` 也被重定向到 `UJsLogHelper`，避免与 GLog 并发写 stdout 时的字节级交错。
+- 业务代码请使用 `createLogger('<pkg>:<module>')` 取代直接 `console.*`；每个 PuerTS 入口应在最早期调用 `installConsoleOverride('<root>')`，让第三方库的 `console.*` 也被重定向到 `UJsLogHelper`，避免与 GLog 并发写 stdout 时的字节级交错。
 - `standalone/` 下的独立 Node 子进程脚本不要引用本模块（无 PuerTS 环境），保留 `console.*`。

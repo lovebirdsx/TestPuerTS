@@ -6,7 +6,16 @@ import { registerTabFactory, restoreOpenTabs } from './common/tabSession';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
-import { createLogger, flushAllPersistence, installConsoleOverride } from '@universe-agent/editor-common';
+import {
+	createLogger,
+	flushAllPersistence,
+	installConsoleOverride,
+	installPuertsTimerPolyfill,
+} from '@universe-agent/editor-common';
+
+// PuerTS setTimeout/setInterval 需要显式 delay；尽早 polyfill，避免第三方库
+// （universe-lib / MCP SDK / ACP SDK 等）省略 delay 时定时器永不触发。
+installPuertsTimerPolyfill();
 
 // 把 globalThis.console 重定向到 UJsLogHelper，让所有 JS 输出走 UE_LOG。
 installConsoleOverride('editor');

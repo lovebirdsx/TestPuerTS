@@ -113,7 +113,7 @@ npx gulp tool:test:watch        # vitest watch
 
 ## PuerTS 环境注意事项
 
-- `setTimeout`/`setInterval` 必须显式传入延迟参数（底层 C++ 要求 `int32`），省略会报 "Bad parameters #1, expect a int32"。已在 `puertsPolyfill.ts` 中修复。
+- `setTimeout`/`setInterval` 必须显式传入延迟参数（底层 C++ 要求 `int32`），省略会报 "Bad parameters #1, expect a int32" 或定时器永不触发。每个 PuerTS 入口（`packages/editor/src/main.ts` / `packages/tests/src/puertsPolyfill.ts` / `packages/acp-client-ue/src/index.ts`）必须在最早期调用 `installPuertsTimerPolyfill()`（导出自 `@universe-agent/editor-common`），让第三方库省略 delay 的调用也能按 0ms 调度。
 - 不支持 ESM 动态 `import()`（报 "Invalid host defined options"），使用顶层静态 `import` 或 `require`。
 - `DYNAMIC_MULTICAST_DELEGATE` 回调参数不支持 `TArray<uint8>`，需改用无参 delegate + 轮询（如 `OnDataAvailable` + `ReadBuffer()`）。
 - `FTickableGameObject::Tick()` 在 Commandlet 环境中不会被调用，需改用 `FTSTicker` 回调。

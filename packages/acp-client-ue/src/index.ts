@@ -1,14 +1,6 @@
-// PuerTS polyfill（setTimeout/setInterval 需要显式 delay 参数）
-const _origSetTimeout = globalThis.setTimeout;
-const _origSetInterval = globalThis.setInterval;
-
-(globalThis as any).setTimeout = function (handler: (...args: any[]) => void, timeout?: number, ...args: any[]) {
-	return _origSetTimeout(handler, timeout ?? 0, ...args);
-};
-
-(globalThis as any).setInterval = function (handler: (...args: any[]) => void, timeout?: number, ...args: any[]) {
-	return _origSetInterval(handler, timeout ?? 0, ...args);
-};
+// PuerTS polyfill：必须在引入任何依赖前安装。
+import { installPuertsTimerPolyfill } from '@universe-agent/editor-common';
+installPuertsTimerPolyfill();
 
 import * as UE from 'ue';
 import { parseCliOptions, type CliMcpConfig } from './cli';
