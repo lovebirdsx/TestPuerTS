@@ -29,6 +29,8 @@ public class TsEditor : ModuleRules
                 "ToolMenus",
                 "JsEnv",
                 "EditorCommon",
+                "Sockets",
+                "Networking",
             }
         );
     }
