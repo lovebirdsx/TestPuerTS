@@ -27,9 +27,6 @@ export interface AcpUiControllerOptions {
 	permission?: AcpPermissionStrategy;
 	mode?: string;
 	session?: string;
-	model?: string;
-	apiKey?: string;
-	baseUrl?: string;
 	/** 初始 MCP server 列表；后续可通过 `setMcpServers()` 替换。 */
 	mcpServers?: McpServerEntry[];
 }
@@ -452,9 +449,6 @@ export class AcpUiController {
 			permission: this.state.permission,
 			mode: this.options.mode,
 			session: this.options.session,
-			model: this.options.model,
-			apiKey: this.options.apiKey,
-			baseUrl: this.options.baseUrl,
 		};
 	}
 }

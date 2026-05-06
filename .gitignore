@@ -1,3 +1,6 @@
+# Ignore universe agent recordings
+.universe-agent/recordings/
+
 # Ignore env
 .env
 

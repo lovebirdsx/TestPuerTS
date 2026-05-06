@@ -29,10 +29,11 @@ export const McpServersConfigSchema = z
 				ueEditor: z
 					.object({
 						enabled: z.boolean().default(true),
+						enableBuiltinTools: z.boolean().default(true),
 					})
-					.default({ enabled: true }),
+					.default({ enabled: true, enableBuiltinTools: true }),
 			})
-			.default({ ueEditor: { enabled: true } }),
+			.default({ ueEditor: { enabled: true, enableBuiltinTools: true } }),
 		external: z
 			.record(
 				z.string(),
@@ -47,7 +48,7 @@ export const McpServersConfigSchema = z
 	})
 	.default({
 		enabled: true,
-		builtin: { ueEditor: { enabled: true } },
+		builtin: { ueEditor: { enabled: true, enableBuiltinTools: true } },
 		external: {},
 	});
 

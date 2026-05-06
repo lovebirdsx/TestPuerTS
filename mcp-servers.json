@@ -2,7 +2,8 @@
 	"enabled": true,
 	"builtin": {
 		"ueEditor": {
-			"enabled": true
+			"enabled": true,
+			"enableBuiltinTools": true
 		}
 	},
 	"external": {}

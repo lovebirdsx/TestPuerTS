@@ -234,6 +234,7 @@ gulp.task(
 				'--',
 				'--protocol',
 				'--verbose',
+				'--record',
 				...passthrough.map(quoteForCmd),
 			];
 			// 读取 .env，通过子进程环境变量透传（ueTransport.ts 会将其注入 ACP Server）

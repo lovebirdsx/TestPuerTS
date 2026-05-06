@@ -9,9 +9,10 @@ export interface CliOptions {
 	permission: 'interactive' | 'auto-approve' | 'deny-all';
 	mode: string | undefined;
 	session: string | undefined;
-	model: string | undefined;
-	apiKey: string | undefined;
-	baseUrl: string | undefined;
+	model?: string;
+	apiKey?: string;
+	baseUrl?: string;
+	record?: boolean;
 }
 
 /** CLI 解析出的 MCP 选项；不进 `CliOptions` 是因为底层 `ACPClient` 不关心 MCP。 */
@@ -46,6 +47,7 @@ export function parseCliOptions(): ParsedCli {
 	let model: string | undefined;
 	let apiKey: string | undefined;
 	let baseUrl: string | undefined;
+	let record = false;
 	let mcp: CliMcpConfig = {};
 	const promptParts: string[] = [];
 
@@ -94,6 +96,8 @@ export function parseCliOptions(): ParsedCli {
 			baseUrl = arg.slice('--base-url='.length);
 		} else if (arg === '--base-url' && args[i + 1]) {
 			baseUrl = args[++i]!;
+		} else if (arg === '--record') {
+			record = true;
 		} else if (arg === '--no-mcp') {
 			mcp = false;
 		} else if (arg.startsWith('--mcp-config=')) {
@@ -109,6 +113,7 @@ export function parseCliOptions(): ParsedCli {
 	if (model) extraArgs.push('--model', model);
 	if (apiKey) extraArgs.push('--api-key', apiKey);
 	if (baseUrl) extraArgs.push('--base-url', baseUrl);
+	if (record) extraArgs.push('--record');
 
 	const prompt = promptParts.length > 0 ? promptParts.join(' ') : undefined;
 
@@ -125,6 +130,7 @@ export function parseCliOptions(): ParsedCli {
 			model,
 			apiKey,
 			baseUrl,
+			record,
 		},
 		prompt,
 		mcp,

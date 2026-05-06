@@ -61,7 +61,10 @@ export class McpManager {
 	startSession(sessionId: string): McpServerEntry {
 		this.stopSession(sessionId);
 		const pipeName = makePipeName(sessionId);
-		const handle = startUeMcpServer({ pipeName });
+		const handle = startUeMcpServer({
+			pipeName,
+			registerBuiltins: this.cachedConfig?.builtin.ueEditor.enableBuiltinTools ?? true,
+		});
 		// 主动触发 ready()：让 mcp.connect() 在 bridge 接入时立即完成，
 		// 避免 bridge 先于 handler 注册发帧时依赖 pending buffer 的窗口期。
 		handle.ready().catch(() => {
