@@ -5,7 +5,6 @@ import { HorizontalBox, SizeBox } from 'react-umg';
 import type {
 	AcpPermissionStrategy,
 	AcpUiController,
-	AcpUiControllerOptions,
 	AcpUiEvent,
 	JsonRpcMessage,
 	PendingPermissionRequest,
@@ -13,7 +12,7 @@ import type {
 	SessionInfo,
 	SessionModeState,
 } from '@universe-agent/acp-client-ue';
-import { AcpUiController as Controller } from '@universe-agent/acp-client-ue';
+import { AcpClient, type AcpClientOptions } from '@universe-agent/acp-client-ue';
 import { defineStore } from '@universe-agent/editor-common';
 import {
 	Badge,
@@ -31,7 +30,6 @@ import {
 	ToolbarButton,
 	VBox,
 } from './ui';
-import { McpManager } from '../mcp/manager';
 import { usePersistedState } from '../hooks/usePersistedState';
 
 type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
@@ -91,24 +89,17 @@ const acpPanelConfigStore = defineStore(
 	}),
 );
 
-export type AcpControllerFactory = (options: AcpUiControllerOptions) => AcpUiController;
+export type AcpClientFactory = (options: AcpClientOptions) => AcpClient;
 
-const defaultControllerFactory: AcpControllerFactory = (options) => new Controller(options);
-
-export type AcpMcpManagerFactory = () => McpManager;
-
-const defaultMcpManagerFactory: AcpMcpManagerFactory = () => new McpManager();
+const defaultAcpClientFactory: AcpClientFactory = (options) => new AcpClient(options);
 
 export interface AcpClientPanelProps {
-	// 测试或调试用：覆盖默认的 AcpUiController 工厂；不传则使用真实 Controller。
-	controllerFactory?: AcpControllerFactory;
-	// 测试用：覆盖默认的 McpManager 工厂；不传则使用真实 McpManager。
-	mcpManagerFactory?: AcpMcpManagerFactory;
+	// 测试或调试用：覆盖默认的 AcpClient 工厂；不传则使用真实 AcpClient（自动启动 MCP）。
+	clientFactory?: AcpClientFactory;
 }
 
 export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
-	const controllerFactory = props.controllerFactory ?? defaultControllerFactory;
-	const mcpManagerFactory = props.mcpManagerFactory ?? defaultMcpManagerFactory;
+	const clientFactory = props.clientFactory ?? defaultAcpClientFactory;
 	const [config, updateConfig] = usePersistedState(acpPanelConfigStore);
 	const command = config.command !== '' ? config.command : DEFAULT_COMMAND;
 	const workspace = config.workspace !== '' ? config.workspace : UE.JsRunHelper.GetProjectDir();
@@ -134,33 +125,22 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 		});
 	const [sessionToLoad, setSessionToLoad] = React.useState('');
 	const [prompt, setPrompt] = React.useState('');
-	const [controller, setController] = React.useState<AcpUiController | undefined>(undefined);
+	const [client, setClient] = React.useState<AcpClient | undefined>(undefined);
+	const controller: AcpUiController | undefined = client?.controller;
 	const [state, setState] = React.useState<AcpPanelState>(() => createInitialState());
-	const mcpManagerRef = React.useRef<McpManager | undefined>(undefined);
-	const mcpSessionIdRef = React.useRef<string | undefined>(undefined);
-
-	function getMcpManager(): McpManager {
-		if (!mcpManagerRef.current) {
-			mcpManagerRef.current = mcpManagerFactory();
-		}
-		return mcpManagerRef.current;
-	}
 
 	React.useEffect(() => {
 		return () => {
-			controller?.disconnect();
-			mcpManagerRef.current?.dispose();
-			mcpManagerRef.current = undefined;
-			mcpSessionIdRef.current = undefined;
+			client?.dispose();
 		};
-	}, [controller]);
+	}, [client]);
 
 	const handleEvent = React.useCallback((event: AcpUiEvent) => {
 		setState((prev) => reduceEvent(prev, event));
 	}, []);
 
 	const connect = React.useCallback(() => {
-		const next = controllerFactory({
+		const next = clientFactory({
 			command,
 			args: splitArgs(extraArgs),
 			workspace,
@@ -168,62 +148,47 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 			protocol: protocolEnabled,
 			verbose: true,
 		});
-		next.subscribe(handleEvent);
-		setController(next);
+		next.controller.subscribe(handleEvent);
+		setClient(next);
 		setState(createInitialState());
 		next.connect().catch((err) => {
 			setState((prev) =>
 				addMessage({ ...prev, status: 'error', error: errorMessage(err) }, 'error', errorMessage(err)),
 			);
 		});
-	}, [command, controllerFactory, extraArgs, handleEvent, permission, protocolEnabled, workspace]);
+	}, [command, clientFactory, extraArgs, handleEvent, permission, protocolEnabled, workspace]);
 
 	const disconnect = React.useCallback(() => {
-		controller?.disconnect();
-		setController(undefined);
-		const sessionId = mcpSessionIdRef.current;
-		if (sessionId) {
-			mcpManagerRef.current?.stopSession(sessionId);
-			mcpSessionIdRef.current = undefined;
-		}
-	}, [controller]);
+		client?.dispose();
+		setClient(undefined);
+	}, [client]);
 
-	const prepareMcpForSession = React.useCallback(
-		async (sessionKey: string) => {
-			const manager = getMcpManager();
-			const previous = mcpSessionIdRef.current;
-			if (previous && previous !== sessionKey) {
-				manager.stopSession(previous);
-			}
-			mcpSessionIdRef.current = sessionKey;
-			const result = await manager.buildSessionMcpList(sessionKey);
-			controller?.setMcpServers(result.servers);
-			for (const warning of result.warnings) {
-				setState((prev) => addMessage(prev, 'system', `MCP config: ${warning}`));
-			}
-		},
-		[controller, getMcpManager],
-	);
+	const reportMcpWarnings = React.useCallback((warnings: string[]) => {
+		for (const warning of warnings) {
+			setState((prev) => addMessage(prev, 'system', `MCP config: ${warning}`));
+		}
+	}, []);
 
 	const createSession = React.useCallback(() => {
-		if (!controller) return;
-		const sessionKey = `new-${Date.now().toString(36)}`;
-		prepareMcpForSession(sessionKey)
-			.then(() => controller.newSession())
+		if (!client) return;
+		client
+			.newSession()
+			.then(({ warnings }) => reportMcpWarnings(warnings))
 			.catch((err) => {
 				setState((prev) => addMessage(prev, 'error', errorMessage(err)));
 			});
-	}, [controller, prepareMcpForSession]);
+	}, [client, reportMcpWarnings]);
 
 	const loadSession = React.useCallback(() => {
 		const sessionId = sessionToLoad.trim();
-		if (!sessionId || !controller) return;
-		prepareMcpForSession(sessionId)
-			.then(() => controller.loadSession(sessionId))
+		if (!sessionId || !client) return;
+		client
+			.loadSession(sessionId)
+			.then(({ warnings }) => reportMcpWarnings(warnings))
 			.catch((err) => {
 				setState((prev) => addMessage(prev, 'error', errorMessage(err)));
 			});
-	}, [controller, prepareMcpForSession, sessionToLoad]);
+	}, [client, reportMcpWarnings, sessionToLoad]);
 
 	const sendPrompt = React.useCallback(() => {
 		const text = prompt.trim();

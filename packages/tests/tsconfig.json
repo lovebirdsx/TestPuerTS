@@ -17,6 +17,7 @@
   ],
   "references": [
     { "path": "../editor-common" },
+    { "path": "../acp-client-ue" },
     { "path": "../editor" },
     { "path": "../mcp-server-ue" }
   ]

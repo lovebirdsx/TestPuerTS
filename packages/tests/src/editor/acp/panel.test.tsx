@@ -2,7 +2,7 @@ import * as React from 'react';
 import { describe, it, expect } from '../../testRunner';
 import { render, fireEvent } from '../../reactUmg/testing';
 import { AcpClientPanel } from 'editor';
-import { MockAcpUiController, MockMcpManager, asController, asMcpManager } from './mockController';
+import { MockAcpClient, asClient } from './mockController';
 
 function flushMicrotasks(): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, 0));
@@ -10,34 +10,26 @@ function flushMicrotasks(): Promise<void> {
 
 describe('AcpClientPanel - initial render', () => {
 	it('renders Connect button and disconnected status badge by default', () => {
-		const view = render(
-			<AcpClientPanel
-				controllerFactory={() => asController(new MockAcpUiController({ command: 'foo', workspace: '.' }))}
-			/>,
-		);
+		const view = render(<AcpClientPanel clientFactory={(opts) => asClient(new MockAcpClient(opts))} />);
 		expect(view.queryByText('disconnected')).toBeTruthy();
 		expect(view.queryByTypeWithText('Button', 'Connect')).toBeTruthy();
 	});
 
 	it('shows "No session" placeholder before connecting', () => {
-		const view = render(
-			<AcpClientPanel
-				controllerFactory={() => asController(new MockAcpUiController({ command: 'foo', workspace: '.' }))}
-			/>,
-		);
+		const view = render(<AcpClientPanel clientFactory={(opts) => asClient(new MockAcpClient(opts))} />);
 		expect(view.queryByText('No session')).toBeTruthy();
 	});
 });
 
 describe('AcpClientPanel - connect / disconnect', () => {
-	it('clicking Connect creates controller, subscribes, and calls connect()', async () => {
-		const created: MockAcpUiController[] = [];
+	it('clicking Connect creates client, subscribes, and calls connect()', async () => {
+		const created: MockAcpClient[] = [];
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					const m = new MockAcpUiController(opts);
+				clientFactory={(opts) => {
+					const m = new MockAcpClient(opts);
 					created.push(m);
-					return asController(m);
+					return asClient(m);
 				}}
 			/>,
 		);
@@ -50,12 +42,12 @@ describe('AcpClientPanel - connect / disconnect', () => {
 	});
 
 	it('updates badge and button when controller emits status_changed: connected', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
@@ -63,39 +55,39 @@ describe('AcpClientPanel - connect / disconnect', () => {
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
-		view.act(() => mock.emit({ type: 'status_changed', status: 'connected' }));
+		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
 		expect(view.queryByText('connected')).toBeTruthy();
 		expect(view.queryByTypeWithText('Button', 'Disconnect')).toBeTruthy();
 	});
 
-	it('clicking Disconnect calls controller.disconnect()', async () => {
-		let mock!: MockAcpUiController;
+	it('clicking Disconnect calls client.dispose()', async () => {
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
-		view.act(() => mock.emit({ type: 'status_changed', status: 'connected' }));
+		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
 
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Disconnect')));
-		expect(mock.disconnectCalls).toBeGreaterThan(0);
+		expect(mock.disposeCalls).toBeGreaterThan(0);
 	});
 
 	it('connect failure surfaces error message', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					mock.connectImpl = async () => {
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					mock.mockController.connectImpl = async () => {
 						throw new Error('connect-failed');
 					};
-					return asController(mock);
+					return asClient(mock);
 				}}
 			/>,
 		);
@@ -107,41 +99,39 @@ describe('AcpClientPanel - connect / disconnect', () => {
 		expect(view.findAllByText(/connect-failed/).length).toBeGreaterThan(0);
 	});
 
-	it('disconnect on unmount triggers controller.disconnect()', async () => {
-		let mock!: MockAcpUiController;
+	it('dispose on unmount triggers client.dispose()', async () => {
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
-		const before = mock.disconnectCalls;
+		const before = mock.disposeCalls;
 		view.unmount();
-		expect(mock.disconnectCalls).toBeGreaterThan(before);
+		expect(mock.disposeCalls).toBeGreaterThan(before);
 	});
 });
 
 describe('AcpClientPanel - sessions and prompts', () => {
-	it('clicking New session calls controller.newSession()', async () => {
-		let mock!: MockAcpUiController;
-		const mcpManager = new MockMcpManager();
+	it('clicking New session calls client.newSession()', async () => {
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
-				mcpManagerFactory={() => asMcpManager(mcpManager)}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
-		view.act(() => mock.emit({ type: 'status_changed', status: 'connected' }));
+		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
 
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'New')));
 		await flushMicrotasks();
@@ -149,20 +139,42 @@ describe('AcpClientPanel - sessions and prompts', () => {
 		expect(mock.newSessionCalls).toBe(1);
 	});
 
-	it('session_changed event renders session id and system message', async () => {
-		let mock!: MockAcpUiController;
+	it('newSession warnings render as system messages', async () => {
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					mock.newSessionImpl = async () => ({ warnings: ['bad-config'] });
+					return asClient(mock);
+				}}
+			/>,
+		);
+		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
+		await flushMicrotasks();
+		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
+
+		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'New')));
+		await flushMicrotasks();
+		await flushMicrotasks();
+		view.act(() => {});
+		expect(view.findAllByText(/MCP config: bad-config/).length).toBeGreaterThan(0);
+	});
+
+	it('session_changed event renders session id and system message', async () => {
+		let mock!: MockAcpClient;
+		const view = render(
+			<AcpClientPanel
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() =>
-			mock.emit({
+			mock.mockController.emit({
 				type: 'session_changed',
 				session: { sessionId: 'abc-123-456', configOptions: [], modes: undefined } as any,
 			}),
@@ -173,19 +185,19 @@ describe('AcpClientPanel - sessions and prompts', () => {
 	});
 
 	it('message_chunk events stream into conversation', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
-		view.act(() => mock.emit({ type: 'message_chunk', role: 'agent', text: 'Hello ' }));
-		view.act(() => mock.emit({ type: 'message_chunk', role: 'agent', text: 'world' }));
+		view.act(() => mock.mockController.emit({ type: 'message_chunk', role: 'agent', text: 'Hello ' }));
+		view.act(() => mock.mockController.emit({ type: 'message_chunk', role: 'agent', text: 'world' }));
 
 		expect(view.queryByText('Hello world')).toBeTruthy();
 	});
@@ -193,12 +205,12 @@ describe('AcpClientPanel - sessions and prompts', () => {
 
 describe('AcpClientPanel - tool calls and inspector', () => {
 	it('tool_call_updated populates Inspector tools tab when active', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
@@ -206,7 +218,7 @@ describe('AcpClientPanel - tool calls and inspector', () => {
 		await flushMicrotasks();
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Tools')));
 		view.act(() =>
-			mock.emit({
+			mock.mockController.emit({
 				type: 'tool_call_updated',
 				toolCallId: 'tc1',
 				title: 'ReadFile',
@@ -221,13 +233,13 @@ describe('AcpClientPanel - tool calls and inspector', () => {
 
 describe('AcpClientPanel - permission modal', () => {
 	it('permission_requested event opens modal with options; clicking option resolves', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		let resolvedWith: string | undefined;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
@@ -235,7 +247,7 @@ describe('AcpClientPanel - permission modal', () => {
 		await flushMicrotasks();
 
 		view.act(() =>
-			mock.emit({
+			mock.mockController.emit({
 				type: 'permission_requested',
 				permission: {
 					id: 1,
@@ -261,20 +273,20 @@ describe('AcpClientPanel - permission modal', () => {
 	});
 
 	it('cancel button on permission modal calls cancel()', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		let cancelled = false;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() =>
-			mock.emit({
+			mock.mockController.emit({
 				type: 'permission_requested',
 				permission: {
 					id: 1,
@@ -299,12 +311,12 @@ describe('AcpClientPanel - permission modal', () => {
 
 describe('AcpClientPanel - protocol & policy controls', () => {
 	it('toggling Protocol button calls controller.setProtocolEnabled', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
@@ -315,29 +327,29 @@ describe('AcpClientPanel - protocol & policy controls', () => {
 		const isOff = view.queryByTypeWithText('Button', 'Protocol Off') !== undefined;
 		if (isOff) {
 			view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Protocol Off')));
-			expect(mock.lastProtocolEnabled).toBe(true);
+			expect(mock.mockController.lastProtocolEnabled).toBe(true);
 		} else {
 			view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Protocol On')));
-			expect(mock.lastProtocolEnabled).toBe(false);
+			expect(mock.mockController.lastProtocolEnabled).toBe(false);
 		}
 	});
 });
 
 describe('AcpClientPanel - error event', () => {
 	it('error event flips status badge and appends error message', async () => {
-		let mock!: MockAcpUiController;
+		let mock!: MockAcpClient;
 		const view = render(
 			<AcpClientPanel
-				controllerFactory={(opts) => {
-					mock = new MockAcpUiController(opts);
-					return asController(mock);
+				clientFactory={(opts) => {
+					mock = new MockAcpClient(opts);
+					return asClient(mock);
 				}}
 			/>,
 		);
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
-		view.act(() => mock.emit({ type: 'error', message: 'oops' }));
+		view.act(() => mock.mockController.emit({ type: 'error', message: 'oops' }));
 		expect(view.findAllByText(/oops/).length).toBeGreaterThan(0);
 	});
 });

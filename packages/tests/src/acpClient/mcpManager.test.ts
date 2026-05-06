@@ -1,6 +1,6 @@
 import * as UE from 'ue';
 import { describe, it, expect, beforeEach, afterEach } from '../testRunner';
-import { McpManager, parseMcpServersConfig, DEFAULT_MCP_CONFIG } from 'editor';
+import { McpManager, parseMcpServersConfig, DEFAULT_MCP_CONFIG } from '@universe-agent/acp-client-ue';
 import { withTimeout } from './__fixtures__/withTimeout';
 
 const projectDir = UE.JsRunHelper.GetProjectDir();

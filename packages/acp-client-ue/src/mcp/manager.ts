@@ -1,17 +1,17 @@
 /**
- * editor 端 MCP Server 生命周期管理。
+ * acp-client-ue 端 MCP Server 生命周期管理。
  *
  * 一个 ACP session 对应一组：
- *   - 一个 universe-lib 命名管道 server（在 editor 进程内）
+ *   - 一个 universe-lib 命名管道 server（在当前 PuerTS 进程内）
  *   - 一个 mcp-server-ue 实例（注册 UE tools）
  *   - 一份 ACP `mcpServers` 数组（含内置 ue-editor entry + 项目配置中的 external entries）
  *
  * agent 收到 `mcpServers` 后会 spawn `node mcp-bridge/dist/main.js --pipe <name>`，
- * bridge 进程通过命名管道接入 editor，把 stdio 帧透明转给 McpServer。
+ * bridge 进程通过命名管道接入 PuerTS 进程，把 stdio 帧透明转给 McpServer。
  */
 import * as UE from 'ue';
 import { startUeMcpServer, type UeMcpServerHandle } from '@universe-agent/mcp-server-ue';
-import type { McpServerEntry } from '@universe-agent/acp-client-ue';
+import type { McpServerEntry } from '../types';
 import type { McpServersConfig } from './config';
 import { DEFAULT_MCP_CONFIG, loadMcpServersConfig } from './config';
 

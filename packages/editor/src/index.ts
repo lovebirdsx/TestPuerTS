@@ -17,16 +17,10 @@ export {
 } from './components/AcpClientPanel';
 export type {
 	AcpClientPanelProps,
-	AcpControllerFactory,
+	AcpClientFactory,
 	AcpPanelState,
 	ChatMessage,
 	ToolRecord,
 	MessageRole,
 	InspectorTab,
 } from './components/AcpClientPanel';
-
-// MCP 管理（供测试引用）
-export { McpManager, defaultMcpConfigPath, defaultBridgeEntry } from './mcp/manager';
-export type { McpManagerOptions, BuildSessionMcpListResult } from './mcp/manager';
-export { DEFAULT_MCP_CONFIG, McpServersConfigSchema, parseMcpServersConfig, loadMcpServersConfig } from './mcp/config';
-export type { McpServersConfig } from './mcp/config';

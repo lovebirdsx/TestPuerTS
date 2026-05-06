@@ -9,9 +9,10 @@
 		"tsBuildInfoFile": "./tsconfig.tsbuildinfo",
 		"baseUrl": ".",
 		"paths": {
-			"@universe-agent/editor-common": ["../editor-common/src/index.ts"]
+			"@universe-agent/editor-common": ["../editor-common/src/index.ts"],
+			"@universe-agent/mcp-server-ue": ["../mcp-server-ue/src/index.ts"]
 		}
 	},
 	"include": ["src"],
-	"references": [{ "path": "../editor-common" }]
+	"references": [{ "path": "../editor-common" }, { "path": "../mcp-server-ue" }]
 }

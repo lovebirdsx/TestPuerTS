@@ -20,12 +20,14 @@ Available commands:
 export class Repl {
 	private client: ACPClient;
 	private renderer: Renderer;
+	private prepareMcp: ((sessionKey: string) => Promise<void>) | undefined;
 	private prompting = false;
 	private closed = false;
 
-	constructor(client: ACPClient, renderer: Renderer) {
+	constructor(client: ACPClient, renderer: Renderer, prepareMcp?: (sessionKey: string) => Promise<void>) {
 		this.client = client;
 		this.renderer = renderer;
+		this.prepareMcp = prepareMcp;
 	}
 
 	async start(): Promise<void> {
@@ -173,6 +175,7 @@ export class Repl {
 		switch (subCmd) {
 			case 'new':
 				try {
+					await this.prepareMcp?.(`new-${Date.now().toString(36)}`);
 					const session = await this.client.newSession();
 					UE.ProcessIOHelper.WriteStderr(fmt.green(`New session created: ${session.sessionId}\n`));
 				} catch (err) {
@@ -189,6 +192,7 @@ export class Repl {
 					break;
 				}
 				try {
+					await this.prepareMcp?.(`load-${id}`);
 					const session = await this.client.loadSession(id);
 					UE.ProcessIOHelper.WriteStderr(fmt.green(`Session loaded: ${session.sessionId}\n`));
 				} catch (err) {

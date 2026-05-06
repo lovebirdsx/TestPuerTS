@@ -13,5 +13,5 @@
 		}
 	},
 	"include": ["src/**/*"],
-	"references": [{ "path": "../editor-common" }, { "path": "../acp-client-ue" }, { "path": "../mcp-server-ue" }]
+	"references": [{ "path": "../editor-common" }, { "path": "../acp-client-ue" }]
 }

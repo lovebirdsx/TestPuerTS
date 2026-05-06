@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "@universe-agent/acp-client-ue": "*",
     "@universe-agent/editor-common": "*",
     "editor": "*",
     "universe-lib": "0.1.0",

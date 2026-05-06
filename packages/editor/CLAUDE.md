@@ -35,38 +35,9 @@ npx gulp editor:lint:fix    # lint 自动修复
 **ACP Client UI：**
 
 - `src/components/AcpClientPanel.tsx` 在独立编辑器 Tab 中提供 ACP 客户端界面。
-- 协议和权限逻辑来自 `@universe-agent/acp-client-ue` 的 `AcpUiController`。
-- Tab 生命周期由 `main.ts` 管理，编辑器停止时关闭 Tab 并触发控制器清理。
-- 新建 / 加载 session 时自动通过 `McpManager`（见下文）启动内置 ue-editor MCP server，并把 entry 注入 `controller.setMcpServers(...)`，传递给 ACP `session/new`。
+- Panel 通过 `clientFactory` prop 接收一个 `AcpClient` facade（来自 `@universe-agent/acp-client-ue`），内部组合了 `AcpUiController` + `McpManager`。
+- MCP 生命周期由 `AcpClient` 自动管理：`newSession()` / `loadSession()` 启动并注入内置 ue-editor MCP server 的 entry，`dispose()` 在断开/卸载时统一释放命名管道。Panel 不再持有任何 `mcpManagerRef`。
+- `newSession()` / `loadSession()` 的返回值含 `warnings: string[]`，Panel 渲染为 system message。
+- Tab 生命周期由 `main.ts` 管理，编辑器停止时关闭 Tab 并触发 `client.dispose()`。
 
-**MCP 集成（`src/mcp/`）：**
-
-把"UE 编辑器自身能力"作为 MCP server 暴露给 ACP agent。每个 ACP session 对应一组独立的命名管道 + MCP server 实例。
-
-| 文件         | 说明                                                               |
-| ------------ | ------------------------------------------------------------------ |
-| `config.ts`  | 项目根 `mcp-servers.json` 的 zod schema + `loadMcpServersConfig()` |
-| `manager.ts` | `McpManager`：startSession / stopSession / buildSessionMcpList     |
-
-**配置文件：** `<ProjectDir>/mcp-servers.json`（git 入库友好）
-
-```json
-{
-  "enabled": true,
-  "builtin": { "ueEditor": { "enabled": true } },
-  "external": {
-    "filesystem": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
-    }
-  }
-}
-```
-
-**关键注意：**
-
-- 内置 ue-editor server 的 ACP entry 形如 `{ name: 'ue-editor', command: 'node', args: ['<projectDir>/packages/mcp-bridge/dist/main.js', '--pipe', '<pipeName>'] }`，agent 收到后会自动 spawn bridge 进程；bridge 通过 universe-lib 命名管道接入 editor 内的 `mcp-server-ue`。
-- 真正的 MCP 协议处理在 editor 进程（PuerTS）中（`@universe-agent/mcp-server-ue`），bridge 只做 stdio↔pipe 透明中继。
-- session 关闭 / panel unmount 时务必调 `mcpManager.stopSession()` 释放命名管道。
-- 修改 `mcp-servers.json` 后需重新打开 session（`McpManager.loadConfig(true)` 强刷或重启 panel）。
-- `McpManager` 与 `config.ts` 的集成测试在 `packages/tests/src/acpClient/mcpManager.test.ts`（生命周期、配置缓存/解析失败/schema 警告、ue-editor entry 拼装、env record 转换）。
+**MCP 配置：** `<ProjectDir>/mcp-servers.json`（详见 `packages/acp-client-ue/CLAUDE.md`）。editor 包不再直接依赖 `@universe-agent/mcp-server-ue`，所有 MCP 启停均走 `AcpClient`。

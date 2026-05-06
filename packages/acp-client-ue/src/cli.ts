@@ -14,15 +14,21 @@ export interface CliOptions {
 	baseUrl: string | undefined;
 }
 
+/** CLI 解析出的 MCP 选项；不进 `CliOptions` 是因为底层 `ACPClient` 不关心 MCP。 */
+export type CliMcpConfig = false | { configPath?: string };
+
+export interface ParsedCli {
+	options: CliOptions;
+	prompt: string | undefined;
+	mcp: CliMcpConfig;
+}
+
 /**
  * 解析命令行参数。
  * 在 PuerTS 环境中，参数通过 JsRunHelper.GetCommandArgs() 传入，
  * 格式为 "--key=value" 或 "prompt text"。
  */
-export function parseCliOptions(): {
-	options: CliOptions;
-	prompt: string | undefined;
-} {
+export function parseCliOptions(): ParsedCli {
 	const rawArgs = UE.JsRunHelper.GetCommandArgs();
 	const projectDir = UE.JsRunHelper.GetProjectDir();
 
@@ -40,6 +46,7 @@ export function parseCliOptions(): {
 	let model: string | undefined;
 	let apiKey: string | undefined;
 	let baseUrl: string | undefined;
+	let mcp: CliMcpConfig = {};
 	const promptParts: string[] = [];
 
 	for (let i = 0; i < args.length; i++) {
@@ -87,6 +94,12 @@ export function parseCliOptions(): {
 			baseUrl = arg.slice('--base-url='.length);
 		} else if (arg === '--base-url' && args[i + 1]) {
 			baseUrl = args[++i]!;
+		} else if (arg === '--no-mcp') {
+			mcp = false;
+		} else if (arg.startsWith('--mcp-config=')) {
+			mcp = { configPath: arg.slice('--mcp-config='.length) };
+		} else if (arg === '--mcp-config' && args[i + 1]) {
+			mcp = { configPath: args[++i]! };
 		} else if (!arg.startsWith('-')) {
 			promptParts.push(arg);
 		}
@@ -114,6 +127,7 @@ export function parseCliOptions(): {
 			baseUrl,
 		},
 		prompt,
+		mcp,
 	};
 }
 

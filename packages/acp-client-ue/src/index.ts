@@ -11,14 +11,18 @@ const _origSetInterval = globalThis.setInterval;
 };
 
 import * as UE from 'ue';
-import { parseCliOptions } from './cli';
+import { parseCliOptions, type CliMcpConfig } from './cli';
 import { ACPClient } from './client';
+import { McpManager } from './mcp/manager';
 import { Renderer } from './renderer';
 import { Repl } from './repl';
 import { fmt, createSpinner } from './format';
+import { createLogger } from '@universe-agent/editor-common';
+
+const logger = createLogger('acp-client:main');
 
 async function main(): Promise<void> {
-	const { options, prompt } = parseCliOptions();
+	const { options, prompt, mcp } = parseCliOptions();
 
 	const renderer = new Renderer({
 		protocol: options.protocol,
@@ -26,6 +30,25 @@ async function main(): Promise<void> {
 	});
 
 	const client = new ACPClient(renderer, options);
+	const mcpManager = makeMcpManager(mcp);
+	let currentMcpSession: string | null = null;
+
+	async function injectMcpFor(sessionKey: string): Promise<void> {
+		if (!mcpManager) return;
+		if (currentMcpSession) mcpManager.stopSession(currentMcpSession);
+		const { servers, warnings } = await mcpManager.buildSessionMcpList(sessionKey);
+		currentMcpSession = sessionKey;
+		client.setMcpServers(servers);
+		for (const warning of warnings) {
+			logger.warn(`MCP config: ${warning}`);
+		}
+	}
+
+	function disposeMcp(): void {
+		if (!mcpManager) return;
+		mcpManager.dispose();
+		currentMcpSession = null;
+	}
 
 	// 连接服务端
 	const spinner = createSpinner('Connecting to ACP server...');
@@ -37,9 +60,8 @@ async function main(): Promise<void> {
 		);
 	} catch (err) {
 		spinner.stop();
-		UE.ProcessIOHelper.WriteStderr(
-			fmt.error(`Failed to connect: ${err instanceof Error ? err.message : String(err)}\n`),
-		);
+		logger.error(`Failed to connect: ${err instanceof Error ? err.message : String(err)}`);
+		disposeMcp();
 		UE.JsRunHelper.MarkDone(1);
 		return;
 	}
@@ -47,17 +69,18 @@ async function main(): Promise<void> {
 	// 创建或加载会话
 	try {
 		if (options.session) {
+			await injectMcpFor(`load-${options.session}`);
 			await client.loadSession(options.session);
 			UE.ProcessIOHelper.WriteStderr(fmt.dim(`Session loaded: ${client.sessionId}\n`));
 		} else {
+			await injectMcpFor(`new-${Date.now().toString(36)}`);
 			await client.newSession();
 			UE.ProcessIOHelper.WriteStderr(fmt.dim(`Session created: ${client.sessionId}\n`));
 		}
 	} catch (err) {
-		UE.ProcessIOHelper.WriteStderr(
-			fmt.error(`Failed to create session: ${err instanceof Error ? err.message : String(err)}\n`),
-		);
+		logger.error(`Failed to create session: ${err instanceof Error ? err.message : String(err)}`);
 		await client.disconnect();
+		disposeMcp();
 		UE.JsRunHelper.MarkDone(1);
 		return;
 	}
@@ -67,9 +90,7 @@ async function main(): Promise<void> {
 		try {
 			await client.setMode(options.mode);
 		} catch (err) {
-			UE.ProcessIOHelper.WriteStderr(
-				fmt.error(`Failed to set mode: ${err instanceof Error ? err.message : String(err)}\n`),
-			);
+			logger.error(`Failed to set mode: ${err instanceof Error ? err.message : String(err)}`);
 		}
 	}
 
@@ -81,19 +102,26 @@ async function main(): Promise<void> {
 			UE.ProcessIOHelper.WriteStderr(fmt.dim(`[Stop reason: ${result.stopReason}]\n`));
 		} catch (err) {
 			renderer.ensureNewline();
-			UE.ProcessIOHelper.WriteStderr(fmt.error(`Error: ${err instanceof Error ? err.message : String(err)}\n`));
+			logger.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
 		}
 		await client.disconnect();
+		disposeMcp();
 		UE.JsRunHelper.MarkDone(0);
 	} else {
-		const repl = new Repl(client, renderer);
+		const repl = new Repl(client, renderer, mcpManager ? injectMcpFor : undefined);
 		await repl.start();
 		await client.disconnect();
+		disposeMcp();
 		UE.JsRunHelper.MarkDone(0);
 	}
 }
 
+function makeMcpManager(mcp: CliMcpConfig): McpManager | null {
+	if (mcp === false) return null;
+	return new McpManager(mcp.configPath ? { configPath: mcp.configPath } : {});
+}
+
 main().catch((err) => {
-	UE.ProcessIOHelper.WriteStderr(fmt.error(`Fatal: ${err instanceof Error ? err.message : String(err)}\n`));
+	logger.error(`Fatal: ${err instanceof Error ? err.message : String(err)}`);
 	UE.JsRunHelper.MarkDone(1);
 });

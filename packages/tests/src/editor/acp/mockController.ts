@@ -1,7 +1,8 @@
 import type {
+	AcpClient,
+	AcpClientOptions,
 	AcpPermissionStrategy,
 	AcpUiController,
-	AcpUiControllerOptions,
 	AcpUiEvent,
 	AcpUiState,
 	ListSessionsResponse,
@@ -11,14 +12,12 @@ import type {
 type Listener = (event: AcpUiEvent) => void;
 
 // 替代真 AcpUiController 的极简 mock：仅记录调用、广播事件，不做任何真实 IO。
-// 通过 `as unknown as AcpUiController` 在 panel 测试里塞进 controllerFactory。
+// 通过 `asController()` 在测试中暴露给 MockAcpClient.controller。
 export class MockAcpUiController {
-	public readonly options: AcpUiControllerOptions;
+	public readonly options: AcpClientOptions;
 
 	public connectCalls = 0;
 	public disconnectCalls = 0;
-	public newSessionCalls = 0;
-	public loadSessionCalls: string[] = [];
 	public sendPromptCalls: string[] = [];
 	public cancelCalls = 0;
 	public lastPermissionStrategy?: AcpPermissionStrategy;
@@ -30,15 +29,13 @@ export class MockAcpUiController {
 	private listeners = new Set<Listener>();
 	private state: AcpUiState;
 
-	// 测试可重写：让 connect/sendPrompt/newSession 等抛错走错误分支
+	// 测试可重写：让 connect/sendPrompt 等抛错走错误分支
 	public connectImpl: () => Promise<void> = async () => {};
-	public newSessionImpl: () => Promise<void> = async () => {};
-	public loadSessionImpl: (id: string) => Promise<void> = async () => {};
 	public sendPromptImpl: (text: string) => Promise<void> = async () => {};
 	public listSessionsImpl: () => Promise<ListSessionsResponse> = async () =>
 		({ sessions: [] }) as unknown as ListSessionsResponse;
 
-	constructor(options: AcpUiControllerOptions) {
+	constructor(options: AcpClientOptions) {
 		this.options = options;
 		this.state = {
 			status: 'disconnected',
@@ -63,7 +60,6 @@ export class MockAcpUiController {
 		return { ...this.state };
 	}
 
-	// 手动向所有订阅者广播事件，模拟真 controller 的事件流
 	emit(event: AcpUiEvent): void {
 		for (const l of this.listeners) l(event);
 	}
@@ -75,16 +71,6 @@ export class MockAcpUiController {
 
 	async disconnect(): Promise<void> {
 		this.disconnectCalls++;
-	}
-
-	async newSession(): Promise<void> {
-		this.newSessionCalls++;
-		await this.newSessionImpl();
-	}
-
-	async loadSession(sessionId: string): Promise<void> {
-		this.loadSessionCalls.push(sessionId);
-		await this.loadSessionImpl(sessionId);
 	}
 
 	async listSessions(): Promise<ListSessionsResponse> {
@@ -121,40 +107,57 @@ export class MockAcpUiController {
 	}
 }
 
-// 极简 MockMcpManager：buildSessionMcpList 直接返回空 servers，不触发任何 IO。
-// 通过 `as unknown as McpManager` 在 panel 测试里塞进 mcpManagerFactory。
-export class MockMcpManager {
-	public buildCalls: string[] = [];
-	public stopCalls: string[] = [];
+/**
+ * 替代真 AcpClient facade 的极简 mock：组合一个 MockAcpUiController 作为 controller，
+ * newSession/loadSession 直接返回空 warnings；不做任何真实 MCP 接线。
+ */
+export class MockAcpClient {
+	public readonly options: AcpClientOptions;
+	public readonly controller: AcpUiController;
+	public readonly mockController: MockAcpUiController;
+
+	public connectCalls = 0;
+	public disconnectCalls = 0;
 	public disposeCalls = 0;
+	public newSessionCalls = 0;
+	public loadSessionCalls: string[] = [];
 
-	async buildSessionMcpList(sessionId: string): Promise<{
-		servers: unknown[];
-		warnings: string[];
-	}> {
-		this.buildCalls.push(sessionId);
-		return { servers: [], warnings: [] };
+	public newSessionImpl: () => Promise<{ warnings: string[] }> = async () => ({ warnings: [] });
+	public loadSessionImpl: (id: string) => Promise<{ warnings: string[] }> = async () => ({ warnings: [] });
+
+	constructor(options: AcpClientOptions) {
+		this.options = options;
+		this.mockController = new MockAcpUiController(options);
+		this.controller = this.mockController as unknown as AcpUiController;
 	}
 
-	stopSession(sessionId: string): void {
-		this.stopCalls.push(sessionId);
+	connect(): Promise<void> {
+		this.connectCalls++;
+		return this.mockController.connect();
 	}
 
-	hasSession(): boolean {
-		return false;
+	async disconnect(): Promise<void> {
+		this.disconnectCalls++;
+		await this.mockController.disconnect();
 	}
 
-	dispose(): void {
+	async dispose(): Promise<void> {
 		this.disposeCalls++;
+		await this.mockController.disconnect();
+	}
+
+	async newSession(): Promise<{ warnings: string[] }> {
+		this.newSessionCalls++;
+		return this.newSessionImpl();
+	}
+
+	async loadSession(sessionId: string): Promise<{ warnings: string[] }> {
+		this.loadSessionCalls.push(sessionId);
+		return this.loadSessionImpl(sessionId);
 	}
 }
 
-// 类型断言辅助：把 MockMcpManager 当作真 McpManager 注入 mcpManagerFactory
-export function asMcpManager<T>(mock: MockMcpManager): T {
-	return mock as unknown as T;
-}
-
-// 类型断言辅助：把 mock 当作真 controller 注入 controllerFactory
-export function asController(mock: MockAcpUiController): AcpUiController {
-	return mock as unknown as AcpUiController;
+/** 类型断言辅助：把 mock 当作真 AcpClient 注入 clientFactory。 */
+export function asClient(mock: MockAcpClient): AcpClient {
+	return mock as unknown as AcpClient;
 }

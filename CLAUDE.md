@@ -88,11 +88,11 @@ npx gulp tool:test:watch        # vitest watch
   - `@agentclientprotocol/sdk` 是 ESM-only 且依赖 Web Streams，因此自实现了 JSON-RPC 2.0 层（`jsonrpc.ts`）替代 SDK 的 `ClientSideConnection`/`ndJsonStream`。
   - 通过 Node.js 桥接脚本（`bridge.ts`）启动 ACP Server（`@universe-agent/acp`），PuerTS 通过命名管道与桥接通信，桥接在管道和 ACP Server stdio 之间双向中继 ndjson。
   - C++ `ProcessIOHelper` 提供 PuerTS 缺失的 API：stdin 非阻塞读取、stdout/stderr 写入、文件 I/O。
-- **MCP 集成（editor → agent）**：editor 把 UE 编辑器能力作为 MCP server 暴露给 ACP agent。
+- **MCP 集成（acp-client-ue → agent）**：把 UE 编辑器能力作为 MCP server 暴露给 ACP agent。
   - `packages/mcp-server-ue/` 基于 `@modelcontextprotocol/sdk` 的 `McpServer` 实现，配合 `BridgeTransport` 把命名管道的 ndjson 帧适配为 SDK Transport。
-  - `packages/mcp-bridge/` 是 Node.js stdio↔命名管道桥接进程；agent 视角看到一个标准 stdio MCP server，bridge 内部把帧透明中继到 editor。
-  - `packages/editor/src/mcp/` 的 `McpManager` 在 ACP `session/new`/`session/load` 之前为 session 启动管道 server 并组装 mcpServers entry，`AcpClientPanel` 自动调用。
-  - 项目根 `mcp-servers.json` 配置启用 / 禁用内置 server 与追加外部 MCP server。
+  - `packages/mcp-bridge/` 是 Node.js stdio↔命名管道桥接进程；agent 视角看到一个标准 stdio MCP server，bridge 内部把帧透明中继到调用方进程。
+  - `packages/acp-client-ue/src/mcp/` 的 `McpManager` 在 ACP `session/new`/`session/load` 之前为 session 启动管道 server 并组装 mcpServers entry；`AcpClient` facade 自动调用，editor 面板与 CLI 都开箱即用。
+  - 项目根 `mcp-servers.json` 配置启用 / 禁用内置 server 与追加外部 MCP server；`--no-mcp` / `--mcp-config <path>` 在 CLI 覆盖。
 - **公共模块抽取（editor-common）**：
   - `packages/editor-common/` 承载 editor、mcp-server-ue、tests 共享的 Unreal 相关基础模块。
   - 当前包含 `ipc`（`BridgeLink`、`UeIpcSocket`）和 `persistence`（`defineStore`、`PersistenceStore`、`ueFileIO`）两类能力。  

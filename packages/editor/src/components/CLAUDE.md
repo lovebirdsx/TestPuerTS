@@ -19,5 +19,6 @@
 **ACP Client Panel：**
 
 - `AcpClientPanel.tsx` 是编辑器内 ACP 客户端主界面。
-- UI 只消费 `AcpUiController` 的事件，不直接处理 JSON-RPC transport。
+- 通过 `clientFactory: (opts) => AcpClient` 接收 facade；UI 只消费 `client.controller` 的事件，不直接处理 JSON-RPC transport。
+- MCP 由 `AcpClient` 自动管理，Panel 不再持有 `mcpManagerRef` / `mcpSessionIdRef`；`disconnect` / unmount 调 `client.dispose()`。
 - 权限请求以 `ModalPanel` 展示，必须调用 pending permission 的 `resolve()` 或 `cancel()`。

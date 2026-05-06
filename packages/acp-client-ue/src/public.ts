@@ -33,3 +33,18 @@ export {
 	type AcpUiState,
 	type PendingPermissionRequest,
 } from './uiController';
+export { AcpClient, type AcpClientOptions } from './acpClient';
+export {
+	McpManager,
+	type McpManagerOptions,
+	type BuildSessionMcpListResult,
+	defaultMcpConfigPath,
+	defaultBridgeEntry,
+} from './mcp/manager';
+export {
+	type McpServersConfig,
+	McpServersConfigSchema,
+	DEFAULT_MCP_CONFIG,
+	parseMcpServersConfig,
+	loadMcpServersConfig,
+} from './mcp/config';
