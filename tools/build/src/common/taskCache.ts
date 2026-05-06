@@ -87,7 +87,7 @@ export function withCache(options: TaskCacheOptions, taskFn: () => Promise<void>
 			return;
 		}
 
-		if (config.noCache) {
+		if (config.force) {
 			await taskFn();
 			try {
 				const inputs = resolveInputs(options.inputGlobs);

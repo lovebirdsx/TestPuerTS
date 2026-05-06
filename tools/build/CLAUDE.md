@@ -17,7 +17,7 @@
 * `src/cmdArgs.ts`：命令行参数解析
 * `src/common/exec.ts`：exec 辅助函数，带输出格式化
 * `src/common/util.ts`：文件工具、颜色辅助函数
-* `src/common/taskCache.ts`：构建缓存机制（`--no-cache` 跳过；`bypass()` 选项允许任务在某些条件下强制执行）
+* `src/common/taskCache.ts`：构建缓存机制（`--force`/`-f` 跳过；`bypass()` 选项允许任务在某些条件下强制执行）
 * `src/common/passthroughArgs.ts`：抽取 gulp 命令行上的命名 flag（`--filter`/`-t`/`--acp-args` 等），并提供 `quoteForCmd` 拼接到 shell 命令
 
 **workspace 抽象的工作机制：**
@@ -37,7 +37,7 @@
 * workspace 级任务在 `workspace.ts` 中定义；按包薄包装也在 `workspace.ts` 中由 `registerPackage()` 自动注册
 * `gulpfile.ts` 顶层任务（`build`/`typecheck`/`lint`/`lint:fix`/`watch` 等）只串 workspace:* 与少量 ue:* 任务，不再硬编码包名
 * 日志使用 `gulplog` 的 `info()`，配合 `green()`/`blue()`/`red()` 颜色函数
-* 缓存机制：基于输入文件哈希，`--no-cache` 强制跳过；workspace 级缓存粒度较粗，但 `tsc -b` 自身的 `.tsbuildinfo` 提供更细的增量
+* 缓存机制：基于输入文件哈希，`--force`/`-f` 强制跳过；workspace 级缓存粒度较粗，但 `tsc -b` 自身的 `.tsbuildinfo` 提供更细的增量
 
 **常用命令：**
 

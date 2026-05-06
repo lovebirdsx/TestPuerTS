@@ -77,7 +77,7 @@ npx gulp tool:test:watch        # vitest watch
   - `tool:test`（vitest）—— `tools/build` 自身的纯 Node 单元测试。
   - `ue:test`（JsRunnerCommandlet + 自实现 vitest 风 runner）—— 所有需要 PuerTS/UE 引擎的测试（含 UE 绑定、IPC、ReactUMG、persistence 等），代码在 `packages/tests/`。
   - editor 包不再持有任何独立测试入口；所有"在 PuerTS 引擎里测 UE 绑定"的用例统一在 `packages/tests/src/ueBindings/`。
-- **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源；`workspace.ts` 据此自动注册按包薄包装与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--no-cache` 强制跳过。
+- **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源；`workspace.ts` 据此自动注册按包薄包装与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--force` 强制跳过。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。

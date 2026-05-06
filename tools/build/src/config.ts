@@ -14,7 +14,7 @@ const projectRoot = path.resolve(__dirname, '../../..');
 const config: IConfig = {
 	noClear: true,
 	verbose: false,
-	noCache: false,
+	force: false,
 	localJsEnvPorts: [9229, 9230],
 	projectRoot,
 	packagesPath: path.join(projectRoot, 'packages'),
