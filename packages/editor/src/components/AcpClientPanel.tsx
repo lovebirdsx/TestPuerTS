@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as UE from 'ue';
 import { z } from 'zod';
-import { HorizontalBox, SizeBox } from 'react-umg';
+import { HorizontalBox, SizeBox, Spacer } from 'react-umg';
 import type {
 	AcpPermissionStrategy,
 	AcpUiController,
@@ -85,6 +85,7 @@ const acpPanelConfigStore = defineStore(
 		extraArgs: z.string().default(''),
 		permission: z.enum(['interactive', 'auto-approve', 'deny-all']).default('interactive'),
 		protocolEnabled: z.boolean().default(false),
+		autoConnect: z.boolean().default(false),
 		inspector: z.enum(['plan', 'tools', 'protocol', 'settings']).default('plan'),
 	}),
 );
@@ -100,12 +101,13 @@ export interface AcpClientPanelProps {
 
 export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
 	const clientFactory = props.clientFactory ?? defaultAcpClientFactory;
-	const [config, updateConfig] = usePersistedState(acpPanelConfigStore);
+	const [config, updateConfig, isReady] = usePersistedState(acpPanelConfigStore);
 	const command = config.command !== '' ? config.command : DEFAULT_COMMAND;
 	const workspace = config.workspace !== '' ? config.workspace : UE.JsRunHelper.GetProjectDir();
 	const extraArgs = config.extraArgs;
 	const permission = config.permission;
 	const protocolEnabled = config.protocolEnabled;
+	const autoConnect = config.autoConnect;
 	const inspector = config.inspector;
 	const setCommand = (value: string) =>
 		updateConfig((s) => {
@@ -122,6 +124,10 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 	const setInspector = (value: InspectorTab) =>
 		updateConfig((s) => {
 			s.inspector = value;
+		});
+	const setAutoConnect = (value: boolean) =>
+		updateConfig((s) => {
+			s.autoConnect = value;
 		});
 	const [sessionToLoad, setSessionToLoad] = React.useState('');
 	const [prompt, setPrompt] = React.useState('');
@@ -162,6 +168,22 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 		client?.dispose();
 		setClient(undefined);
 	}, [client]);
+
+	const clearMessages = React.useCallback(() => {
+		setState((prev) => ({ ...prev, messages: [] }));
+	}, []);
+
+	const clearProtocol = React.useCallback(() => {
+		setState((prev) => ({ ...prev, protocol: [] }));
+	}, []);
+
+	// 自动连接：store ready 之后只触发一次（避免热重载或 dispose 后反复重连）
+	const autoConnectTriggeredRef = React.useRef(false);
+	React.useEffect(() => {
+		if (!isReady || autoConnectTriggeredRef.current) return;
+		autoConnectTriggeredRef.current = true;
+		if (autoConnect) connect();
+	}, [isReady, autoConnect, connect]);
 
 	const reportMcpWarnings = React.useCallback((warnings: string[]) => {
 		for (const warning of warnings) {
@@ -238,6 +260,8 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 					sessionId={state.sessionId}
 					isPrompting={state.isPrompting}
 					connected={connected}
+					autoConnect={autoConnect}
+					onAutoConnect={setAutoConnect}
 					onConnect={connect}
 					onDisconnect={disconnect}
 					onCancel={cancel}
@@ -268,7 +292,7 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 						/>
 					</SizeBox>
 					<VBox Slot={{ Size: { SizeRule: 1, Value: 1 }, Padding: { Right: 6 } }} Gap={6}>
-						<MessageStream messages={state.messages} />
+						<MessageStream messages={state.messages} onClear={clearMessages} />
 						<PromptBox
 							prompt={prompt}
 							disabled={!connected || !state.sessionId || state.isPrompting}
@@ -279,7 +303,12 @@ export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElem
 						/>
 					</VBox>
 					<SizeBox WidthOverride={340} bOverride_WidthOverride>
-						<Inspector active={inspector} state={state} onSelect={setInspector} />
+						<Inspector
+							active={inspector}
+							state={state}
+							onSelect={setInspector}
+							onClearProtocol={clearProtocol}
+						/>
 					</SizeBox>
 				</HorizontalBox>
 				{state.pendingPermission ? (
@@ -302,24 +331,37 @@ function Toolbar(props: {
 	sessionId: string | undefined;
 	isPrompting: boolean;
 	connected: boolean;
+	autoConnect: boolean;
+	onAutoConnect: (value: boolean) => void;
 	onConnect: () => void;
 	onDisconnect: () => void;
 	onCancel: () => void;
 }): React.ReactElement {
+	// EVerticalAlignment.VAlign_Center = 2 — 让顶栏所有项垂直居中对齐
+	const center = { VerticalAlignment: 2 as any };
+	const agentLabel = props.agentName ? `${props.agentName} ${props.agentVersion}`.trim() : 'ACP Client';
+	const sessionLabel = props.sessionId ? `Session ${shortId(props.sessionId)}` : 'No session';
 	return (
-		<HBox Gap={6}>
+		<HBox Gap={8}>
 			<Badge
 				Text={props.status}
 				Tone={props.connected ? 'accent' : props.status === 'error' ? 'error' : 'normal'}
+				Slot={center}
 			/>
-			<Text Text={props.agentName ? `${props.agentName} ${props.agentVersion}` : 'ACP Client'} />
-			<Text Text={props.sessionId ? `Session ${shortId(props.sessionId)}` : 'No session'} />
-			<ToolbarButton OnClicked={props.connected ? props.onDisconnect : props.onConnect}>
-				<Text Text={props.connected ? 'Disconnect' : 'Connect'} />
-			</ToolbarButton>
-			<ToolbarButton OnClicked={props.onCancel} bIsEnabled={props.isPrompting}>
-				<Text Text="Cancel" />
-			</ToolbarButton>
+			<Text Text={agentLabel} Slot={center} />
+			<Text Text={sessionLabel} Slot={center} />
+			<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
+			<HBox Gap={4} Slot={center}>
+				<Btn OnClicked={() => props.onAutoConnect(!props.autoConnect)}>
+					<Text Text={`${props.autoConnect ? '[x]' : '[ ]'} Auto Connect`} />
+				</Btn>
+				<ToolbarButton OnClicked={props.connected ? props.onDisconnect : props.onConnect}>
+					<Text Text={props.connected ? 'Disconnect' : 'Connect'} />
+				</ToolbarButton>
+				<ToolbarButton OnClicked={props.onCancel} bIsEnabled={props.isPrompting}>
+					<Text Text="Cancel" />
+				</ToolbarButton>
+			</HBox>
 		</HBox>
 	);
 }
@@ -472,9 +514,17 @@ function ConfigOptionControl(props: {
 	return <Text Text={`${props.option.name ?? props.option.id}: unsupported ${props.option.type}`} />;
 }
 
-function MessageStream(props: { messages: ChatMessage[] }): React.ReactElement {
+function MessageStream(props: { messages: ChatMessage[]; onClear: () => void }): React.ReactElement {
+	const center = { VerticalAlignment: 2 as any };
 	return (
-		<Section Title="Conversation" Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+		<Section Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+			<HBox Gap={4}>
+				<Text Text="Conversation" Slot={center} />
+				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
+				<ToolbarButton OnClicked={props.onClear} bIsEnabled={props.messages.length > 0} Slot={center}>
+					<Text Text="Clear" />
+				</ToolbarButton>
+			</HBox>
 			<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<VBox Gap={4}>
 					{props.messages.length === 0 ? (
@@ -509,14 +559,27 @@ function PromptBox(props: {
 	onSend: () => void;
 	onCancel: () => void;
 }): React.ReactElement {
+	// Ctrl+Enter 发送：MultiLineEditableTextBox 把普通 Enter 当作换行（OnTextCommitted 不触发），
+	// 所以在 OnTextChanged 中检测「Ctrl 键按下且文本新增了一个换行」即触发 send。
+	// sendPrompt 内部会 trim()，因此尾部的 '\n' 不需要在这里去除。
+	const onTextChanged = React.useCallback(
+		(text: string) => {
+			const isCtrlEnter =
+				text.length === props.prompt.length + 1 &&
+				text.endsWith('\n') &&
+				UE.KismetInputLibrary.ModifierKeysState_IsControlDown(UE.KismetInputLibrary.GetModifierKeysState());
+			props.onPrompt(text);
+			if (isCtrlEnter) props.onSend();
+		},
+		[props],
+	);
 	return (
 		<Section>
 			<TextArea
 				Text={props.prompt}
-				HintText="Ask the agent..."
-				OnTextChanged={props.onPrompt}
+				HintText="Ask the agent... (Ctrl+Enter to send)"
+				OnTextChanged={onTextChanged}
 				bIsReadOnly={props.disabled}
-				OnTextCommitted={props.onSend}
 			/>
 			<HBox>
 				<Btn OnClicked={props.onSend} bIsEnabled={!props.disabled && !!props.prompt.trim()}>
@@ -534,19 +597,33 @@ function Inspector(props: {
 	active: InspectorTab;
 	state: AcpPanelState;
 	onSelect: (tab: InspectorTab) => void;
+	onClearProtocol: () => void;
 }): React.ReactElement {
+	const center = { VerticalAlignment: 2 as any };
 	return (
 		<Section Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<Tabs
-				Items={[
-					{ id: 'plan', label: 'Plan' },
-					{ id: 'tools', label: 'Tools' },
-					{ id: 'protocol', label: 'Protocol' },
-					{ id: 'settings', label: 'State' },
-				]}
-				ActiveId={props.active}
-				OnSelect={(id) => props.onSelect(id as InspectorTab)}
-			/>
+			<HBox Gap={4}>
+				<Tabs
+					Items={[
+						{ id: 'plan', label: 'Plan' },
+						{ id: 'tools', label: 'Tools' },
+						{ id: 'protocol', label: 'Protocol' },
+						{ id: 'settings', label: 'State' },
+					]}
+					ActiveId={props.active}
+					OnSelect={(id) => props.onSelect(id as InspectorTab)}
+				/>
+				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
+				{props.active === 'protocol' ? (
+					<ToolbarButton
+						OnClicked={props.onClearProtocol}
+						bIsEnabled={props.state.protocol.length > 0}
+						Slot={center}
+					>
+						<Text Text="Clear" />
+					</ToolbarButton>
+				) : undefined}
+			</HBox>
 			<Divider />
 			{props.active === 'plan' ? <PlanView plan={props.state.plan} /> : undefined}
 			{props.active === 'tools' ? <ToolsView tools={props.state.tools} /> : undefined}

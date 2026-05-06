@@ -258,7 +258,7 @@ export const Divider = (): React.ReactElement => (
 	/>
 );
 
-export const Badge = (props: { Text: string; Tone?: SectionTone }): React.ReactElement => {
+export const Badge = (props: { Text: string; Tone?: SectionTone } & Pick<BorderProps, 'Slot'>): React.ReactElement => {
 	const tone = props.Tone ?? 'normal';
 	return (
 		<Border
@@ -272,6 +272,7 @@ export const Badge = (props: { Text: string; Tone?: SectionTone }): React.ReactE
 							: roundedBrush(COL_SECONDARY, COL_SECONDARY)
 			}
 			Padding={{ Left: 6, Top: 1, Right: 6, Bottom: 1 }}
+			Slot={props.Slot}
 		>
 			<Text Text={props.Text} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_FOREGROUND_HOVER }} />
 		</Border>
