@@ -22,10 +22,14 @@
 #include "UECompatible.h"
 #endif
 
+#include <algorithm>
+#include <chrono>
 #include <functional>
 #include <string>
 #include <locale>
 #include <codecvt>
+#include <thread>
+#include <vector>
 
 PRAGMA_DISABLE_UNDEFINED_IDENTIFIER_WARNINGS
 #pragma warning(push)
@@ -237,6 +241,12 @@ private:
 
     std::map<void*, V8InspectorChannelImpl*> V8InspectorChannels;
 
+    // 关闭时需要对每个已建立的 ws 连接发起握手关闭（仅靠 io_service::stop 不会关 socket，
+    // 端口会滞留，重启时与新 server 形成"两个内部状态机持有同一端口"）。
+    // wspp 没有"枚举所有连接"的接口，且 connection_hdl 是 weak_ptr 不能直接当 map key，
+    // 所以在 OnOpen 时显式记录 hdl 列表，OnClose 时移除。
+    std::vector<websocketpp::connection_hdl> OpenConnections;
+
     wspp_server Server;
 
     std::string JSONVersion;
@@ -393,12 +403,80 @@ void V8InspectorClientImpl::Close()
 #ifdef THREAD_SAFE
         v8::Locker Locker(Isolate);
 #endif
-        Server.stop_listening();
+        // 1. 停止接受新连接（先关 accept，避免下面 close 的同时又接进来）
+        try
+        {
+            if (Server.is_listening())
+            {
+                Server.stop_listening();
+            }
+        }
+        catch (const wspp_exception& Exception)
+        {
+#if USING_UE
+            ReportException(Exception, TEXT("Close::stop_listening"));
+#endif
+        }
+
+        // 2. 主动对每个已建立的 ws 连接发起 close 握手。
+        //    仅靠 wspp_server 析构 / io_service::stop() 不会真正关闭已建立 socket，
+        //    端口会滞留，配合 PuerTS 在 Windows 上 set_reuse_addr(true)（共享语义），
+        //    重启时会出现"两个内部状态机持有同一端口"，进而导致 UnrealEditor 退出阶段
+        //    join 不掉后台线程而僵死、8888 长期被占。
+        for (const auto& Hdl : OpenConnections)
+        {
+            try
+            {
+                Server.close(Hdl, websocketpp::close::status::going_away, "shutdown");
+            }
+            catch (const wspp_exception& Exception)
+            {
+#if USING_UE
+                ReportException(Exception, TEXT("Close::close_connection"));
+#endif
+            }
+        }
+
+        // 3. 喂 io_service 把 close 帧 / socket 关闭真正写出去。
+        //    OpenConnections 由 OnClose 回调摘除，因此 empty 即代表所有连接已走完关闭流程。
+        //    上限 500ms，避免对端不响应时永远卡在这里。
+        try
+        {
+            const auto Deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(500);
+            while (!OpenConnections.empty() && std::chrono::steady_clock::now() < Deadline)
+            {
+                if (Server.poll() == 0)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                }
+            }
+        }
+        catch (const wspp_exception& Exception)
+        {
+#if USING_UE
+            ReportException(Exception, TEXT("Close::poll"));
+#endif
+        }
+
+        // 4. 停止 io_service（让 wspp_server 析构后端口立即释放）
+        try
+        {
+            Server.stop();
+        }
+        catch (const wspp_exception& Exception)
+        {
+#if USING_UE
+            ReportException(Exception, TEXT("Close::stop"));
+#endif
+        }
+
+        // 5. 兜底清理 channel（OnClose 若没机会跑完）
         for (auto Iter = V8InspectorChannels.begin(); Iter != V8InspectorChannels.end(); ++Iter)
         {
             delete Iter->second;
         }
         V8InspectorChannels.clear();
+        OpenConnections.clear();
 
         v8::Isolate::Scope IsolateScope(Isolate);
         v8::HandleScope HandleScope(Isolate);
@@ -501,6 +579,7 @@ void V8InspectorClientImpl::OnOpen(wspp_connection_hdl Handle)
 {
     V8InspectorChannelImpl* channel = static_cast<V8InspectorChannelImpl*>(CreateV8InspectorChannel());
     V8InspectorChannels[Handle.lock().get()] = channel;
+    OpenConnections.push_back(Handle);
     channel->OnMessage(std::bind(&V8InspectorClientImpl::OnSendMessage, this, Handle, std::placeholders::_1));
 #if USING_UE
     UE_LOG(LogV8Inspector, Display, TEXT("Inspector: Connect"));
@@ -553,6 +632,10 @@ void V8InspectorClientImpl::OnClose(wspp_connection_hdl Handle)
     void* HandlePtr = Handle.lock().get();
     delete V8InspectorChannels[HandlePtr];
     V8InspectorChannels.erase(HandlePtr);
+    OpenConnections.erase(
+        std::remove_if(OpenConnections.begin(), OpenConnections.end(),
+            [HandlePtr](const websocketpp::connection_hdl& Hdl) { return Hdl.lock().get() == HandlePtr; }),
+        OpenConnections.end());
 #if USING_UE
     UE_LOG(LogV8Inspector, Display, TEXT("Inspector: Disconnect"));
 #endif
