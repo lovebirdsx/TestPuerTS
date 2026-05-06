@@ -125,6 +125,7 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 
 			resolveBridge?.(link);
 			resolveBridge = null;
+			rejectBridge = null;
 
 			server.onDidRemoveConnection((removed) => {
 				if (removed === conn && !closed) {
