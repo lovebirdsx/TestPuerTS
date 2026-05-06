@@ -20,6 +20,9 @@ interface IExecOptions {
 	/** 将 stdin 设为 inherit，支持 Ctrl+C 等交互操作 */
 	interactive?: boolean;
 
+	/** 跳过行缓冲，直接输出原始 chunk（适合 REPL 等需要实时字符回显的场景） */
+	rawOutput?: boolean;
+
 	/** 追加或覆盖子进程环境变量（合并到 process.env） */
 	env?: NodeJS.ProcessEnv;
 }
@@ -36,7 +39,7 @@ export function setExecVerbose(verbose: boolean): void {
  */
 export async function exec(
 	cmd: string,
-	{ logPrefix, originalLog, workingDir, noThrow, formatText, passthrough, interactive, env }: IExecOptions,
+	{ logPrefix, originalLog, workingDir, noThrow, formatText, passthrough, interactive, rawOutput, env }: IExecOptions,
 ): Promise<void> {
 	return new Promise<void>((resolve, reject) => {
 		const subProcess = spawn(cmd, {
@@ -101,6 +104,10 @@ export async function exec(
 		const stderrBuf = { v: '' };
 
 		subProcess.stdout?.on('data', (data: Buffer) => {
+			if (rawOutput) {
+				process.stdout.write(data);
+				return;
+			}
 			const lines = (stdoutBuf.v + data.toString()).split('\n');
 			stdoutBuf.v = lines.pop() ?? '';
 			for (const line of lines) {
@@ -109,6 +116,10 @@ export async function exec(
 		});
 
 		subProcess.stderr?.on('data', (data: Buffer) => {
+			if (rawOutput) {
+				process.stderr.write(data);
+				return;
+			}
 			const lines = (stderrBuf.v + data.toString()).split('\n');
 			stderrBuf.v = lines.pop() ?? '';
 			for (const line of lines) {

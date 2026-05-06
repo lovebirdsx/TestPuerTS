@@ -244,6 +244,7 @@ gulp.task(
 				originalLog: true,
 				passthrough: true,
 				interactive: true,
+				rawOutput: true,
 				env: dotEnv,
 				formatText: formatUeOutput,
 			});
