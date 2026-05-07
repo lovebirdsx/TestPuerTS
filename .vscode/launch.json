@@ -3,8 +3,9 @@
   "configurations": [
       {
           "name": "Attach Editor",
-          "port": 8889,
-          "restart": false,
+          "port": 30000,
+          "restart": true,
+          "sourceMaps": true,
           "request": "attach",
           "skipFiles": [
               "<node_internals>/**"

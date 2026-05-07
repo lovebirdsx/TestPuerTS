@@ -168,17 +168,8 @@ void FTsEditorModule::RestartTsEditor()
 	{
 		return;
 	}
-
-	TsEditor->Stop();
-	const bool bStarted = TsEditor->TryStart();
-	if (bStarted)
-	{
-		ShowTsEditorNotification(LOCTEXT("TsEditorRestarted", "TsEditor restarted."), false);
-	}
-	else
-	{
-		ShowTsEditorNotification(LOCTEXT("TsEditorRestartFailed", "TsEditor failed to restart. Check LogTsEditor for details."), true);
-	}
+	
+	TsEditor->Restart();
 }
 
 void FTsEditorModule::ToggleWaitJSDebug()
