@@ -1,22 +1,56 @@
 import * as React from 'react';
 import { describe, it, expect } from '../../testRunner';
 import { render, fireEvent } from '../../reactUmg/testing';
-import { AcpClientPanel } from 'editor';
+import { AcpClientPanel, createAcpPanelConfigStore, type AcpClientPanelProps } from 'editor';
+import type { IFileIO } from '@universe-agent/editor-common';
 import { MockAcpClient, asClient } from './mockController';
 
 function flushMicrotasks(): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+// 内存 IFileIO：测试用，避免触盘 + 让每个 store 完全隔离。
+function memoryFileIO(): IFileIO {
+	const files = new Map<string, string>();
+	return {
+		async readText(path: string) {
+			return files.get(path);
+		},
+		async writeText(path: string, content: string) {
+			files.set(path, content);
+		},
+		async fileExists(path: string) {
+			return files.has(path);
+		},
+		async makeDirTree() {
+			/* no-op */
+		},
+	};
+}
+
+let storeCounter = 0;
+function freshConfigStore() {
+	storeCounter++;
+	return createAcpPanelConfigStore(`acp-client-panel-test-${Date.now()}-${storeCounter}`, {
+		fileIO: memoryFileIO(),
+		// 同步默认值路径（无文件 → 默认值），但 ready 仍是 microtask；测试在 connect 前 await flushMicrotasks 兜底。
+	});
+}
+
+// 包装 render：自动注入隔离的 configStore，调用方只需传额外 props。
+function renderPanel(extra: Omit<AcpClientPanelProps, 'configStore'>): ReturnType<typeof render> {
+	return render(<AcpClientPanel {...extra} configStore={freshConfigStore()} />);
+}
+
 describe('AcpClientPanel - initial render', () => {
 	it('renders Connect button and disconnected status badge by default', () => {
-		const view = render(<AcpClientPanel clientFactory={(opts) => asClient(new MockAcpClient(opts))} />);
+		const view = renderPanel({ clientFactory: (opts) => asClient(new MockAcpClient(opts)) });
 		expect(view.queryByText('disconnected')).toBeTruthy();
 		expect(view.queryByTypeWithText('Button', 'Connect')).toBeTruthy();
 	});
 
 	it('shows "No session" placeholder before connecting', () => {
-		const view = render(<AcpClientPanel clientFactory={(opts) => asClient(new MockAcpClient(opts))} />);
+		const view = renderPanel({ clientFactory: (opts) => asClient(new MockAcpClient(opts)) });
 		expect(view.queryByText('No session')).toBeTruthy();
 	});
 });
@@ -24,15 +58,13 @@ describe('AcpClientPanel - initial render', () => {
 describe('AcpClientPanel - connect / disconnect', () => {
 	it('clicking Connect creates client, subscribes, and calls connect()', async () => {
 		const created: MockAcpClient[] = [];
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					const m = new MockAcpClient(opts);
-					created.push(m);
-					return asClient(m);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				const m = new MockAcpClient(opts);
+				created.push(m);
+				return asClient(m);
+			},
+		});
 
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
@@ -43,14 +75,12 @@ describe('AcpClientPanel - connect / disconnect', () => {
 
 	it('updates badge and button when controller emits status_changed: connected', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
@@ -62,14 +92,12 @@ describe('AcpClientPanel - connect / disconnect', () => {
 
 	it('clicking Disconnect calls client.dispose()', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
@@ -80,17 +108,15 @@ describe('AcpClientPanel - connect / disconnect', () => {
 
 	it('connect failure surfaces error message', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					mock.mockController.connectImpl = async () => {
-						throw new Error('connect-failed');
-					};
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				mock.mockController.connectImpl = async () => {
+					throw new Error('connect-failed');
+				};
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => {});
@@ -101,14 +127,12 @@ describe('AcpClientPanel - connect / disconnect', () => {
 
 	it('dispose on unmount triggers client.dispose()', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
@@ -121,14 +145,12 @@ describe('AcpClientPanel - connect / disconnect', () => {
 describe('AcpClientPanel - sessions and prompts', () => {
 	it('clicking New session calls client.newSession()', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
@@ -141,15 +163,13 @@ describe('AcpClientPanel - sessions and prompts', () => {
 
 	it('newSession warnings render as system messages', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					mock.newSessionImpl = async () => ({ warnings: ['bad-config'] });
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				mock.newSessionImpl = async () => ({ warnings: ['bad-config'] });
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => mock.mockController.emit({ type: 'status_changed', status: 'connected' }));
@@ -163,14 +183,12 @@ describe('AcpClientPanel - sessions and prompts', () => {
 
 	it('session_changed event renders session id and system message', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() =>
@@ -186,14 +204,12 @@ describe('AcpClientPanel - sessions and prompts', () => {
 
 	it('message_chunk events stream into conversation', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => mock.mockController.emit({ type: 'message_chunk', role: 'agent', text: 'Hello ' }));
@@ -206,14 +222,12 @@ describe('AcpClientPanel - sessions and prompts', () => {
 describe('AcpClientPanel - tool calls and inspector', () => {
 	it('tool_call_updated populates Inspector tools tab when active', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Tools')));
@@ -235,14 +249,12 @@ describe('AcpClientPanel - permission modal', () => {
 	it('permission_requested event opens modal with options; clicking option resolves', async () => {
 		let mock!: MockAcpClient;
 		let resolvedWith: string | undefined;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
@@ -275,14 +287,12 @@ describe('AcpClientPanel - permission modal', () => {
 	it('cancel button on permission modal calls cancel()', async () => {
 		let mock!: MockAcpClient;
 		let cancelled = false;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 		view.act(() =>
@@ -312,40 +322,30 @@ describe('AcpClientPanel - permission modal', () => {
 describe('AcpClientPanel - protocol & policy controls', () => {
 	it('toggling Protocol button calls controller.setProtocolEnabled', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 
-		// store 是模块级单例，测试间共享；取当前按钮状态再判断期望值
-		const isOff = view.queryByTypeWithText('Button', 'Protocol Off') !== undefined;
-		if (isOff) {
-			view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Protocol Off')));
-			expect(mock.mockController.lastProtocolEnabled).toBe(true);
-		} else {
-			view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Protocol On')));
-			expect(mock.mockController.lastProtocolEnabled).toBe(false);
-		}
+		// 隔离 store：默认 protocolEnabled=false → 当前按钮为 'Protocol Off'，点击后应转为 true
+		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Protocol Off')));
+		expect(mock.mockController.lastProtocolEnabled).toBe(true);
 	});
 });
 
 describe('AcpClientPanel - error event', () => {
 	it('error event flips status badge and appends error message', async () => {
 		let mock!: MockAcpClient;
-		const view = render(
-			<AcpClientPanel
-				clientFactory={(opts) => {
-					mock = new MockAcpClient(opts);
-					return asClient(mock);
-				}}
-			/>,
-		);
+		const view = renderPanel({
+			clientFactory: (opts) => {
+				mock = new MockAcpClient(opts);
+				return asClient(mock);
+			},
+		});
 		view.act(() => fireEvent.click(view.findByTypeWithText('Button', 'Connect')));
 		await flushMicrotasks();
 

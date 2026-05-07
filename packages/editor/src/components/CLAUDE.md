@@ -22,3 +22,4 @@
 - 通过 `clientFactory: (opts) => AcpClient` 接收 facade；UI 只消费 `client.controller` 的事件，不直接处理 JSON-RPC transport。
 - MCP 由 `AcpClient` 自动管理，Panel 不再持有 `mcpManagerRef` / `mcpSessionIdRef`；`disconnect` / unmount 调 `client.dispose()`。
 - 权限请求以 `ModalPanel` 展示，必须调用 pending permission 的 `resolve()` 或 `cancel()`。
+- 持久化配置走 `acpPanelConfigStore`（模块级单例，落到 `<AppData>/<Project>/EditorPersistence/acp-client-panel.json`）。测试若需隔离 store 状态，请通过 `configStore` prop 注入由 `createAcpPanelConfigStore(name, { fileIO })` 构造的内存版本，避免共享单例的异步 `ready()` 与持久化数据在多个用例间产生副作用。

@@ -14,11 +14,14 @@ export {
 	addMessage,
 	appendStreamMessage,
 	upsertTool,
+	createAcpPanelConfigStore,
 } from './components/AcpClientPanel';
 export type {
 	AcpClientPanelProps,
 	AcpClientFactory,
 	AcpPanelState,
+	AcpPanelConfig,
+	AcpPanelConfigStore,
 	ChatMessage,
 	ToolRecord,
 	MessageRole,

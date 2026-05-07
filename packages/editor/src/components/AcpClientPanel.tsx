@@ -13,7 +13,7 @@ import type {
 	SessionModeState,
 } from '@universe-agent/acp-client-ue';
 import { AcpClient, type AcpClientOptions } from '@universe-agent/acp-client-ue';
-import { defineStore } from '@universe-agent/editor-common';
+import { defineStore, type DefineStoreOptions, type PersistenceStore } from '@universe-agent/editor-common';
 import {
 	Badge,
 	Btn,
@@ -77,18 +77,28 @@ let nextProtocolId = 1;
 
 const DEFAULT_COMMAND = 'npx universe-agent-acp';
 
-const acpPanelConfigStore = defineStore(
-	'acp-client-panel',
-	z.object({
-		command: z.string().default(DEFAULT_COMMAND),
-		workspace: z.string().default(''),
-		extraArgs: z.string().default(''),
-		permission: z.enum(['interactive', 'auto-approve', 'deny-all']).default('interactive'),
-		protocolEnabled: z.boolean().default(false),
-		autoConnect: z.boolean().default(false),
-		inspector: z.enum(['plan', 'tools', 'protocol', 'settings']).default('plan'),
-	}),
-);
+const acpPanelConfigSchema = z.object({
+	command: z.string().default(DEFAULT_COMMAND),
+	workspace: z.string().default(''),
+	extraArgs: z.string().default(''),
+	permission: z.enum(['interactive', 'auto-approve', 'deny-all']).default('interactive'),
+	protocolEnabled: z.boolean().default(false),
+	autoConnect: z.boolean().default(false),
+	inspector: z.enum(['plan', 'tools', 'protocol', 'settings']).default('plan'),
+});
+
+export type AcpPanelConfig = z.infer<typeof acpPanelConfigSchema>;
+export type AcpPanelConfigStore = PersistenceStore<AcpPanelConfig>;
+
+const acpPanelConfigStore: AcpPanelConfigStore = defineStore('acp-client-panel', acpPanelConfigSchema);
+
+/**
+ * 创建一个独立的 AcpPanel 配置 store。测试可用此函数构造隔离实例，避免共享模块级单例
+ * 的异步 ready 回调或写入污染影响别的用例。
+ */
+export function createAcpPanelConfigStore(name: string, options?: DefineStoreOptions): AcpPanelConfigStore {
+	return defineStore(name, acpPanelConfigSchema, options);
+}
 
 export type AcpClientFactory = (options: AcpClientOptions) => AcpClient;
 
@@ -97,11 +107,14 @@ const defaultAcpClientFactory: AcpClientFactory = (options) => new AcpClient(opt
 export interface AcpClientPanelProps {
 	// 测试或调试用：覆盖默认的 AcpClient 工厂；不传则使用真实 AcpClient（自动启动 MCP）。
 	clientFactory?: AcpClientFactory;
+	// 测试用：覆盖模块级持久化 store，避免共享状态在多个测试间产生副作用。
+	configStore?: AcpPanelConfigStore;
 }
 
 export const AcpClientPanel = (props: AcpClientPanelProps = {}): React.ReactElement => {
 	const clientFactory = props.clientFactory ?? defaultAcpClientFactory;
-	const [config, updateConfig, isReady] = usePersistedState(acpPanelConfigStore);
+	const store = props.configStore ?? acpPanelConfigStore;
+	const [config, updateConfig, isReady] = usePersistedState(store);
 	const command = config.command !== '' ? config.command : DEFAULT_COMMAND;
 	const workspace = config.workspace !== '' ? config.workspace : UE.JsRunHelper.GetProjectDir();
 	const extraArgs = config.extraArgs;
