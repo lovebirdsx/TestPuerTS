@@ -646,7 +646,8 @@ void V8InspectorClientImpl::OnFail(wspp_connection_hdl Handle)
     wspp_server::connection_ptr con = Server.get_con_from_hdl(Handle);
     std::string message = con->get_ec().message();
 #if USING_UE
-    UE_LOG(LogV8Inspector, Error, TEXT("Connection OnFail %s"), UTF8_TO_TCHAR(message.c_str()));
+    // 调试器主动断开时这里也会触发，记为 Display，避免污染命令行测试结果。
+    UE_LOG(LogV8Inspector, Display, TEXT("Connection OnFail %s"), UTF8_TO_TCHAR(message.c_str()));
 #else
     puerts::PLog(puerts::Error, "Connection OnFail %s", message.c_str());
 #endif

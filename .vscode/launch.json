@@ -4,7 +4,7 @@
       {
           "name": "Attach Editor",
           "port": 8888,
-          "restart": true,
+          "restart": false,
           "request": "attach",
           "skipFiles": [
               "<node_internals>/**"
@@ -21,7 +21,8 @@
           "request": "attach",
           "port": 9229,
           "address": "127.0.0.1",
-          "restart": true,
+          "restart": false,
+          "timeout": 10000,
           "preLaunchTask": "ue:test:debug",
           "sourceMaps": true,
           "outFiles": [

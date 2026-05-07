@@ -4,7 +4,7 @@
         {
             "label": "ue:test:debug",
             "type": "shell",
-            "command": "npx gulp ue:test:debug",
+            "command": "npx gulp ue:test:debug --verbose",
             "isBackground": true,
             "problemMatcher": {
                 "pattern": {
@@ -18,7 +18,8 @@
             },
             "presentation": {
                 "reveal": "always",
-                "panel": "new"
+                "panel": "shared",
+                "clear": true,
             }
         }
     ]
