@@ -89,6 +89,8 @@ void FReactDeclarationGenerator::GenReactDeclaration()
            << "import * as React from 'react';\n    import * as UE from 'ue';\n    type TArray<T> = UE.TArray<T>;\n    type "
               "TSet<T> = UE.TSet<T>;\n    type TMap<TKey, TValue> = UE.TMap<TKey, TValue>;\n\n";
 
+    TArray<UClass*> SlotClasses;
+    TArray<UClass*> WidgetClasses;
     for (TObjectIterator<UClass> It; It; ++It)
     {
         UClass* Class = *It;
@@ -99,7 +101,18 @@ void FReactDeclarationGenerator::GenReactDeclaration()
             continue;
         }
         if (Class->IsChildOf<UPanelSlot>())
-            Gen(Class);
+            SlotClasses.Add(Class);
+        else if (Class->IsChildOf<UWidget>())
+            WidgetClasses.Add(Class);
+    }
+
+    // 按类名排序，保证输出稳定，避免因引擎对象注册顺序不同导致 diff 噪音
+    SlotClasses.Sort([](const UClass& A, const UClass& B) { return A.GetName() < B.GetName(); });
+    WidgetClasses.Sort([](const UClass& A, const UClass& B) { return A.GetName() < B.GetName(); });
+
+    for (UClass* Class : SlotClasses)
+    {
+        Gen(Class);
     }
 
     Output << "    "
@@ -109,23 +122,13 @@ void FReactDeclarationGenerator::GenReactDeclaration()
     Output << "    "
            << "}\n\n";
 
-    for (TObjectIterator<UClass> It; It; ++It)
+    for (UClass* Class : WidgetClasses)
     {
-        UClass* Class = *It;
-        checkfSlow(Class != nullptr, TEXT("Class name corruption!"));
-        if (Class->GetName().StartsWith("SKEL_") || Class->GetName().StartsWith("REINST_") ||
-            Class->GetName().StartsWith("TRASHCLASS_") || Class->GetName().StartsWith("PLACEHOLDER_"))
+        Gen(Class);
+        Components += "exports." + SafeName(Class->GetName()) + " = '" + SafeName(Class->GetName()) + "';\n";
+        if (!(Class->ClassFlags & CLASS_Native))
         {
-            continue;
-        }
-        if (Class->IsChildOf<UWidget>())
-        {
-            Gen(Class);
-            Components += "exports." + SafeName(Class->GetName()) + " = '" + SafeName(Class->GetName()) + "';\n";
-            if (!(Class->ClassFlags & CLASS_Native))
-            {
-                Components += "exports.lazyloadComponents." + SafeName(Class->GetName()) + " = '" + Class->GetPathName() + "';\n";
-            }
+            Components += "exports.lazyloadComponents." + SafeName(Class->GetName()) + " = '" + Class->GetPathName() + "';\n";
         }
     }
 
