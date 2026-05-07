@@ -28,6 +28,11 @@ Content/JavaScript/mcp-server-ue/
 *.so
 *.dylib
 
+# V8 library must include
+!Plugins/Puerts/ThirdParty/v8_9.4.146.24/**/*.dll
+!Plugins/Puerts/ThirdParty/v8_9.4.146.24/**/*.exe
+!Plugins/Puerts/ThirdParty/v8_9.4.146.24/**/*.lib
+
 # Ignore build
 Binaries/
 Build/
