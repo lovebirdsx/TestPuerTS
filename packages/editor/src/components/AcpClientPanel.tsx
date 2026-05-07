@@ -578,7 +578,7 @@ function PromptBox(props: {
 	const onTextChanged = React.useCallback(
 		(text: string) => {
 			const isCtrlEnter =
-				text.length === props.prompt.length + 1 &&
+				text.length > props.prompt.length &&
 				text.endsWith('\n') &&
 				UE.KismetInputLibrary.ModifierKeysState_IsControlDown(UE.KismetInputLibrary.GetModifierKeysState());
 			props.onPrompt(text);
