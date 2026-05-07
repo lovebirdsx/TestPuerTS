@@ -53,7 +53,7 @@ private:
 	UTsEditor *TsEditor;
 };
 
-UTsEditor::UTsEditor() : bWaitJSDebug(false), ModuleName(TEXT("editor/main")), DebugPort(30000)
+UTsEditor::UTsEditor() : bWaitJSDebug(false), ModuleName(TEXT("editor/main")), DebugPort(40000)
 {
 }
 

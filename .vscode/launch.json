@@ -3,7 +3,7 @@
   "configurations": [
       {
           "name": "Attach Editor",
-          "port": 30000,
+          "port": 40000,
           "restart": true,
           "sourceMaps": true,
           "request": "attach",
