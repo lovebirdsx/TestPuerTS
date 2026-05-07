@@ -1,24 +1,23 @@
+import {
+	createLogger,
+	flushAllPersistence,
+	installConsoleOverride,
+	installPuertsPolyfill,
+} from '@universe-agent/editor-common';
+
+// PuerTS setTimeout/setInterval 需要显式 delay；尽早 polyfill，避免第三方库（universe-lib / MCP SDK / ACP SDK 等）省略 delay 时定时器永不触发。
+installPuertsPolyfill();
+
+// 把 globalThis.console 重定向到 UJsLogHelper，让所有 JS 输出走 UE_LOG。
+installConsoleOverride('editor');
+
 import * as React from 'react';
-import { watch } from './common/watcher';
 import { TsEditorLibrary, EditorCommonLibrary } from 'ue';
 import { openReactTab } from './common/reactTab';
 import { registerTabFactory, restoreOpenTabs } from './common/tabSession';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
-import {
-	createLogger,
-	flushAllPersistence,
-	installConsoleOverride,
-	installPuertsTimerPolyfill,
-} from '@universe-agent/editor-common';
-
-// PuerTS setTimeout/setInterval 需要显式 delay；尽早 polyfill，避免第三方库
-// （universe-lib / MCP SDK / ACP SDK 等）省略 delay 时定时器永不触发。
-installPuertsTimerPolyfill();
-
-// 把 globalThis.console 重定向到 UJsLogHelper，让所有 JS 输出走 UE_LOG。
-installConsoleOverride('editor');
 
 const logger = createLogger('editor:main');
 
@@ -47,19 +46,6 @@ const TAB_CONFIGS = [
 		menuSortOrder: 10,
 	},
 ] as const;
-
-function startWatch() {
-	const watcher = watch(__dirname, () => {
-		const editor = TsEditorLibrary.GetTsEditor();
-		if (editor) {
-			logger.info('Restarting editor...');
-			editor.Restart();
-		}
-	});
-
-	logger.info('Editor watcher: watching for changes...');
-	return watcher;
-}
 
 function registerMenus() {
 	// 同步注册工厂，供恢复时使用
@@ -106,7 +92,6 @@ function registerExitHooks() {
 }
 
 function main() {
-	startWatch();
 	registerMenus();
 	restoreTabsOnStart();
 	registerExitHooks();

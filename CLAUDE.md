@@ -15,14 +15,12 @@ Plugins/                      # UE 插件（包含 Puerts）
   ReactUMG/                   # React UMG 插件
   Puerts/                     # PuerTS 核心插件
 Content/JavaScript/           # JS 输出（编译后的 TS 输出到此处）
-  editor/                     # 编辑器端 TS 输出
-  tests/                      # 测试包 TS 输出（tsc 编译）
 Typing/                       # PuerTS 生成的 d.ts 文件（ue.d.ts、ue_bp.d.ts）
 packages/                     # npm 工作区（yarn/npm）
   editor-common/              # editor/mcp-server-ue/tests 共享 Unreal 公共模块（IPC + persistence）
   editor/                     # 编辑器端 TypeScript（编译输出到 Content/JavaScript/editor）
   tests/                      # Commandlet 测试脚本（tsc 编译输出到 Content/JavaScript/tests）
-  acp-client-ue/                 # ACP 协议客户端（移植到 PuerTS 环境）
+  acp-client-ue/              # ACP 协议客户端（移植到 PuerTS 环境）
 tools/                        # 仓库级开发工具
   build/                      # 构建工具（gulp 任务、工具函数）
 ```
@@ -67,7 +65,6 @@ npx gulp tool:test:watch        # vitest watch
 ```
 
 > 新增 workspace 包：仓库根 `tsconfig.workspace.json` 加一行 references + `tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 加一项即可。`gulpfile.ts` 不需修改。
-
 > CLI 透传：`ue:test` / `ue:test:debug` / `ue:test:watch` / `ue:acp-client` 支持把命名 flag 透传给跑在 PuerTS 里的 JS（gulp 5 的 yargs 不识别 POSIX `--`，所以走命名 flag 而非 `--`）。透传非空时会绕过 `withCache`，强制执行。
 > - 测试：`--filter <suite-prefix>` / `-t <regex>`（亦支持 `--test-name-pattern`），可组合：`npx gulp ue:test --filter ueBindings -t async`
 
@@ -76,14 +73,12 @@ npx gulp tool:test:watch        # vitest watch
 - **测试体系**：项目只有两条测试线。
   - `tool:test`（vitest）—— `tools/build` 自身的纯 Node 单元测试。
   - `ue:test`（JsRunnerCommandlet + 自实现 vitest 风 runner）—— 所有需要 PuerTS/UE 引擎的测试（含 UE 绑定、IPC、ReactUMG、persistence 等），代码在 `packages/tests/`。
-  - editor 包不再持有任何独立测试入口；所有"在 PuerTS 引擎里测 UE 绑定"的用例统一在 `packages/tests/src/ueBindings/`。
 - **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源；`workspace.ts` 据此自动注册按包薄包装与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--force` 强制跳过。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。
   - 协议层：复用 `universe-lib` 的 `Protocol` → `IPCClient/Server` → `ProxyChannel` 自动编排。
   - Node.js 端：直接使用 `universe-lib` 的 `serve()`/`connect()` 连接命名管道。
-- **tests 包构建**：使用 tsc 编译输出多文件 CommonJS，`universe-lib` 通过 `DefaultJSModuleLoader` 的 `ExtraSearchPaths`（指向项目根目录）在运行时解析，`ue`/`puerts` 由 PuerTS 运行时提供。
 - **ACP Client 架构**：ACP 协议客户端，在 PuerTS 环境中运行。
   - `@agentclientprotocol/sdk` 是 ESM-only 且依赖 Web Streams，因此自实现了 JSON-RPC 2.0 层（`jsonrpc.ts`）替代 SDK 的 `ClientSideConnection`/`ndJsonStream`。
   - 通过 Node.js 桥接脚本（`bridge.ts`）启动 ACP Server（`@universe-agent/acp`），PuerTS 通过命名管道与桥接通信，桥接在管道和 ACP Server stdio 之间双向中继 ndjson。
@@ -97,17 +92,13 @@ npx gulp tool:test:watch        # vitest watch
   - `packages/editor-common/` 承载 editor、mcp-server-ue、tests 共享的 Unreal 相关基础模块。
   - 当前包含 `ipc`（`BridgeLink`、`UeIpcSocket`）和 `persistence`（`defineStore`、`PersistenceStore`、`ueFileIO`）两类能力。  
 
-
 ## 代码风格
 
-- TypeScript 配合 ESLint 9 + Prettier
-- TypeScript 使用 Tab 缩进
+- TypeScript 配合 ESLint 9 + Prettier，使用 Tab 缩进
 - 可以使用中文注释
-- gulp 任务日志使用 `gulplog` 的 `info()`，配合 `green()`/`blue()`/`red()` 颜色辅助函数
 
 ## 注意
 
-- 回答请使用中文
 - Plugins和packages的每个包都有自己独立的CLAUDE.md，你在完成功能后，若有需要，请务必更新对应的CLAUDE.md，保持文档与代码同步
 - 完成feature后，请执行 `npm run check` 来检查
 

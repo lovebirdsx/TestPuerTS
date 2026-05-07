@@ -147,7 +147,7 @@ public class JsEnv : ModuleRules
                 "WasmCore", "Json"
             });
 
-        UseNodejs = true;
+        UseNodejs = false;
         if (UseNodejs)
         {
             ThirdPartyNodejs(Target);

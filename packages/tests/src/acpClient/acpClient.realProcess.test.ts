@@ -15,6 +15,7 @@ import type { CliOptions } from '../../../acp-client-ue/src/cli';
 import { TestRenderer } from './__fixtures__/testRenderer';
 import { withTimeout } from './__fixtures__/withTimeout';
 import * as UE from 'ue';
+import { decodeUtf8 } from '@universe-agent/editor-common';
 
 function envFlag(name: string): string | undefined {
 	try {
@@ -60,7 +61,7 @@ describeIfEnabled('ChildProcessTransport - real subprocess (UNIVERSE_ACP_E2E=1)'
 
 		const transport = new ChildProcessTransport(proc);
 		const received: string[] = [];
-		transport.onData((bytes) => received.push(new TextDecoder().decode(bytes)));
+		transport.onData((bytes) => received.push(decodeUtf8(bytes)));
 
 		// 等待子进程退出
 		await new Promise<void>((resolve) => {

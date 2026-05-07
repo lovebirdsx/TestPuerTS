@@ -4,7 +4,7 @@
  * 不依赖 Web Streams API，可在 PuerTS 环境中运行。
  */
 
-import { createLogger } from '@universe-agent/editor-common';
+import { createLogger, encodeUtf8, Utf8StreamDecoder } from '@universe-agent/editor-common';
 
 const logger = createLogger('acp-client:jsonrpc');
 
@@ -73,8 +73,7 @@ export class JsonRpcConnection {
 	private closedResolve: (() => void) | null = null;
 	private closedPromise: Promise<void>;
 	private disposed = false;
-	private decoder = new TextDecoder();
-	private encoder = new TextEncoder();
+	private decoder = new Utf8StreamDecoder();
 
 	constructor(transport: NdJsonTransport) {
 		this.transport = transport;
@@ -155,11 +154,11 @@ export class JsonRpcConnection {
 		if (this.disposed) return;
 		this.messageObserver?.('send', msg);
 		const line = JSON.stringify(msg) + '\n';
-		this.transport.send(this.encoder.encode(line));
+		this.transport.send(encodeUtf8(line));
 	}
 
 	private onRawData(data: Uint8Array): void {
-		this.lineBuffer += this.decoder.decode(data, { stream: true });
+		this.lineBuffer += this.decoder.decode(data);
 		const lines = this.lineBuffer.split('\n');
 		// 最后一个元素可能是不完整的行
 		this.lineBuffer = lines.pop() || '';

@@ -2,6 +2,7 @@ import { describe, it, expect } from '../testRunner';
 import { JsonRpcConnection } from '@universe-agent/acp-client-ue';
 import { createTransportPair } from './__fixtures__/inMemoryNdJsonTransport';
 import { withTimeout, flushMicrotasks } from './__fixtures__/withTimeout';
+import { decodeUtf8, encodeUtf8 } from '@universe-agent/editor-common';
 
 // 注：editor/acp/e2e.test.ts 已覆盖了基本的 request/response/notification/error 路径与多帧粘包；
 // 本文件只补充该文件未覆盖的细节：observer / 服务端 handler / 关闭语义 / 不完整行缓冲 / 错误映射。
@@ -164,10 +165,9 @@ describe('JsonRpcConnection - partial-line buffering', () => {
 		});
 
 		// server 直接通过底层 transport push 半行 + 半行
-		const enc = new TextEncoder();
 		const full = JSON.stringify({ jsonrpc: '2.0', method: 'split', params: { a: 1 } }) + '\n';
-		const half1 = enc.encode(full.slice(0, 10));
-		const half2 = enc.encode(full.slice(10));
+		const half1 = encodeUtf8(full.slice(0, 10));
+		const half2 = encodeUtf8(full.slice(10));
 		server.send(half1);
 		expect(received.length).toBe(0);
 		server.send(half2);
@@ -186,9 +186,8 @@ describe('JsonRpcConnection - partial-line buffering', () => {
 		});
 
 		// 一行垃圾 + 一行有效
-		const enc = new TextEncoder();
-		server.send(enc.encode('not-json\n'));
-		server.send(enc.encode(JSON.stringify({ jsonrpc: '2.0', method: 'after', params: 1 }) + '\n'));
+		server.send(encodeUtf8('not-json\n'));
+		server.send(encodeUtf8(JSON.stringify({ jsonrpc: '2.0', method: 'after', params: 1 }) + '\n'));
 		await flushMicrotasks();
 		expect(received.length).toBe(1);
 		expect(received[0]!.method).toBe('after');
@@ -201,10 +200,9 @@ describe('JsonRpcConnection - notifications', () => {
 		const cClient = new JsonRpcConnection(client);
 
 		const recvBuf: string[] = [];
-		const dec = new TextDecoder();
 		// 直接拦截 server 端原始 onData，断言收到的帧无 id
 		(server as any).onData((data: Uint8Array) => {
-			recvBuf.push(dec.decode(data));
+			recvBuf.push(decodeUtf8(data));
 		});
 
 		cClient.sendNotification('ping', { x: 1 });

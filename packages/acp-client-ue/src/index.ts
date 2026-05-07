@@ -1,6 +1,6 @@
 // PuerTS polyfill：必须在引入任何依赖前安装。
-import { installPuertsTimerPolyfill } from '@universe-agent/editor-common';
-installPuertsTimerPolyfill();
+import { installPuertsPolyfill } from '@universe-agent/editor-common';
+installPuertsPolyfill();
 
 import * as UE from 'ue';
 import { parseCliOptions, type CliMcpConfig } from './cli';

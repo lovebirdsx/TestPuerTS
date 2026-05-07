@@ -1,4 +1,5 @@
-import type { NdJsonTransport } from '@universe-agent/acp-client-ue';
+import { type NdJsonTransport } from '@universe-agent/acp-client-ue';
+import { decodeUtf8, encodeUtf8 } from '@universe-agent/editor-common';
 
 /**
  * 创建一对内存中互联的 NdJsonTransport，模拟 ACP client ↔ server 之间的 ndjson 通道。
@@ -22,7 +23,6 @@ export class InMemoryNdJsonTransport implements NdJsonTransport {
 	private closeCallbacks: (() => void)[] = [];
 	private closed = false;
 	private pending: Uint8Array[] = [];
-	private decoder = new TextDecoder();
 
 	attach(peer: InMemoryNdJsonTransport): void {
 		this.peer = peer;
@@ -81,11 +81,11 @@ export class InMemoryNdJsonTransport implements NdJsonTransport {
 	/** 测试辅助：把字符串当作字节注入接收回调（绕过 send，模拟服务端推送）。 */
 	pushRawString(s: string): void {
 		if (this.closed) return;
-		this.dataCallback?.(new TextEncoder().encode(s));
+		this.dataCallback?.(encodeUtf8(s));
 	}
 
 	/** 测试辅助：解码已发送的字节序列为字符串（用于断言） */
 	decode(data: Uint8Array): string {
-		return this.decoder.decode(data);
+		return decodeUtf8(data);
 	}
 }

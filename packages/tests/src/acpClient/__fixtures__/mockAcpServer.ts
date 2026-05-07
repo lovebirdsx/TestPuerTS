@@ -1,5 +1,6 @@
-import type { JsonRpcMessage, JsonRpcRequest, JsonRpcNotification } from '@universe-agent/acp-client-ue';
+import { type JsonRpcMessage, type JsonRpcRequest, type JsonRpcNotification } from '@universe-agent/acp-client-ue';
 import { InMemoryNdJsonTransport } from './inMemoryNdJsonTransport';
+import { encodeUtf8, Utf8StreamDecoder } from '@universe-agent/editor-common';
 
 /**
  * 测试侧的"假 ACP server"：直接读写 ndjson 字符串，不再起第二个 JsonRpcConnection。
@@ -8,8 +9,7 @@ import { InMemoryNdJsonTransport } from './inMemoryNdJsonTransport';
 export class MockAcpServer {
 	private transport: InMemoryNdJsonTransport;
 	private buffer = '';
-	private decoder = new TextDecoder();
-	private encoder = new TextEncoder();
+	private decoder = new Utf8StreamDecoder();
 	private receivedRequests: JsonRpcRequest[] = [];
 	private receivedNotifications: JsonRpcNotification[] = [];
 	/** 按方法名预置请求处理器：返回 result 或抛出 { code, message } */
@@ -35,7 +35,7 @@ export class MockAcpServer {
 	/** 主动向客户端推任意原始 JSON 字符串（用于错误格式测试） — 经 transport 真正送给 client。 */
 	pushRaw(line: string): void {
 		const text = line.endsWith('\n') ? line : line + '\n';
-		this.transport.send(this.encoder.encode(text));
+		this.transport.send(encodeUtf8(text));
 	}
 
 	/** 等待客户端发起指定方法的请求，超时则 reject。 */
@@ -72,7 +72,7 @@ export class MockAcpServer {
 	}
 
 	private onRawData(data: Uint8Array): void {
-		this.buffer += this.decoder.decode(data, { stream: true });
+		this.buffer += this.decoder.decode(data);
 		const lines = this.buffer.split('\n');
 		this.buffer = lines.pop() ?? '';
 		for (const line of lines) {
@@ -125,6 +125,6 @@ export class MockAcpServer {
 
 	private send(msg: JsonRpcMessage): void {
 		const line = JSON.stringify(msg) + '\n';
-		this.transport.send(this.encoder.encode(line));
+		this.transport.send(encodeUtf8(line));
 	}
 }

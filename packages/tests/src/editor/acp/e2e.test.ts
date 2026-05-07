@@ -1,3 +1,4 @@
+import { encodeUtf8 } from '@universe-agent/editor-common';
 import { describe, it, expect } from '../../testRunner';
 import { JsonRpcConnection, type NdJsonTransport, type JsonRpcMessage } from '@universe-agent/acp-client-ue';
 
@@ -164,7 +165,7 @@ describe('ACP JSON-RPC end-to-end via in-memory transport', () => {
 			JSON.stringify({ jsonrpc: '2.0', method: 'b', params: 2 }) +
 			'\n';
 		// 模拟 server 推送（b.send 会调用 a 的 onData 回调）
-		b.send(new TextEncoder().encode(blob));
+		b.send(encodeUtf8(blob));
 
 		expect(received.length).toBe(2);
 		expect((received[0] as any).method).toBe('a');

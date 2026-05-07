@@ -3,7 +3,7 @@
   "configurations": [
       {
           "name": "Attach Editor",
-          "port": 8888,
+          "port": 8889,
           "restart": false,
           "request": "attach",
           "skipFiles": [
