@@ -73,13 +73,13 @@ const ConfigOptionControl: React.FC<{
 }> = ({ option, onChange }) => {
 	if (option.type === 'select') {
 		const opt = option as Extract<SessionConfigOption, { type: 'select' }>;
-		const values = opt.options?.map((o) => o.valueId) ?? [];
+		const values = opt.options?.map((o) => o.value) ?? [];
 		return (
 			<VBox Gap={2}>
 				<Text Text={opt.name} />
 				<Select
 					DefaultOptions={toTArray(values)}
-					SelectedOption={opt.currentValueId ?? values[0]}
+					SelectedOption={opt.currentValue ?? values[0]}
 					OnSelectionChanged={(value) => onChange(opt.id, value)}
 				/>
 			</VBox>

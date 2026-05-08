@@ -46,8 +46,8 @@ export type SessionConfigOption =
 			name: string;
 			description?: string;
 			category?: string | null;
-			currentValueId?: string | null;
-			options?: { valueId: string; name: string; description?: string }[];
+			currentValue?: string | null;
+			options?: { value: string; name: string; description?: string }[];
 	  }
 	| {
 			type: 'boolean';

@@ -545,8 +545,8 @@ export class ACPClient {
 
 		const params =
 			typeof valueId === 'boolean'
-				? { sessionId: this.sessionId, optionId, value: valueId }
-				: { sessionId: this.sessionId, optionId, valueId };
+				? { sessionId: this.sessionId, configId: optionId, value: valueId }
+				: { sessionId: this.sessionId, configId: optionId, value: valueId };
 		const result = await this.connection.sendRequest<{ configOptions?: SessionConfigOption[] }>(
 			AGENT_METHODS.session_set_config_option,
 			params,

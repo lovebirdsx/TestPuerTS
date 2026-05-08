@@ -196,13 +196,13 @@ describe('ACPClient - setConfigOption', () => {
 		const cfg = await withTimeout(h.client.setConfigOption('verbose', true), 1000);
 
 		const params = h.server.lastRequestParams('session/set_config_option') as any;
-		expect(params.optionId).toBe('verbose');
+		expect(params.configId).toBe('verbose');
 		expect(params.value).toBe(true);
 		expect('valueId' in params).toBe(false);
 		expect(cfg.length).toBe(1);
 	});
 
-	it('string valueId sends params.valueId', async () => {
+	it('string value sends params.value', async () => {
 		const h = buildHarness();
 		h.server.respondTo('session/new', () => ({ sessionId: 'sess-C2' }));
 		h.server.respondTo('session/set_config_option', () => ({}));
@@ -212,8 +212,9 @@ describe('ACPClient - setConfigOption', () => {
 		await withTimeout(h.client.setConfigOption('mode', 'fast'), 1000);
 
 		const params = h.server.lastRequestParams('session/set_config_option') as any;
-		expect(params.valueId).toBe('fast');
-		expect('value' in params).toBe(false);
+		expect(params.configId).toBe('mode');
+		expect(params.value).toBe('fast');
+		expect('valueId' in params).toBe(false);
 	});
 });
 
