@@ -14,6 +14,8 @@ export interface PackageDef {
 	dir: string;
 	/** 相对 projectRoot 的源文件 glob，用于 per-package lint 缓存键 */
 	srcGlob: string[];
+	/** 相对 projectRoot 的编译输出目录，用于 <pkg>:clean */
+	outDir: string;
 	/** per-package lint 时执行的 eslint 入口（相对 dir），默认 'src' */
 	lintEntry?: string;
 	/** typecheck 时是否额外跑 madge 循环依赖检查 */
@@ -26,33 +28,37 @@ export interface PackageDef {
 
 const config = getConfig();
 const packagesPath = config.packagesPath;
-const buildToolsPath = config.buildToolsPath;
 
 export const WORKSPACE_PACKAGES: PackageDef[] = [
 	{
 		name: 'editor-common',
 		dir: path.join(packagesPath, 'editor-common'),
 		srcGlob: ['packages/editor-common/src/**/*.ts', 'packages/editor-common/eslint.config.*'],
+		outDir: 'Content/JavaScript/editor-common',
 	},
 	{
 		name: 'mcp-bridge',
 		dir: path.join(packagesPath, 'mcp-bridge'),
 		srcGlob: ['packages/mcp-bridge/src/**/*.ts'],
+		outDir: 'packages/mcp-bridge/dist',
 	},
 	{
 		name: 'acp-client-ue',
 		dir: path.join(packagesPath, 'acp-client-ue'),
 		srcGlob: ['packages/acp-client-ue/src/**/*.ts'],
+		outDir: 'Content/JavaScript/acp-client-ue',
 	},
 	{
 		name: 'mcp-server-ue',
 		dir: path.join(packagesPath, 'mcp-server-ue'),
 		srcGlob: ['packages/mcp-server-ue/src/**/*.ts'],
+		outDir: 'Content/JavaScript/mcp-server-ue',
 	},
 	{
 		name: 'editor',
 		dir: path.join(packagesPath, 'editor'),
 		srcGlob: ['packages/editor/src/**/*.{ts,tsx}'],
+		outDir: 'Content/JavaScript/editor',
 		enableMadge: true,
 		hasWatch: true,
 	},
@@ -60,13 +66,7 @@ export const WORKSPACE_PACKAGES: PackageDef[] = [
 		name: 'tests',
 		dir: path.join(packagesPath, 'tests'),
 		srcGlob: ['packages/tests/src/**/*.ts'],
-	},
-	{
-		name: 'tool',
-		dir: buildToolsPath,
-		srcGlob: ['tools/build/src/**/*.ts'],
-		enableMadge: true,
-		hasWatch: true,
+		outDir: 'Content/JavaScript/tests',
 	},
 ];
 

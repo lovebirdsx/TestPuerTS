@@ -30,16 +30,18 @@ tools/                        # 仓库级开发工具
 ```bash
 npm ci                          # 安装依赖；postinstall 会编译 tool、构建 UE，并生成 VS Code C++ 配置
 npm run dev                     # 监听 tool 源码变更，自动重编译后执行 gulp dev
-npm run check                   # 串行：build → typecheck → lint → unittest
+npm run check                   # 串行：tool 自检（lint+typecheck+test）→ gulp build/typecheck/lint/test
+npm run clean                   # 顶层全量清理：业务包产物 + UE C++ + gulp 缓存 + tool 自身
 
 # 顶层组合任务（注册表驱动，新增包不需要修改任务定义）
 npx gulp build                  # ue:gen_typing → workspace:build（根级一次 tsc -b）
 npx gulp typecheck              # workspace:build + 各包 madge fan-out
-npx gulp lint                   # 一次根级 eslint .（覆盖所有包）
+npx gulp lint                   # 一次根级 eslint .（覆盖所有包，含 tools/build）
 npx gulp lint:fix               # 一次根级 eslint . --fix
 npx gulp watch                  # workspace:watch（根级 tsc -b -w）+ ue:build:watch
 npx gulp test:watch             # workspace:watch + ue:test:watch（commandlet 热重启 < 5s）
-npx gulp check                  # 等价 npm run check
+npx gulp check                  # 等价 npm run check 的 gulp 部分（不含 tool 自检）
+npx gulp clean                  # workspace:clean + cache:clear（并行）→ ue:build:clean
 npx gulp cache:clear            # 清理 .gulp-cache 目录
 
 # 按包薄包装（注册表自动生成；适合只关注一个包的开发）
@@ -47,7 +49,8 @@ npx gulp <pkg>:lint             # eslint src，单包缓存
 npx gulp <pkg>:lint:fix         # eslint src --fix
 npx gulp <pkg>:typecheck        # = workspace:build [+ <pkg>:madge]
 npx gulp <pkg>:build            # = workspace:build（composite 图无法只构造单包）
-npx gulp <pkg>:watch            # 独立 tsc -w（仅 editor / tool 等开启了 hasWatch 的包）
+npx gulp <pkg>:watch            # 独立 tsc -w（仅 editor 等开启了 hasWatch 的包）
+npx gulp <pkg>:clean            # 删该包 outDir + tsconfig.tsbuildinfo + 失效相关 gulp 缓存
 
 # UE 专属任务
 npx gulp ue:gen_vscode_settings # 通过 UnrealBuildTool 生成 .vscode/c_cpp_properties.json 和 compileCommands_*.json
@@ -58,22 +61,18 @@ npx gulp ue:gen_typing          # 通过 Puerts.Gen 控制台命令生成 d.ts �
 npx gulp ue:build:watch         # 监听 C++ 源文件；.h 文件变更还会触发 gen_typing
 npx gulp ue:build:clean         # 清理 C++ 构建产物
 npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
-
-# 其他
-npx gulp tool:test              # vitest 单元测试（tools/build 自身）
-npx gulp tool:test:watch        # vitest watch
 ```
 
-> 新增 workspace 包：仓库根 `tsconfig.workspace.json` 加一行 references + `tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 加一项即可。`gulpfile.ts` 不需修改。
+> 新增 workspace 包：仓库根 `tsconfig.workspace.json` 加一行 references + `tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 加一项（含 `outDir`）即可。`gulpfile.ts` 不需修改。
 > CLI 透传：`ue:test` / `ue:test:debug` / `ue:test:watch` / `ue:acp-client` 支持把命名 flag 透传给跑在 PuerTS 里的 JS（gulp 5 的 yargs 不识别 POSIX `--`，所以走命名 flag 而非 `--`）。透传非空时会绕过 `withCache`，强制执行。
 > - 测试：`--filter <suite-prefix>` / `-t <regex>`（亦支持 `--test-name-pattern`），可组合：`npx gulp ue:test --filter ueBindings -t async`
 
 ## 架构说明
 
 - **测试体系**：项目只有两条测试线。
-  - `tool:test`（vitest）—— `tools/build` 自身的纯 Node 单元测试。
+  - `tools/build` 的 vitest 测试（`npm --workspace @test-puerts/build-tools run test`）—— `tools/build` 自身的纯 Node 单元测试。tool 已从 gulp 任务体系中解耦，自治通过 npm scripts 管理。
   - `ue:test`（JsRunnerCommandlet + 自实现 vitest 风 runner）—— 所有需要 PuerTS/UE 引擎的测试（含 UE 绑定、IPC、ReactUMG、persistence 等），代码在 `packages/tests/`。
-- **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源；`workspace.ts` 据此自动注册按包薄包装与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--force` 强制跳过。
+- **Gulp 任务编排**：`tools/build/src/packages/registry.ts` 的 `WORKSPACE_PACKAGES` 是单一数据源（每项含 `name`/`dir`/`srcGlob`/`outDir`）；`workspace.ts` 据此自动注册按包薄包装（`<pkg>:lint`/`:build`/`:typecheck`/`:watch`/`:clean`）与 workspace 级任务（`workspace:build/lint/lint:fix/typecheck/watch/clean`）。`gulpfile.ts` 顶层任务 alias 到 workspace:* + 少量 ue:* 任务，新增包不需修改任务定义。缓存机制基于输入文件哈希，`--force` 强制跳过；`<pkg>:clean` 会同时失效该包相关的缓存条目，避免下次 build 误命中。
 - **IPC/RPC 架构**：PuerTS ↔ Node.js 跨进程通信，通过 Windows 命名管道实现。
   - C++ 层：`UIPCTransport`（`EditorCommon` 插件），使用 `FTSTicker` 轮询管道数据，通过 `FArrayBuffer` 与 JS 交换二进制数据。
   - TS 适配层：`UeIpcSocket` 将 `UIPCTransport` 包装为 universe-lib 的 `ISocket` 接口。

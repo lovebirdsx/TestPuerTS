@@ -5,9 +5,15 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -b",
+    "watch": "tsc -b -w",
+    "typecheck": "tsc -b",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "test": "vitest run",
-    "dev:test": "vitest --watch"
+    "test:watch": "vitest --watch",
+    "clean": "node -e \"const fs=require('fs');fs.rmSync('out',{recursive:true,force:true});fs.rmSync('tsconfig.tsbuildinfo',{force:true})\"",
+    "check": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.17",

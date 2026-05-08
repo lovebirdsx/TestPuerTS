@@ -6,7 +6,6 @@
 		{ "path": "./packages/acp-client-ue" },
 		{ "path": "./packages/mcp-server-ue" },
 		{ "path": "./packages/editor" },
-		{ "path": "./packages/tests" },
-		{ "path": "./tools/build" }
+		{ "path": "./packages/tests" }
 	]
 }

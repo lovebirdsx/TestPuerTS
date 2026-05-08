@@ -2,15 +2,11 @@ import * as gulp from 'gulp';
 import * as path from 'path';
 import { info } from 'gulplog';
 
-// 注册表驱动的 workspace 任务（含按包薄包装：<pkg>:lint / build / typecheck / watch / lint:fix / madge）
+// 注册表驱动的 workspace 任务（含按包薄包装：<pkg>:lint / build / typecheck / watch / lint:fix / madge / clean）
 import './packages/workspace';
 
 // UE 专属任务（C++ 构建、commandlet）
 import './packages/ue';
-
-// 不被 workspace 抽象覆盖的特殊任务：
-//   - tool: vitest 单元测试（tool:test / tool:test:watch / tool:clean）
-import './packages/tool';
 
 import { getConfig } from './config';
 import { cleanDirAsync, green } from './common/util';
@@ -22,7 +18,7 @@ gulp.task('typecheck', gulp.series('workspace:typecheck'));
 gulp.task('lint', gulp.series('workspace:lint'));
 gulp.task('lint:fix', gulp.series('workspace:lint:fix'));
 
-gulp.task('test', gulp.parallel('tool:test', 'ue:test'));
+gulp.task('test', gulp.series('ue:test'));
 gulp.task('check', gulp.series('build', 'typecheck', 'lint', 'test'));
 
 // 开发任务
@@ -36,5 +32,8 @@ gulp.task('cache:clear', async () => {
 	await cleanDirAsync(path.join(projectRoot, '.gulp-cache'));
 	info(green('[cache:clear] Cache cleared'));
 });
+
+// 全量清理：业务包产物 + gulp 缓存（并行）→ UE C++ 构建产物（串行，耗时长）
+gulp.task('clean', gulp.series(gulp.parallel('workspace:clean', 'cache:clear'), 'ue:build:clean'));
 
 // #endregion

@@ -1,11 +1,12 @@
 import * as gulp from 'gulp';
+import * as path from 'path';
 import { spawn } from 'child_process';
 import { info } from 'gulplog';
 
 import { exec, formatCheckCircularText, formatLintOutput, formatTscCheckOutput } from '../common/exec';
 import { withCache } from '../common/taskCache';
 import { getConfig } from '../config';
-import { blue, red } from '../common/util';
+import { blue, cleanDirAsync, green, red, rmFileAsync } from '../common/util';
 import { allSrcGlobs, allTsconfigGlobs, PackageDef, WORKSPACE_PACKAGES } from './registry';
 
 const config = getConfig();
@@ -158,6 +159,20 @@ function registerPackage(pkg: PackageDef): void {
 			});
 		});
 	}
+
+	// per-package clean：删除 outDir、tsbuildinfo，并失效相关 gulp 缓存条目
+	// 否则 <pkg>:clean → workspace:build 时会因输入文件未变命中缓存而 skip 真实编译
+	gulp.task(`${pkg.name}:clean`, async () => {
+		const absOutDir = path.join(projectRoot, pkg.outDir);
+		const tsBuildInfo = path.join(pkg.dir, 'tsconfig.tsbuildinfo');
+		const cacheDir = path.join(projectRoot, '.gulp-cache');
+		await cleanDirAsync(absOutDir);
+		await rmFileAsync(tsBuildInfo);
+		// 清理与本包相关的 gulp 缓存条目（输入哈希不变，但产物已删，必须强制下次 cache miss）
+		await rmFileAsync(path.join(cacheDir, 'workspace-build.json'));
+		await rmFileAsync(path.join(cacheDir, `${pkg.name}-lint.json`));
+		info(`${blue(`[${pkg.name}:clean] `)}${green('cleaned')} ${pkg.outDir}`);
+	});
 }
 
 WORKSPACE_PACKAGES.forEach(registerPackage);
@@ -174,5 +189,8 @@ gulp.task(
 		? gulp.series('workspace:build', gulp.parallel(...madgeFanout))
 		: gulp.series('workspace:build'),
 );
+
+// workspace:clean：并行清理所有包产物（互不相交，安全）
+gulp.task('workspace:clean', gulp.parallel(...WORKSPACE_PACKAGES.map((p) => `${p.name}:clean`)));
 
 // #endregion
