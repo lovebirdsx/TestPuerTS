@@ -14,31 +14,6 @@ const SidebarTextArea: React.FC<React.ComponentProps<typeof TextArea>> = (props)
 );
 
 // ──────────────────────────────────────────────────────────────────────────
-// Connection 配置区
-// ──────────────────────────────────────────────────────────────────────────
-
-const ConnectionConfigPanel: React.FC = () => {
-	const command = useStoreSelector((s) => s.config.connection.command);
-	const workspace = useStoreSelector((s) => s.config.connection.workspace);
-	const extraArgs = useStoreSelector((s) => s.config.connection.extraArgs);
-	const connected = useStoreSelector((s) => s.client !== undefined);
-	const setCommand = useStoreAction('setCommand');
-	const setWorkspace = useStoreAction('setWorkspace');
-	const setExtraArgs = useStoreAction('setExtraArgs');
-
-	return (
-		<Section Title="Connection">
-			<Text Text="Command" />
-			<SidebarTextArea Text={command} OnTextChanged={setCommand} bIsReadOnly={connected} />
-			<Text Text="Workspace" />
-			<SidebarTextArea Text={workspace} OnTextChanged={setWorkspace} bIsReadOnly={connected} />
-			<Text Text="Extra Args" />
-			<SidebarTextArea Text={extraArgs} OnTextChanged={setExtraArgs} bIsReadOnly={connected} />
-		</Section>
-	);
-};
-
-// ──────────────────────────────────────────────────────────────────────────
 // Session 操作区
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -156,7 +131,6 @@ const SessionOptionsPanel: React.FC = () => {
 
 export const Sidebar: React.FC = () => (
 	<VBox Gap={6}>
-		<ConnectionConfigPanel />
 		<SessionPanel />
 		<PolicyPanel />
 		<SessionOptionsPanel />

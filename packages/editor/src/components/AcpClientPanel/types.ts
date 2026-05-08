@@ -53,11 +53,8 @@ export interface UsageInfo {
 }
 
 export interface PersistedConfig {
-	connection: {
-		command: string;
-		workspace: string;
-		extraArgs: string;
-	};
+	/** 当前选中的连接配置 ID；空字符串表示使用第一个可用连接。 */
+	activeConnectionId: string;
 	startup: {
 		autoConnect: boolean;
 	};

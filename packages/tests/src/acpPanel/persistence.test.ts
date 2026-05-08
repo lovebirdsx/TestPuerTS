@@ -12,9 +12,7 @@ describe('AcpPanel store / persistence', () => {
 
 		const first = createAcpPanelStore({ clientFactory, persistName, storage });
 		await waitHydration(first);
-		first.getState().setCommand('custom-cmd');
-		first.getState().setWorkspace('C:/ws');
-		first.getState().setExtraArgs('-v');
+		first.getState().setActiveConnectionId('my-profile');
 		first.getState().setAutoConnect(true);
 		first.getState().setPermissionStrategy('auto-approve');
 		first.getState().setProtocolEnabled(true);
@@ -28,9 +26,7 @@ describe('AcpPanel store / persistence', () => {
 		const second = createAcpPanelStore({ clientFactory, persistName, storage });
 		await waitHydration(second);
 		const s = second.getState();
-		expect(s.config.connection.command).toBe('custom-cmd');
-		expect(s.config.connection.workspace).toBe('C:/ws');
-		expect(s.config.connection.extraArgs).toBe('-v');
+		expect(s.config.activeConnectionId).toBe('my-profile');
 		expect(s.config.startup.autoConnect).toBe(true);
 		expect(s.permission).toBe('auto-approve');
 		expect(s.protocolEnabled).toBe(true);

@@ -1,0 +1,18 @@
+{
+  "connections": [
+    {
+      "id": "claude",
+      "label": "Claude Agent",
+      "command": "npx claude-agent-acp",
+      "workspace": "",
+      "extraArgs": ""
+    },
+    {
+      "id": "universe-agent",
+      "label": "Universe Agent",
+      "command": "npx universe-agent-acp",
+      "workspace": "",
+      "extraArgs": ""
+    }
+  ]
+}

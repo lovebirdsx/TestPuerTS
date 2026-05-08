@@ -17,6 +17,7 @@ const PanelBody: React.FC = () => {
 	const hasClient = useStoreSelector((s) => s.client !== undefined);
 	const connect = useStoreAction('connect');
 	const disconnect = useStoreAction('disconnect');
+	const loadConnections = useStoreAction('loadConnections');
 
 	// 卸载时统一释放 client（含 MCP）
 	React.useEffect(() => {
@@ -25,13 +26,15 @@ const PanelBody: React.FC = () => {
 		};
 	}, [disconnect]);
 
-	// hydration 完成后按需自动连接（仅触发一次）
+	// hydration 完成后加载连接配置，并按需自动连接（仅触发一次）
 	const autoConnectFiredRef = React.useRef(false);
 	React.useEffect(() => {
 		if (!hydrated || autoConnectFiredRef.current) return;
 		autoConnectFiredRef.current = true;
-		if (autoConnect && !hasClient) connect();
-	}, [hydrated, autoConnect, hasClient, connect]);
+		void loadConnections().then(() => {
+			if (autoConnect && !hasClient) connect();
+		});
+	}, [hydrated, autoConnect, hasClient, connect, loadConnections]);
 
 	return (
 		<Panel Slot={{ Size: { SizeRule: 1, Value: 1 } }}>

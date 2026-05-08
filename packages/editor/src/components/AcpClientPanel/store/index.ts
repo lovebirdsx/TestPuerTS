@@ -23,6 +23,7 @@ import type {
 	ToolRecord,
 	UsageInfo,
 } from '../types';
+import { type ConnectionProfile, loadConnectionsConfig } from './connectionConfig';
 import { ueStorage } from './ueStorage';
 
 // 转出常用类型，方便领域组件按 `'../../store'` 路径就近引用
@@ -42,6 +43,7 @@ export type {
 	ToolRecord,
 	UsageInfo,
 } from '../types';
+export type { ConnectionProfile } from './connectionConfig';
 
 const PROTOCOL_LIMIT = 200;
 const DEFAULT_COMMAND = 'npx universe-agent-acp';
@@ -66,6 +68,9 @@ export interface AcpPanelStateData {
 	agentName: string;
 	agentVersion: string;
 	error: string | undefined;
+
+	// connection profiles (从 acp-connections.json 加载，不持久化)
+	connections: ConnectionProfile[];
 
 	// session
 	sessionId: string | undefined;
@@ -133,10 +138,11 @@ export interface AcpPanelActions {
 	setProtocolEnabled: (value: boolean) => void;
 
 	// config
-	setCommand: (value: string) => void;
-	setWorkspace: (value: string) => void;
-	setExtraArgs: (value: string) => void;
 	setAutoConnect: (value: boolean) => void;
+
+	// connections（JSON 配置文件中的连接档案）
+	setActiveConnectionId: (id: string) => void;
+	loadConnections: () => Promise<void>;
 
 	// internal: 由订阅 controller 事件触发；测试可直接调用
 	ingestEvent: (event: AcpUiEvent) => void;
@@ -150,7 +156,7 @@ export type AcpPanelStore = AcpPanelStateData & AcpPanelActions;
 
 function defaultConfig(): PersistedConfig {
 	return {
-		connection: { command: DEFAULT_COMMAND, workspace: '', extraArgs: '' },
+		activeConnectionId: '',
 		startup: { autoConnect: false },
 	};
 }
@@ -162,6 +168,8 @@ function initialData(): AcpPanelStateData {
 		agentName: '',
 		agentVersion: '',
 		error: undefined,
+
+		connections: [],
 
 		sessionId: undefined,
 		sessionToLoad: '',
@@ -337,11 +345,12 @@ const createSlices = (
 
 		// ── connection ──
 		connect: () => {
-			const { config, permission, protocolEnabled } = get();
+			const { config, connections, permission, protocolEnabled } = get();
+			const profile = connections.find((c) => c.id === config.activeConnectionId) ?? connections[0];
 			const client = clientFactory({
-				command: config.connection.command !== '' ? config.connection.command : DEFAULT_COMMAND,
-				args: splitArgs(config.connection.extraArgs),
-				workspace: resolveWorkspace(config.connection.workspace),
+				command: profile?.command ?? DEFAULT_COMMAND,
+				args: splitArgs(profile?.extraArgs ?? ''),
+				workspace: resolveWorkspace(profile?.workspace ?? ''),
 				permission,
 				protocol: protocolEnabled,
 				verbose: true,
@@ -544,22 +553,32 @@ const createSlices = (
 		},
 
 		// ── config ──
-		setCommand: (value) =>
-			set((s) => {
-				s.config.connection.command = value;
-			}),
-		setWorkspace: (value) =>
-			set((s) => {
-				s.config.connection.workspace = value;
-			}),
-		setExtraArgs: (value) =>
-			set((s) => {
-				s.config.connection.extraArgs = value;
-			}),
 		setAutoConnect: (value) =>
 			set((s) => {
 				s.config.startup.autoConnect = value;
 			}),
+
+		// ── connections ──
+		setActiveConnectionId: (id) =>
+			set((s) => {
+				s.config.activeConnectionId = id;
+			}),
+
+		loadConnections: async () => {
+			let projectDir: string;
+			try {
+				// eslint-disable-next-line @typescript-eslint/no-require-imports
+				const ue = require('ue') as typeof import('ue');
+				projectDir = ue.JsRunHelper.GetProjectDir();
+			} catch {
+				return; // 非 UE 环境（测试）跳过
+			}
+			const { config, warning } = await loadConnectionsConfig(`${projectDir}/.config/acp-connections.json`);
+			set((s) => {
+				s.connections = config.connections;
+				if (warning) pushMessage(s.messages, 'system', `Connections config: ${warning}`);
+			});
+		},
 
 		// ── event sink ──
 		ingestEvent: (event) => set((s) => ingestEvent(s as unknown as AcpPanelStateData, event)),
@@ -621,7 +640,7 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 				return {
 					...current,
 					config: {
-						connection: { ...baseConfig.connection, ...(p.config?.connection ?? {}) },
+						activeConnectionId: p.config?.activeConnectionId ?? baseConfig.activeConnectionId,
 						startup: { ...baseConfig.startup, ...(p.config?.startup ?? {}) },
 					},
 					permission: p.policy?.permission ?? current.permission,
