@@ -55,12 +55,13 @@ describe('AcpPanel store / conversation', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: 'sid' }));
 
 		const ctrl = ctx.mockClients[0]!.mockController;
-		ctrl.emit({ type: 'message_chunk', role: 'agent', text: 'Hello' });
-		ctrl.emit({ type: 'message_chunk', role: 'agent', text: ' world' });
-		ctrl.emit({ type: 'thought_chunk', text: 'thinking' });
-		ctrl.emit({ type: 'message_chunk', role: 'agent', text: '!' });
+		ctrl.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: 'Hello' });
+		ctrl.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: ' world' });
+		ctrl.emit({ type: 'thought_chunk', sessionId: 'sid', text: 'thinking' });
+		ctrl.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: '!' });
 
 		const messages = ctx.store.getState().messages;
 		expect(messages.length).toBe(3);
@@ -75,7 +76,8 @@ describe('AcpPanel store / conversation', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
-		ctx.mockClients[0]!.mockController.emit({ type: 'message_chunk', role: 'agent', text: 'x' });
+		ctx.store.setState((s) => ({ ...s, sessionId: 'sid' }));
+		ctx.mockClients[0]!.mockController.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: 'x' });
 		expect(ctx.store.getState().messages.length).toBe(1);
 
 		ctx.store.getState().clearMessages();

@@ -1,13 +1,17 @@
 import { describe, expect, it } from '../testRunner';
 import { createTestStore, waitHydration } from './testStore';
 
+const SID = 'test-session';
+
 describe('AcpPanel store / inspector', () => {
 	it('plan_updated populates plan tab', async () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
 		ctx.mockClients[0]!.mockController.emit({
 			type: 'plan_updated',
+			sessionId: SID,
 			entries: [{ content: 'a', status: 'pending', priority: 'high' }],
 		});
 		expect(ctx.store.getState().plan.length).toBe(1);
@@ -17,10 +21,11 @@ describe('AcpPanel store / inspector', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
 		const ctrl = ctx.mockClients[0]!.mockController;
-		ctrl.emit({ type: 'tool_call_updated', toolCallId: 't1', title: 'T1', status: 'pending' });
-		ctrl.emit({ type: 'tool_call_updated', toolCallId: 't1', title: 'T1', status: 'completed' });
-		ctrl.emit({ type: 'tool_call_updated', toolCallId: 't2', title: 'T2' });
+		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't1', title: 'T1', status: 'pending' });
+		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't1', title: 'T1', status: 'completed' });
+		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't2', title: 'T2' });
 		const tools = ctx.store.getState().tools;
 		expect(tools.length).toBe(2);
 		expect(tools[0]!.status).toBe('completed');
@@ -67,7 +72,8 @@ describe('AcpPanel store / inspector', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
-		ctx.mockClients[0]!.mockController.emit({ type: 'usage_updated', size: 200000, used: 1234 });
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
+		ctx.mockClients[0]!.mockController.emit({ type: 'usage_updated', sessionId: SID, size: 200000, used: 1234 });
 		expect(ctx.store.getState().usage).toEqual({ size: 200000, used: 1234 });
 	});
 
@@ -75,8 +81,10 @@ describe('AcpPanel store / inspector', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
 		ctx.mockClients[0]!.mockController.emit({
 			type: 'commands_updated',
+			sessionId: SID,
 			commands: [{ name: 'help', description: 'show help' }],
 		});
 		expect(ctx.store.getState().commands.length).toBe(1);

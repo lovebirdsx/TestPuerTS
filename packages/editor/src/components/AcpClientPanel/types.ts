@@ -14,6 +14,14 @@ import type { StateStorage } from 'zustand/middleware';
 export type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
 export type InspectorTab = 'plan' | 'tools' | 'protocol' | 'state' | 'commands';
 
+/** SessionPicker 列表项（来自服务端 session/list）。 */
+export interface SessionListEntry {
+	sessionId: string;
+	title?: string | null;
+	createdAt?: string | null;
+	updatedAt?: string | null;
+}
+
 export interface ChatMessage {
 	id: number;
 	role: MessageRole;

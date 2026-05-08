@@ -178,3 +178,47 @@ describe('AcpUiController - permission strategy', () => {
 		await h.controller.disconnect();
 	});
 });
+
+describe('AcpUiController - session attribution', () => {
+	it('session/update notifications attach the originating sessionId to events', async () => {
+		const h = buildHarness();
+		h.server.respondTo('session/new', () => ({ sessionId: 's-A' }));
+		await withTimeout(h.controller.connect(), 2000);
+		await withTimeout(h.controller.newSession(), 2000);
+
+		// 服务端推送两条来自不同 session 的 message_chunk update
+		h.server.pushRaw(
+			JSON.stringify({
+				jsonrpc: '2.0',
+				method: 'session/update',
+				params: {
+					sessionId: 's-A',
+					update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: 'hi-A' } },
+				},
+			}),
+		);
+		h.server.pushRaw(
+			JSON.stringify({
+				jsonrpc: '2.0',
+				method: 'session/update',
+				params: {
+					sessionId: 's-B',
+					update: { sessionUpdate: 'agent_message_chunk', content: { type: 'text', text: 'hi-B' } },
+				},
+			}),
+		);
+		await flushMicrotasks(10);
+
+		const chunks = h.events.filter(
+			(e): e is Extract<AcpUiEvent, { type: 'message_chunk' }> => e.type === 'message_chunk',
+		);
+		expect(chunks.length).toBe(2);
+		expect(chunks[0]!.sessionId).toBe('s-A');
+		expect(chunks[0]!.text).toBe('hi-A');
+		expect(chunks[1]!.sessionId).toBe('s-B');
+		expect(chunks[1]!.text).toBe('hi-B');
+
+		h.unsubscribe();
+		await h.controller.disconnect();
+	});
+});

@@ -40,4 +40,5 @@ npx gulp editor:lint:fix    # lint 自动修复
 - 状态管理：zustand v5 + immer + persist 中间件，单一 store 内含 8 个领域字段；事件流通过 `ingestEvent` 投影到 store，UI 组件按需 `useStoreSelector` / `useStoreAction` 订阅，零 props drilling。
 - `AcpClient` facade（来自 `@universe-agent/acp-client-ue`）由 store 内部按 `clientFactory` 实例化；MCP 生命周期由 `AcpClient` 自动管理，Panel 卸载时统一调 `client.dispose()`。
 - 持久化：zustand persist + 自定义 ueStorage 适配器写 `<ProjectDir>/EditorPersistence/acp-panel.json`，仅落 `{ config, policy, inspector.activeTab }`。旧 schema `acp-client-panel.json` / `acpPanelConfigStore` / `usePersistedState` 已下线。
+- Session 管理：服务端 `session/list` 为唯一来源，单活动会话 + 列表快速切换。store 提供 `refreshSessions()`/`switchSession(id)`/`newSession()`，`connect()` 后自动 `refreshSessions()`；切换/新建前调 `resetSessionRuntime` 清空 messages/tools/plan/protocol/usage 等运行态。`ingestEvent` 对 session-bound 事件按 `event.sessionId === s.sessionId` 过滤丢弃跨会话尾随事件；切换时先乐观置入新 sessionId，加载失败回滚。UI 由 `domain/session/SessionPicker.tsx`（独立左栏）展示历史列表 + Active 高亮 + New/Refresh，旧的「输入 ID → Load」流程已下线。
 - 测试隔离：`createAcpPanelStore({ clientFactory, persistName, storage })` 工厂可注入 mock client + 内存 storage，详见 `packages/tests/src/acpPanel/`。

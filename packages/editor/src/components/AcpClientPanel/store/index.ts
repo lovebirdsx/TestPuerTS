@@ -19,6 +19,7 @@ import type {
 	ProtocolEntry,
 	SessionConfigOption,
 	SessionInfo,
+	SessionListEntry,
 	SessionModeState,
 	ToolRecord,
 	UsageInfo,
@@ -39,6 +40,7 @@ export type {
 	ProtocolEntry,
 	SessionConfigOption,
 	SessionInfo,
+	SessionListEntry,
 	SessionModeState,
 	ToolRecord,
 	UsageInfo,
@@ -74,10 +76,12 @@ export interface AcpPanelStateData {
 
 	// session
 	sessionId: string | undefined;
-	sessionToLoad: string;
 	configOptions: SessionConfigOption[];
 	modes: SessionModeState | undefined;
 	sessionInfo: SessionInfo | undefined;
+	sessions: SessionListEntry[];
+	sessionsLoading: boolean;
+	sessionsError: string | undefined;
 
 	// prompt
 	prompt: string;
@@ -111,9 +115,9 @@ export interface AcpPanelActions {
 	disconnect: () => Promise<void>;
 
 	// session
-	setSessionToLoad: (value: string) => void;
 	newSession: () => void;
-	loadSession: () => void;
+	switchSession: (sessionId: string) => void;
+	refreshSessions: () => Promise<void>;
 	setMode: (mode: string) => void;
 	setConfigOption: (id: string, value: string | boolean) => void;
 
@@ -172,10 +176,12 @@ function initialData(): AcpPanelStateData {
 		connections: [],
 
 		sessionId: undefined,
-		sessionToLoad: '',
 		configOptions: [],
 		modes: undefined,
 		sessionInfo: undefined,
+		sessions: [],
+		sessionsLoading: false,
+		sessionsError: undefined,
 
 		prompt: '',
 		isPrompting: false,
@@ -252,11 +258,50 @@ function resolveWorkspace(workspace: string): string {
 	return ue.JsRunHelper.GetProjectDir();
 }
 
+/** 把面板里随会话产生的运行态全部重置；不动连接、配置、策略相关字段。 */
+export function resetSessionRuntime(s: AcpPanelStateData): void {
+	s.sessionId = undefined;
+	s.configOptions = [];
+	s.modes = undefined;
+	s.sessionInfo = undefined;
+	s.isPrompting = false;
+	s.messages = [];
+	s.plan = [];
+	s.tools = [];
+	s.protocol = [];
+	s.commands = [];
+	s.usage = undefined;
+	s.pendingPermission = undefined;
+}
+
+/** Session-bound 事件：只有 sessionId 与当前 active session 一致才落地，避免切换时尾随事件污染。 */
+function isSessionBoundEvent(event: AcpUiEvent): event is Extract<AcpUiEvent, { sessionId: string }> {
+	switch (event.type) {
+		case 'message_chunk':
+		case 'thought_chunk':
+		case 'plan_updated':
+		case 'tool_call_updated':
+		case 'commands_updated':
+		case 'mode_updated':
+		case 'config_options_updated':
+		case 'session_info_updated':
+		case 'usage_updated':
+			return true;
+		default:
+			return false;
+	}
+}
+
 // ──────────────────────────────────────────────────────────────────────────
 // EventSink：把 controller 事件投影到 store
 // ──────────────────────────────────────────────────────────────────────────
 
 export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
+	// session-bound 事件先做归属过滤；旧 session 的尾随更新一律丢弃。
+	if (isSessionBoundEvent(event) && event.sessionId !== s.sessionId) {
+		return;
+	}
+
 	switch (event.type) {
 		case 'status_changed':
 			s.status = event.status;
@@ -266,13 +311,25 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			s.agentName = event.result.agentInfo?.name ?? 'agent';
 			s.agentVersion = event.result.agentInfo?.version ?? '';
 			break;
-		case 'session_changed':
-			s.sessionId = event.session.sessionId;
+		case 'session_changed': {
+			const id = event.session.sessionId;
+			s.sessionId = id;
 			s.configOptions = event.session.configOptions ?? [];
 			s.modes = event.session.modes ?? undefined;
-			s.sessionInfo = event.session.sessionInfo ?? { sessionId: event.session.sessionId };
-			pushMessage(s.messages, 'system', `Session ready: ${event.session.sessionId}`);
+			s.sessionInfo = event.session.sessionInfo ?? { sessionId: id };
+			pushMessage(s.messages, 'system', `Session ready: ${id}`);
+			// 把当前 session 提到列表头部（若已存在则就地更新 / 提升）。
+			const existingIdx = s.sessions.findIndex((x) => x.sessionId === id);
+			const merged = {
+				sessionId: id,
+				title: event.session.sessionInfo?.title ?? s.sessions[existingIdx]?.title ?? null,
+				createdAt: event.session.sessionInfo?.createdAt ?? s.sessions[existingIdx]?.createdAt ?? null,
+				updatedAt: event.session.sessionInfo?.updatedAt ?? new Date().toISOString(),
+			};
+			if (existingIdx >= 0) s.sessions.splice(existingIdx, 1);
+			s.sessions.unshift(merged);
 			break;
+		}
 		case 'message_chunk':
 			appendStream(s.messages, event.role, event.text);
 			break;
@@ -294,9 +351,19 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 		case 'config_options_updated':
 			s.configOptions = event.configOptions;
 			break;
-		case 'session_info_updated':
+		case 'session_info_updated': {
 			s.sessionInfo = { ...(s.sessionInfo ?? {}), ...event.sessionInfo };
+			// 同步到 sessions 列表里同 id 的条目，让 SessionPicker 能反映最新 title。
+			const idx = s.sessions.findIndex((x) => x.sessionId === event.sessionId);
+			if (idx >= 0) {
+				s.sessions[idx] = {
+					...s.sessions[idx]!,
+					title: event.sessionInfo.title ?? s.sessions[idx]!.title ?? null,
+					updatedAt: event.sessionInfo.updatedAt ?? new Date().toISOString(),
+				};
+			}
 			break;
+		}
 		case 'usage_updated':
 			s.usage = { size: event.size, used: event.used };
 			break;
@@ -317,6 +384,14 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			pushMessage(s.messages, 'error', event.message);
 			break;
 		case 'session_listed':
+			s.sessions = (event.result.sessions ?? []).map((x) => ({
+				sessionId: x.sessionId,
+				title: x.title ?? null,
+				createdAt: x.createdAt ?? null,
+				updatedAt: x.updatedAt ?? null,
+			}));
+			s.sessionsLoading = false;
+			s.sessionsError = undefined;
 			break;
 		default: {
 			const _exhaustive: never = event;
@@ -359,34 +434,31 @@ const createSlices = (
 			subscriptions.set(client, unsubscribe);
 
 			set((s) => {
-				// 重置非持久化运行态
 				s.client = client;
 				s.status = 'disconnected';
 				s.agentName = '';
 				s.agentVersion = '';
 				s.error = undefined;
-				s.sessionId = undefined;
-				s.configOptions = [];
-				s.modes = undefined;
-				s.sessionInfo = undefined;
-				s.isPrompting = false;
-				s.messages = [];
-				s.plan = [];
-				s.tools = [];
-				s.protocol = [];
-				s.commands = [];
-				s.usage = undefined;
-				s.pendingPermission = undefined;
+				s.sessions = [];
+				s.sessionsLoading = false;
+				s.sessionsError = undefined;
+				resetSessionRuntime(s as unknown as AcpPanelStateData);
 			});
 
-			client.connect().catch((err) => {
-				const msg = errorMessage(err);
-				set((s) => {
-					s.status = 'error';
-					s.error = msg;
-					pushMessage(s.messages, 'error', msg);
+			client
+				.connect()
+				.then(() => {
+					// 连接建立后立即拉取历史会话列表，让 SessionPicker 可用。
+					void get().refreshSessions();
+				})
+				.catch((err) => {
+					const msg = errorMessage(err);
+					set((s) => {
+						s.status = 'error';
+						s.error = msg;
+						pushMessage(s.messages, 'error', msg);
+					});
 				});
-			});
 		},
 
 		disconnect: async () => {
@@ -398,28 +470,28 @@ const createSlices = (
 			set((s) => {
 				s.client = undefined;
 				s.status = 'disconnected';
-				s.sessionId = undefined;
-				s.isPrompting = false;
-				s.pendingPermission = undefined;
+				s.sessions = [];
+				s.sessionsLoading = false;
+				s.sessionsError = undefined;
+				resetSessionRuntime(s as unknown as AcpPanelStateData);
 			});
 		},
 
 		// ── session ──
-		setSessionToLoad: (value) =>
-			set((s) => {
-				s.sessionToLoad = value;
-			}),
 
 		newSession: () => {
 			const client = get().client;
 			if (!client) return;
+			set((s) => {
+				resetSessionRuntime(s as unknown as AcpPanelStateData);
+			});
 			client
 				.newSession()
 				.then(({ warnings }) => {
-					if (warnings.length === 0) return;
 					set((s) => {
 						for (const w of warnings) pushMessage(s.messages, 'system', `MCP config: ${w}`);
 					});
+					void get().refreshSessions();
 				})
 				.catch((err) => {
 					const msg = errorMessage(err);
@@ -429,24 +501,66 @@ const createSlices = (
 				});
 		},
 
-		loadSession: () => {
-			const { client, sessionToLoad } = get();
-			const id = sessionToLoad.trim();
+		switchSession: (sessionId) => {
+			const { client, sessionId: current } = get();
+			const id = sessionId.trim();
 			if (!client || !id) return;
+			if (id === current) return;
+			set((s) => {
+				resetSessionRuntime(s as unknown as AcpPanelStateData);
+				// 乐观置入新 sessionId，确保后续 session/update 通知能通过归属过滤；
+				// 加载失败时由 catch 分支回滚为 undefined。
+				s.sessionId = id;
+			});
 			client
 				.loadSession(id)
 				.then(({ warnings }) => {
-					if (warnings.length === 0) return;
 					set((s) => {
 						for (const w of warnings) pushMessage(s.messages, 'system', `MCP config: ${w}`);
 					});
+					void get().refreshSessions();
 				})
 				.catch((err) => {
 					const msg = errorMessage(err);
 					set((s) => {
+						s.sessionId = undefined;
 						pushMessage(s.messages, 'error', msg);
 					});
 				});
+		},
+
+		refreshSessions: async () => {
+			const client = get().client;
+			if (!client) {
+				set((s) => {
+					s.sessions = [];
+					s.sessionsLoading = false;
+					s.sessionsError = undefined;
+				});
+				return;
+			}
+			set((s) => {
+				s.sessionsLoading = true;
+				s.sessionsError = undefined;
+			});
+			try {
+				const result = await client.controller.listSessions();
+				set((s) => {
+					s.sessions = (result.sessions ?? []).map((x) => ({
+						sessionId: x.sessionId,
+						title: x.title ?? null,
+						createdAt: x.createdAt ?? null,
+						updatedAt: x.updatedAt ?? null,
+					}));
+					s.sessionsLoading = false;
+				});
+			} catch (err) {
+				const msg = errorMessage(err);
+				set((s) => {
+					s.sessionsLoading = false;
+					s.sessionsError = msg;
+				});
+			}
 		},
 
 		setMode: (mode) => {

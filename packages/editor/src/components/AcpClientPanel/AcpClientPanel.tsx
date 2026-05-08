@@ -6,6 +6,7 @@ import { ConnectionToolbar } from './domain/connection/ConnectionToolbar';
 import { Inspector } from './domain/inspector/Inspector';
 import { PermissionModal } from './domain/permission/PermissionModal';
 import { MessageStream, PromptBox } from './domain/prompt/PromptArea';
+import { SessionPicker } from './domain/session/SessionPicker';
 import { Sidebar } from './domain/session/Sidebar';
 import { StoreProvider, useHydration, useStoreAction, useStoreSelector } from './hooks/useStore';
 import { createAcpPanelStore, type UseAcpPanelStore } from './store';
@@ -41,6 +42,9 @@ const PanelBody: React.FC = () => {
 			<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<ConnectionToolbar />
 				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+					<SizeBox WidthOverride={220}>
+						<SessionPicker />
+					</SizeBox>
 					<SizeBox WidthOverride={260}>
 						<Sidebar />
 					</SizeBox>

@@ -1,43 +1,9 @@
 import * as React from 'react';
 
 import type { SessionConfigOption } from '@universe-agent/acp-client-ue';
-import { Btn, HBox, Section, Select, Text, TextArea, VBox } from '../../../ui';
+import { Btn, Section, Select, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import { toTArray } from '../shared/ueArray';
-
-// ──────────────────────────────────────────────────────────────────────────
-// 共享子组件
-// ──────────────────────────────────────────────────────────────────────────
-
-const SidebarTextArea: React.FC<React.ComponentProps<typeof TextArea>> = (props) => (
-	<TextArea AutoWrapText WrapTextAt={230} {...props} />
-);
-
-// ──────────────────────────────────────────────────────────────────────────
-// Session 操作区
-// ──────────────────────────────────────────────────────────────────────────
-
-const SessionPanel: React.FC = () => {
-	const sessionToLoad = useStoreSelector((s) => s.sessionToLoad);
-	const connected = useStoreSelector((s) => s.status === 'connected');
-	const setSessionToLoad = useStoreAction('setSessionToLoad');
-	const newSession = useStoreAction('newSession');
-	const loadSession = useStoreAction('loadSession');
-
-	return (
-		<Section Title="Session">
-			<HBox>
-				<Btn OnClicked={newSession} bIsEnabled={connected}>
-					<Text Text="New" />
-				</Btn>
-				<Btn OnClicked={loadSession} bIsEnabled={connected && !!sessionToLoad.trim()}>
-					<Text Text="Load" />
-				</Btn>
-			</HBox>
-			<SidebarTextArea Text={sessionToLoad} HintText="session id" OnTextChanged={setSessionToLoad} />
-		</Section>
-	);
-};
 
 // ──────────────────────────────────────────────────────────────────────────
 // Policy 区
@@ -131,7 +97,6 @@ const SessionOptionsPanel: React.FC = () => {
 
 export const Sidebar: React.FC = () => (
 	<VBox Gap={6}>
-		<SessionPanel />
 		<PolicyPanel />
 		<SessionOptionsPanel />
 	</VBox>

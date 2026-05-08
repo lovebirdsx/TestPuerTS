@@ -37,6 +37,10 @@ ACP 协议客户端，用于调试和测试 ACP 服务端；包含命令行 REPL
 - `client.controller` 暴露原始 `AcpUiController`，UI 直接 `subscribe` / `getState`，无需 facade 透传所有事件。
 - 真正的 MCP 协议处理走 `@universe-agent/mcp-server-ue`（在调用方进程内），通过 `@universe-agent/mcp-bridge` 把命名管道桥接成 agent 看到的 stdio MCP server。
 
+**Session 归属：**
+
+`AcpUiController` 把 `session/update` 通知里的 `sessionId` 透传到所有 session-bound 事件（`message_chunk` / `thought_chunk` / `plan_updated` / `tool_call_updated` / `commands_updated` / `mode_updated` / `config_options_updated` / `session_info_updated` / `usage_updated`）。订阅方据此做归属过滤，避免新旧会话事件混合（典型场景：`switchSession` 期间旧 session 的 in-flight 工具调用通知到达）。`session_changed` / `protocol_message` / `permission_requested` / `prompt_finished` / `error` 等连接级事件不带 sessionId。
+
 **配置文件：** `<ProjectDir>/mcp-servers.json`
 
 ```json

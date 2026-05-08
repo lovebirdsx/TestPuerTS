@@ -56,11 +56,16 @@ export type AcpUiEvent =
 	| { type: 'initialized'; result: InitializeResponse }
 	| { type: 'session_changed'; session: SessionStartResponse }
 	| { type: 'session_listed'; result: ListSessionsResponse }
-	| { type: 'message_chunk'; role: 'user' | 'agent'; text: string }
-	| { type: 'thought_chunk'; text: string }
-	| { type: 'plan_updated'; entries: { content: string; status: string; priority: string }[] }
+	| { type: 'message_chunk'; sessionId: string; role: 'user' | 'agent'; text: string }
+	| { type: 'thought_chunk'; sessionId: string; text: string }
+	| {
+			type: 'plan_updated';
+			sessionId: string;
+			entries: { content: string; status: string; priority: string }[];
+	  }
 	| {
 			type: 'tool_call_updated';
+			sessionId: string;
 			toolCallId: string;
 			title: string;
 			kind?: string;
@@ -69,11 +74,15 @@ export type AcpUiEvent =
 			rawOutput?: unknown;
 			content?: unknown;
 	  }
-	| { type: 'commands_updated'; commands: { name: string; description?: string }[] }
-	| { type: 'mode_updated'; currentModeId: string }
-	| { type: 'config_options_updated'; configOptions: SessionConfigOption[] }
-	| { type: 'session_info_updated'; sessionInfo: SessionInfo }
-	| { type: 'usage_updated'; size: number; used: number }
+	| {
+			type: 'commands_updated';
+			sessionId: string;
+			commands: { name: string; description?: string }[];
+	  }
+	| { type: 'mode_updated'; sessionId: string; currentModeId: string }
+	| { type: 'config_options_updated'; sessionId: string; configOptions: SessionConfigOption[] }
+	| { type: 'session_info_updated'; sessionId: string; sessionInfo: SessionInfo }
+	| { type: 'usage_updated'; sessionId: string; size: number; used: number }
 	| { type: 'protocol_message'; direction: 'send' | 'recv'; message: JsonRpcMessage }
 	| { type: 'permission_requested'; permission: PendingPermissionRequest }
 	| { type: 'prompt_finished'; stopReason: string }
@@ -96,20 +105,22 @@ class AcpEventRenderer extends Renderer {
 
 	override renderSessionUpdate(notification: SessionNotification): void {
 		const update = notification.update as any;
+		const sessionId = notification.sessionId;
 
 		switch (update.sessionUpdate) {
 			case 'agent_message_chunk':
-				this.emitContentChunk('agent', update.content);
+				this.emitContentChunk(sessionId, 'agent', update.content);
 				break;
 			case 'agent_thought_chunk':
-				this.emitThought(update.content);
+				this.emitThought(sessionId, update.content);
 				break;
 			case 'user_message_chunk':
-				this.emitContentChunk('user', update.content);
+				this.emitContentChunk(sessionId, 'user', update.content);
 				break;
 			case 'tool_call':
 				this.emitEvent({
 					type: 'tool_call_updated',
+					sessionId,
 					toolCallId: update.toolCallId,
 					title: update.title,
 					kind: update.kind,
@@ -120,6 +131,7 @@ class AcpEventRenderer extends Renderer {
 			case 'tool_call_update':
 				this.emitEvent({
 					type: 'tool_call_updated',
+					sessionId,
 					toolCallId: update.toolCallId,
 					title: update.title ?? update.toolCallId,
 					status: update.status,
@@ -128,22 +140,30 @@ class AcpEventRenderer extends Renderer {
 				});
 				break;
 			case 'plan':
-				this.emitEvent({ type: 'plan_updated', entries: update.entries });
+				this.emitEvent({ type: 'plan_updated', sessionId, entries: update.entries });
 				break;
 			case 'available_commands_update':
-				this.emitEvent({ type: 'commands_updated', commands: update.availableCommands });
+				this.emitEvent({ type: 'commands_updated', sessionId, commands: update.availableCommands });
 				break;
 			case 'current_mode_update':
-				this.emitEvent({ type: 'mode_updated', currentModeId: update.currentModeId });
+				this.emitEvent({ type: 'mode_updated', sessionId, currentModeId: update.currentModeId });
 				break;
 			case 'config_option_update':
-				this.emitEvent({ type: 'config_options_updated', configOptions: update.configOptions });
+				this.emitEvent({
+					type: 'config_options_updated',
+					sessionId,
+					configOptions: update.configOptions,
+				});
 				break;
 			case 'session_info_update':
-				this.emitEvent({ type: 'session_info_updated', sessionInfo: update as SessionInfo });
+				this.emitEvent({
+					type: 'session_info_updated',
+					sessionId,
+					sessionInfo: update as SessionInfo,
+				});
 				break;
 			case 'usage_update':
-				this.emitEvent({ type: 'usage_updated', size: update.size, used: update.used });
+				this.emitEvent({ type: 'usage_updated', sessionId, size: update.size, used: update.used });
 				break;
 			default:
 				if (this.verbose) {
@@ -154,15 +174,19 @@ class AcpEventRenderer extends Renderer {
 
 	override ensureNewline(): void {}
 
-	private emitContentChunk(role: 'user' | 'agent', content: { type: string; text?: string }): void {
+	private emitContentChunk(
+		sessionId: string,
+		role: 'user' | 'agent',
+		content: { type: string; text?: string },
+	): void {
 		if (content.type === 'text' && content.text) {
-			this.emitEvent({ type: 'message_chunk', role, text: content.text });
+			this.emitEvent({ type: 'message_chunk', sessionId, role, text: content.text });
 		}
 	}
 
-	private emitThought(content: { type: string; text?: string }): void {
+	private emitThought(sessionId: string, content: { type: string; text?: string }): void {
 		if (content.type === 'text' && content.text) {
-			this.emitEvent({ type: 'thought_chunk', text: content.text });
+			this.emitEvent({ type: 'thought_chunk', sessionId, text: content.text });
 		}
 	}
 }
@@ -328,13 +352,15 @@ export class AcpUiController {
 			...this.state,
 			modes: this.state.modes ? { ...this.state.modes, currentModeId: mode } : this.state.modes,
 		};
-		this.emit({ type: 'mode_updated', currentModeId: mode });
+		const sessionId = this.state.sessionId;
+		if (sessionId) this.emit({ type: 'mode_updated', sessionId, currentModeId: mode });
 	}
 
 	async setConfigOption(optionId: string, valueId: string | boolean): Promise<void> {
 		const configOptions = await this.requireClient().setConfigOption(optionId, valueId);
 		this.state = { ...this.state, configOptions };
-		this.emit({ type: 'config_options_updated', configOptions });
+		const sessionId = this.state.sessionId;
+		if (sessionId) this.emit({ type: 'config_options_updated', sessionId, configOptions });
 	}
 
 	private applySession(session: SessionStartResponse): void {
