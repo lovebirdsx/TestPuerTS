@@ -36,10 +36,8 @@ npx gulp editor:lint:fix    # lint 自动修复
 
 **ACP Client UI：**
 
-- `src/components/AcpClientPanel.tsx` 在独立编辑器 Tab 中提供 ACP 客户端界面。
-- Panel 通过 `clientFactory` prop 接收一个 `AcpClient` facade（来自 `@universe-agent/acp-client-ue`），内部组合了 `AcpUiController` + `McpManager`。
-- MCP 生命周期由 `AcpClient` 自动管理：`newSession()` / `loadSession()` 启动并注入内置 ue-editor MCP server 的 entry，`dispose()` 在断开/卸载时统一释放命名管道。Panel 不再持有任何 `mcpManagerRef`。
-- `newSession()` / `loadSession()` 的返回值含 `warnings: string[]`，Panel 渲染为 system message。
-- Tab 生命周期由 `main.ts` 管理，编辑器停止时关闭 Tab 并触发 `client.dispose()`。
-
-**MCP 配置：** `<ProjectDir>/mcp-servers.json`（详见 `packages/acp-client-ue/CLAUDE.md`）。editor 包不再直接依赖 `@universe-agent/mcp-server-ue`，所有 MCP 启停均走 `AcpClient`。
+- `src/components/AcpClientPanel/` 在独立编辑器 Tab 中提供 ACP 客户端界面，目录按领域分包（store/slices/eventSink + domain/{connection,session,prompt,inspector,permission,policy} + hooks）。
+- 状态管理：zustand v5 + immer + persist 中间件，单一 store 内含 8 个领域字段；事件流通过 `ingestEvent` 投影到 store，UI 组件按需 `useStoreSelector` / `useStoreAction` 订阅，零 props drilling。
+- `AcpClient` facade（来自 `@universe-agent/acp-client-ue`）由 store 内部按 `clientFactory` 实例化；MCP 生命周期由 `AcpClient` 自动管理，Panel 卸载时统一调 `client.dispose()`。
+- 持久化：zustand persist + 自定义 ueStorage 适配器写 `<ProjectDir>/EditorPersistence/acp-panel.json`，仅落 `{ config, policy, inspector.activeTab }`。旧 schema `acp-client-panel.json` / `acpPanelConfigStore` / `usePersistedState` 已下线。
+- 测试隔离：`createAcpPanelStore({ clientFactory, persistName, storage })` 工厂可注入 mock client + 内存 storage，详见 `packages/tests/src/acpPanel/`。

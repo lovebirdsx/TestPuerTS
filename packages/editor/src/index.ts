@@ -5,25 +5,42 @@ export { UEWidget, UEWidgetRoot, compareWidgetProps, createRendererForTest } fro
 export type { Disposable, EditorMenuRegistration } from './common/menu';
 export { registerEditorMenu, registerEditorMenus, unregisterEditorMenu } from './common/menu';
 
-// 组件 + reducer（供测试引用）
+// AcpClientPanel：组件 + store + 类型（供测试引用）
 export { AcpClientPanel } from './components/AcpClientPanel';
 export {
-	reduceEvent,
-	createInitialState,
-	splitArgs,
-	addMessage,
-	appendStreamMessage,
-	upsertTool,
-	createAcpPanelConfigStore,
+	createAcpPanelStore,
+	useAcpPanelStore,
+	StoreProvider,
+	useStore,
+	useStoreSelector,
+	useStoreAction,
+	useHydration,
+	createMemoryStorage,
 } from './components/AcpClientPanel';
+export {
+	pushMessage,
+	appendStream,
+	upsertTool,
+	splitArgs,
+	errorMessage,
+	ingestEvent,
+} from './components/AcpClientPanel/store';
 export type {
 	AcpClientPanelProps,
 	AcpClientFactory,
-	AcpPanelState,
-	AcpPanelConfig,
-	AcpPanelConfigStore,
+	AcpPanelStore,
+	AcpPanelStoreOptions,
+	UseAcpPanelStore,
 	ChatMessage,
 	ToolRecord,
 	MessageRole,
 	InspectorTab,
+	PlanEntry,
+	ProtocolEntry,
+	UsageInfo,
+	CommandEntry,
+	PersistedConfig,
+	PersistedPolicy,
+	PersistedInspector,
+	PersistedState,
 } from './components/AcpClientPanel';

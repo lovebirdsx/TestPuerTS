@@ -287,6 +287,21 @@ void UIPCTransport::CleanupHandle()
 	bIsListening = false;
 	PendingData.Empty();
 
+	// 必须先关闭管道，再释放 OVERLAPPED。
+	// CloseHandle(PipeHandle) 会取消挂起的 ConnectNamedPipe I/O，OS 将 ERROR_OPERATION_ABORTED
+	// 写入 OVERLAPPED.Internal 并发信 hEvent。若先 delete OVERLAPPED 再关管道，OS 会写入已释放的
+	// 内存，损坏 mimalloc 空闲链表，导致后续任意 Malloc/Realloc 崩溃。
+	if (PipeHandle != INVALID_HANDLE_VALUE)
+	{
+		if (bIsServer)
+		{
+			DisconnectNamedPipe(PipeHandle);
+		}
+		CloseHandle(PipeHandle);
+		PipeHandle = INVALID_HANDLE_VALUE;
+	}
+
+	// 管道已关闭，所有挂起 I/O 已完成（含取消），现在安全释放 OVERLAPPED。
 	if (ConnectOverlapped)
 	{
 		OVERLAPPED* Overlapped = static_cast<OVERLAPPED*>(ConnectOverlapped);
@@ -296,16 +311,6 @@ void UIPCTransport::CleanupHandle()
 		}
 		delete Overlapped;
 		ConnectOverlapped = nullptr;
-	}
-
-	if (PipeHandle != INVALID_HANDLE_VALUE)
-	{
-		if (bIsServer)
-		{
-			DisconnectNamedPipe(PipeHandle);
-		}
-		CloseHandle(PipeHandle);
-		PipeHandle = INVALID_HANDLE_VALUE;
 	}
 
 	bIsServer = false;

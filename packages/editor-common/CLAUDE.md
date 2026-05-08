@@ -9,7 +9,7 @@ editor-common 是 editor、mcp-server-ue、tests 共享的 Unreal 关联基础�
 - 提供与 UE/PuerTS 运行时相关但不包含 UI 的公共实现。
 - 当前包含五类能力：
   - 日志层：`createLogger`、`installConsoleOverride`
-  - PuerTS 运行时 polyfill：`installPuertsTimerPolyfill`（内部级联触发 `installTextCodecPolyfill` 与 `installAbortControllerPolyfill`）
+  - PuerTS 运行时 polyfill：`installPuertsPolyfill`（一站式注入 `process` / cjs 重导出 shim / timer / TextEncoder/Decoder / AbortController）
   - UTF-8 编解码：`encodeUtf8` / `decodeUtf8` / `Utf8StreamDecoder`（PuerTS V8 模式下没有原生 `TextEncoder`/`TextDecoder`）
   - IPC 基础层：`BridgeLink`、`UeIpcSocket`
   - 持久化层：`defineStore`、`PersistenceStore`、`flushAllPersistence`、`ueFileIO`
@@ -22,6 +22,8 @@ editor-common 是 editor、mcp-server-ue、tests 共享的 Unreal 关联基础�
 - `src/polyfill/timer.ts`: `installPuertsTimerPolyfill()`：补齐 `setTimeout`/`setInterval` 缺省 delay
 - `src/polyfill/utf8.ts`: `encodeUtf8` / `decodeUtf8` / `Utf8StreamDecoder`，以及 `installTextCodecPolyfill()`（V8 模式下注入全局 `TextEncoder`/`TextDecoder`，最小可用实现）
 - `src/polyfill/abortController.ts`: `installAbortControllerPolyfill()`：V8 模式下注入全局 `AbortController` / `AbortSignal`（覆盖 MCP SDK 等用到的子集）
+- `src/polyfill/process.ts`: `installProcessPolyfill()`：保证 `globalThis.process.env` 存在（immer / react 等 dev 入口顶层会读 `process.env.NODE_ENV`）。
+- `src/polyfill/cjsReexport.ts`: `installCjsReexportShims()`：把 `react` / `immer` 的 dev 实现预先 require 后通过 `puerts.registerBuildinModule(name, ...)` 固化为 builtin。绕开 PuerTS `modular.js` 对 `module.exports = require('./xxx')` 重导出形式不友好的问题——这种入口下，消费者顶层 `var X = require(name)` 捕获到的是空对象，导致 `React.useCallback is not a function` / `immer.produce is not a function`。
 - `src/ipc/bridgeLink.ts`: bridge 双向链路接口定义
 - `src/ipc/ueIpcSocket.ts`: `UE.IPCTransport` 到 `ISocket` 的适配
 - `src/persistence/store.ts`: zod 驱动的类型化持久化 store 实现

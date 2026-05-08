@@ -147,6 +147,14 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 			} catch {
 				// ignore
 			}
+			// 无论 bridge 是否曾连接，必须显式关闭 transport，确保 FTSTicker 被移除。
+			// socket?.close() 在 socket 存在时已调用 transport.Close()，此处补全 socket 为 null
+			// （bridge 未接入）时的路径；Close() 内部有 PipeHandle 守卫，重复调用安全。
+			try {
+				transport.Close();
+			} catch {
+				// ignore
+			}
 			server.dispose();
 			onClientConnect.dispose();
 			onDidClientDisconnect.dispose();

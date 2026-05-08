@@ -18,8 +18,10 @@
 
 **ACP Client Panel：**
 
-- `AcpClientPanel.tsx` 是编辑器内 ACP 客户端主界面。
-- 通过 `clientFactory: (opts) => AcpClient` 接收 facade；UI 只消费 `client.controller` 的事件，不直接处理 JSON-RPC transport。
-- MCP 由 `AcpClient` 自动管理，Panel 不再持有 `mcpManagerRef` / `mcpSessionIdRef`；`disconnect` / unmount 调 `client.dispose()`。
-- 权限请求以 `ModalPanel` 展示，必须调用 pending permission 的 `resolve()` 或 `cancel()`。
-- 持久化配置走 `acpPanelConfigStore`（模块级单例，落到 `<AppData>/<Project>/EditorPersistence/acp-client-panel.json`）。测试若需隔离 store 状态，请通过 `configStore` prop 注入由 `createAcpPanelConfigStore(name, { fileIO })` 构造的内存版本，避免共享单例的异步 `ready()` 与持久化数据在多个用例间产生副作用。
+- `AcpClientPanel/` 是编辑器内 ACP 客户端主界面，按领域目录拆分（`store/` + `domain/{connection,session,prompt,inspector,permission,policy}` + `hooks/`）。
+- 状态管理基于 zustand v5 + immer + persist 中间件：单一 store 内含 connection/session/prompt/conversation/inspector/permission/policy/config 8 个领域字段；事件流通过统一的 `ingestEvent` 投影到 store（`store/index.ts`），不再读 `controller.getState()`。
+- 组件无 props drilling：`AcpClientPanel.tsx` 仅做布局组装，子组件按需 `useStoreSelector(s => ...)` / `useStoreAction('xxx')` 订阅。
+- `AcpClient` facade 由 store 内部通过 `clientFactory`（默认从 `@universe-agent/acp-client-ue` 加载）按需实例化；测试通过 `createAcpPanelStore({ clientFactory, storage })` 注入 mock。
+- MCP 仍由 `AcpClient` 自动管理，`disconnect` / unmount 调 `client.dispose()`。
+- 权限请求由 `domain/permission/PermissionModal.tsx` 渲染 `ModalPanel`，必须调用 `resolvePermission(optionId)` 或 `cancelPermission()`。
+- 持久化通过 zustand persist + 自定义 ueStorage 适配器写到 `<AppData>/<Project>/EditorPersistence/acp-panel.json`；`partialize` 仅持久化 `{ config, policy: { permission, protocolEnabled }, inspector: { activeTab } }`，运行时字段（messages/tools/protocol/sessionId 等）不入盘。
