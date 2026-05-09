@@ -350,6 +350,7 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			s.configOptions = event.session.configOptions ?? [];
 			s.modes = event.session.modes ?? undefined;
 			s.sessionInfo = event.session.sessionInfo ?? { sessionId: id };
+			s.config.lastSessionId = id;
 			pushTextItem(s.timeline, 'system', `Session ready: ${id}`);
 			// 把当前 session 提到列表头部（若已存在则就地更新 / 提升）。
 			const existingIdx = s.sessions.findIndex((x) => x.sessionId === id);
@@ -482,9 +483,14 @@ const createSlices = (
 
 			client
 				.connect()
-				.then(() => {
-					// 连接建立后立即拉取历史会话列表，让 SessionPicker 可用。
-					void get().refreshSessions();
+				.then(async () => {
+					// 连接建立后先拉取历史会话列表，让 SessionPicker 可用。
+					await get().refreshSessions();
+					// 恢复上次活跃的 session。
+					const lastSessionId = get().config.lastSessionId;
+					if (lastSessionId) {
+						get().switchSession(lastSessionId);
+					}
 				})
 				.catch((err) => {
 					const msg = errorMessage(err);
@@ -722,10 +728,13 @@ const createSlices = (
 		setActiveDrawer: (key) =>
 			set((s) => {
 				s.activeDrawer = key;
+				s.config.lastActiveDrawer = key;
 			}),
 		toggleDrawer: (key) =>
 			set((s) => {
-				s.activeDrawer = s.activeDrawer === key ? undefined : key;
+				const newKey = s.activeDrawer === key ? undefined : key;
+				s.activeDrawer = newKey;
+				s.config.lastActiveDrawer = newKey;
 			}),
 
 		// ── permission ──
@@ -851,9 +860,12 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 					config: {
 						activeConnectionId: p.config?.activeConnectionId ?? baseConfig.activeConnectionId,
 						startup: { ...baseConfig.startup, ...(p.config?.startup ?? {}) },
+						lastSessionId: p.config?.lastSessionId,
+						lastActiveDrawer: p.config?.lastActiveDrawer,
 					},
 					permission: p.policy?.permission ?? current.permission,
 					protocolEnabled: p.policy?.protocolEnabled ?? current.protocolEnabled,
+					activeDrawer: p.config?.lastActiveDrawer ?? current.activeDrawer,
 				};
 			},
 		}),

@@ -114,6 +114,14 @@ const COMPACT_BUTTON_STYLE: ButtonStyle = {
 	PressedPadding: { Left: 8, Top: 2, Right: 8, Bottom: 0 },
 };
 
+const BUTTON_ACTIVE_STYLE: ButtonStyle = {
+	...DEFAULT_BUTTON_STYLE,
+	Normal: roundedBrush(COL_ACCENT, COL_ACCENT),
+	Hovered: roundedBrush(COL_ACCENT, COL_ACCENT),
+	Pressed: roundedBrush(COL_ACCENT, COL_ACCENT),
+	Disabled: roundedBrush(COL_ACCENT, COL_ACCENT),
+};
+
 // ── 工具函数 ──
 
 function mergeDeep<T>(defaults: T, overrides?: Partial<T>): T {
@@ -195,10 +203,11 @@ export const HBox = (props: HorizontalBoxProps & BoxSpacingProps): React.ReactEl
 	return <HorizontalBox {...rest}>{withChildGap(children, { Right: Gap })}</HorizontalBox>;
 };
 
-export const Btn = (props: ButtonProps): React.ReactElement => {
-	const { children, WidgetStyle, ...rest } = props;
+export const Btn = (props: ButtonProps & { Active?: boolean }): React.ReactElement => {
+	const { children, WidgetStyle, Active, ...rest } = props;
+	const baseStyle = Active ? BUTTON_ACTIVE_STYLE : DEFAULT_BUTTON_STYLE;
 	return (
-		<Button WidgetStyle={mergeDeep(DEFAULT_BUTTON_STYLE, WidgetStyle)} {...rest}>
+		<Button WidgetStyle={mergeDeep(baseStyle, WidgetStyle)} {...rest}>
 			{children}
 		</Button>
 	);

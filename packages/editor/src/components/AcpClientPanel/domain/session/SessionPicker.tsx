@@ -46,14 +46,19 @@ const SessionRow: React.FC<{
 	const title = displayTitle(entry);
 	const subtitle = formatRelativeTime(entry.updatedAt ?? entry.createdAt);
 	return (
-		<Btn OnClicked={() => onSelect(entry.sessionId)} bIsEnabled={!active}>
-			<VBox Gap={2}>
-				<HBox Gap={4}>
-					<Text Text={title} />
-					{active ? <Badge Text="ACTIVE" Tone="accent" /> : null}
-				</HBox>
-				{subtitle ? <Text Text={subtitle} Font={{ Size: 8 }} /> : null}
-			</VBox>
+		<Btn Active={active} bIsEnabled={!active} OnClicked={() => onSelect(entry.sessionId)}>
+			<HBox Gap={4}>
+				{/* 左：描述文字，填充剩余空间，溢出省略 */}
+				<Text
+					Text={title}
+					Slot={{ Size: { SizeRule: 1, Value: 1 } }}
+					Justification={0 as any}
+					{...({ OverflowPolicy: 1 } as any)}
+				/>
+				{/* 右：时间 + ACTIVE 标记 */}
+				{subtitle ? <Text Text={subtitle} Font={{ Size: 8 }} Slot={center} /> : null}
+				{active ? <Badge Text="ACTIVE" Tone="accent" Slot={center} /> : null}
+			</HBox>
 		</Btn>
 	);
 };
@@ -72,6 +77,14 @@ export const SessionPicker: React.FC = () => {
 	const refreshSessions = useStoreAction('refreshSessions');
 	const switchSession = useStoreAction('switchSession');
 	const setActiveDrawer = useStoreAction('setActiveDrawer');
+
+	const handleSelect = React.useCallback(
+		(id: string) => {
+			switchSession(id);
+			setActiveDrawer(undefined);
+		},
+		[switchSession, setActiveDrawer],
+	);
 
 	return (
 		<Section Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
@@ -117,7 +130,7 @@ export const SessionPicker: React.FC = () => {
 							key={entry.sessionId}
 							entry={entry}
 							active={entry.sessionId === sessionId}
-							onSelect={switchSession}
+							onSelect={handleSelect}
 						/>
 					))}
 				</VBox>

@@ -45,8 +45,10 @@ describe('AcpPanel store / persistence', () => {
 
 		const second = createAcpPanelStore({ clientFactory, persistName, storage });
 		await waitHydration(second);
+		// sessionId / isPrompting 是纯运行态，不持久化
 		expect(second.getState().sessionId).toBe(undefined);
 		expect(second.getState().isPrompting).toBe(false);
-		expect(second.getState().activeDrawer).toBe(undefined);
+		// activeDrawer 通过 config.lastActiveDrawer 持久化，重启后应被恢复
+		expect(second.getState().activeDrawer).toBe('history');
 	});
 });

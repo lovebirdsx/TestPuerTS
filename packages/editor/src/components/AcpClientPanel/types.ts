@@ -77,6 +77,10 @@ export interface PersistedConfig {
 	startup: {
 		autoConnect: boolean;
 	};
+	/** 上次活跃的 session ID；连接后自动恢复。 */
+	lastSessionId?: string;
+	/** 上次打开的抽屉；重启后恢复界面状态。 */
+	lastActiveDrawer?: DrawerKey;
 }
 
 export interface PersistedPolicy {
