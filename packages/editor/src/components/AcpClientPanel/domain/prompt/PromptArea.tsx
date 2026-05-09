@@ -4,7 +4,9 @@ import { Spacer } from 'react-umg';
 
 import { Badge, Btn, HBox, ScrollArea, Section, Text, TextArea, ToolbarButton, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
-import type { ChatMessage } from '../../store';
+import type { TextItem } from '../../store';
+import { PlanCard } from './PlanCard';
+import { ToolCallCard } from './ToolCallCard';
 
 const center = { VerticalAlignment: 2 as any };
 
@@ -12,20 +14,20 @@ const center = { VerticalAlignment: 2 as any };
 // 消息流
 // ──────────────────────────────────────────────────────────────────────────
 
-const MessageRow: React.FC<{ message: ChatMessage }> = ({ message }) => {
-	const tone = message.role === 'error' ? 'error' : message.role === 'agent' ? 'accent' : 'normal';
+const MessageRow: React.FC<{ item: TextItem }> = ({ item }) => {
+	const tone = item.role === 'error' ? 'error' : item.role === 'agent' ? 'accent' : 'normal';
 	return (
 		<Section Tone={tone} Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
 			<HBox>
-				<Badge Text={message.role} Tone={tone} />
+				<Badge Text={item.role} Tone={tone} />
 			</HBox>
-			<Text Text={message.text} AutoWrapText />
+			<Text Text={item.text} AutoWrapText />
 		</Section>
 	);
 };
 
 export const MessageStream: React.FC = () => {
-	const messages = useStoreSelector((s) => s.messages);
+	const timeline = useStoreSelector((s) => s.timeline);
 	const clearMessages = useStoreAction('clearMessages');
 
 	return (
@@ -33,16 +35,18 @@ export const MessageStream: React.FC = () => {
 			<HBox Gap={4}>
 				<Text Text="Conversation" Slot={center} />
 				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
-				<ToolbarButton OnClicked={clearMessages} bIsEnabled={messages.length > 0} Slot={center}>
+				<ToolbarButton OnClicked={clearMessages} bIsEnabled={timeline.length > 0} Slot={center}>
 					<Text Text="Clear" />
 				</ToolbarButton>
 			</HBox>
 			<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<VBox Gap={4}>
-					{messages.length === 0 ? <Text Text="Connect, create a session, then send a prompt." /> : undefined}
-					{messages.map((m) => (
-						<MessageRow key={m.id} message={m} />
-					))}
+					{timeline.length === 0 ? <Text Text="Connect, create a session, then send a prompt." /> : undefined}
+					{timeline.map((item) => {
+						if (item.kind === 'text') return <MessageRow key={item.id} item={item} />;
+						if (item.kind === 'tool') return <ToolCallCard key={item.id} item={item} />;
+						return <PlanCard key={item.id} item={item} />;
+					})}
 				</VBox>
 			</ScrollArea>
 		</Section>

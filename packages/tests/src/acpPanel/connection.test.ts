@@ -64,6 +64,8 @@ describe('AcpPanel store / connection', () => {
 		ctx2.store.getState().connect();
 		ctx2.mockClients[0]!.mockController.emit({ type: 'error', message: 'boom' });
 		expect(ctx2.store.getState().error).toBe('boom');
-		expect(ctx2.store.getState().messages.some((m) => m.role === 'error' && m.text === 'boom')).toBe(true);
+		expect(
+			ctx2.store.getState().timeline.some((i) => i.kind === 'text' && i.role === 'error' && i.text === 'boom'),
+		).toBe(true);
 	});
 });

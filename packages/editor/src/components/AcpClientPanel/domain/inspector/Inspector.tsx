@@ -12,37 +12,6 @@ const center = { VerticalAlignment: 2 as any };
 // Tab views
 // ──────────────────────────────────────────────────────────────────────────
 
-const PlanView: React.FC = () => {
-	const plan = useStoreSelector((s) => s.plan);
-	return (
-		<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<VBox Gap={4}>
-				{plan.length === 0 ? <Text Text="No plan yet" /> : undefined}
-				{plan.map((entry, index) => (
-					<Text key={index} Text={`${entry.status} ${entry.priority}: ${entry.content}`} AutoWrapText />
-				))}
-			</VBox>
-		</ScrollArea>
-	);
-};
-
-const ToolsView: React.FC = () => {
-	const tools = useStoreSelector((s) => s.tools);
-	return (
-		<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<VBox Gap={4}>
-				{tools.length === 0 ? <Text Text="No tool calls" /> : undefined}
-				{tools.map((tool) => (
-					<Section key={tool.id} Title={tool.title}>
-						<Text Text={`${tool.kind ?? 'tool'} ${tool.status ?? ''}`} />
-						<Text Text={formatUnknown(tool.rawInput ?? tool.rawOutput ?? tool.content)} AutoWrapText />
-					</Section>
-				))}
-			</VBox>
-		</ScrollArea>
-	);
-};
-
 const ProtocolView: React.FC = () => {
 	const protocol = useStoreSelector((s) => s.protocol);
 	return (
@@ -61,8 +30,9 @@ const StateView: React.FC = () => {
 	const status = useStoreSelector((s) => s.status);
 	const sessionId = useStoreSelector((s) => s.sessionId);
 	const usage = useStoreSelector((s) => s.usage);
-	const messageCount = useStoreSelector((s) => s.messages.length);
-	const toolCount = useStoreSelector((s) => s.tools.length);
+	const textCount = useStoreSelector((s) => s.timeline.filter((i) => i.kind === 'text').length);
+	const toolCount = useStoreSelector((s) => s.timeline.filter((i) => i.kind === 'tool').length);
+	const planCount = useStoreSelector((s) => s.timeline.filter((i) => i.kind === 'plan').length);
 	const error = useStoreSelector((s) => s.error);
 
 	return (
@@ -70,8 +40,9 @@ const StateView: React.FC = () => {
 			<Text Text={`Status: ${status}`} />
 			<Text Text={`Session: ${sessionId ?? 'none'}`} />
 			<Text Text={`Usage: ${usage ? `${usage.used}/${usage.size}` : 'n/a'}`} />
-			<Text Text={`Messages: ${messageCount}`} />
+			<Text Text={`Messages: ${textCount}`} />
 			<Text Text={`Tools: ${toolCount}`} />
+			<Text Text={`Plans: ${planCount}`} />
 			{error ? <Text Text={`Error: ${error}`} /> : undefined}
 		</VBox>
 	);
@@ -96,8 +67,6 @@ const CommandsView: React.FC = () => {
 // ──────────────────────────────────────────────────────────────────────────
 
 const TAB_ITEMS: { id: InspectorTab; label: string }[] = [
-	{ id: 'plan', label: 'Plan' },
-	{ id: 'tools', label: 'Tools' },
 	{ id: 'protocol', label: 'Protocol' },
 	{ id: 'state', label: 'State' },
 	{ id: 'commands', label: 'Commands' },
@@ -121,8 +90,6 @@ export const Inspector: React.FC = () => {
 				) : undefined}
 			</HBox>
 			<Divider />
-			{activeTab === 'plan' ? <PlanView /> : undefined}
-			{activeTab === 'tools' ? <ToolsView /> : undefined}
 			{activeTab === 'protocol' ? <ProtocolView /> : undefined}
 			{activeTab === 'state' ? <StateView /> : undefined}
 			{activeTab === 'commands' ? <CommandsView /> : undefined}

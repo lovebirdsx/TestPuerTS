@@ -12,7 +12,7 @@ import type {
 import type { StateStorage } from 'zustand/middleware';
 
 export type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
-export type InspectorTab = 'plan' | 'tools' | 'protocol' | 'state' | 'commands';
+export type InspectorTab = 'protocol' | 'state' | 'commands';
 
 /** SessionPicker 列表项（来自服务端 session/list）。 */
 export interface SessionListEntry {
@@ -22,27 +22,38 @@ export interface SessionListEntry {
 	updatedAt?: string | null;
 }
 
-export interface ChatMessage {
+export interface PlanEntry {
+	content: string;
+	status: string;
+	priority: string;
+}
+
+export interface TextItem {
+	kind: 'text';
 	id: number;
 	role: MessageRole;
 	text: string;
 }
 
-export interface ToolRecord {
-	id: string;
+export interface ToolItem {
+	kind: 'tool';
+	id: number;
+	toolCallId: string;
 	title: string;
-	kind?: string;
+	toolKind?: string;
 	status?: string | null;
 	rawInput?: unknown;
 	rawOutput?: unknown;
 	content?: unknown;
 }
 
-export interface PlanEntry {
-	content: string;
-	status: string;
-	priority: string;
+export interface PlanItem {
+	kind: 'plan';
+	id: number;
+	entries: PlanEntry[];
 }
+
+export type TimelineItem = TextItem | ToolItem | PlanItem;
 
 export interface ProtocolEntry {
 	id: number;

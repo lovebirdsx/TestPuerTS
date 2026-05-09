@@ -14,7 +14,9 @@ describe('AcpPanel store / session', () => {
 
 		const s = ctx.store.getState();
 		expect(s.sessionId).toBe('sess-1');
-		expect(s.messages.some((m) => m.role === 'system' && m.text.includes('sess-1'))).toBe(true);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.role === 'system' && i.text.includes('sess-1'))).toBe(
+			true,
+		);
 		// session_changed 应把当前会话登记到 sessions 列表头部
 		expect(s.sessions[0]?.sessionId).toBe('sess-1');
 	});
@@ -30,7 +32,10 @@ describe('AcpPanel store / session', () => {
 		});
 
 		// 预先放一些"上一次会话"的脏数据，验证 reset 能清掉
-		ctx.store.setState((s) => ({ ...s, messages: [{ id: 999, role: 'user', text: 'stale' }] }));
+		ctx.store.setState((s) => ({
+			...s,
+			timeline: [{ kind: 'text', id: 999, role: 'user', text: 'stale' }],
+		}));
 
 		ctx.store.getState().newSession();
 		await flushMicrotasks();
@@ -38,8 +43,8 @@ describe('AcpPanel store / session', () => {
 		await flushMicrotasks();
 
 		const s = ctx.store.getState();
-		expect(s.messages.some((m) => m.text.includes('cfg missing'))).toBe(true);
-		expect(s.messages.some((m) => m.text === 'stale')).toBe(false);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.text.includes('cfg missing'))).toBe(true);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.text === 'stale')).toBe(false);
 		// refresh 应填充 sessions
 		expect(s.sessions.some((x) => x.sessionId === 'sess-old')).toBe(true);
 	});
@@ -61,7 +66,9 @@ describe('AcpPanel store / session', () => {
 		expect(mock.loadSessionCalls).toEqual(['abc']);
 		// 乐观写入 sessionId 让后续 session/update 能匹配
 		expect(ctx.store.getState().sessionId).toBe('abc');
-		expect(ctx.store.getState().messages.some((m) => m.text.includes('loaded abc'))).toBe(true);
+		expect(ctx.store.getState().timeline.some((i) => i.kind === 'text' && i.text.includes('loaded abc'))).toBe(
+			true,
+		);
 	});
 
 	it('switchSession is a no-op when id matches current sessionId', async () => {
@@ -117,8 +124,8 @@ describe('AcpPanel store / session', () => {
 		});
 
 		const s = ctx.store.getState();
-		expect(s.messages.some((m) => m.text === 'leak')).toBe(false);
-		expect(s.messages.some((m) => m.text === 'kept')).toBe(true);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.text === 'leak')).toBe(false);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.text === 'kept')).toBe(true);
 	});
 
 	it('setMode/setConfigOption forward to controller', async () => {

@@ -19,6 +19,7 @@
 **ACP Client Panel：**
 
 - `AcpClientPanel/` 是编辑器内 ACP 客户端主界面，按领域目录拆分（`store/` + `domain/{connection,session,prompt,inspector,permission,policy}` + `hooks/`）。
+- 对话流：中间 `MessageStream` 渲染多态 `timeline: TimelineItem[]`（text / tool / plan）。`tool_call_updated` 按 `toolCallId` 就地合并并默认折叠（点击 ▶ 展开看 input/output）；`plan_updated` 按 `activePlanItemId` 单卡就地更新，`prompt_finished` / `cancel` / `error` 后丢弃指针让下一轮起新卡。Inspector 仅保留 `Protocol / State / Commands` 三 tab。
 - 状态管理基于 zustand v5 + immer + persist 中间件：单一 store 内含 connection/session/prompt/conversation/inspector/permission/policy/config 8 个领域字段；事件流通过统一的 `ingestEvent` 投影到 store（`store/index.ts`），不再读 `controller.getState()`。
 - 组件无 props drilling：`AcpClientPanel.tsx` 仅做布局组装，子组件按需 `useStoreSelector(s => ...)` / `useStoreAction('xxx')` 订阅。
 - `AcpClient` facade 由 store 内部通过 `clientFactory`（默认从 `@universe-agent/acp-client-ue` 加载）按需实例化；测试通过 `createAcpPanelStore({ clientFactory, storage })` 注入 mock。

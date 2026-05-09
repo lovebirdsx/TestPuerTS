@@ -8,7 +8,6 @@ import type {
 	AcpConnectionStatus,
 	AcpPanelStoreOptions,
 	AcpPermissionStrategy,
-	ChatMessage,
 	CommandEntry,
 	InspectorTab,
 	MessageRole,
@@ -21,7 +20,7 @@ import type {
 	SessionInfo,
 	SessionListEntry,
 	SessionModeState,
-	ToolRecord,
+	TimelineItem,
 	UsageInfo,
 } from '../types';
 import { type ConnectionProfile, loadConnectionsConfig } from './connectionConfig';
@@ -29,7 +28,6 @@ import { ueStorage } from './ueStorage';
 
 // 转出常用类型，方便领域组件按 `'../../store'` 路径就近引用
 export type {
-	ChatMessage,
 	CommandEntry,
 	InspectorTab,
 	MessageRole,
@@ -37,12 +35,15 @@ export type {
 	PersistedConfig,
 	PersistedState,
 	PlanEntry,
+	PlanItem,
 	ProtocolEntry,
 	SessionConfigOption,
 	SessionInfo,
 	SessionListEntry,
 	SessionModeState,
-	ToolRecord,
+	TextItem,
+	TimelineItem,
+	ToolItem,
 	UsageInfo,
 } from '../types';
 export type { ConnectionProfile } from './connectionConfig';
@@ -50,7 +51,7 @@ export type { ConnectionProfile } from './connectionConfig';
 const PROTOCOL_LIMIT = 200;
 const DEFAULT_COMMAND = 'npx universe-agent-acp';
 
-let nextMessageId = 1;
+let nextItemId = 1;
 let nextProtocolId = 1;
 
 const defaultClientFactory: AcpClientFactory = (options) => {
@@ -88,12 +89,12 @@ export interface AcpPanelStateData {
 	isPrompting: boolean;
 
 	// conversation
-	messages: ChatMessage[];
+	timeline: TimelineItem[];
+	/** 当前轮 plan 卡的 id；prompt_finished/error 后清空，让下一轮 plan 起新卡。 */
+	activePlanItemId: number | undefined;
 
 	// inspector
 	activeTab: InspectorTab;
-	plan: PlanEntry[];
-	tools: ToolRecord[];
 	protocol: ProtocolEntry[];
 	commands: CommandEntry[];
 	usage: UsageInfo | undefined;
@@ -186,11 +187,10 @@ function initialData(): AcpPanelStateData {
 		prompt: '',
 		isPrompting: false,
 
-		messages: [],
+		timeline: [],
+		activePlanItemId: undefined,
 
-		activeTab: 'plan',
-		plan: [],
-		tools: [],
+		activeTab: 'state',
 		protocol: [],
 		commands: [],
 		usage: undefined,
@@ -208,36 +208,63 @@ function initialData(): AcpPanelStateData {
 // 工具（导出供测试）
 // ──────────────────────────────────────────────────────────────────────────
 
-export function pushMessage(messages: ChatMessage[], role: MessageRole, text: string): void {
-	messages.push({ id: nextMessageId++, role, text });
+export function pushTextItem(timeline: TimelineItem[], role: MessageRole, text: string): void {
+	timeline.push({ kind: 'text', id: nextItemId++, role, text });
 }
 
-export function appendStream(messages: ChatMessage[], role: MessageRole, text: string): void {
-	const last = messages[messages.length - 1];
-	if (last && last.role === role) {
+export function appendStreamText(timeline: TimelineItem[], role: MessageRole, text: string): void {
+	const last = timeline[timeline.length - 1];
+	if (last && last.kind === 'text' && last.role === role) {
 		last.text = last.text + text;
 		return;
 	}
-	pushMessage(messages, role, text);
+	pushTextItem(timeline, role, text);
 }
 
-export function upsertTool(tools: ToolRecord[], event: Extract<AcpUiEvent, { type: 'tool_call_updated' }>): void {
-	const next: ToolRecord = {
-		id: event.toolCallId,
+export function upsertToolItem(
+	timeline: TimelineItem[],
+	event: Extract<AcpUiEvent, { type: 'tool_call_updated' }>,
+): void {
+	for (let i = timeline.length - 1; i >= 0; i--) {
+		const item = timeline[i]!;
+		if (item.kind === 'tool' && item.toolCallId === event.toolCallId) {
+			// 浅合并：仅当事件提供了新值时覆盖（tool_call_update 通常不重发 rawInput）
+			if (event.title) item.title = event.title;
+			if (event.kind !== undefined) item.toolKind = event.kind;
+			if (event.status !== undefined) item.status = event.status;
+			if (event.rawInput !== undefined) item.rawInput = event.rawInput;
+			if (event.rawOutput !== undefined) item.rawOutput = event.rawOutput;
+			if (event.content !== undefined) item.content = event.content;
+			return;
+		}
+	}
+	timeline.push({
+		kind: 'tool',
+		id: nextItemId++,
+		toolCallId: event.toolCallId,
 		title: event.title,
-		kind: event.kind,
+		toolKind: event.kind,
 		status: event.status,
 		rawInput: event.rawInput,
 		rawOutput: event.rawOutput,
 		content: event.content,
-	};
-	const index = tools.findIndex((t) => t.id === next.id);
-	if (index < 0) {
-		tools.push(next);
-		return;
+	});
+}
+
+export function upsertPlanItem(
+	state: { timeline: TimelineItem[]; activePlanItemId: number | undefined },
+	entries: PlanEntry[],
+): void {
+	if (state.activePlanItemId !== undefined) {
+		const existing = state.timeline.find((i) => i.kind === 'plan' && i.id === state.activePlanItemId);
+		if (existing && existing.kind === 'plan') {
+			existing.entries = entries;
+			return;
+		}
 	}
-	const previous = tools[index]!;
-	tools[index] = { ...previous, ...next };
+	const id = nextItemId++;
+	state.timeline.push({ kind: 'plan', id, entries });
+	state.activePlanItemId = id;
 }
 
 export function splitArgs(input: string): string[] {
@@ -265,9 +292,8 @@ export function resetSessionRuntime(s: AcpPanelStateData): void {
 	s.modes = undefined;
 	s.sessionInfo = undefined;
 	s.isPrompting = false;
-	s.messages = [];
-	s.plan = [];
-	s.tools = [];
+	s.timeline = [];
+	s.activePlanItemId = undefined;
 	s.protocol = [];
 	s.commands = [];
 	s.usage = undefined;
@@ -317,7 +343,7 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			s.configOptions = event.session.configOptions ?? [];
 			s.modes = event.session.modes ?? undefined;
 			s.sessionInfo = event.session.sessionInfo ?? { sessionId: id };
-			pushMessage(s.messages, 'system', `Session ready: ${id}`);
+			pushTextItem(s.timeline, 'system', `Session ready: ${id}`);
 			// 把当前 session 提到列表头部（若已存在则就地更新 / 提升）。
 			const existingIdx = s.sessions.findIndex((x) => x.sessionId === id);
 			const merged = {
@@ -331,16 +357,16 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			break;
 		}
 		case 'message_chunk':
-			appendStream(s.messages, event.role, event.text);
+			appendStreamText(s.timeline, event.role, event.text);
 			break;
 		case 'thought_chunk':
-			appendStream(s.messages, 'thought', event.text);
+			appendStreamText(s.timeline, 'thought', event.text);
 			break;
 		case 'plan_updated':
-			s.plan = event.entries;
+			upsertPlanItem(s, event.entries);
 			break;
 		case 'tool_call_updated':
-			upsertTool(s.tools, event);
+			upsertToolItem(s.timeline, event);
 			break;
 		case 'commands_updated':
 			s.commands = event.commands;
@@ -376,12 +402,14 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			break;
 		case 'prompt_finished':
 			s.isPrompting = false;
-			pushMessage(s.messages, 'system', `Stop reason: ${event.stopReason}`);
+			s.activePlanItemId = undefined;
+			pushTextItem(s.timeline, 'system', `Stop reason: ${event.stopReason}`);
 			break;
 		case 'error':
 			s.error = event.message;
 			s.isPrompting = false;
-			pushMessage(s.messages, 'error', event.message);
+			s.activePlanItemId = undefined;
+			pushTextItem(s.timeline, 'error', event.message);
 			break;
 		case 'session_listed':
 			s.sessions = (event.result.sessions ?? []).map((x) => ({
@@ -456,7 +484,7 @@ const createSlices = (
 					set((s) => {
 						s.status = 'error';
 						s.error = msg;
-						pushMessage(s.messages, 'error', msg);
+						pushTextItem(s.timeline, 'error', msg);
 					});
 				});
 		},
@@ -489,14 +517,14 @@ const createSlices = (
 				.newSession()
 				.then(({ warnings }) => {
 					set((s) => {
-						for (const w of warnings) pushMessage(s.messages, 'system', `MCP config: ${w}`);
+						for (const w of warnings) pushTextItem(s.timeline, 'system', `MCP config: ${w}`);
 					});
 					void get().refreshSessions();
 				})
 				.catch((err) => {
 					const msg = errorMessage(err);
 					set((s) => {
-						pushMessage(s.messages, 'error', msg);
+						pushTextItem(s.timeline, 'error', msg);
 					});
 				});
 		},
@@ -516,7 +544,7 @@ const createSlices = (
 				.loadSession(id)
 				.then(({ warnings }) => {
 					set((s) => {
-						for (const w of warnings) pushMessage(s.messages, 'system', `MCP config: ${w}`);
+						for (const w of warnings) pushTextItem(s.timeline, 'system', `MCP config: ${w}`);
 					});
 					void get().refreshSessions();
 				})
@@ -524,7 +552,7 @@ const createSlices = (
 					const msg = errorMessage(err);
 					set((s) => {
 						s.sessionId = undefined;
-						pushMessage(s.messages, 'error', msg);
+						pushTextItem(s.timeline, 'error', msg);
 					});
 				});
 		},
@@ -569,7 +597,7 @@ const createSlices = (
 				.catch((err) => {
 					const msg = errorMessage(err);
 					set((s) => {
-						pushMessage(s.messages, 'error', msg);
+						pushTextItem(s.timeline, 'error', msg);
 					});
 				});
 		},
@@ -580,7 +608,7 @@ const createSlices = (
 				.catch((err) => {
 					const msg = errorMessage(err);
 					set((s) => {
-						pushMessage(s.messages, 'error', msg);
+						pushTextItem(s.timeline, 'error', msg);
 					});
 				});
 		},
@@ -598,12 +626,12 @@ const createSlices = (
 			set((s) => {
 				s.prompt = '';
 				s.isPrompting = true;
-				pushMessage(s.messages, 'user', text);
+				pushTextItem(s.timeline, 'user', text);
 			});
 			client.controller.sendPrompt(text).catch((err) => {
 				const msg = errorMessage(err);
 				set((s) => {
-					pushMessage(s.messages, 'error', msg);
+					pushTextItem(s.timeline, 'error', msg);
 				});
 			});
 		},
@@ -612,14 +640,16 @@ const createSlices = (
 			get().client?.controller.cancel();
 			set((s) => {
 				s.isPrompting = false;
-				pushMessage(s.messages, 'system', 'Cancellation requested.');
+				s.activePlanItemId = undefined;
+				pushTextItem(s.timeline, 'system', 'Cancellation requested.');
 			});
 		},
 
 		// ── conversation ──
 		clearMessages: () =>
 			set((s) => {
-				s.messages = [];
+				s.timeline = [];
+				s.activePlanItemId = undefined;
 			}),
 
 		// ── inspector ──
@@ -690,7 +720,7 @@ const createSlices = (
 			const { config, warning } = await loadConnectionsConfig(`${projectDir}/.config/acp-connections.json`);
 			set((s) => {
 				s.connections = config.connections;
-				if (warning) pushMessage(s.messages, 'system', `Connections config: ${warning}`);
+				if (warning) pushTextItem(s.timeline, 'system', `Connections config: ${warning}`);
 			});
 		},
 
@@ -751,6 +781,10 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 			merge: (persisted, current) => {
 				const p = (persisted ?? {}) as Partial<PersistedState>;
 				const baseConfig = current.config;
+				// 旧持久化里的 'plan' / 'tools' tab 已下线，退化为 'state'
+				const persistedTab = p.inspector?.activeTab as InspectorTab | undefined;
+				const validTabs: InspectorTab[] = ['protocol', 'state', 'commands'];
+				const activeTab = persistedTab && validTabs.includes(persistedTab) ? persistedTab : current.activeTab;
 				return {
 					...current,
 					config: {
@@ -759,7 +793,7 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 					},
 					permission: p.policy?.permission ?? current.permission,
 					protocolEnabled: p.policy?.protocolEnabled ?? current.protocolEnabled,
-					activeTab: p.inspector?.activeTab ?? current.activeTab,
+					activeTab,
 				};
 			},
 		}),

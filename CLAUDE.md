@@ -99,7 +99,7 @@ npx gulp ue:acp-client          # 启动 ACP 客户端（交互式 REPL）
 ## 注意
 
 - Plugins和packages的每个包都有自己独立的CLAUDE.md，你在完成功能后，若有需要，请务必更新对应的CLAUDE.md，保持文档与代码同步
-- 完成feature后，请执行 `npm run check` 来检查
+- 完成feature后，请执行 `npm run check` 来检查，将输出保存到临时文件，只有返回值为非0时才需要关注输出内容
 
 ## PuerTS 环境注意事项
 

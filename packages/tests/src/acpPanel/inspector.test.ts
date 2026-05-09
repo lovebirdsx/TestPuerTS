@@ -3,8 +3,8 @@ import { createTestStore, waitHydration } from './testStore';
 
 const SID = 'test-session';
 
-describe('AcpPanel store / inspector', () => {
-	it('plan_updated populates plan tab', async () => {
+describe('AcpPanel store / timeline', () => {
+	it('plan_updated appends a single plan card', async () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
@@ -14,10 +14,59 @@ describe('AcpPanel store / inspector', () => {
 			sessionId: SID,
 			entries: [{ content: 'a', status: 'pending', priority: 'high' }],
 		});
-		expect(ctx.store.getState().plan.length).toBe(1);
+		const planItems = ctx.store.getState().timeline.filter((i) => i.kind === 'plan');
+		expect(planItems.length).toBe(1);
+		expect(planItems[0]!.kind === 'plan' && planItems[0]!.entries.length).toBe(1);
 	});
 
-	it('tool_call_updated upserts entries by toolCallId', async () => {
+	it('repeated plan_updated within one turn updates the same card in place', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
+		const ctrl = ctx.mockClients[0]!.mockController;
+		ctrl.emit({
+			type: 'plan_updated',
+			sessionId: SID,
+			entries: [{ content: 'a', status: 'pending', priority: 'high' }],
+		});
+		ctrl.emit({
+			type: 'plan_updated',
+			sessionId: SID,
+			entries: [
+				{ content: 'a', status: 'completed', priority: 'high' },
+				{ content: 'b', status: 'pending', priority: 'medium' },
+			],
+		});
+		const planItems = ctx.store.getState().timeline.filter((i) => i.kind === 'plan');
+		expect(planItems.length).toBe(1);
+		const plan = planItems[0]!;
+		expect(plan.kind === 'plan' && plan.entries.length).toBe(2);
+		expect(plan.kind === 'plan' && plan.entries[0]!.status).toBe('completed');
+	});
+
+	it('plan_updated after prompt_finished spawns a fresh plan card', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
+		const ctrl = ctx.mockClients[0]!.mockController;
+		ctrl.emit({
+			type: 'plan_updated',
+			sessionId: SID,
+			entries: [{ content: 'a', status: 'pending', priority: 'high' }],
+		});
+		ctrl.emit({ type: 'prompt_finished', stopReason: 'end_turn' });
+		ctrl.emit({
+			type: 'plan_updated',
+			sessionId: SID,
+			entries: [{ content: 'b', status: 'pending', priority: 'high' }],
+		});
+		const planItems = ctx.store.getState().timeline.filter((i) => i.kind === 'plan');
+		expect(planItems.length).toBe(2);
+	});
+
+	it('tool_call + tool_call_update collapse to one item with merged status', async () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
@@ -26,10 +75,23 @@ describe('AcpPanel store / inspector', () => {
 		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't1', title: 'T1', status: 'pending' });
 		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't1', title: 'T1', status: 'completed' });
 		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't2', title: 'T2' });
-		const tools = ctx.store.getState().tools;
+		const tools = ctx.store.getState().timeline.filter((i) => i.kind === 'tool');
 		expect(tools.length).toBe(2);
-		expect(tools[0]!.status).toBe('completed');
-		expect(tools[1]!.id).toBe('t2');
+		expect(tools[0]!.kind === 'tool' && tools[0]!.status).toBe('completed');
+		expect(tools[1]!.kind === 'tool' && tools[1]!.toolCallId).toBe('t2');
+	});
+
+	it('interleaved tool_call and message_chunk preserve event order in timeline', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({ ...s, sessionId: SID }));
+		const ctrl = ctx.mockClients[0]!.mockController;
+		ctrl.emit({ type: 'message_chunk', sessionId: SID, role: 'agent', text: 'thinking ' });
+		ctrl.emit({ type: 'tool_call_updated', sessionId: SID, toolCallId: 't1', title: 'Read', status: 'pending' });
+		ctrl.emit({ type: 'message_chunk', sessionId: SID, role: 'agent', text: 'done.' });
+		const kinds = ctx.store.getState().timeline.map((i) => i.kind);
+		expect(kinds).toEqual(['text', 'tool', 'text']);
 	});
 
 	it('protocol_message respects 200-entry cap', async () => {

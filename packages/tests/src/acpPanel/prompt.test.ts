@@ -1,5 +1,6 @@
 import { describe, expect, it } from '../testRunner';
 import { createTestStore, flushMicrotasks, waitHydration } from './testStore';
+import type { TextItem } from 'editor';
 
 describe('AcpPanel store / prompt', () => {
 	it('sendPrompt trims, requires connected client, and pushes user message', async () => {
@@ -14,7 +15,7 @@ describe('AcpPanel store / prompt', () => {
 		expect(s.prompt).toBe('');
 		expect(s.isPrompting).toBe(true);
 		expect(ctx.mockClients[0]!.mockController.sendPromptCalls).toEqual(['hello world']);
-		expect(s.messages.some((m) => m.role === 'user' && m.text === 'hello world')).toBe(true);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.role === 'user' && i.text === 'hello world')).toBe(true);
 	});
 
 	it('sendPrompt with empty text is a no-op', async () => {
@@ -46,7 +47,7 @@ describe('AcpPanel store / prompt', () => {
 		ctx.mockClients[0]!.mockController.emit({ type: 'prompt_finished', stopReason: 'end_turn' });
 		const s = ctx.store.getState();
 		expect(s.isPrompting).toBe(false);
-		expect(s.messages.some((m) => m.text.includes('end_turn'))).toBe(true);
+		expect(s.timeline.some((i) => i.kind === 'text' && i.text.includes('end_turn'))).toBe(true);
 	});
 });
 
@@ -63,24 +64,24 @@ describe('AcpPanel store / conversation', () => {
 		ctrl.emit({ type: 'thought_chunk', sessionId: 'sid', text: 'thinking' });
 		ctrl.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: '!' });
 
-		const messages = ctx.store.getState().messages;
-		expect(messages.length).toBe(3);
-		expect(messages[0]!.role).toBe('agent');
-		expect(messages[0]!.text).toBe('Hello world');
-		expect(messages[1]!.role).toBe('thought');
-		expect(messages[2]!.role).toBe('agent');
-		expect(messages[2]!.text).toBe('!');
+		const textItems = ctx.store.getState().timeline.filter((i): i is TextItem => i.kind === 'text');
+		expect(textItems.length).toBe(3);
+		expect(textItems[0]!.role).toBe('agent');
+		expect(textItems[0]!.text).toBe('Hello world');
+		expect(textItems[1]!.role).toBe('thought');
+		expect(textItems[2]!.role).toBe('agent');
+		expect(textItems[2]!.text).toBe('!');
 	});
 
-	it('clearMessages empties messages list', async () => {
+	it('clearMessages empties timeline', async () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
 		ctx.store.setState((s) => ({ ...s, sessionId: 'sid' }));
 		ctx.mockClients[0]!.mockController.emit({ type: 'message_chunk', sessionId: 'sid', role: 'agent', text: 'x' });
-		expect(ctx.store.getState().messages.length).toBe(1);
+		expect(ctx.store.getState().timeline.length).toBe(1);
 
 		ctx.store.getState().clearMessages();
-		expect(ctx.store.getState().messages.length).toBe(0);
+		expect(ctx.store.getState().timeline.length).toBe(0);
 	});
 });
