@@ -285,6 +285,31 @@ export function errorMessage(err: unknown): string {
 	return err instanceof Error ? err.message : String(err);
 }
 
+function isKnownModeChange(modes: SessionModeState | undefined, mode: string): boolean {
+	if (!mode) return false;
+	const modeIds = modes?.availableModes.map((m) => m.id) ?? [];
+	if (modeIds.length > 0 && !modeIds.includes(mode)) return false;
+	return modes?.currentModeId !== mode;
+}
+
+function shouldForwardConfigOption(configOptions: SessionConfigOption[], id: string, value: string | boolean): boolean {
+	const option = configOptions.find((opt) => opt.id === id);
+	if (!option) return false;
+
+	if (option.type === 'boolean') {
+		return typeof value === 'boolean' && option.currentValue !== value;
+	}
+
+	if (option.type === 'select') {
+		if (typeof value !== 'string') return false;
+		const allowedValues = option.options?.map((opt) => opt.value) ?? [];
+		if (!allowedValues.includes(value)) return false;
+		return option.currentValue !== value;
+	}
+
+	return true;
+}
+
 function resolveWorkspace(workspace: string): string {
 	if (workspace !== '') return workspace;
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -607,25 +632,25 @@ const createSlices = (
 		},
 
 		setMode: (mode) => {
-			get()
-				.client?.controller.setMode(mode)
-				.catch((err) => {
-					const msg = errorMessage(err);
-					set((s) => {
-						pushTextItem(s.timeline, 'error', msg);
-					});
+			const { client, modes } = get();
+			if (!client || !isKnownModeChange(modes, mode)) return;
+			client.controller.setMode(mode).catch((err) => {
+				const msg = errorMessage(err);
+				set((s) => {
+					pushTextItem(s.timeline, 'error', msg);
 				});
+			});
 		},
 
 		setConfigOption: (id, value) => {
-			get()
-				.client?.controller.setConfigOption(id, value)
-				.catch((err) => {
-					const msg = errorMessage(err);
-					set((s) => {
-						pushTextItem(s.timeline, 'error', msg);
-					});
+			const { client, configOptions } = get();
+			if (!client || !shouldForwardConfigOption(configOptions, id, value)) return;
+			client.controller.setConfigOption(id, value).catch((err) => {
+				const msg = errorMessage(err);
+				set((s) => {
+					pushTextItem(s.timeline, 'error', msg);
 				});
+			});
 		},
 
 		// ── prompt ──

@@ -177,6 +177,21 @@ describe('ACPClient - prompt / cancel', () => {
 });
 
 describe('ACPClient - setConfigOption', () => {
+	it('setMode sends params.modeId', async () => {
+		const h = buildHarness();
+		h.server.respondTo('session/new', () => ({ sessionId: 'sess-M' }));
+		h.server.respondTo('session/set_mode', () => ({}));
+
+		await h.client.connect();
+		await withTimeout(h.client.newSession(), 1000);
+		await withTimeout(h.client.setMode('bypassPermissions'), 1000);
+
+		const params = h.server.lastRequestParams('session/set_mode') as any;
+		expect(params.sessionId).toBe('sess-M');
+		expect(params.modeId).toBe('bypassPermissions');
+		expect('mode' in params).toBe(false);
+	});
+
 	it('boolean valueId sends params.value', async () => {
 		const h = buildHarness();
 		h.server.respondTo('session/new', () => ({ sessionId: 'sess-C' }));

@@ -520,7 +520,7 @@ export class ACPClient {
 
 		await this.connection.sendRequest(AGENT_METHODS.session_set_mode, {
 			sessionId: this.sessionId,
-			mode,
+			modeId: mode,
 		});
 	}
 

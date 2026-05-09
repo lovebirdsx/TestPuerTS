@@ -115,19 +115,16 @@ export const InputArea: React.FC = () => {
 	const status = useStoreSelector((s) => s.status);
 	const sessionId = useStoreSelector((s) => s.sessionId);
 	const isPrompting = useStoreSelector((s) => s.isPrompting);
-	const modes = useStoreSelector((s) => s.modes);
 	const configOptions = useStoreSelector((s) => s.configOptions);
 	const commands = useStoreSelector((s) => s.commands);
 	const setPrompt = useStoreAction('setPrompt');
 	const sendPrompt = useStoreAction('sendPrompt');
 	const cancel = useStoreAction('cancel');
-	const setMode = useStoreAction('setMode');
 	const setConfigOption = useStoreAction('setConfigOption');
 
 	const [showCommands, setShowCommands] = React.useState(false);
 
 	const disabled = status !== 'connected' || !sessionId || isPrompting;
-	const modeIds = modes?.availableModes.map((m) => m.id) ?? [];
 	const selectOptions = configOptions.filter(
 		(o): o is Extract<SessionConfigOption, { type: 'select' }> => o.type === 'select',
 	);
@@ -171,28 +168,21 @@ export const InputArea: React.FC = () => {
 					Active={showCommands}
 					Slot={center}
 				/>
-				{modeIds.length > 0 ? (
-					<Select
-						DefaultOptions={toTArray(modeIds)}
-						SelectedOption={modes?.currentModeId}
-						OnSelectionChanged={setMode}
-						ToolTipText="Mode"
-						Slot={center}
-					/>
-				) : undefined}
-				{selectOptions.map((opt) => {
-					const values = opt.options?.map((o) => o.value) ?? [];
-					return (
-						<Select
-							key={opt.id}
-							DefaultOptions={toTArray(values)}
-							SelectedOption={opt.currentValue ?? values[0]}
-							OnSelectionChanged={(value) => setConfigOption(opt.id, value)}
-							ToolTipText={opt.name}
-							Slot={center}
-						/>
-					);
-				})}
+				<HBox>
+					{selectOptions.map((opt) => {
+						const values = opt.options?.map((o) => o.value) ?? [];
+						return (
+							<Select
+								key={opt.id}
+								DefaultOptions={toTArray(values)}
+								SelectedOption={opt.currentValue ?? values[0]}
+								OnSelectionChanged={(value) => setConfigOption(opt.id, value)}
+								ToolTipText={opt.name}
+								Slot={center}
+							/>
+						);
+					})}
+				</HBox>
 				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
 				<IconBtn
 					IconName="ChevronRight"

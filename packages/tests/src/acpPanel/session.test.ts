@@ -132,10 +132,75 @@ describe('AcpPanel store / session', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({
+			...s,
+			modes: { currentModeId: 'mode-a', availableModes: [{ id: 'mode-a' }, { id: 'mode-x' }] } as any,
+			configOptions: [
+				{
+					id: 'opt-a',
+					name: 'Opt A',
+					type: 'boolean',
+					currentValue: false,
+				},
+			] as any,
+		}));
 		ctx.store.getState().setMode('mode-x');
 		ctx.store.getState().setConfigOption('opt-a', true);
 		await flushMicrotasks();
 		expect(ctx.mockClients[0]!.mockController.lastMode).toBe('mode-x');
 		expect(ctx.mockClients[0]!.mockController.lastConfigOption).toEqual({ optionId: 'opt-a', value: true });
+	});
+
+	it('setMode ignores empty, unknown and unchanged values', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({
+			...s,
+			modes: {
+				currentModeId: 'default',
+				availableModes: [{ id: 'default' }, { id: 'bypassPermissions' }],
+			} as any,
+		}));
+
+		ctx.store.getState().setMode('');
+		ctx.store.getState().setMode('default');
+		ctx.store.getState().setMode('missing');
+		await flushMicrotasks();
+
+		expect(ctx.mockClients[0]!.mockController.lastMode).toBe(undefined);
+	});
+
+	it('setConfigOption ignores invalid or unchanged select values', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().connect();
+		ctx.store.setState((s) => ({
+			...s,
+			configOptions: [
+				{
+					id: 'mode',
+					name: 'Mode',
+					type: 'select',
+					currentValue: 'default',
+					options: [{ value: 'default' }, { value: 'bypassPermissions' }],
+				},
+			] as any,
+		}));
+
+		ctx.store.getState().setConfigOption('mode', '');
+		ctx.store.getState().setConfigOption('mode', 'default');
+		ctx.store.getState().setConfigOption('mode', 'unknown');
+		await flushMicrotasks();
+
+		expect(ctx.mockClients[0]!.mockController.lastConfigOption).toBe(undefined);
+
+		ctx.store.getState().setConfigOption('mode', 'bypassPermissions');
+		await flushMicrotasks();
+
+		expect(ctx.mockClients[0]!.mockController.lastConfigOption).toEqual({
+			optionId: 'mode',
+			value: 'bypassPermissions',
+		});
 	});
 });
