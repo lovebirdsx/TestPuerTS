@@ -41,6 +41,7 @@ describe('AcpPanel store / persistence', () => {
 		const first = createAcpPanelStore({ clientFactory, persistName, storage });
 		await waitHydration(first);
 		first.setState((s) => ({ ...s, sessionId: 'leak', isPrompting: true }));
+		first.getState().setActiveDrawer('history');
 		await Promise.resolve();
 		await Promise.resolve();
 
@@ -48,5 +49,6 @@ describe('AcpPanel store / persistence', () => {
 		await waitHydration(second);
 		expect(second.getState().sessionId).toBe(undefined);
 		expect(second.getState().isPrompting).toBe(false);
+		expect(second.getState().activeDrawer).toBe(undefined);
 	});
 });

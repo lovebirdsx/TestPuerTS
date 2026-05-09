@@ -13,6 +13,7 @@ import type { StateStorage } from 'zustand/middleware';
 
 export type MessageRole = 'user' | 'agent' | 'thought' | 'system' | 'error';
 export type InspectorTab = 'protocol' | 'state' | 'commands';
+export type DrawerKey = 'history' | 'settings' | 'debug';
 
 /** SessionPicker 列表项（来自服务端 session/list）。 */
 export interface SessionListEntry {

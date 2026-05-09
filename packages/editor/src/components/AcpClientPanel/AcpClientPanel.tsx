@@ -2,12 +2,10 @@ import * as React from 'react';
 import { HorizontalBox, SizeBox } from 'react-umg';
 
 import { Panel, VBox } from '../ui';
-import { ConnectionToolbar } from './domain/connection/ConnectionToolbar';
-import { Inspector } from './domain/inspector/Inspector';
+import { DrawerHost } from './domain/drawer/DrawerHost';
 import { PermissionModal } from './domain/permission/PermissionModal';
-import { MessageStream, PromptBox } from './domain/prompt/PromptArea';
-import { SessionPicker } from './domain/session/SessionPicker';
-import { Sidebar } from './domain/session/Sidebar';
+import { InputArea, MessageStream } from './domain/prompt/PromptArea';
+import { TopBar } from './domain/topbar/TopBar';
 import { StoreProvider, useHydration, useStoreAction, useStoreSelector } from './hooks/useStore';
 import { createAcpPanelStore, type UseAcpPanelStore } from './store';
 import type { AcpPanelStoreOptions } from './types';
@@ -16,6 +14,7 @@ const PanelBody: React.FC = () => {
 	const hydrated = useHydration();
 	const autoConnect = useStoreSelector((s) => s.config.startup.autoConnect);
 	const hasClient = useStoreSelector((s) => s.client !== undefined);
+	const activeDrawer = useStoreSelector((s) => s.activeDrawer);
 	const connect = useStoreAction('connect');
 	const disconnect = useStoreAction('disconnect');
 	const loadConnections = useStoreAction('loadConnections');
@@ -40,21 +39,17 @@ const PanelBody: React.FC = () => {
 	return (
 		<Panel Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-				<ConnectionToolbar />
+				<TopBar />
 				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-					<SizeBox WidthOverride={220} MaxDesiredWidth={220} bOverride_MaxDesiredWidth>
-						<SessionPicker />
-					</SizeBox>
-					<SizeBox WidthOverride={260} MaxDesiredWidth={260} bOverride_MaxDesiredWidth>
-						<Sidebar />
-					</SizeBox>
 					<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 						<MessageStream />
-						<PromptBox />
+						<InputArea />
 					</VBox>
-					<SizeBox WidthOverride={340} MaxDesiredWidth={340} bOverride_MaxDesiredWidth>
-						<Inspector />
-					</SizeBox>
+					{activeDrawer ? (
+						<SizeBox WidthOverride={360} MaxDesiredWidth={360} bOverride_MaxDesiredWidth>
+							<DrawerHost active={activeDrawer} />
+						</SizeBox>
+					) : null}
 				</HorizontalBox>
 				<PermissionModal />
 			</VBox>

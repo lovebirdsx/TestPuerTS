@@ -50,11 +50,11 @@ const COL_HEADER: LinearColor = { R: 0.028, G: 0.028, B: 0.028, A: 1.0 };
 /** Dropdown #383838 → 按钮禁用底色 */
 const COL_DROPDOWN: LinearColor = { R: 0.0396, G: 0.0396, B: 0.0396, A: 1.0 };
 /** Foreground #C0C0C0 → 普通文字色 */
-const COL_FOREGROUND: LinearColor = { R: 0.533, G: 0.533, B: 0.533, A: 1.0 };
+export const COL_FOREGROUND: LinearColor = { R: 0.533, G: 0.533, B: 0.533, A: 1.0 };
 /** ForegroundHover #FFFFFF → 按钮/高亮文字色 */
-const COL_FOREGROUND_HOVER: LinearColor = { R: 1.0, G: 1.0, B: 1.0, A: 1.0 };
+export const COL_FOREGROUND_HOVER: LinearColor = { R: 1.0, G: 1.0, B: 1.0, A: 1.0 };
 const COL_PANEL: LinearColor = { R: 0.015, G: 0.015, B: 0.015, A: 1.0 };
-const COL_ACCENT: LinearColor = { R: 0.034, G: 0.16, B: 0.32, A: 1.0 };
+export const COL_ACCENT: LinearColor = { R: 0.034, G: 0.16, B: 0.32, A: 1.0 };
 const COL_WARNING: LinearColor = { R: 0.55, G: 0.37, B: 0.08, A: 1.0 };
 const COL_ERROR: LinearColor = { R: 0.45, G: 0.06, B: 0.05, A: 1.0 };
 

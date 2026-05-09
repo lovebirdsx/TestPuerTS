@@ -9,6 +9,7 @@ import type {
 	AcpPanelStoreOptions,
 	AcpPermissionStrategy,
 	CommandEntry,
+	DrawerKey,
 	InspectorTab,
 	MessageRole,
 	PendingPermissionRequest,
@@ -29,6 +30,7 @@ import { ueStorage } from './ueStorage';
 // 转出常用类型，方便领域组件按 `'../../store'` 路径就近引用
 export type {
 	CommandEntry,
+	DrawerKey,
 	InspectorTab,
 	MessageRole,
 	PendingPermissionRequest,
@@ -99,6 +101,9 @@ export interface AcpPanelStateData {
 	commands: CommandEntry[];
 	usage: UsageInfo | undefined;
 
+	// ui（不持久化）
+	activeDrawer: DrawerKey | undefined;
+
 	// permission
 	pendingPermission: PendingPermissionRequest | undefined;
 
@@ -133,6 +138,10 @@ export interface AcpPanelActions {
 	// inspector
 	setActiveTab: (tab: InspectorTab) => void;
 	clearProtocol: () => void;
+
+	// ui
+	setActiveDrawer: (key: DrawerKey | undefined) => void;
+	toggleDrawer: (key: DrawerKey) => void;
 
 	// permission
 	resolvePermission: (optionId: string) => void;
@@ -194,6 +203,8 @@ function initialData(): AcpPanelStateData {
 		protocol: [],
 		commands: [],
 		usage: undefined,
+
+		activeDrawer: undefined,
 
 		pendingPermission: undefined,
 
@@ -660,6 +671,16 @@ const createSlices = (
 		clearProtocol: () =>
 			set((s) => {
 				s.protocol = [];
+			}),
+
+		// ── ui ──
+		setActiveDrawer: (key) =>
+			set((s) => {
+				s.activeDrawer = key;
+			}),
+		toggleDrawer: (key) =>
+			set((s) => {
+				s.activeDrawer = s.activeDrawer === key ? undefined : key;
 			}),
 
 		// ── permission ──
