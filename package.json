@@ -14,7 +14,7 @@
     "postinstall": "npm --workspace @test-puerts/build-tools run build && npx gulp ue:build --verbose && npx gulp ue:gen_vscode_settings --verbose && npx gulp workspace:clean",
     "tool:build": "npm --workspace @test-puerts/build-tools run build",
     "dev": "nodemon -w tools/build/src -e ts -x \"npm --workspace @test-puerts/build-tools run build && npx gulp dev --verbose\"",
-    "check": "npm --workspace @test-puerts/build-tools run check && npx gulp check",
+    "check": "npm --workspace @test-puerts/build-tools run check && npx gulp check --verbose",
     "clean": "npx gulp clean && npm --workspace @test-puerts/build-tools run clean"
   },
   "devDependencies": {
