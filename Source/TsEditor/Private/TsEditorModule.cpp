@@ -103,6 +103,11 @@ void FTsEditorModule::RegisterCommands()
 		FCanExecuteAction::CreateLambda([]() { return true; }),
 		FIsActionChecked::CreateRaw(this, &FTsEditorModule::IsWaitJSDebugEnabled));
 
+	PluginCommands->MapAction(
+		FTsEditorCommands::Get().OpenSettings,
+		FExecuteAction::CreateRaw(this, &FTsEditorModule::OpenTsEditorSettings),
+		FCanExecuteAction::CreateLambda([]() { return true; }));
+
 	UToolMenus::RegisterStartupCallback(
 		FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FTsEditorModule::RegisterMenus));
 
@@ -131,6 +136,8 @@ void FTsEditorModule::UnregisterCommands()
 	if (PluginCommands.IsValid())
 	{
 		PluginCommands->UnmapAction(FTsEditorCommands::Get().Restart);
+		PluginCommands->UnmapAction(FTsEditorCommands::Get().ToggleWaitJSDebug);
+		PluginCommands->UnmapAction(FTsEditorCommands::Get().OpenSettings);
 		PluginCommands.Reset();
 	}
 
@@ -159,6 +166,7 @@ void FTsEditorModule::RegisterMenus()
 	FToolMenuSection& Section = TsEditorMenu->FindOrAddSection("TsEditor", LOCTEXT("TsEditorMenuSection", "TsEditor"));
 	Section.AddMenuEntryWithCommandList(FTsEditorCommands::Get().Restart, PluginCommands);
 	Section.AddMenuEntryWithCommandList(FTsEditorCommands::Get().ToggleWaitJSDebug, PluginCommands);
+	Section.AddMenuEntryWithCommandList(FTsEditorCommands::Get().OpenSettings, PluginCommands);
 	AddRegisteredMenuEntries(TsEditorMenu);
 }
 
@@ -180,6 +188,14 @@ void FTsEditorModule::ToggleWaitJSDebug()
 	SyncSettingsToEditor();
 
 	UE_LOG(LogTsEditor, Display, TEXT("Wait JS Debug set to: %s"), Settings->bWaitJSDebug ? TEXT("True") : TEXT("False"));
+}
+
+void FTsEditorModule::OpenTsEditorSettings()
+{
+	if (ISettingsModule* SettingsModule = FModuleManager::GetModulePtr<ISettingsModule>("Settings"))
+	{
+		SettingsModule->ShowViewer("Editor", "Plugins", "TsEditor");
+	}
 }
 
 bool FTsEditorModule::IsWaitJSDebugEnabled() const

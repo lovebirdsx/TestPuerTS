@@ -19,6 +19,7 @@ public:
 
 	TSharedPtr<FUICommandInfo> Restart;
 	TSharedPtr<FUICommandInfo> ToggleWaitJSDebug;
+	TSharedPtr<FUICommandInfo> OpenSettings;
 
 	virtual void RegisterCommands() override;
 };

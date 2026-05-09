@@ -44,6 +44,7 @@ private:
     void RegisterMenus();
     void RestartTsEditor();
     void ToggleWaitJSDebug();
+    void OpenTsEditorSettings();
     bool IsWaitJSDebugEnabled() const;
     void ExecuteRegisteredMenuEntry(FName Id);
     bool CanExecuteRegisteredMenuEntry(FName Id);
