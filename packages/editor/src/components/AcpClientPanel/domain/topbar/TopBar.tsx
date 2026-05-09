@@ -7,7 +7,6 @@ import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 const center = { VerticalAlignment: 2 as any };
 
 export const TopBar: React.FC = () => {
-	const isPrompting = useStoreSelector((s) => s.isPrompting);
 	const hasClient = useStoreSelector((s) => s.client !== undefined);
 	const connected = useStoreSelector((s) => s.status === 'connected');
 	const activeDrawer = useStoreSelector((s) => s.activeDrawer);
@@ -15,7 +14,6 @@ export const TopBar: React.FC = () => {
 
 	const connect = useStoreAction('connect');
 	const disconnect = useStoreAction('disconnect');
-	const cancel = useStoreAction('cancel');
 	const newSession = useStoreAction('newSession');
 	const toggleDrawer = useStoreAction('toggleDrawer');
 	const exportProtocol = useStoreAction('exportProtocol');
@@ -59,7 +57,6 @@ export const TopBar: React.FC = () => {
 				OnClicked={hasClient ? () => void disconnect() : connect}
 				Slot={center}
 			/>
-			<IconBtn IconName="X" ToolTipText="Cancel" OnClicked={cancel} bIsEnabled={isPrompting} Slot={center} />
 		</HBox>
 	);
 };

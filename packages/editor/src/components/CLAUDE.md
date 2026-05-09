@@ -23,8 +23,8 @@
   - **TopBar**（纯图标按钮）：➕New / 🕘History（toggle 高亮） / ⚙Settings（toggle 高亮） / 📤Export Protocol JSON / 📋Log State / 🔌Connect-Disconnect / ✖Cancel；不再显示 status / agent / session 文字。
   - **主区域**：当 `activeDrawer === 'history'` 时由 `SessionPicker` 全占主列（替换式，VSCode Copilot 行为，左上角 ← 返回按钮）；否则渲染 `MessageStream` + `InputArea`。
   - **MessageStream**：纯滚动列表，无 "Conversation" 标题与 Clear 按钮。
-  - **InputArea**：TextArea + 工具栏（`Icons.Filter` Commands 弹出 / Mode Select / 所有 select 类 configOptions（model / effort 等内联） / Send（`Icons.ChevronRight`） / Cancel（`Icons.X`））；Commands 按钮点开内联 CommandsPanel（hover 描述 → 点击填入 `/{name} `）。
-  - **Settings 抽屉**：仅当 `activeDrawer === 'settings'` 时挤压主区域 360px 宽度；包含连接 profile / auto-connect / boolean 类 configOptions（select 类已被 InputArea 接管）。
+  - **InputArea**：TextArea 上方先显示 select 类 configOptions（model / effort 等下拉）；再显示 CommandsPanel（加 `SizeBox MaxDesiredHeight={160}` + ScrollArea 防超框）；TextArea；底部工具栏（`Icons.Filter` Commands 弹出 / Spacer / 任务进行中显示转菊花 SpinnerBtn（点击取消）否则显示 Send（`Icons.ChevronRight`））；无独立 Cancel 按钮。
+  - **Settings 抽屉**：仅当 `activeDrawer === 'settings'` 时，纵向显示在对话区上方（内容自适应高度）；包含连接 profile / auto-connect / boolean 类 configOptions（select 类已被 InputArea 接管）。
   - **PermissionModal** 仍为独立浮层。
 - 状态管理基于 zustand v5 + immer + persist 中间件：单一 store 内含 connection/session/prompt/conversation/ui/permission/policy/config 字段；事件流通过统一的 `ingestEvent` 投影到 store（`store/index.ts`）。新增 `exportProtocol`（写 `<ProjectDir>/Saved/Logs/acp-protocol-{ts}.json` + `cmd /c start` 调系统默认程序打开） / `logStateToConsole`（用 `createLogger('acp-panel').info` 输出 snapshot 到 UE Output Log）两个 action。`activeDrawer ∈ {'history','settings'}`（debug 抽屉已下线）由 `setActiveDrawer` / `toggleDrawer` 控制，**不持久化**。
 - `permission` / `protocolEnabled` 字段在 store 中保留以便 controller 同步（默认 `protocolEnabled = true` 让 export 始终有数据），但 UI 不再暴露策略选择。

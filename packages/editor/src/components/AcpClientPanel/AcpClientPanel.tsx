@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { HorizontalBox, SizeBox } from 'react-umg';
 
 import { Panel, VBox } from '../ui';
 import { DrawerHost } from './domain/drawer/DrawerHost';
@@ -42,26 +41,18 @@ const PanelBody: React.FC = () => {
 
 	return (
 		<Panel Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+			<VBox Gap={2} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<TopBar />
-				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-					<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-						{showHistory ? (
-							<SessionPicker />
-						) : (
-							<>
-								<MessageStream />
-								<InputArea />
-							</>
-						)}
+				<VBox>{showSettings ? <DrawerHost active="settings" /> : null}</VBox>
+				{showHistory ? (
+					<SessionPicker />
+				) : (
+					<VBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+						<MessageStream />
+						<PermissionModal />
+						<InputArea />
 					</VBox>
-					{showSettings ? (
-						<SizeBox WidthOverride={360} MaxDesiredWidth={360} bOverride_MaxDesiredWidth>
-							<DrawerHost active="settings" />
-						</SizeBox>
-					) : null}
-				</HorizontalBox>
-				<PermissionModal />
+				)}
 			</VBox>
 		</Panel>
 	);

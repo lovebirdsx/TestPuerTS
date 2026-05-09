@@ -10,7 +10,7 @@ export const Drawer: React.FC<{
 	onClose: () => void;
 	children?: React.ReactNode;
 }> = ({ title, onClose, children }) => (
-	<Section Slot={{ Size: { SizeRule: 1, Value: 1 } }} Gap={6}>
+	<Section Gap={6}>
 		<HBox Gap={4}>
 			<Text Text={title} Slot={center} />
 			<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />

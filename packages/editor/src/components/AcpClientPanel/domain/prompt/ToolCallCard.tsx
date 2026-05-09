@@ -28,6 +28,16 @@ function toolDescription(item: ToolItem): string {
 	return '';
 }
 
+// 运行中状态（warning tone）使用闪烁动画
+const AnimatedBadge: React.FC<{ text: string }> = ({ text }) => {
+	const [blink, setBlink] = React.useState(false);
+	React.useEffect(() => {
+		const id = setInterval(() => setBlink((b) => !b), 600);
+		return () => clearInterval(id);
+	}, []);
+	return <Badge Text={text} Tone={blink ? 'warning' : 'normal'} Slot={center} />;
+};
+
 export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 	const [expanded, setExpanded] = React.useState(false);
 
@@ -49,7 +59,13 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 				/>
 				<Badge Text={item.toolKind ?? 'tool'} Slot={center} />
 				<SelectableText Text={toolDescription(item)} Slot={center} />
-				{item.status ? <Badge Text={item.status} Tone={tone} Slot={center} /> : undefined}
+				{item.status ? (
+					tone === 'warning' ? (
+						<AnimatedBadge text={item.status} />
+					) : (
+						<Badge Text={item.status} Tone={tone} Slot={center} />
+					)
+				) : undefined}
 			</HBox>
 			{expanded && hasBody ? (
 				<VBox Gap={4}>

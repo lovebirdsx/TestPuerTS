@@ -36,7 +36,7 @@ npx gulp editor:lint:fix    # lint 自动修复
 
 **ACP Client UI：**
 
-- `src/components/AcpClientPanel/` 在独立编辑器 Tab 中提供 ACP 客户端界面，VSCode Copilot 风格的纵向单列布局：`TopBar`（连接状态 / 会话标签 / + New / 三个抽屉切换 / Connect-Disconnect / Cancel）+ 主对话区（`MessageStream` + `InputArea`）+ 右侧条件渲染的 360px `Drawer`（横向挤压主区域）。目录按领域分包（store/slices/eventSink + domain/{topbar,session,prompt,drawer,inspector,permission,policy} + hooks）。
+- `src/components/AcpClientPanel/` 在独立编辑器 Tab 中提供 ACP 客户端界面，VSCode Copilot 风格的纵向单列布局：`TopBar`（连接状态 / 会话标签 / + New / 三个抽屉切换 / Connect-Disconnect）+ 可选 Settings 区（`activeDrawer === 'settings'` 时显示在对话区上方，内容自适应高度）+ 主对话区（`MessageStream` + `InputArea`）。`InputArea` 底部工具栏右侧：任务进行中显示转菊花 SpinnerBtn（点击取消），否则显示 Send 按钮；select 类 configOptions 显示在 TextArea 上方。目录按领域分包（store/slices/eventSink + domain/{topbar,session,prompt,drawer,inspector,permission,policy} + hooks）。
 - 状态管理：zustand v5 + immer + persist 中间件，单一 store 内含 connection/session/prompt/conversation/inspector/ui/permission/policy/config 字段；事件流通过 `ingestEvent` 投影到 store，UI 组件按需 `useStoreSelector` / `useStoreAction` 订阅，零 props drilling。`activeDrawer`（`'history' | 'settings' | 'debug' | undefined`）由 `setActiveDrawer` / `toggleDrawer` 切换，**不持久化**。
 - `AcpClient` facade（来自 `@universe-agent/acp-client-ue`）由 store 内部按 `clientFactory` 实例化；MCP 生命周期由 `AcpClient` 自动管理，Panel 卸载时统一调 `client.dispose()`。
 - 持久化：zustand persist + 自定义 ueStorage 适配器写 `<ProjectDir>/EditorPersistence/acp-panel.json`，仅落 `{ config, policy, inspector.activeTab }`。旧 schema `acp-client-panel.json` / `acpPanelConfigStore` / `usePersistedState` 已下线。

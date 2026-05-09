@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as UE from 'ue';
-import { Spacer } from 'react-umg';
+import { SizeBox, Spacer } from 'react-umg';
 
 import {
 	Btn,
@@ -108,7 +108,26 @@ const CommandsPanel: React.FC<{
 };
 
 // ──────────────────────────────────────────────────────────────────────────
-// 输入区（VSCode Copilot 风格：TextArea + 工具栏：Commands/Mode/configOptions + Send/Cancel）
+// 转菊花按钮（任务进行中时替换 Send 按钮，点击取消）
+// ──────────────────────────────────────────────────────────────────────────
+
+const SPINNER_FRAMES = ['|', '/', '-', '\\'];
+
+const SpinnerBtn: React.FC<{ onClick: () => void }> = ({ onClick }) => {
+	const [frame, setFrame] = React.useState(0);
+	React.useEffect(() => {
+		const id = setInterval(() => setFrame((f) => (f + 1) % SPINNER_FRAMES.length), 120);
+		return () => clearInterval(id);
+	}, []);
+	return (
+		<Btn OnClicked={onClick} ToolTipText="Cancel" Slot={center}>
+			<Text Text={SPINNER_FRAMES[frame]} />
+		</Btn>
+	);
+};
+
+// ──────────────────────────────────────────────────────────────────────────
+// 输入区（VSCode Copilot 风格：select 选项 + TextArea + 工具栏：Commands/Send or Spinner）
 // ──────────────────────────────────────────────────────────────────────────
 
 export const InputArea: React.FC = () => {
@@ -154,7 +173,34 @@ export const InputArea: React.FC = () => {
 
 	return (
 		<Section>
-			{showCommands ? <CommandsPanel commands={commands} onPick={onPickCommand} /> : null}
+			{/* select 类选项（model/effort 等）在输入框上方 */}
+			<HBox>
+				{selectOptions.length > 0 ? (
+					<HBox Gap={4}>
+						{selectOptions.map((opt) => {
+							const values = opt.options?.map((o) => o.value) ?? [];
+							return (
+								<Select
+									key={opt.id}
+									DefaultOptions={toTArray(values)}
+									SelectedOption={opt.currentValue ?? values[0]}
+									OnSelectionChanged={(value) => setConfigOption(opt.id, value)}
+									ToolTipText={opt.name}
+									Slot={center}
+								/>
+							);
+						})}
+					</HBox>
+				) : null}
+			</HBox>
+			{/* Commands 面板：加高度上限防止超框 */}
+			{showCommands ? (
+				<SizeBox MaxDesiredHeight={160} bOverride_MaxDesiredHeight>
+					<ScrollArea>
+						<CommandsPanel commands={commands} onPick={onPickCommand} />
+					</ScrollArea>
+				</SizeBox>
+			) : null}
 			<TextArea
 				Text={prompt}
 				HintText="Ask the agent... (Ctrl+Enter to send)"
@@ -169,30 +215,18 @@ export const InputArea: React.FC = () => {
 					Active={showCommands}
 					Slot={center}
 				/>
-				<HBox>
-					{selectOptions.map((opt) => {
-						const values = opt.options?.map((o) => o.value) ?? [];
-						return (
-							<Select
-								key={opt.id}
-								DefaultOptions={toTArray(values)}
-								SelectedOption={opt.currentValue ?? values[0]}
-								OnSelectionChanged={(value) => setConfigOption(opt.id, value)}
-								ToolTipText={opt.name}
-								Slot={center}
-							/>
-						);
-					})}
-				</HBox>
 				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
-				<IconBtn
-					IconName="ChevronRight"
-					ToolTipText="Send (Ctrl+Enter)"
-					OnClicked={sendPrompt}
-					bIsEnabled={!disabled && !!prompt.trim()}
-					Slot={center}
-				/>
-				<IconBtn IconName="X" ToolTipText="Cancel" OnClicked={cancel} bIsEnabled={isPrompting} Slot={center} />
+				{isPrompting ? (
+					<SpinnerBtn onClick={cancel} />
+				) : (
+					<IconBtn
+						IconName="ChevronRight"
+						ToolTipText="Send (Ctrl+Enter)"
+						OnClicked={sendPrompt}
+						bIsEnabled={!disabled && !!prompt.trim()}
+						Slot={center}
+					/>
+				)}
 			</HBox>
 		</Section>
 	);
