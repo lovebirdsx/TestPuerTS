@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Badge, HBox, Section, Text, ToolbarButton, VBox } from '../../../ui';
+import { Badge, HBox, IconBtn, Section, Text, VBox } from '../../../ui';
 import type { ToolItem } from '../../store';
 import { formatUnknown } from '../shared/formatters';
 
@@ -29,9 +29,12 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 	return (
 		<Section Tone="normal" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
 			<HBox Gap={4}>
-				<ToolbarButton OnClicked={() => setExpanded((v) => !v)} bIsEnabled={hasBody} Slot={center}>
-					<Text Text={expanded ? '▼' : '▶'} />
-				</ToolbarButton>
+				<IconBtn
+					IconName={expanded ? 'ChevronDown' : 'ChevronRight'}
+					ToolTipText=""
+					OnClicked={() => setExpanded((v) => !v)}
+					bIsEnabled={hasBody}
+				/>
 				<Badge Text={item.toolKind ?? 'tool'} Slot={center} />
 				<Text Text={item.title} Slot={center} />
 				{item.status ? <Badge Text={item.status} Tone={tone} Slot={center} /> : undefined}
