@@ -1,7 +1,8 @@
 import * as React from 'react';
+import * as UE from 'ue';
 import { Spacer } from 'react-umg';
 
-import { Badge, Btn, HBox, IconBtn, ScrollArea, Section, Text, VBox } from '../../../ui';
+import { Btn, HBox, IconBtn, ScrollArea, Section, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import type { SessionListEntry } from '../../store';
 
@@ -24,13 +25,13 @@ function formatRelativeTime(iso: string | null | undefined): string {
 	const ts = Date.parse(iso);
 	if (Number.isNaN(ts)) return iso;
 	const diffSec = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-	if (diffSec < 60) return `${diffSec}s ago`;
+	if (diffSec < 60) return `${diffSec}s`;
 	const diffMin = Math.floor(diffSec / 60);
-	if (diffMin < 60) return `${diffMin}m ago`;
+	if (diffMin < 60) return `${diffMin}m`;
 	const diffH = Math.floor(diffMin / 60);
-	if (diffH < 24) return `${diffH}h ago`;
+	if (diffH < 24) return `${diffH}h`;
 	const diffD = Math.floor(diffH / 24);
-	if (diffD < 30) return `${diffD}d ago`;
+	if (diffD < 30) return `${diffD}d`;
 	return new Date(ts).toISOString().slice(0, 10);
 }
 
@@ -47,17 +48,25 @@ const SessionRow: React.FC<{
 	const subtitle = formatRelativeTime(entry.updatedAt);
 	return (
 		<Btn Active={active} bIsEnabled={!active} OnClicked={() => onSelect(entry.sessionId)}>
-			<HBox Gap={4}>
+			<HBox Gap={2} Slot={{ HorizontalAlignment: 0 }}>
 				{/* 左：描述文字，填充剩余空间，溢出省略 */}
 				<Text
 					Text={title}
 					Slot={{ Size: { SizeRule: 1, Value: 1 } }}
-					Justification={0 as any}
-					{...({ OverflowPolicy: 1 } as any)}
+					Justification={0}
+					AutoWrapText={false}
+					Clipping={UE.EWidgetClipping.ClipToBounds}
+					{...{ TextOverflowPolicy: 1 }}
 				/>
-				{/* 右：时间 + ACTIVE 标记 */}
-				{subtitle ? <Text Text={subtitle} Font={{ Size: 8 }} Slot={center} /> : null}
-				{active ? <Badge Text="ACTIVE" Tone="accent" Slot={center} /> : null}
+				{subtitle ? (
+					<Text
+						Text={subtitle}
+						Font={{ Size: 8 }}
+						Justification={2}
+						Slot={center}
+						{...({ MinDesiredWidth: 32 } as any)}
+					/>
+				) : null}
 			</HBox>
 		</Btn>
 	);
