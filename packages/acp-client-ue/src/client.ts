@@ -15,6 +15,7 @@ import {
 	type SessionModeState,
 	type SessionNotification,
 	type SessionStartResponse,
+	type SessionUpdate,
 } from './types';
 
 export { PROTOCOL_VERSION };
@@ -120,8 +121,9 @@ export class ACPClientHandler {
 	handleNotification(method: string, params: any): void {
 		switch (method) {
 			case CLIENT_METHODS.session_update: {
-				this.renderer.renderSessionUpdate(params as SessionNotification);
-				const update = (params as SessionNotification).update as any;
+				const notification = params as SessionNotification;
+				this.renderer.renderSessionUpdate(notification);
+				const update: SessionUpdate = notification.update;
 				if (update.sessionUpdate === 'available_commands_update') {
 					this.availableCommands = update.availableCommands ?? [];
 				}

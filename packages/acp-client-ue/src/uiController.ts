@@ -13,6 +13,7 @@ import type {
 	SessionModeState,
 	SessionNotification,
 	SessionStartResponse,
+	SessionUpdate,
 } from './types';
 import type { CliOptions } from './cli';
 
@@ -105,7 +106,7 @@ class AcpEventRenderer extends Renderer {
 	}
 
 	override renderSessionUpdate(notification: SessionNotification): void {
-		const update = notification.update as any;
+		const update: SessionUpdate = notification.update;
 		const sessionId = notification.sessionId;
 
 		switch (update.sessionUpdate) {
@@ -160,7 +161,7 @@ class AcpEventRenderer extends Renderer {
 				this.emitEvent({
 					type: 'session_info_updated',
 					sessionId,
-					sessionInfo: update as SessionInfoUpdate,
+					sessionInfo: update,
 				});
 				break;
 			case 'usage_update':
@@ -168,7 +169,10 @@ class AcpEventRenderer extends Renderer {
 				break;
 			default:
 				if (this.verbose) {
-					this.emitEvent({ type: 'error', message: `Unknown session update: ${update.sessionUpdate}` });
+					this.emitEvent({
+						type: 'error',
+						message: `Unknown session update: ${(update as { sessionUpdate: string }).sessionUpdate}`,
+					});
 				}
 		}
 	}

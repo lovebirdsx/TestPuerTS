@@ -1,6 +1,6 @@
 import * as UE from 'ue';
 import type { JsonRpcMessage } from './jsonrpc';
-import type { SessionNotification } from './types';
+import type { SessionNotification, SessionUpdate } from './types';
 import { fmt, colorizeJson } from './format';
 
 export interface RendererOptions {
@@ -73,7 +73,7 @@ export class Renderer {
 	// --- 会话更新渲染 ---
 
 	renderSessionUpdate(notification: SessionNotification): void {
-		const update = notification.update as any;
+		const update: SessionUpdate = notification.update;
 
 		switch (update.sessionUpdate) {
 			case 'agent_message_chunk':
