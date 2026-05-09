@@ -2,15 +2,13 @@ import * as React from 'react';
 
 import { Btn, Section, Select, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
-import { Inspector } from '../inspector/Inspector';
-import { SessionPicker } from '../session/SessionPicker';
 import { Sidebar } from '../session/Sidebar';
 import { toTArray } from '../shared/ueArray';
 import type { DrawerKey } from '../../store';
 import { Drawer } from './Drawer';
 
 // ──────────────────────────────────────────────────────────────────────────
-// Connection 子区（原 ConnectionToolbar 中可持久化的连接选择部分）
+// Connection 子区（连接 profile 选择 + auto-connect）
 // ──────────────────────────────────────────────────────────────────────────
 
 const ConnectionSettings: React.FC = () => {
@@ -51,33 +49,20 @@ const ConnectionSettings: React.FC = () => {
 };
 
 // ──────────────────────────────────────────────────────────────────────────
-// DrawerHost：根据 activeDrawer 选择渲染哪个子面板
+// DrawerHost：仅 settings 抽屉（history 现在替换主区域；debug 已下线）
 // ──────────────────────────────────────────────────────────────────────────
 
 export const DrawerHost: React.FC<{ active: DrawerKey }> = ({ active }) => {
 	const setActiveDrawer = useStoreAction('setActiveDrawer');
 	const close = React.useCallback(() => setActiveDrawer(undefined), [setActiveDrawer]);
 
-	if (active === 'history') {
-		return (
-			<Drawer title="Sessions" onClose={close}>
-				<SessionPicker />
-			</Drawer>
-		);
-	}
-	if (active === 'settings') {
-		return (
-			<Drawer title="Settings" onClose={close}>
-				<VBox Gap={6}>
-					<ConnectionSettings />
-					<Sidebar />
-				</VBox>
-			</Drawer>
-		);
-	}
+	if (active !== 'settings') return null;
 	return (
-		<Drawer title="Debug" onClose={close}>
-			<Inspector />
+		<Drawer title="Settings" onClose={close}>
+			<VBox Gap={6}>
+				<ConnectionSettings />
+				<Sidebar />
+			</VBox>
 		</Drawer>
 	);
 };

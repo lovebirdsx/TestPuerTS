@@ -47448,6 +47448,59 @@ declare module "ue" {
         __tid_EditorFunctionLibrary_0__: boolean;
     }
     
+    class EditorHelper extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *关闭当前编辑的且激活的资源窗口
+         */
+        static CloseActiveEditAsset() : boolean;
+        /*
+         *获得当前编辑的且激活（对应的Tab有焦点）的资源
+         */
+        static GetActiveEditAsset() : UE.Object;
+        /*
+         *打开资源所在的文件夹（操作系统）
+         */
+        static OpenAssetFolder(Asset: $Nullable<UE.Object>) : boolean;
+        /*
+         *打开Gameplay Tag Manager
+         */
+        static OpenGameplayTagManager() : boolean;
+        /*
+         *显示当前编辑的且激活资源的引用关系
+         */
+        static ShowActiveEditAssetReference() : boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EditorHelper;
+        static Load(InName: string): EditorHelper;
+    
+        __tid_EditorHelper_0__: boolean;
+    }
+    
+    class EditorHelperSettings extends UE.Object {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        bExampleBoolSetting: boolean;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EditorHelperSettings;
+        static Load(InName: string): EditorHelperSettings;
+    
+        __tid_EditorHelperSettings_0__: boolean;
+    }
+    
+    class EditorIconHelper extends UE.BlueprintFunctionLibrary {
+        constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
+        /*
+         *通过 FAppStyle 名称取出编辑器图标 SlateBrush，例如 "Icons.Plus" _ "Icons.Settings"。
+         *取不到时返回默认空 brush（SlateBrush::DrawAs = NoDrawType）。
+         */
+        static GetEditorIcon(IconName: string) : UE.SlateBrush;
+        static StaticClass(): Class;
+        static Find(OrigInName: string, Outer?: Object): EditorIconHelper;
+        static Load(InName: string): EditorIconHelper;
+    
+        __tid_EditorIconHelper_0__: boolean;
+    }
+    
     class ISMComponentDescriptorBase {
         constructor();
         constructor(Hash: number, ComponentClass: UE.Class, Mobility: UE.EComponentMobility, VirtualTextureRenderPassType: UE.ERuntimeVirtualTextureMainPassType, LightmapType: UE.ELightmapType, LightingChannels: UE.LightingChannels, RayTracingGroupId: number, RayTracingGroupCullingPriority: UE.ERayTracingGroupCullingPriority, bHasCustomNavigableGeometry: UE.EHasCustomNavigableGeometry, CustomDepthStencilWriteMask: UE.ERendererStencilMask, BodyInstance: UE.BodyInstance, InstanceStartCullDistance: number, InstanceEndCullDistance: number, InstanceLODDistanceScale: number, VirtualTextureCullMips: number, TranslucencySortPriority: number, OverriddenLightMapRes: number, CustomDepthStencilValue: number, HLODBatchingPolicy: UE.EHLODBatchingPolicy, bCastShadow: boolean, bEmissiveLightSource: boolean, bCastDynamicShadow: boolean, bCastStaticShadow: boolean, bCastContactShadow: boolean, bCastShadowAsTwoSided: boolean, bCastHiddenShadow: boolean, bAffectDynamicIndirectLighting: boolean, bAffectDynamicIndirectLightingWhileHidden: boolean, bAffectDistanceFieldLighting: boolean, bReceivesDecals: boolean, bOverrideLightMapRes: boolean, bUseAsOccluder: boolean, bEnableDensityScaling: boolean, bEnableDiscardOnLoad: boolean, bRenderCustomDepth: boolean, bVisibleInRayTracing: boolean, bHiddenInGame: boolean, bIsEditorOnly: boolean, bVisible: boolean, bEvaluateWorldPositionOffset: boolean, bReverseCulling: boolean, bUseGpuLodSelection: boolean, bIncludeInHLOD: boolean, bConsiderForActorPlacementWhenHidden: boolean, bUseDefaultCollision: boolean, bGenerateOverlapEvents: boolean, bOverrideNavigationExport: boolean, bForceNavigationObstacle: boolean, bFillCollisionUnderneathForNavmesh: boolean, WorldPositionOffsetDisableDistance: number, ShadowCacheInvalidationBehavior: UE.EShadowCacheInvalidationBehavior, DetailMode: UE.EDetailMode);

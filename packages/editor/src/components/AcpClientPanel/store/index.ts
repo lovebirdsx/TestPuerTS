@@ -10,7 +10,6 @@ import type {
 	AcpPermissionStrategy,
 	CommandEntry,
 	DrawerKey,
-	InspectorTab,
 	MessageRole,
 	PendingPermissionRequest,
 	PersistedConfig,
@@ -31,7 +30,6 @@ import { ueStorage } from './ueStorage';
 export type {
 	CommandEntry,
 	DrawerKey,
-	InspectorTab,
 	MessageRole,
 	PendingPermissionRequest,
 	PersistedConfig,
@@ -95,8 +93,7 @@ export interface AcpPanelStateData {
 	/** 当前轮 plan 卡的 id；prompt_finished/error 后清空，让下一轮 plan 起新卡。 */
 	activePlanItemId: number | undefined;
 
-	// inspector
-	activeTab: InspectorTab;
+	// runtime data（由事件流投影；UI 通过 exportProtocol / logStateToConsole 消费）
 	protocol: ProtocolEntry[];
 	commands: CommandEntry[];
 	usage: UsageInfo | undefined;
@@ -135,9 +132,9 @@ export interface AcpPanelActions {
 	// conversation
 	clearMessages: () => void;
 
-	// inspector
-	setActiveTab: (tab: InspectorTab) => void;
-	clearProtocol: () => void;
+	// debug actions
+	exportProtocol: () => Promise<void>;
+	logStateToConsole: () => void;
 
 	// ui
 	setActiveDrawer: (key: DrawerKey | undefined) => void;
@@ -199,7 +196,6 @@ function initialData(): AcpPanelStateData {
 		timeline: [],
 		activePlanItemId: undefined,
 
-		activeTab: 'state',
 		protocol: [],
 		commands: [],
 		usage: undefined,
@@ -209,7 +205,7 @@ function initialData(): AcpPanelStateData {
 		pendingPermission: undefined,
 
 		permission: 'interactive',
-		protocolEnabled: false,
+		protocolEnabled: true,
 
 		config: defaultConfig(),
 	};
@@ -663,15 +659,64 @@ const createSlices = (
 				s.activePlanItemId = undefined;
 			}),
 
-		// ── inspector ──
-		setActiveTab: (tab) =>
-			set((s) => {
-				s.activeTab = tab;
-			}),
-		clearProtocol: () =>
-			set((s) => {
-				s.protocol = [];
-			}),
+		// ── debug actions ──
+		exportProtocol: async () => {
+			const { protocol } = get();
+			if (protocol.length === 0) {
+				set((s) => {
+					pushTextItem(s.timeline, 'system', 'Protocol log is empty; nothing to export.');
+				});
+				return;
+			}
+			// eslint-disable-next-line @typescript-eslint/no-require-imports
+			const ue = require('ue') as typeof import('ue');
+
+			const { ueFileIO } =
+				// eslint-disable-next-line @typescript-eslint/no-require-imports
+				require('@universe-agent/editor-common') as typeof import('@universe-agent/editor-common');
+			const projectDir = ue.JsRunHelper.GetProjectDir();
+			const ts = new Date().toISOString().replace(/[:.]/g, '-');
+			const filePath = `${projectDir}/Saved/Logs/acp-protocol-${ts}.json`;
+			const json = JSON.stringify(protocol, null, 2);
+			try {
+				await ueFileIO.writeText(filePath, json);
+				const winPath = filePath.replace(/\//g, '\\');
+				ue.JsRunHelper.SpawnProcess('cmd.exe', `/c start "" "${winPath}"`, '');
+				set((s) => {
+					pushTextItem(s.timeline, 'system', `Protocol exported: ${filePath}`);
+				});
+			} catch (err) {
+				const msg = errorMessage(err);
+				set((s) => {
+					pushTextItem(s.timeline, 'error', `Export failed: ${msg}`);
+				});
+			}
+		},
+
+		logStateToConsole: () => {
+			const s = get();
+			const snapshot = {
+				status: s.status,
+				agentName: s.agentName,
+				agentVersion: s.agentVersion,
+				sessionId: s.sessionId,
+				usage: s.usage,
+				counts: {
+					messages: s.timeline.filter((i) => i.kind === 'text').length,
+					tools: s.timeline.filter((i) => i.kind === 'tool').length,
+					plans: s.timeline.filter((i) => i.kind === 'plan').length,
+					protocol: s.protocol.length,
+					commands: s.commands.length,
+				},
+				modes: s.modes,
+				error: s.error,
+			};
+
+			const { createLogger } =
+				// eslint-disable-next-line @typescript-eslint/no-require-imports
+				require('@universe-agent/editor-common') as typeof import('@universe-agent/editor-common');
+			createLogger('acp-panel').info(JSON.stringify(snapshot, null, 2));
+		},
 
 		// ── ui ──
 		setActiveDrawer: (key) =>
@@ -797,15 +842,10 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 			partialize: (s): PersistedState => ({
 				config: s.config,
 				policy: { permission: s.permission, protocolEnabled: s.protocolEnabled },
-				inspector: { activeTab: s.activeTab },
 			}),
 			merge: (persisted, current) => {
 				const p = (persisted ?? {}) as Partial<PersistedState>;
 				const baseConfig = current.config;
-				// 旧持久化里的 'plan' / 'tools' tab 已下线，退化为 'state'
-				const persistedTab = p.inspector?.activeTab as InspectorTab | undefined;
-				const validTabs: InspectorTab[] = ['protocol', 'state', 'commands'];
-				const activeTab = persistedTab && validTabs.includes(persistedTab) ? persistedTab : current.activeTab;
 				return {
 					...current,
 					config: {
@@ -814,7 +854,6 @@ export function createAcpPanelStore(options: AcpPanelStoreOptions = {}): UseAcpP
 					},
 					permission: p.policy?.permission ?? current.permission,
 					protocolEnabled: p.policy?.protocolEnabled ?? current.protocolEnabled,
-					activeTab,
 				};
 			},
 		}),

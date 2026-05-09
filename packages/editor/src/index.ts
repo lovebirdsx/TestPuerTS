@@ -37,13 +37,11 @@ export type {
 	ToolItem,
 	PlanItem,
 	MessageRole,
-	InspectorTab,
 	PlanEntry,
 	ProtocolEntry,
 	UsageInfo,
 	CommandEntry,
 	PersistedConfig,
 	PersistedPolicy,
-	PersistedInspector,
 	PersistedState,
 } from './components/AcpClientPanel';

@@ -5,10 +5,8 @@ export { ueStorage, createMemoryStorage } from './store/ueStorage';
 export type {
 	AcpClientFactory,
 	AcpPanelStoreOptions,
-	InspectorTab,
 	MessageRole,
 	PersistedConfig,
-	PersistedInspector,
 	PersistedPolicy,
 	PersistedState,
 	PlanEntry,

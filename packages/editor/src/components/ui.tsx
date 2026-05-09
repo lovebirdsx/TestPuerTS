@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as UE from 'ue';
 import {
 	Border,
 	Button,
@@ -6,6 +7,7 @@ import {
 	ComboBoxString,
 	EditableTextBox,
 	HorizontalBox,
+	Image,
 	MultiLineEditableTextBox,
 	ScrollBox,
 	TextBlock,
@@ -208,6 +210,150 @@ export const ToolbarButton = (props: ButtonProps): React.ReactElement => {
 		<Btn WidgetStyle={mergeDeep(COMPACT_BUTTON_STYLE, WidgetStyle)} {...rest}>
 			{children}
 		</Btn>
+	);
+};
+
+// 从StarshipCoreStyle.cpp中提取
+const _ICON_NAMES = [
+	'Denied',
+	'Help',
+	'Download',
+	'Server',
+	'Cloud',
+	'Local',
+	'Alert',
+	'Error',
+	'ErrorWithColor',
+	'Warning',
+	'WarningWithColor',
+	'Info',
+	'InfoWithColor',
+	'Success',
+	'SuccessWithColor',
+	'AlertCircle',
+	'AlertCircleWithColor',
+	'box-perspective',
+	'cylinder',
+	'pyramid',
+	'sphere',
+	'Settings',
+	'Blueprints',
+	'Cross',
+	'Plus',
+	'Minus',
+	'PlusCircle',
+	'MinusCircle',
+	'X',
+	'XCircle',
+	'Delete',
+	'Save',
+	'SaveModified',
+	'Favorites',
+	'Import',
+	'Filter',
+	'AutoFilter',
+	'Lock',
+	'Unlock',
+	'Normalize',
+	'CircleArrowLeft',
+	'CircleArrowRight',
+	'CircleArrowUp',
+	'CircleArrowDown',
+	'ArrowLeft',
+	'ArrowRight',
+	'ArrowUp',
+	'ArrowDown',
+	'Check',
+	'FolderOpen',
+	'FolderClosed',
+	'ChevronLeft',
+	'ChevronRight',
+	'ChevronUp',
+	'ChevronDown',
+	'Search',
+	'FilledCircle',
+	'Duplicate',
+	'Edit',
+	'Visible',
+	'Hidden',
+	'DragHandle',
+	'Refresh',
+	'Star',
+	'Link',
+	'Unlink',
+	'BulletPoint',
+	'BulletPoint16',
+	'SortDown',
+	'SortUp',
+	'EyeDropper',
+	'C',
+	'Advanced',
+	'Launch',
+	'Rotate90Clockwise',
+	'Rotate90CounterClockwise',
+	'Rotate180',
+	'FlipHorizontal',
+	'FlipVertical',
+	'Layout',
+	'Recent',
+	'Badge',
+	'BadgeModified',
+	'Toolbar',
+	'ConstraintManager',
+	'ConstraintManager',
+	'Role',
+	'Merge',
+	'Calendar',
+	'Success',
+] as const;
+
+export type IconName = (typeof _ICON_NAMES)[number];
+
+// ── 编辑器内置图标 ──
+// 通过 UEditorIconHelper.GetEditorIcon 从 FAppStyle 读取 brush。
+// IconName 命名见 Engine/Source/Editor/EditorStyle/Private/SlateEditorStyle.cpp 与 StarshipCoreStyle.cpp。
+
+export const Icon = (props: { Name: IconName; Size?: number }): React.ReactElement => {
+	const { Name, Size = 14 } = props;
+	const brush = UE.EditorIconHelper.GetEditorIcon(`Icons.${Name}`);
+	return <Image Brush={brush} Slot={{ Size: { SizeRule: 0, Value: Size } }} />;
+};
+
+const ICON_BUTTON_STYLE: ButtonStyle = {
+	...COMPACT_BUTTON_STYLE,
+	NormalPadding: { Left: 4, Top: 2, Right: 4, Bottom: 2 },
+	PressedPadding: { Left: 4, Top: 3, Right: 4, Bottom: 1 },
+};
+
+const ICON_BUTTON_ACTIVE_STYLE: ButtonStyle = {
+	...ICON_BUTTON_STYLE,
+	Normal: roundedBrush(COL_ACCENT, COL_ACCENT),
+	Hovered: roundedBrush(COL_ACCENT, COL_ACCENT),
+	Pressed: roundedBrush(COL_ACCENT, COL_ACCENT),
+};
+
+export interface IconBtnProps {
+	IconName: IconName;
+	ToolTipText: string;
+	OnClicked?: () => void;
+	bIsEnabled?: boolean;
+	Active?: boolean;
+	Size?: number;
+	Slot?: ButtonProps['Slot'];
+}
+
+export const IconBtn = (props: IconBtnProps): React.ReactElement => {
+	const { IconName, ToolTipText, OnClicked, bIsEnabled, Active, Size, Slot } = props;
+	return (
+		<Button
+			WidgetStyle={Active ? ICON_BUTTON_ACTIVE_STYLE : ICON_BUTTON_STYLE}
+			OnClicked={OnClicked}
+			bIsEnabled={bIsEnabled}
+			ToolTipText={ToolTipText}
+			Slot={Slot}
+		>
+			<Icon Name={IconName} Size={Size} />
+		</Button>
 	);
 };
 

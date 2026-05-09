@@ -1,8 +1,11 @@
 import * as React from 'react';
+import { Spacer } from 'react-umg';
 
-import { Badge, Btn, HBox, ScrollArea, Section, Text, VBox } from '../../../ui';
+import { Badge, Btn, HBox, IconBtn, ScrollArea, Section, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import type { SessionListEntry } from '../../store';
+
+const center = { VerticalAlignment: 2 as any };
 
 // ──────────────────────────────────────────────────────────────────────────
 // 工具
@@ -68,21 +71,35 @@ export const SessionPicker: React.FC = () => {
 	const newSession = useStoreAction('newSession');
 	const refreshSessions = useStoreAction('refreshSessions');
 	const switchSession = useStoreAction('switchSession');
+	const setActiveDrawer = useStoreAction('setActiveDrawer');
 
 	return (
-		<Section Title="Sessions" Gap={6}>
+		<Section Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<HBox Gap={4}>
-				<Btn OnClicked={newSession} bIsEnabled={connected}>
-					<Text Text="New" />
-				</Btn>
-				<Btn
+				<IconBtn
+					IconName="ArrowLeft"
+					ToolTipText="Back to conversation"
+					OnClicked={() => setActiveDrawer(undefined)}
+					Slot={center}
+				/>
+				<Text Text="Sessions" Slot={center} />
+				<Spacer Slot={{ Size: { SizeRule: 1, Value: 1 } }} />
+				<IconBtn
+					IconName="Refresh"
+					ToolTipText="Refresh"
 					OnClicked={() => {
 						void refreshSessions();
 					}}
 					bIsEnabled={connected && !sessionsLoading}
-				>
-					<Text Text={sessionsLoading ? 'Refreshing…' : 'Refresh'} />
-				</Btn>
+					Slot={center}
+				/>
+				<IconBtn
+					IconName="Plus"
+					ToolTipText="New session"
+					OnClicked={newSession}
+					bIsEnabled={connected}
+					Slot={center}
+				/>
 			</HBox>
 
 			{sessionsError ? <Text Text={`Error: ${sessionsError}`} /> : null}
@@ -93,7 +110,7 @@ export const SessionPicker: React.FC = () => {
 				<Text Text="No sessions yet." />
 			) : null}
 
-			<ScrollArea>
+			<ScrollArea Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<VBox Gap={4}>
 					{sessions.map((entry) => (
 						<SessionRow

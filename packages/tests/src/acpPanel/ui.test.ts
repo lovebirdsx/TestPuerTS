@@ -30,9 +30,9 @@ describe('AcpPanel store / ui', () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
 		ctx.store.getState().toggleDrawer('history');
-		ctx.store.getState().toggleDrawer('debug');
-		expect(ctx.store.getState().activeDrawer).toBe('debug');
 		ctx.store.getState().toggleDrawer('settings');
 		expect(ctx.store.getState().activeDrawer).toBe('settings');
+		ctx.store.getState().toggleDrawer('history');
+		expect(ctx.store.getState().activeDrawer).toBe('history');
 	});
 });

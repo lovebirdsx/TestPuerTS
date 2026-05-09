@@ -109,27 +109,6 @@ describe('AcpPanel store / timeline', () => {
 		expect(ctx.store.getState().protocol.length).toBe(200);
 	});
 
-	it('clearProtocol empties the protocol log', async () => {
-		const ctx = createTestStore();
-		await waitHydration(ctx.store);
-		ctx.store.getState().connect();
-		ctx.mockClients[0]!.mockController.emit({
-			type: 'protocol_message',
-			direction: 'recv',
-			message: { jsonrpc: '2.0', method: 'x' } as any,
-		});
-		expect(ctx.store.getState().protocol.length).toBe(1);
-		ctx.store.getState().clearProtocol();
-		expect(ctx.store.getState().protocol.length).toBe(0);
-	});
-
-	it('setActiveTab switches inspector tab', async () => {
-		const ctx = createTestStore();
-		await waitHydration(ctx.store);
-		ctx.store.getState().setActiveTab('protocol');
-		expect(ctx.store.getState().activeTab).toBe('protocol');
-	});
-
 	it('usage_updated populates usage', async () => {
 		const ctx = createTestStore();
 		await waitHydration(ctx.store);
@@ -150,5 +129,24 @@ describe('AcpPanel store / timeline', () => {
 			commands: [{ name: 'help', description: 'show help' }],
 		});
 		expect(ctx.store.getState().commands.length).toBe(1);
+	});
+
+	it('exportProtocol on empty log appends a system note and skips file write', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		await ctx.store.getState().exportProtocol();
+		const sysMessages = ctx.store
+			.getState()
+			.timeline.filter((i) => i.kind === 'text' && i.role === 'system')
+			.map((i) => (i as { text: string }).text);
+		expect(sysMessages.some((t) => t.includes('empty'))).toBe(true);
+	});
+
+	it('logStateToConsole does not throw on a fresh store', async () => {
+		const ctx = createTestStore();
+		await waitHydration(ctx.store);
+		ctx.store.getState().logStateToConsole();
+		// 没抛异常即视为通过；具体内容已在 createLogger 通道里走 UE_LOG。
+		expect(true).toBe(true);
 	});
 });

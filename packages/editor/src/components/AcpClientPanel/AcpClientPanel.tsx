@@ -5,6 +5,7 @@ import { Panel, VBox } from '../ui';
 import { DrawerHost } from './domain/drawer/DrawerHost';
 import { PermissionModal } from './domain/permission/PermissionModal';
 import { InputArea, MessageStream } from './domain/prompt/PromptArea';
+import { SessionPicker } from './domain/session/SessionPicker';
 import { TopBar } from './domain/topbar/TopBar';
 import { StoreProvider, useHydration, useStoreAction, useStoreSelector } from './hooks/useStore';
 import { createAcpPanelStore, type UseAcpPanelStore } from './store';
@@ -36,18 +37,27 @@ const PanelBody: React.FC = () => {
 		});
 	}, [hydrated, autoConnect, hasClient, connect, loadConnections]);
 
+	const showHistory = activeDrawer === 'history';
+	const showSettings = activeDrawer === 'settings';
+
 	return (
 		<Panel Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<TopBar />
 				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 					<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-						<MessageStream />
-						<InputArea />
+						{showHistory ? (
+							<SessionPicker />
+						) : (
+							<>
+								<MessageStream />
+								<InputArea />
+							</>
+						)}
 					</VBox>
-					{activeDrawer ? (
+					{showSettings ? (
 						<SizeBox WidthOverride={360} MaxDesiredWidth={360} bOverride_MaxDesiredWidth>
-							<DrawerHost active={activeDrawer} />
+							<DrawerHost active="settings" />
 						</SizeBox>
 					) : null}
 				</HorizontalBox>

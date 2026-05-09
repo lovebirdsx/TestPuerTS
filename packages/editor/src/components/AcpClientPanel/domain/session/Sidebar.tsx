@@ -1,92 +1,32 @@
 import * as React from 'react';
 
 import type { SessionConfigOption } from '@universe-agent/acp-client-ue';
-import { Btn, Section, Select, Text, VBox } from '../../../ui';
+import { Btn, Section, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
-import { toTArray } from '../shared/ueArray';
 
 // ──────────────────────────────────────────────────────────────────────────
-// Policy 区
+// Boolean Options 区
+// 注：select 类 configOptions（model / effort 等）已移到 InputArea 底栏内联展示。
+// 这里只保留 boolean 类的 configOptions（开关类设置）。
 // ──────────────────────────────────────────────────────────────────────────
 
-const PolicyPanel: React.FC = () => {
-	const permission = useStoreSelector((s) => s.permission);
-	const protocolEnabled = useStoreSelector((s) => s.protocolEnabled);
-	const setPermissionStrategy = useStoreAction('setPermissionStrategy');
-	const setProtocolEnabled = useStoreAction('setProtocolEnabled');
-
-	return (
-		<Section Title="Policy">
-			<Select
-				DefaultOptions={toTArray(['interactive', 'auto-approve', 'deny-all'])}
-				SelectedOption={permission}
-				OnSelectionChanged={(value) => setPermissionStrategy(value as typeof permission)}
-			/>
-			<Btn OnClicked={() => setProtocolEnabled(!protocolEnabled)}>
-				<Text Text={protocolEnabled ? 'Protocol On' : 'Protocol Off'} />
-			</Btn>
-		</Section>
-	);
-};
-
-// ──────────────────────────────────────────────────────────────────────────
-// Session Options 区（mode + configOptions）
-// ──────────────────────────────────────────────────────────────────────────
-
-const ConfigOptionControl: React.FC<{
-	option: SessionConfigOption;
-	onChange: (id: string, value: string | boolean) => void;
-}> = ({ option, onChange }) => {
-	if (option.type === 'select') {
-		const opt = option as Extract<SessionConfigOption, { type: 'select' }>;
-		const values = opt.options?.map((o) => o.value) ?? [];
-		return (
-			<VBox Gap={2}>
-				<Text Text={opt.name} />
-				<Select
-					DefaultOptions={toTArray(values)}
-					SelectedOption={opt.currentValue ?? values[0]}
-					OnSelectionChanged={(value) => onChange(opt.id, value)}
-				/>
-			</VBox>
-		);
-	}
-	if (option.type === 'boolean') {
-		const opt = option as Extract<SessionConfigOption, { type: 'boolean' }>;
-		return (
-			<Btn OnClicked={() => onChange(opt.id, !opt.currentValue)}>
-				<Text Text={`${opt.currentValue ? '[x]' : '[ ]'} ${opt.name}`} />
-			</Btn>
-		);
-	}
-	return <Text Text={`${option.name ?? option.id}: unsupported ${option.type}`} />;
-};
-
-const SessionOptionsPanel: React.FC = () => {
-	const modes = useStoreSelector((s) => s.modes);
+const BooleanOptionsPanel: React.FC = () => {
 	const configOptions = useStoreSelector((s) => s.configOptions);
-	const setMode = useStoreAction('setMode');
 	const setConfigOption = useStoreAction('setConfigOption');
 
-	const modeIds = modes?.availableModes.map((m) => m.id) ?? [];
-	const empty = modeIds.length === 0 && configOptions.length === 0;
+	const booleanOptions = configOptions.filter(
+		(o): o is Extract<SessionConfigOption, { type: 'boolean' }> => o.type === 'boolean',
+	);
+
+	if (booleanOptions.length === 0) return null;
 
 	return (
 		<Section Title="Session Options">
-			{modeIds.length > 0 ? (
-				<>
-					<Text Text="Mode" />
-					<Select
-						DefaultOptions={toTArray(modeIds)}
-						SelectedOption={modes?.currentModeId}
-						OnSelectionChanged={setMode}
-					/>
-				</>
-			) : undefined}
-			{configOptions.map((option) => (
-				<ConfigOptionControl key={option.id} option={option} onChange={setConfigOption} />
+			{booleanOptions.map((opt) => (
+				<Btn key={opt.id} OnClicked={() => setConfigOption(opt.id, !opt.currentValue)}>
+					<Text Text={`${opt.currentValue ? '[x]' : '[ ]'} ${opt.name}`} />
+				</Btn>
 			))}
-			{empty ? <Text Text="No session options" /> : undefined}
 		</Section>
 	);
 };
@@ -97,7 +37,6 @@ const SessionOptionsPanel: React.FC = () => {
 
 export const Sidebar: React.FC = () => (
 	<VBox Gap={6}>
-		<PolicyPanel />
-		<SessionOptionsPanel />
+		<BooleanOptionsPanel />
 	</VBox>
 );
