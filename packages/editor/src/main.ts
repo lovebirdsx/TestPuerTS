@@ -23,7 +23,7 @@ import { CommandService } from './commandService';
 const logger = createLogger('editor:main');
 
 let menuDisposable: { dispose(): void } | undefined;
-const EDITOR_CMD_PIPE = 'ue-editor-cmd';
+const EDITOR_CMD_PIPE = '\\\\.\\pipe\\ue-editor-cmd';
 let commandService: CommandService | undefined;
 
 // Tab 元数据：tabName → label（注册工厂和菜单共用）
