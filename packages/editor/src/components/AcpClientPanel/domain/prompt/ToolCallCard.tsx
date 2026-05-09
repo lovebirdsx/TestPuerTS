@@ -17,6 +17,17 @@ function statusTone(status: string | null | undefined): Tone {
 	return 'normal';
 }
 
+function toolDescription(item: ToolItem): string {
+	if (item.rawInput && typeof item.rawInput === 'object') {
+		const record = item.rawInput as Record<string, unknown>;
+		if (record.description && typeof record.description === 'string') {
+			return record.description;
+		}
+	}
+
+	return '';
+}
+
 export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 	const [expanded, setExpanded] = React.useState(false);
 
@@ -30,13 +41,14 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 		<Section Tone="normal" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
 			<HBox Gap={4}>
 				<IconBtn
+					Size={8}
 					IconName={expanded ? 'ChevronDown' : 'ChevronRight'}
 					ToolTipText=""
 					OnClicked={() => setExpanded((v) => !v)}
 					bIsEnabled={hasBody}
 				/>
 				<Badge Text={item.toolKind ?? 'tool'} Slot={center} />
-				<Text Text={item.title} Slot={center} />
+				<Text Text={toolDescription(item)} Slot={center} />
 				{item.status ? <Badge Text={item.status} Tone={tone} Slot={center} /> : undefined}
 			</HBox>
 			{expanded && hasBody ? (

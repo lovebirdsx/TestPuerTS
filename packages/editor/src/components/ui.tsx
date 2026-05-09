@@ -10,6 +10,7 @@ import {
 	Image,
 	MultiLineEditableTextBox,
 	ScrollBox,
+	SizeBox,
 	TextBlock,
 	VerticalBox,
 } from 'react-umg';
@@ -325,7 +326,16 @@ export type IconName = (typeof _ICON_NAMES)[number];
 export const Icon = (props: { Name: IconName; Size?: number }): React.ReactElement => {
 	const { Name, Size = 14 } = props;
 	const brush = UE.EditorIconHelper.GetEditorIcon(`Icons.${Name}`);
-	return <Image Brush={brush} Slot={{ Size: { SizeRule: 0, Value: Size } }} />;
+	return (
+		<SizeBox
+			WidthOverride={Size}
+			HeightOverride={Size}
+			bOverride_WidthOverride={true}
+			bOverride_HeightOverride={true}
+		>
+			<Image Brush={brush} />
+		</SizeBox>
+	);
 };
 
 const ICON_BUTTON_STYLE: ButtonStyle = {
