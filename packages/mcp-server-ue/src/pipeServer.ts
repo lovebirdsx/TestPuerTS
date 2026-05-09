@@ -37,7 +37,6 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 	const server = new IPCServer<string>(onClientConnect.event);
 
 	const transport = new UE.IPCTransport();
-	transport.Listen(pipeName);
 
 	// 等待 bridge 连接的状态
 	let resolveBridge: ((link: BridgeLink) => void) | null = null;
@@ -51,6 +50,13 @@ export function serveOnPipe(pipeName: string): PipeServerHandle {
 	bridgePromise.catch(() => {
 		// ignore
 	});
+
+	const ok = transport.Listen(pipeName);
+	if (!ok) {
+		rejectBridge?.(new Error(`Listen on ${pipeName} failed`));
+		rejectBridge = null;
+		transport.Close();
+	}
 
 	let socket: UeIpcSocket | null = null;
 	const onDidClientDisconnect = new Emitter<void>();

@@ -74,7 +74,14 @@ export class CommandService {
 			logger.log('[CommandService] client connected');
 		});
 
-		transport.Listen(this.pipeName);
+		const ok = transport.Listen(this.pipeName);
+		if (!ok) {
+			logger.error(`[CommandService] Listen on ${this.pipeName} failed`);
+			this.currentTransport = null;
+			transport.Close();
+			setTimeout(() => this.acceptNext(), 1000);
+			return;
+		}
 		logger.log(`[CommandService] listening on ${this.pipeName}`);
 	}
 

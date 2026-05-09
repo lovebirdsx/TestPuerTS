@@ -137,7 +137,11 @@ export function listenUeIpc(pipeName: string): Promise<UeIpcSocket> {
 			}
 		});
 
-		transport.Listen(pipeName);
+		const ok = transport.Listen(pipeName);
+		if (!ok) {
+			reject(new Error(`Listen on ${pipeName} failed`));
+			return;
+		}
 
 		setTimeout(() => {
 			if (!resolved) {

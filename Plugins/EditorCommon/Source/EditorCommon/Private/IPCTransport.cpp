@@ -42,7 +42,7 @@ void UIPCTransport::StopTicker()
 	}
 }
 
-void UIPCTransport::Listen(const FString& PipeName)
+bool UIPCTransport::Listen(const FString& PipeName)
 {
 	if (PipeHandle != INVALID_HANDLE_VALUE)
 	{
@@ -63,7 +63,7 @@ void UIPCTransport::Listen(const FString& PipeName)
 	if (PipeHandle == INVALID_HANDLE_VALUE)
 	{
 		UE_LOG(LogIPCTransport, Error, TEXT("IPCTransport: CreateNamedPipe failed, error=%d"), GetLastError());
-		return;
+		return false;
 	}
 
 	bIsServer = true;
@@ -93,11 +93,12 @@ void UIPCTransport::Listen(const FString& PipeName)
 		{
 			UE_LOG(LogIPCTransport, Error, TEXT("IPCTransport: ConnectNamedPipe failed, error=%d"), Error);
 			CleanupHandle();
-			return;
+			return false;
 		}
 	}
 
 	StartTicker();
+	return true;
 }
 
 void UIPCTransport::Connect(const FString& PipeName)

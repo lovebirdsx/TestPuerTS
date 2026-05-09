@@ -56,7 +56,9 @@ describe('rpcServer', () => {
 
 		// 3. 监听命名管道
 		const transport = new UE.IPCTransport();
-		transport.Listen(PIPE_NAME);
+		if (!transport.Listen(PIPE_NAME)) {
+			throw new Error(`Listen on ${PIPE_NAME} failed`);
+		}
 
 		// 4. 启动 Node.js RPC Client
 		const projectDir = UE.JsRunHelper.GetProjectDir();

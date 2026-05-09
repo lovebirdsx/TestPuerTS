@@ -18,9 +18,9 @@ public:
 	UIPCTransport();
 	virtual ~UIPCTransport() override;
 
-	// 创建命名管道服务器，等待客户端连接
+	// 创建命名管道服务器，等待客户端连接。返回 true 表示成功启动监听，false 表示管道创建失败
 	UFUNCTION(BlueprintCallable, Category = "IPC")
-	void Listen(const FString& PipeName);
+	bool Listen(const FString& PipeName);
 
 	// 连接到命名管道服务器
 	UFUNCTION(BlueprintCallable, Category = "IPC")

@@ -57232,9 +57232,9 @@ declare module "ue" {
          */
         IsConnected() : boolean;
         /*
-         *创建命名管道服务器，等待客户端连接
+         *创建命名管道服务器，等待客户端连接。返回 true 表示成功启动监听，false 表示管道创建失败
          */
-        Listen(PipeName: string) : void;
+        Listen(PipeName: string) : boolean;
         /*
          *读取接收到的数据（返回 ArrayBuffer，无数据时返回空）
          */
