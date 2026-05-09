@@ -42,17 +42,17 @@ const PanelBody: React.FC = () => {
 			<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<ConnectionToolbar />
 				<HorizontalBox Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-					<SizeBox WidthOverride={220}>
+					<SizeBox WidthOverride={220} MaxDesiredWidth={220} bOverride_MaxDesiredWidth>
 						<SessionPicker />
 					</SizeBox>
-					<SizeBox WidthOverride={260}>
+					<SizeBox WidthOverride={260} MaxDesiredWidth={260} bOverride_MaxDesiredWidth>
 						<Sidebar />
 					</SizeBox>
 					<VBox Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 						<MessageStream />
 						<PromptBox />
 					</VBox>
-					<SizeBox WidthOverride={340}>
+					<SizeBox WidthOverride={340} MaxDesiredWidth={340} bOverride_MaxDesiredWidth>
 						<Inspector />
 					</SizeBox>
 				</HorizontalBox>
