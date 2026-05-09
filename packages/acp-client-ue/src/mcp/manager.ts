@@ -75,6 +75,7 @@ export class McpManager {
 			name: 'ue-editor',
 			command: 'node',
 			args: [this.bridgeEntry, '--pipe', pipeName],
+			env: [],
 		};
 	}
 
@@ -134,8 +135,8 @@ export class McpManager {
 			servers.push({
 				name,
 				command: entry.command,
-				args: entry.args,
-				env: entry.env ? Object.entries(entry.env).map(([n, v]) => ({ name: n, value: v })) : undefined,
+				args: entry.args ?? [],
+				env: entry.env ? Object.entries(entry.env).map(([n, v]) => ({ name: n, value: v })) : [],
 			});
 		}
 

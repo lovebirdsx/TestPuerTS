@@ -1,137 +1,31 @@
-export const PROTOCOL_VERSION = 1;
-
 /**
- * ACP `session/new` 与 `session/load` 请求中 `mcpServers` 数组的元素类型。
+ * 协议类型：从 @agentclientprotocol/sdk 直接 re-export，无任何本地扩展。
  *
- * 命令 + 参数构成一个 stdio 子进程命令，agent 自行 spawn 并通过 stdin/stdout 走 MCP JSON-RPC。
- * 与 MCP 标准一致；env 用 `{ name, value }` 数组（ACP 协议要求），不是 `Record<string,string>`。
+ * 所有 SDK 引用均为 `export type { ... } from`，编译后被 TypeScript 完全擦除，
+ * 不会在 PuerTS 运行时触发 SDK 主入口（含 Web Streams / zod 副作用）的加载。
+ *
+ * 运行时常量 PROTOCOL_VERSION 保持本地硬编码，避免 PuerTS commonjs loader
+ * 加载 SDK 的 ESM .js 文件。SDK 升级协议版本时手动更新本文件。
  */
-export interface McpServerEntry {
-	name: string;
-	command: string;
-	args?: string[];
-	env?: { name: string; value: string }[];
-}
 
-export interface InitializeResponse {
-	protocolVersion: number;
-	agentInfo?: {
-		name: string;
-		version?: string;
-	};
-	capabilities?: AgentCapabilities;
-}
+export type {
+	AgentCapabilities,
+	EnvVariable,
+	InitializeResponse,
+	ListSessionsResponse,
+	McpServerStdio as McpServerEntry,
+	NewSessionResponse as SessionStartResponse,
+	PermissionOption,
+	RequestPermissionRequest,
+	RequestPermissionResponse,
+	SessionConfigOption,
+	SessionInfo,
+	SessionInfoUpdate,
+	SessionMode,
+	SessionModeState,
+	SessionNotification,
+	SessionUpdate,
+} from '@agentclientprotocol/sdk';
 
-export interface AgentCapabilities {
-	loadSession?: boolean | Record<string, unknown>;
-	sessionList?: boolean | Record<string, unknown>;
-	[key: string]: unknown;
-}
-
-export interface SessionMode {
-	id: string;
-	name?: string;
-	description?: string;
-}
-
-export interface SessionModeState {
-	currentModeId: string;
-	availableModes: SessionMode[];
-}
-
-export type SessionConfigOption =
-	| {
-			type: 'select';
-			id: string;
-			name: string;
-			description?: string;
-			category?: string | null;
-			currentValue?: string | null;
-			options?: { value: string; name: string; description?: string }[];
-	  }
-	| {
-			type: 'boolean';
-			id: string;
-			name: string;
-			description?: string;
-			category?: string | null;
-			currentValue?: boolean;
-	  }
-	| {
-			type: string;
-			id: string;
-			name?: string;
-			description?: string;
-			category?: string | null;
-			[key: string]: unknown;
-	  };
-
-export interface SessionInfo {
-	sessionId: string;
-	title?: string | null;
-	createdAt?: string | null;
-	updatedAt?: string | null;
-	[key: string]: unknown;
-}
-
-export interface SessionStartResponse {
-	sessionId: string;
-	configOptions?: SessionConfigOption[] | null;
-	modes?: SessionModeState | null;
-	sessionInfo?: SessionInfo | null;
-	models?: unknown;
-}
-
-export interface ListSessionsResponse {
-	sessions: SessionInfo[];
-	nextCursor?: string | null;
-}
-
-export interface SessionNotification {
-	sessionId: string;
-	update: SessionUpdate;
-}
-
-export type SessionUpdate =
-	| { sessionUpdate: 'agent_message_chunk'; content: { type: string; text?: string } }
-	| { sessionUpdate: 'agent_thought_chunk'; content: { type: string; text?: string } }
-	| { sessionUpdate: 'user_message_chunk'; content: { type: string; text?: string } }
-	| {
-			sessionUpdate: 'tool_call';
-			toolCallId: string;
-			title: string;
-			kind?: string;
-			status?: string;
-			rawInput?: unknown;
-	  }
-	| {
-			sessionUpdate: 'tool_call_update';
-			toolCallId: string;
-			status?: string | null;
-			rawOutput?: unknown;
-			content?: unknown;
-			title?: string | null;
-	  }
-	| { sessionUpdate: 'plan'; entries: { content: string; status: string; priority: string }[] }
-	| { sessionUpdate: 'available_commands_update'; availableCommands: { name: string; description?: string }[] }
-	| { sessionUpdate: 'current_mode_update'; currentModeId: string }
-	| { sessionUpdate: 'config_option_update'; configOptions: SessionConfigOption[] }
-	| ({ sessionUpdate: 'session_info_update' } & Partial<SessionInfo>)
-	| { sessionUpdate: 'usage_update'; size: number; used: number }
-	| { sessionUpdate: string };
-
-export interface RequestPermissionRequest {
-	toolCall: {
-		toolCallId: string;
-		title?: string;
-		rawInput?: unknown;
-	};
-	options: { optionId: string; name: string; kind: string }[];
-}
-
-export interface RequestPermissionResponse {
-	outcome: {
-		outcome: string;
-		optionId?: string;
-	};
-}
+/** 协议版本常量（与 @agentclientprotocol/sdk 的 PROTOCOL_VERSION 保持同步，SDK 升 v2 时手动更新） */
+export const PROTOCOL_VERSION = 1;

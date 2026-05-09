@@ -44,7 +44,7 @@ const SessionRow: React.FC<{
 	onSelect: (id: string) => void;
 }> = ({ entry, active, onSelect }) => {
 	const title = displayTitle(entry);
-	const subtitle = formatRelativeTime(entry.updatedAt ?? entry.createdAt);
+	const subtitle = formatRelativeTime(entry.updatedAt);
 	return (
 		<Btn Active={active} bIsEnabled={!active} OnClicked={() => onSelect(entry.sessionId)}>
 			<HBox Gap={4}>

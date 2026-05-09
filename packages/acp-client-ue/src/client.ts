@@ -34,9 +34,7 @@ export type {
 	SessionUpdate,
 } from './types';
 
-// --- ACP 协议类型定义（从 @agentclientprotocol/sdk 提取） ---
-
-// ACP 方法常量
+// 本地常量与 @agentclientprotocol/sdk 的 AGENT_METHODS / CLIENT_METHODS 保持同步（本包仅用其子集）
 const AGENT_METHODS = {
 	initialize: 'initialize',
 	session_new: 'session/new',
@@ -59,18 +57,6 @@ const CLIENT_METHODS = {
 	terminal_kill: 'terminal/kill',
 	terminal_release: 'terminal/release',
 } as const;
-
-// zMcpServerStdio 要求 args 和 env 必须为数组（非 optional）
-function normalizeMcpServers(
-	servers: McpServerEntry[],
-): { name: string; command: string; args: string[]; env: { name: string; value: string }[] }[] {
-	return servers.map((s) => ({
-		name: s.name,
-		command: s.command,
-		args: s.args ?? [],
-		env: s.env ?? [],
-	}));
-}
 
 // --- 终端管理 ---
 
@@ -479,7 +465,7 @@ export class ACPClient {
 
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_new, {
 			cwd: this.options.workspace,
-			mcpServers: normalizeMcpServers(this.mcpServers),
+			mcpServers: this.mcpServers,
 		});
 
 		this.applySessionStartResponse(result);
@@ -492,7 +478,7 @@ export class ACPClient {
 		const result = await this.connection.sendRequest<SessionStartResponse>(AGENT_METHODS.session_load, {
 			sessionId,
 			cwd: this.options.workspace,
-			mcpServers: normalizeMcpServers(this.mcpServers),
+			mcpServers: this.mcpServers,
 		});
 
 		this.applySessionStartResponse(result);
@@ -505,7 +491,7 @@ export class ACPClient {
 		return this.connection.sendRequest<ListSessionsResponse>(AGENT_METHODS.session_list, {
 			cursor,
 			cwd: this.options.workspace,
-			mcpServers: normalizeMcpServers(this.mcpServers),
+			mcpServers: this.mcpServers,
 		});
 	}
 
@@ -573,6 +559,6 @@ export class ACPClient {
 		this.sessionId = result.sessionId;
 		this.configOptions = result.configOptions ?? [];
 		this.modes = result.modes ?? null;
-		this.sessionInfo = result.sessionInfo ?? { sessionId: result.sessionId };
+		this.sessionInfo = { sessionId: result.sessionId, cwd: this.options.workspace };
 	}
 }

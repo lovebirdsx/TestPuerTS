@@ -28,7 +28,7 @@ describe('AcpPanel store / session', () => {
 		const mock = ctx.mockClients[0]!;
 		mock.newSessionImpl = async () => ({ warnings: ['cfg missing'] });
 		mock.mockController.listSessionsImpl = async () => ({
-			sessions: [{ sessionId: 'sess-old', title: 'Old', updatedAt: '2026-05-01T00:00:00Z' }],
+			sessions: [{ sessionId: 'sess-old', title: 'Old', cwd: '/workspace', updatedAt: '2026-05-01T00:00:00Z' }],
 		});
 
 		// 预先放一些"上一次会话"的脏数据，验证 reset 能清掉
@@ -90,8 +90,8 @@ describe('AcpPanel store / session', () => {
 		const mock = ctx.mockClients[0]!;
 		mock.mockController.listSessionsImpl = async () => ({
 			sessions: [
-				{ sessionId: 'a', title: 'A', updatedAt: '2026-05-01T00:00:00Z' },
-				{ sessionId: 'b', title: null, updatedAt: '2026-05-02T00:00:00Z' },
+				{ sessionId: 'a', title: 'A', cwd: '/workspace', updatedAt: '2026-05-01T00:00:00Z' },
+				{ sessionId: 'b', title: null, cwd: '/workspace', updatedAt: '2026-05-02T00:00:00Z' },
 			],
 		});
 

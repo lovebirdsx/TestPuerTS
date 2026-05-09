@@ -349,16 +349,15 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			s.sessionId = id;
 			s.configOptions = event.session.configOptions ?? [];
 			s.modes = event.session.modes ?? undefined;
-			s.sessionInfo = event.session.sessionInfo ?? { sessionId: id };
+			s.sessionInfo = { sessionId: id, cwd: '' };
 			s.config.lastSessionId = id;
 			pushTextItem(s.timeline, 'system', `Session ready: ${id}`);
 			// 把当前 session 提到列表头部（若已存在则就地更新 / 提升）。
 			const existingIdx = s.sessions.findIndex((x) => x.sessionId === id);
 			const merged = {
 				sessionId: id,
-				title: event.session.sessionInfo?.title ?? s.sessions[existingIdx]?.title ?? null,
-				createdAt: event.session.sessionInfo?.createdAt ?? s.sessions[existingIdx]?.createdAt ?? null,
-				updatedAt: event.session.sessionInfo?.updatedAt ?? new Date().toISOString(),
+				title: s.sessions[existingIdx]?.title ?? null,
+				updatedAt: s.sessions[existingIdx]?.updatedAt ?? null,
 			};
 			if (existingIdx >= 0) s.sessions.splice(existingIdx, 1);
 			s.sessions.unshift(merged);
@@ -386,14 +385,16 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			s.configOptions = event.configOptions;
 			break;
 		case 'session_info_updated': {
-			s.sessionInfo = { ...(s.sessionInfo ?? {}), ...event.sessionInfo };
+			if (s.sessionInfo) {
+				s.sessionInfo = { ...s.sessionInfo, ...event.sessionInfo };
+			}
 			// 同步到 sessions 列表里同 id 的条目，让 SessionPicker 能反映最新 title。
 			const idx = s.sessions.findIndex((x) => x.sessionId === event.sessionId);
 			if (idx >= 0) {
 				s.sessions[idx] = {
 					...s.sessions[idx]!,
 					title: event.sessionInfo.title ?? s.sessions[idx]!.title ?? null,
-					updatedAt: event.sessionInfo.updatedAt ?? new Date().toISOString(),
+					updatedAt: event.sessionInfo.updatedAt ?? s.sessions[idx]!.updatedAt,
 				};
 			}
 			break;
@@ -420,12 +421,14 @@ export function ingestEvent(s: AcpPanelStateData, event: AcpUiEvent): void {
 			pushTextItem(s.timeline, 'error', event.message);
 			break;
 		case 'session_listed':
-			s.sessions = (event.result.sessions ?? []).map((x) => ({
-				sessionId: x.sessionId,
-				title: x.title ?? null,
-				createdAt: x.createdAt ?? null,
-				updatedAt: x.updatedAt ?? null,
-			}));
+			s.sessions = (event.result.sessions ?? []).map(
+				(x) =>
+					({
+						sessionId: x.sessionId,
+						title: x.title ?? null,
+						updatedAt: x.updatedAt ?? null,
+					}) as SessionListEntry,
+			);
 			s.sessionsLoading = false;
 			s.sessionsError = undefined;
 			break;
@@ -590,7 +593,6 @@ const createSlices = (
 					s.sessions = (result.sessions ?? []).map((x) => ({
 						sessionId: x.sessionId,
 						title: x.title ?? null,
-						createdAt: x.createdAt ?? null,
 						updatedAt: x.updatedAt ?? null,
 					}));
 					s.sessionsLoading = false;

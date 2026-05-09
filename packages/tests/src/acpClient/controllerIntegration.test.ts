@@ -1,5 +1,10 @@
 import { describe, it, expect } from '../testRunner';
-import { AcpUiController, type AcpTransportFactory, type AcpUiEvent } from '@universe-agent/acp-client-ue';
+import {
+	AcpUiController,
+	type AcpTransportFactory,
+	type AcpUiEvent,
+	type McpServerEntry,
+} from '@universe-agent/acp-client-ue';
 import { createTransportPair } from './__fixtures__/inMemoryNdJsonTransport';
 import { MockAcpServer } from './__fixtures__/mockAcpServer';
 import { withTimeout, flushMicrotasks } from './__fixtures__/withTimeout';
@@ -11,7 +16,7 @@ interface Harness {
 	unsubscribe: () => void;
 }
 
-function buildHarness(initialMcpServers: { name: string; command: string }[] = []): Harness {
+function buildHarness(initialMcpServers: McpServerEntry[] = []): Harness {
 	const { client: clientTransport, server: serverTransport } = createTransportPair();
 	const factory: AcpTransportFactory = () => clientTransport;
 	const server = new MockAcpServer(serverTransport);
@@ -62,7 +67,7 @@ describe('AcpUiController - lifecycle wiring', () => {
 		const h = buildHarness();
 		h.server.respondTo('session/new', () => ({ sessionId: 'sess-CTL' }));
 
-		h.controller.setMcpServers([{ name: 'inj', command: 'node' }]);
+		h.controller.setMcpServers([{ name: 'inj', command: 'node', args: [], env: [] }]);
 
 		await withTimeout(h.controller.connect(), 2000);
 		await withTimeout(h.controller.newSession(), 2000);
@@ -71,7 +76,7 @@ describe('AcpUiController - lifecycle wiring', () => {
 		expect(params.cwd).toBe('/workspace');
 		expect(params.mcpServers.length).toBe(1);
 		expect(params.mcpServers[0].name).toBe('inj');
-		// normalizeMcpServers 补 args=[] env=[]
+		// 调用方传完整 args/env，wire 透传
 		expect(params.mcpServers[0].args).toEqual([]);
 		expect(params.mcpServers[0].env).toEqual([]);
 
@@ -84,7 +89,7 @@ describe('AcpUiController - lifecycle wiring', () => {
 	});
 
 	it('setMcpServers before connect: initial entry is honored at session/new', async () => {
-		const h = buildHarness([{ name: 'pre', command: 'node' }]);
+		const h = buildHarness([{ name: 'pre', command: 'node', args: [], env: [] }]);
 		h.server.respondTo('session/new', () => ({ sessionId: 's' }));
 
 		await withTimeout(h.controller.connect(), 2000);

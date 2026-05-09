@@ -1,10 +1,5 @@
 import { describe, it, expect, beforeEach } from '../testRunner';
-import {
-	ACPClient,
-	type AcpTransportFactory,
-	type McpServerEntry,
-	buildSpawnArgs,
-} from '@universe-agent/acp-client-ue';
+import { ACPClient, type AcpTransportFactory, buildSpawnArgs } from '@universe-agent/acp-client-ue';
 import type { CliOptions } from '../../../acp-client-ue/src/cli';
 import { TestRenderer } from './__fixtures__/testRenderer';
 import { createTransportPair, InMemoryNdJsonTransport } from './__fixtures__/inMemoryNdJsonTransport';
@@ -92,11 +87,11 @@ describe('ACPClient - newSession with mcpServers', () => {
 		}));
 	});
 
-	it('normalizes mcpServers args and env to empty arrays', async () => {
+	it('transmits mcpServers args/env arrays as-is', async () => {
 		await h.client.connect();
 		h.client.setMcpServers([
-			{ name: 'ue-editor', command: 'node', args: ['/path/main.js', '--pipe', 'p'] },
-			{ name: 'no-args', command: 'foo' } as McpServerEntry,
+			{ name: 'ue-editor', command: 'node', args: ['/path/main.js', '--pipe', 'p'], env: [] },
+			{ name: 'no-args', command: 'foo', args: [], env: [] },
 		]);
 		await withTimeout(h.client.newSession(), 1000, 'newSession');
 
@@ -104,10 +99,8 @@ describe('ACPClient - newSession with mcpServers', () => {
 		expect(params.cwd).toBe('/workspace');
 		expect(Array.isArray(params.mcpServers)).toBe(true);
 		expect(params.mcpServers.length).toBe(2);
-		// 第一个 entry：args 透传，env 默认 []
 		expect(params.mcpServers[0].args).toEqual(['/path/main.js', '--pipe', 'p']);
 		expect(params.mcpServers[0].env).toEqual([]);
-		// 第二个 entry：args 缺省 → []
 		expect(params.mcpServers[1].args).toEqual([]);
 		expect(params.mcpServers[1].env).toEqual([]);
 	});

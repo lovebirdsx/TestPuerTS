@@ -18,7 +18,6 @@ export type DrawerKey = 'history' | 'settings';
 export interface SessionListEntry {
 	sessionId: string;
 	title?: string | null;
-	createdAt?: string | null;
 	updatedAt?: string | null;
 }
 

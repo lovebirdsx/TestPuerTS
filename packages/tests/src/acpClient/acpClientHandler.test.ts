@@ -32,6 +32,7 @@ function buildHandler(opts: Partial<CliOptions> = {}): ACPClientHandler {
 
 function makePermissionParams(): RequestPermissionRequest {
 	return {
+		sessionId: 's',
 		toolCall: { toolCallId: 't1', title: 'do thing' },
 		options: [
 			{ optionId: 'allow_once', name: 'Allow once', kind: 'allow_once' },

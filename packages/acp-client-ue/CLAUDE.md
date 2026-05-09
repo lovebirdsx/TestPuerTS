@@ -7,6 +7,7 @@ ACP 协议客户端，用于调试和测试 ACP 服务端；包含命令行 REPL
 - `src/index.ts`：CLI 入口（shebang）
 - `src/cli.ts`：参数解析（含 `--no-mcp` / `--mcp-config`）
 - `src/client.ts`：`ACPClient` 连接、会话、权限、文件/终端能力
+- `src/types.ts`：协议类型，通过 `export type { ... } from '@agentclientprotocol/sdk'` 直接 re-export，无本地扩展。SDK 仅用类型，编译时擦除，运行时 0 副作用；`PROTOCOL_VERSION` / `AGENT_METHODS` / `CLIENT_METHODS` 等运行时常量本地硬编码以避免 PuerTS commonjs loader 加载 SDK 的 ESM .js
 - `src/renderer.ts`：CLI 协议消息渲染输出
 - `src/repl.ts`：交互式 REPL
 - `src/uiController.ts`：ReactUMG UI 复用的事件控制器（纯协议层）

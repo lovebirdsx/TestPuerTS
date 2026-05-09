@@ -9,6 +9,7 @@ import type {
 	RequestPermissionResponse,
 	SessionConfigOption,
 	SessionInfo,
+	SessionInfoUpdate,
 	SessionModeState,
 	SessionNotification,
 	SessionStartResponse,
@@ -81,7 +82,7 @@ export type AcpUiEvent =
 	  }
 	| { type: 'mode_updated'; sessionId: string; currentModeId: string }
 	| { type: 'config_options_updated'; sessionId: string; configOptions: SessionConfigOption[] }
-	| { type: 'session_info_updated'; sessionId: string; sessionInfo: SessionInfo }
+	| { type: 'session_info_updated'; sessionId: string; sessionInfo: SessionInfoUpdate }
 	| { type: 'usage_updated'; sessionId: string; size: number; used: number }
 	| { type: 'protocol_message'; direction: 'send' | 'recv'; message: JsonRpcMessage }
 	| { type: 'permission_requested'; permission: PendingPermissionRequest }
@@ -159,7 +160,7 @@ class AcpEventRenderer extends Renderer {
 				this.emitEvent({
 					type: 'session_info_updated',
 					sessionId,
-					sessionInfo: update as SessionInfo,
+					sessionInfo: update as SessionInfoUpdate,
 				});
 				break;
 			case 'usage_update':
@@ -369,7 +370,7 @@ export class AcpUiController {
 			sessionId: session.sessionId,
 			configOptions: session.configOptions ?? [],
 			modes: session.modes ?? null,
-			sessionInfo: session.sessionInfo ?? { sessionId: session.sessionId },
+			sessionInfo: { sessionId: session.sessionId, cwd: this.options.workspace },
 		};
 		this.emit({ type: 'session_changed', session });
 	}
@@ -433,7 +434,12 @@ export class AcpUiController {
 				};
 				break;
 			case 'session_info_updated':
-				this.state = { ...this.state, sessionInfo: { ...this.state.sessionInfo, ...event.sessionInfo } };
+				if (this.state.sessionInfo) {
+					this.state = {
+						...this.state,
+						sessionInfo: { ...this.state.sessionInfo, ...event.sessionInfo },
+					};
+				}
 				break;
 		}
 		this.emit(event);
