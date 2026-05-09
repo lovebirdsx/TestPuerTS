@@ -12,6 +12,7 @@ import {
 	ScrollArea,
 	Section,
 	Select,
+	SelectableText,
 	Text,
 	TextArea,
 	VBox,
@@ -45,7 +46,7 @@ const MessageRow: React.FC<{ item: TextItem }> = ({ item }) => {
 	if (item.role === 'error') {
 		return (
 			<Section Tone="error" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
-				<Text Text={item.text} AutoWrapText />
+				<SelectableText Text={item.text} AutoWrapText />
 			</Section>
 		);
 	}
@@ -56,7 +57,7 @@ const MessageRow: React.FC<{ item: TextItem }> = ({ item }) => {
 				Font={{ Size: 9 }}
 				ColorAndOpacity={{ SpecifiedColor: roleColor(item.role) }}
 			/>
-			<Text Text={item.text} AutoWrapText />
+			<SelectableText Text={item.text} AutoWrapText />
 		</VBox>
 	);
 };

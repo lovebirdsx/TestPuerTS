@@ -387,6 +387,35 @@ export const Text = (props: TextBlockProps): React.ReactElement => {
 	);
 };
 
+const NO_BRUSH: SlateBrush = { DrawAs: DRAW_AS_NO_DRAW as any };
+
+const SELECTABLE_TEXT_STYLE: EditableTextBoxStyle = {
+	BackgroundImageNormal: NO_BRUSH,
+	BackgroundImageHovered: NO_BRUSH,
+	BackgroundImageFocused: NO_BRUSH,
+	BackgroundImageReadOnly: NO_BRUSH,
+	Padding: { Left: 0, Top: 0, Right: 0, Bottom: 0 },
+	Font: DEFAULT_FONT,
+	ForegroundColor: DEFAULT_TEXT_COLOR,
+	BackgroundColor: { SpecifiedColor: { R: 0, G: 0, B: 0, A: 0 } },
+};
+
+/** 外观同 Text，但支持鼠标选中后 Ctrl+C 复制 */
+export const SelectableText = ({ Font, ColorAndOpacity, ...rest }: TextBlockProps): React.ReactElement => {
+	return (
+		<MultiLineEditableTextBox
+			bIsReadOnly
+			WidgetStyle={SELECTABLE_TEXT_STYLE}
+			TextStyle={{
+				Font: mergeDeep(DEFAULT_FONT, Font),
+				ColorAndOpacity: ColorAndOpacity ?? DEFAULT_TEXT_COLOR,
+			}}
+			bIsFontDeprecationDone
+			{...(rest as MultiLineEditableTextBoxProps)}
+		/>
+	);
+};
+
 export const Section = (
 	props: BorderProps & { Title?: string; Tone?: SectionTone; Gap?: number },
 ): React.ReactElement => {

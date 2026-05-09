@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Badge, HBox, IconBtn, Section, Text, VBox } from '../../../ui';
+import { Badge, HBox, IconBtn, Section, SelectableText, Text, VBox } from '../../../ui';
 import type { ToolItem } from '../../store';
 import { formatUnknown } from '../shared/formatters';
 
@@ -48,7 +48,7 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 					bIsEnabled={hasBody}
 				/>
 				<Badge Text={item.toolKind ?? 'tool'} Slot={center} />
-				<Text Text={toolDescription(item)} Slot={center} />
+				<SelectableText Text={toolDescription(item)} Slot={center} />
 				{item.status ? <Badge Text={item.status} Tone={tone} Slot={center} /> : undefined}
 			</HBox>
 			{expanded && hasBody ? (
@@ -56,19 +56,19 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 					{hasInput ? (
 						<VBox Gap={2}>
 							<Text Text="Input" />
-							<Text Text={formatUnknown(item.rawInput)} AutoWrapText />
+							<SelectableText Text={formatUnknown(item.rawInput)} AutoWrapText />
 						</VBox>
 					) : undefined}
 					{hasOutput ? (
 						<VBox Gap={2}>
 							<Text Text="Output" />
-							<Text Text={formatUnknown(item.rawOutput)} AutoWrapText />
+							<SelectableText Text={formatUnknown(item.rawOutput)} AutoWrapText />
 						</VBox>
 					) : undefined}
 					{hasContent ? (
 						<VBox Gap={2}>
 							<Text Text="Content" />
-							<Text Text={formatUnknown(item.content)} AutoWrapText />
+							<SelectableText Text={formatUnknown(item.content)} AutoWrapText />
 						</VBox>
 					) : undefined}
 				</VBox>
