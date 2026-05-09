@@ -1,5 +1,6 @@
 import * as gulp from 'gulp';
 import * as path from 'path';
+import * as fs from 'fs';
 import { spawn } from 'child_process';
 import { info } from 'gulplog';
 
@@ -8,6 +9,7 @@ import { withCache } from '../common/taskCache';
 import { getConfig } from '../config';
 import { blue, cleanDirAsync, green, red, rmFileAsync } from '../common/util';
 import { allSrcGlobs, allTsconfigGlobs, PackageDef, WORKSPACE_PACKAGES } from './registry';
+import { sendEditorCommand } from '../common/editorCommand';
 
 const config = getConfig();
 const projectRoot = config.projectRoot;
@@ -71,6 +73,7 @@ gulp.task('workspace:lint:fix', async () => {
  */
 gulp.task('workspace:watch', async () => {
 	const prefix = '[workspace:watch] ';
+	const editorOutDir = path.join(projectRoot, 'Content', 'JavaScript', 'editor');
 
 	return new Promise<void>((_resolve, reject) => {
 		const proc = spawn('npx', ['tsc', '-b', '-w', workspaceTsconfig], {
@@ -86,11 +89,36 @@ gulp.task('workspace:watch', async () => {
 			const text = data.toString().trimEnd();
 			if (text) info(`${blue(prefix)}${red(text)}`);
 		});
-		proc.on('error', (err) => reject(err));
+		proc.on('error', (err) => {
+			watcher?.close();
+			reject(err);
+		});
 		proc.on('close', (code) => {
+			watcher?.close();
 			info(`${blue(prefix)}tsc exited with ${code ?? 'null'}`);
 			_resolve();
 		});
+
+		// 监听 editor 输出目录，debounce 后发送重启命令
+		let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+		let watcher: fs.FSWatcher | undefined;
+		try {
+			watcher = fs.watch(editorOutDir, { recursive: true }, (_event, filename) => {
+				// 只对 .js 文件变更触发，过滤 .map / .d.ts / .tsbuildinfo
+				if (!filename?.endsWith('.js')) return;
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(() => {
+					info(`${blue(prefix)}editor output changed (${filename}), sending restart...`);
+					void sendEditorCommand({ type: 'restart' });
+				}, 500);
+			});
+			watcher.on('error', (err) => {
+				info(`${blue(prefix)}${red(`fs.watch error: ${String(err)}`)}`);
+			});
+		} catch (e) {
+			// editorOutDir 首次编译前可能不存在，降级运行（仅 tsc -w，无 auto-restart）
+			info(`${blue(prefix)}${red(`Cannot watch ${editorOutDir}: ${String(e)}`)}`);
+		}
 	});
 });
 

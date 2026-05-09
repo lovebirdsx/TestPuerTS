@@ -18,10 +18,13 @@ import { registerTabFactory, restoreOpenTabs } from './common/tabSession';
 import { SamplePanel } from './components/SamplePanel';
 import { AcpClientPanel } from './components/AcpClientPanel';
 import { registerEditorMenus } from './common/menu';
+import { CommandService } from './commandService';
 
 const logger = createLogger('editor:main');
 
 let menuDisposable: { dispose(): void } | undefined;
+const EDITOR_CMD_PIPE = 'ue-editor-cmd';
+let commandService: CommandService | undefined;
 
 // Tab 元数据：tabName → label（注册工厂和菜单共用）
 const TAB_CONFIGS = [
@@ -67,6 +70,8 @@ function registerMenus() {
 	TsEditorLibrary.GetTsEditor().OnStopped.Add(() => {
 		menuDisposable?.dispose();
 		menuDisposable = undefined;
+		commandService?.dispose();
+		commandService = undefined;
 	});
 }
 
@@ -91,10 +96,24 @@ function registerExitHooks() {
 	});
 }
 
+function startCommandService() {
+	commandService = new CommandService(EDITOR_CMD_PIPE);
+	commandService
+		.on('restart', () => {
+			logger.log('[main] received restart command');
+			// 推迟到下一 tick，避免在 IPC 回调中直接销毁当前 JsEnv
+			setTimeout(() => {
+				TsEditorLibrary.GetTsEditor().Restart();
+			}, 0);
+		})
+		.start();
+}
+
 function main() {
 	registerMenus();
 	restoreTabsOnStart();
 	registerExitHooks();
+	startCommandService();
 }
 
 main();
