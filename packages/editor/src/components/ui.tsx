@@ -34,6 +34,7 @@ import type {
 	TableRowStyle,
 	TextBlockProps,
 	VerticalBoxProps,
+	SizeBoxProps,
 } from 'react-umg';
 
 // ── UE5.5 编辑器 Dark 主题颜色（线性空间，来源于 StyleColors.cpp） ──
@@ -343,8 +344,9 @@ export type IconName = (typeof _ICON_NAMES)[number];
 // 通过 UEditorIconHelper.GetEditorIcon 从 FAppStyle 读取 brush。
 // IconName 命名见 Engine/Source/Editor/EditorStyle/Private/SlateEditorStyle.cpp 与 StarshipCoreStyle.cpp。
 
-export const Icon = (props: { Name: IconName; Size?: number }): React.ReactElement => {
-	const { Name, Size = 14 } = props;
+// ui.tsx
+export const Icon = (props: { Name: IconName; Size?: number; Slot?: SizeBoxProps['Slot'] }): React.ReactElement => {
+	const { Name, Size = 14, Slot } = props;
 	const brush = UE.EditorIconHelper.GetEditorIcon(`Icons.${Name}`);
 	return (
 		<SizeBox
@@ -352,6 +354,7 @@ export const Icon = (props: { Name: IconName; Size?: number }): React.ReactEleme
 			HeightOverride={Size}
 			bOverride_WidthOverride={true}
 			bOverride_HeightOverride={true}
+			Slot={Slot}
 		>
 			<Image Brush={brush} />
 		</SizeBox>
