@@ -25,6 +25,7 @@ import type {
 } from '../types';
 import { type ConnectionProfile, loadConnectionsConfig } from './connectionConfig';
 import { ueStorage } from './ueStorage';
+import { openPath } from '@universe-agent/editor-common';
 
 // 转出常用类型，方便领域组件按 `'../../store'` 路径就近引用
 export type {
@@ -714,7 +715,7 @@ const createSlices = (
 			try {
 				await ueFileIO.writeText(filePath, json);
 				const winPath = filePath.replace(/\//g, '\\');
-				ue.JsRunHelper.SpawnProcess('cmd.exe', `/c start "" "${winPath}"`, '');
+				openPath(winPath);
 				set((s) => {
 					pushTextItem(s.timeline, 'system', `Protocol exported: ${filePath}`);
 				});

@@ -47451,6 +47451,11 @@ declare module "ue" {
     class EditorHelper extends UE.BlueprintFunctionLibrary {
         constructor(Outer?: Object, Name?: string, ObjectFlags?: number);
         /*
+         *运行时构造一个 RichTextBlock 用 TextStyleSet（FRichTextStyleRow），含 ACP 代码块语法着色所需的 hljs-* 行
+         *单例：首次调用创建并 AddToRoot 防 GC，后续调用返回同一实例
+         */
+        static BuildAcpCodeStyleSet() : UE.DataTable;
+        /*
          *关闭当前编辑的且激活的资源窗口
          */
         static CloseActiveEditAsset() : boolean;
@@ -47466,6 +47471,10 @@ declare module "ue" {
          *打开Gameplay Tag Manager
          */
         static OpenGameplayTagManager() : boolean;
+        /*
+         *在用户配置的 IDE 中打开源码文件（绝对路径），可选定位到指定行
+         */
+        static OpenSourceFileInIDE(AbsPath: string, LineNumber?: number /* = 0 */) : boolean;
         /*
          *显示当前编辑的且激活资源的引用关系
          */

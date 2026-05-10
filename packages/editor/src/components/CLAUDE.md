@@ -33,3 +33,15 @@
 - MCP 仍由 `AcpClient` 自动管理，`disconnect` / unmount 调 `client.dispose()`。
 - 权限请求由 `domain/permission/PermissionModal.tsx` 渲染 `ModalPanel`，必须调用 `resolvePermission(optionId)` 或 `cancelPermission()`。
 - 持久化通过 zustand persist + 自定义 ueStorage 适配器写到 `<AppData>/<Project>/EditorPersistence/acp-panel.json`；`partialize` 仅持久化 `{ config, policy: { permission, protocolEnabled } }`，运行时字段（messages/tools/protocol/sessionId/activeDrawer 等）不入盘。
+
+**ACP 工具调用差异化展示（`domain/prompt/`）：**
+
+`ToolCallCard.tsx` 不再 dump 全 JSON，而是按 ACP `ToolKind` 派发到对应 renderer。共用的 `[展开▶] [KindIcon] [描述/标题] [PathChip×3] [Status Badge]` 头部 + 专属 body：
+
+- `blocks/`：`PathChip`（点击调 `EditorHelper.OpenSourceFileInIDE`）/ `ToolKindIcon`（`ToolKind` → `IconName` 映射）/ `CodeBlock`（**RichText 模式**：`UE.EditorHelper.BuildAcpCodeStyleSet()` 拉运行时 `UDataTable<FRichTextStyleRow>` 挂到 `RichTextBlock.TextStyleSet`，VBox 一行一个 RichTextBlock，markup 由 `linesToMarkup` 生成 `<hljs-*>...</>`；右上角 `Edit` 图标 `IconBtn` 切换到 plain 模式 → `SelectableText`，弥补 RichTextBlock 不支持选中复制；样式表加载失败时永久退到 plain）/ `TerminalBlock`（命令回显 + stdout/stderr 红色 + exitCode）/ `DiffView`（jsdiff `diffLines` unified 视图，`+/-/ ` 前缀 + 行内文本绿/红/灰）/ `openInEditor`（解析绝对路径 → `UE.EditorHelper.OpenSourceFileInIDE`）。
+- `highlight/`：双通道语法着色 facade —— 优先 `lowlight@1.20.0`（CJS）按需注册 ts/js/json/bash/python/cpp/ini/markdown/diff，失败/异常自动落到正则 `fallback` 通道（覆盖 ts/json/bash/diff）。两条路径共用 `CodeToken{ text, className }` 模型，`detectLanguageByPath(path)` 按后缀映射 highlight.js 语言名。`richMarkup.ts` 的 `lineToMarkup` / `linesToMarkup` 把 `CodeLine[]` 序列化为 UE RichTextBlock markup（`<hljs-*>text</>`，转义 `& < > "` 实体），CodeBlock 直接消费。
+- `contentTypes.ts` + `contentDispatcher.tsx`：把 ACP `ToolCallContent[]`（`{ type: 'content' | 'diff' | 'terminal' }`）的 `unknown` 归一为联合类型，按 type 分支渲染（text/image/diff/terminal/未知）。
+- `toolKindRenderers/`：每个 kind 一个 `KindRenderer = { derivePaths(item), Body(item) }`：`ReadCard`（CodeBlock + `detectLanguageByPath`）/ `EditCard`（多个 DiffView + 头部累计 +N -M）/ `ExecuteCard`（TerminalBlock + ContentDispatcher 兜底）/ `DeleteCard` / `MoveCard`（from → to）/ `SearchCard`（pattern + 命中）/ `ThinkCard` / `FetchCard`（url + body）/ `SwitchModeCard`（from → to）/ `OtherCard`（保留旧 dump 兜底）。`getRendererForKind(kind)` 是单一派发入口，未注册 kind 走 `OtherCard`。
+- `sharedExtractors.ts`：`extractPrimaryPath` / `extractCommand` / `extractTerminalOutput` 等共享工具，兼容 `path` / `file_path` / `absolute_path` 等不同 agent 习惯。
+
+**第三方依赖（PuerTS modular 直接 require `node_modules`）：** `lowlight@^1.20.0`（v2+ 是 ESM-only，必须锁 v1）+ `diff@^5.2.0`，与 `zod` / `zustand` 同等待遇挂在 `packages/editor/package.json` 的 `dependencies`。`packages/tests/src/acpPanel/highlight.smoke.test.ts` 是冒烟门禁，第 1 步必跑。

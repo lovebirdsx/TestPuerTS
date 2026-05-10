@@ -26,6 +26,16 @@ export {
 	errorMessage,
 	ingestEvent,
 } from './components/AcpClientPanel/store';
+export {
+	highlightCode,
+	fallbackHighlight,
+	detectLanguageByPath,
+	lineToMarkup,
+	linesToMarkup,
+} from './components/AcpClientPanel/domain/prompt/highlight';
+export type { CodeLine, CodeToken, HighlightResult } from './components/AcpClientPanel/domain/prompt/highlight';
+export { computeDiffRows } from './components/AcpClientPanel/domain/prompt/blocks/diffMath';
+export type { DiffRow, DiffSummary } from './components/AcpClientPanel/domain/prompt/blocks/diffMath';
 export type {
 	AcpClientPanelProps,
 	AcpClientFactory,

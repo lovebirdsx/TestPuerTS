@@ -17,10 +17,12 @@ public class EditorHelper : ModuleRules
             "Settings",
             "SlateCore",
             "Slate",
+            "UMG",
             "LevelEditor",
             "ContentBrowser",
             "AssetManagerEditor",
             "GameplayTagsEditor",
+            "SourceCodeAccess",
             "UnrealEd",
         });
     }

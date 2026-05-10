@@ -1,8 +1,10 @@
 import * as React from 'react';
 
-import { Badge, HBox, IconBtn, Section, SelectableText, Text, VBox } from '../../../ui';
+import { Badge, HBox, IconBtn, Section, SelectableText, VBox } from '../../../ui';
 import type { ToolItem } from '../../store';
-import { formatUnknown } from '../shared/formatters';
+
+import { PathChip, ToolKindIcon } from './blocks';
+import { getRendererForKind } from './toolKindRenderers';
 
 const center = { VerticalAlignment: 2 as any };
 
@@ -20,11 +22,10 @@ function statusTone(status: string | null | undefined): Tone {
 function toolDescription(item: ToolItem): string {
 	if (item.rawInput && typeof item.rawInput === 'object') {
 		const record = item.rawInput as Record<string, unknown>;
-		if (record.description && typeof record.description === 'string') {
+		if (typeof record.description === 'string') {
 			return record.description;
 		}
 	}
-
 	return '';
 }
 
@@ -38,57 +39,46 @@ const AnimatedBadge: React.FC<{ text: string }> = ({ text }) => {
 	return <Badge Text={text} Tone={blink ? 'warning' : 'normal'} Slot={center} />;
 };
 
+const PATH_CHIP_LIMIT = 3;
+
 export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 	const [expanded, setExpanded] = React.useState(false);
 
-	const hasInput = item.rawInput !== undefined;
-	const hasOutput = item.rawOutput !== undefined;
-	const hasContent = item.content !== undefined;
-	const hasBody = hasInput || hasOutput || hasContent;
+	const renderer = getRendererForKind(item.toolKind);
+	const paths = renderer.derivePaths(item).slice(0, PATH_CHIP_LIMIT);
+	const description = toolDescription(item);
 	const tone = statusTone(item.status);
+
+	// 是否有任何可展开的内容：rawInput / rawOutput / content 任一不为 undefined
+	const hasBody = item.rawInput !== undefined || item.rawOutput !== undefined || item.content !== undefined;
 
 	return (
 		<Section Tone="normal" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
-			<HBox Gap={4}>
-				<IconBtn
-					Size={8}
-					IconName={expanded ? 'ChevronDown' : 'ChevronRight'}
-					ToolTipText=""
-					OnClicked={() => setExpanded((v) => !v)}
-					bIsEnabled={hasBody}
-				/>
-				<Badge Text={item.toolKind ?? 'tool'} Slot={center} />
-				<SelectableText Text={toolDescription(item)} Slot={center} />
-				{item.status ? (
-					tone === 'warning' ? (
-						<AnimatedBadge text={item.status} />
-					) : (
-						<Badge Text={item.status} Tone={tone} Slot={center} />
-					)
-				) : undefined}
-			</HBox>
-			{expanded && hasBody ? (
-				<VBox Gap={4}>
-					{hasInput ? (
-						<VBox Gap={2}>
-							<Text Text="Input" />
-							<SelectableText Text={formatUnknown(item.rawInput)} AutoWrapText />
-						</VBox>
-					) : undefined}
-					{hasOutput ? (
-						<VBox Gap={2}>
-							<Text Text="Output" />
-							<SelectableText Text={formatUnknown(item.rawOutput)} AutoWrapText />
-						</VBox>
-					) : undefined}
-					{hasContent ? (
-						<VBox Gap={2}>
-							<Text Text="Content" />
-							<SelectableText Text={formatUnknown(item.content)} AutoWrapText />
-						</VBox>
-					) : undefined}
-				</VBox>
-			) : undefined}
+			<VBox Gap={4}>
+				<HBox Gap={4}>
+					<IconBtn
+						Size={8}
+						IconName={expanded ? 'ChevronDown' : 'ChevronRight'}
+						ToolTipText=""
+						OnClicked={() => setExpanded((v) => !v)}
+						bIsEnabled={hasBody}
+					/>
+					<ToolKindIcon kind={item.toolKind} />
+					<Badge Text={item.toolKind ?? 'tool'} Tone="normal" Slot={center} />
+					{description ? <SelectableText Text={description} Slot={center} Font={{ Size: 9 }} /> : null}
+					{paths.map((p, i) => (
+						<PathChip key={i} path={p.path} line={p.line} dense />
+					))}
+					{item.status ? (
+						tone === 'warning' ? (
+							<AnimatedBadge text={item.status} />
+						) : (
+							<Badge Text={item.status} Tone={tone} Slot={center} />
+						)
+					) : null}
+				</HBox>
+				{expanded && hasBody ? <renderer.Body item={item} /> : null}
+			</VBox>
 		</Section>
 	);
 };
