@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { LinearColor } from 'react-umg';
 
-import { SelectableText, Text, VBox } from '../../../ui';
+import { SelectableText, SPACING, Text, VBox } from '../../../ui';
 import { formatUnknown } from '../shared/formatters';
 
 import { DiffView, TerminalBlock } from './blocks';
@@ -39,7 +39,7 @@ export const ContentDispatcher: React.FC<ContentDispatcherProps> = ({ value }) =
 	}
 
 	return (
-		<VBox Gap={4}>
+		<VBox Gap={SPACING.normal}>
 			{blocks.map((block, i) => (
 				<ContentBlockView key={i} block={block} />
 			))}

@@ -17,6 +17,29 @@
 - 图标按钮使用 `Icon` / `IconBtn`：`Icon` 通过 `UE.EditorIconHelper.GetEditorIcon(Name)` 从 `FAppStyle` 取 brush（IconName 见 `Engine/Source/Editor/EditorStyle/Private/SlateEditorStyle.cpp` 与 `StarshipCoreStyle.cpp`，例如 `Icons.Plus` / `Icons.Settings` / `Icons.History.Recent` / `Icons.X` / `Icons.Refresh` / `Icons.Save` / `Icons.Console` / `Icons.Plug` / `Icons.ArrowLeft`）；`IconBtn` 包一层 `Button` 提供 `ToolTipText` 与 `Active` 高亮。
 - `VBox` / `HBox` 的 `Gap` 通过 child `Slot.Padding` 实现，业务组件不要重复手写间距逻辑。
 
+**间距系统（`SPACING` / `PADDING` token）：**
+
+间距数值统一从 `ui.tsx` 导出的 token 取值，业务代码不要写裸数字。
+
+| Token             | 值        | 用途                            |
+| ----------------- | --------- | ------------------------------- |
+| `SPACING.none`    | 0         | 行紧贴（代码块内）              |
+| `SPACING.tight`   | 2         | 同卡内字段堆叠；VBox/HBox 默认  |
+| `SPACING.normal`  | 4         | 卡片间、工具栏按钮间；最常用    |
+| `SPACING.loose`   | 6         | 章节/抽屉/模态等大块            |
+| `SPACING.wide`    | 8         | 同行内强分组，罕用              |
+| `PADDING.panel`   | {4,4,4,4} | Panel / 弹出列表                |
+| `PADDING.card`    | {6,4,6,4} | 卡片；Section 默认              |
+| `PADDING.section` | {6,6,6,6} | 对称章节（带 Title 时备用）     |
+| `PADDING.modal`   | {8,8,8,8} | ModalPanel 默认                 |
+
+写法约定：
+
+- Section 优先不传 `Padding`，`PADDING.card` 已覆盖 95% 场景
+- 不写 `Gap={4}`，写 `Gap={SPACING.normal}`
+- 不写不对称 `Padding`（如 `{T:2,B:6}`），如确需先在此表加语义条目
+- Section 内部已含 VBox，不要再在 children 最外层包 `<VBox Gap={…}>`（DiffView/TerminalBlock 已遵循；CodeBlock 内 `Gap=0` 的紧贴行容器属例外，inner VBox 与 Section 的 Gap 职责不同）
+
 **ACP Client Panel：**
 
 - `AcpClientPanel/` 是编辑器内 ACP 客户端主界面，VSCode Copilot 风格的纵向布局：

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import type { SessionConfigOption } from '@universe-agent/acp-client-ue';
-import { Btn, Section, Text, VBox } from '../../../ui';
+import { Btn, Section, SPACING, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -36,7 +36,7 @@ const BooleanOptionsPanel: React.FC = () => {
 // ──────────────────────────────────────────────────────────────────────────
 
 export const Sidebar: React.FC = () => (
-	<VBox Gap={6}>
+	<VBox Gap={SPACING.loose}>
 		<BooleanOptionsPanel />
 	</VBox>
 );

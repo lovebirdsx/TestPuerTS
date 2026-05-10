@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as UE from 'ue';
 import { Spacer } from 'react-umg';
 
-import { Btn, HBox, IconBtn, ScrollArea, Section, Text, VBox } from '../../../ui';
+import { Btn, HBox, IconBtn, ScrollArea, Section, SPACING, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import type { SessionListEntry } from '../../store';
 
@@ -48,7 +48,7 @@ const SessionRow: React.FC<{
 	const subtitle = formatRelativeTime(entry.updatedAt);
 	return (
 		<Btn Active={active} bIsEnabled={!active} OnClicked={() => onSelect(entry.sessionId)}>
-			<HBox Gap={2} Slot={{ HorizontalAlignment: 0 }}>
+			<HBox Gap={SPACING.tight} Slot={{ HorizontalAlignment: 0 }}>
 				{/* 左：描述文字，填充剩余空间，溢出省略 */}
 				<Text
 					Text={title}
@@ -96,8 +96,8 @@ export const SessionPicker: React.FC = () => {
 	);
 
 	return (
-		<Section Gap={6} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<HBox Gap={4}>
+		<Section Gap={SPACING.loose} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+			<HBox Gap={SPACING.normal}>
 				<IconBtn
 					IconName="ArrowLeft"
 					ToolTipText="Back to conversation"
@@ -133,7 +133,7 @@ export const SessionPicker: React.FC = () => {
 			) : null}
 
 			<ScrollArea Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-				<VBox Gap={4}>
+				<VBox Gap={SPACING.normal}>
 					{sessions.map((entry) => (
 						<SessionRow
 							key={entry.sessionId}

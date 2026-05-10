@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { LinearColor } from 'react-umg';
 
-import { Btn, HBox, Section, SelectableText, Text, VBox } from '../../../../ui';
+import { Btn, HBox, Section, SelectableText, SPACING, Text } from '../../../../ui';
 
 import { computeDiffRows, type DiffRow } from './diffMath';
 
@@ -39,42 +39,30 @@ export const DiffView: React.FC<DiffViewProps> = ({ oldText, newText, path, maxR
 	const visible = rows.slice(0, visibleCount);
 
 	return (
-		<Section Tone="normal" Gap={2}>
-			<VBox Gap={2}>
-				<HBox Gap={8}>
+		<Section Tone="normal" Gap={SPACING.tight}>
+			<HBox Gap={SPACING.wide}>
+				<Text Text={`+${summary.added}`} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_GREEN }} />
+				<Text Text={`-${summary.removed}`} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_RED }} />
+				{path ? <Text Text={path} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_DIM }} /> : null}
+			</HBox>
+			{visible.map((row, i) => (
+				<SelectableText
+					key={i}
+					Text={`${rowPrefix(row.kind)}${row.text}`}
+					AutoWrapText
+					Font={{ Size: 9 }}
+					ColorAndOpacity={{ SpecifiedColor: rowColor(row.kind) }}
+				/>
+			))}
+			{hidden > 0 ? (
+				<Btn OnClicked={() => setShowAll(true)}>
 					<Text
-						Text={`+${summary.added}`}
+						Text={`… show ${hidden} more line${hidden > 1 ? 's' : ''}`}
 						Font={{ Size: 9 }}
-						ColorAndOpacity={{ SpecifiedColor: COL_GREEN }}
+						ColorAndOpacity={{ SpecifiedColor: COL_DIM }}
 					/>
-					<Text
-						Text={`-${summary.removed}`}
-						Font={{ Size: 9 }}
-						ColorAndOpacity={{ SpecifiedColor: COL_RED }}
-					/>
-					{path ? (
-						<Text Text={path} Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_DIM }} />
-					) : null}
-				</HBox>
-				{visible.map((row, i) => (
-					<SelectableText
-						key={i}
-						Text={`${rowPrefix(row.kind)}${row.text}`}
-						AutoWrapText
-						Font={{ Size: 9 }}
-						ColorAndOpacity={{ SpecifiedColor: rowColor(row.kind) }}
-					/>
-				))}
-				{hidden > 0 ? (
-					<Btn OnClicked={() => setShowAll(true)}>
-						<Text
-							Text={`… show ${hidden} more line${hidden > 1 ? 's' : ''}`}
-							Font={{ Size: 9 }}
-							ColorAndOpacity={{ SpecifiedColor: COL_DIM }}
-						/>
-					</Btn>
-				) : null}
-			</VBox>
+				</Btn>
+			) : null}
 		</Section>
 	);
 };

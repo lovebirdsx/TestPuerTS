@@ -3,7 +3,7 @@ import type { LinearColor } from 'react-umg';
 import { RichTextBlock } from 'react-umg';
 import * as UE from 'ue';
 
-import { Btn, IconBtn, HBox, Section, SelectableText, Text, VBox } from '../../../../ui';
+import { Btn, IconBtn, HBox, Section, SelectableText, SPACING, Text, VBox } from '../../../../ui';
 import { detectLanguageByPath, fallbackHighlight, lineToMarkup, type CodeLine } from '../highlight';
 import { highlightCode } from '../highlight';
 
@@ -70,8 +70,8 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, path, maxL
 	}, [useRich, allLines, visibleCount, lang]);
 
 	return (
-		<Section Tone="normal" Gap={2}>
-			<HBox Gap={4}>
+		<Section Tone="normal" Gap={SPACING.tight}>
+			<HBox Gap={SPACING.normal}>
 				<Text
 					Text={lang ? `[${lang}]` : '[plain]'}
 					Font={{ Size: 8 }}
@@ -88,7 +88,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ code, language, path, maxL
 				) : null}
 			</HBox>
 			{useRich && richLines ? (
-				<VBox Gap={0}>
+				<VBox Gap={SPACING.none}>
 					{richLines.map((markup, i) => (
 						<RichTextBlock
 							key={i}

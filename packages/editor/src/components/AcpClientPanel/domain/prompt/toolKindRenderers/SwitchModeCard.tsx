@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { LinearColor } from 'react-umg';
 
-import { HBox, SelectableText, Text } from '../../../../ui';
+import { HBox, SelectableText, SPACING, Text } from '../../../../ui';
 
 import type { BodyProps, KindRenderer } from './types';
 
@@ -27,7 +27,7 @@ const SwitchModeBody: React.FC<BodyProps> = ({ item }) => {
 	const { from, to } = extractModes(item.rawInput);
 	if (!from && !to) return null;
 	return (
-		<HBox Gap={6}>
+		<HBox Gap={SPACING.loose}>
 			{from ? <SelectableText Text={from} Font={{ Size: 9 }} /> : null}
 			<Text Text="→" Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_DIM }} />
 			{to ? <SelectableText Text={to} Font={{ Size: 9 }} /> : null}

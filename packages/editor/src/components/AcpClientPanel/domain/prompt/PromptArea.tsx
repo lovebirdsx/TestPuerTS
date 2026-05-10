@@ -9,10 +9,12 @@ import {
 	COL_FOREGROUND_HOVER,
 	HBox,
 	IconBtn,
+	PADDING,
 	ScrollArea,
 	Section,
 	Select,
 	SelectableText,
+	SPACING,
 	Text,
 	TextArea,
 	VBox,
@@ -45,13 +47,13 @@ function roleColor(role: TextItem['role']) {
 const MessageRow: React.FC<{ item: TextItem }> = ({ item }) => {
 	if (item.role === 'error') {
 		return (
-			<Section Tone="error" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
+			<Section Tone="error">
 				<SelectableText Text={item.text} AutoWrapText />
 			</Section>
 		);
 	}
 	return (
-		<VBox Gap={4} Slot={{ Padding: { Left: 6, Top: 2, Right: 6, Bottom: 6 } }}>
+		<VBox Gap={SPACING.normal} Slot={{ Padding: PADDING.card }}>
 			<Text
 				Text={item.role.toUpperCase()}
 				Font={{ Size: 9 }}
@@ -68,7 +70,7 @@ export const MessageStream: React.FC = () => {
 	return (
 		<Section Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 			<ScrollArea AlwaysShowScrollbar Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-				<VBox Gap={4}>
+				<VBox Gap={SPACING.normal}>
 					{timeline.length === 0 ? <Text Text="Connect, create a session, then send a prompt." /> : undefined}
 					{timeline.map((item) => {
 						if (item.kind === 'text') return <MessageRow key={item.id} item={item} />;
@@ -91,13 +93,13 @@ const CommandsPanel: React.FC<{
 }> = ({ commands, onPick }) => {
 	if (commands.length === 0) {
 		return (
-			<Section Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
+			<Section>
 				<Text Text="No commands available" />
 			</Section>
 		);
 	}
 	return (
-		<Section Padding={{ Left: 4, Top: 4, Right: 4, Bottom: 4 }} Gap={2}>
+		<Section Gap={SPACING.tight}>
 			{commands.map((c) => (
 				<Btn key={c.name} OnClicked={() => onPick(c.name)} ToolTipText={c.description ?? ''}>
 					<Text Text={`/${c.name}`} />
@@ -176,7 +178,7 @@ export const InputArea: React.FC = () => {
 			{/* select 类选项（model/effort 等）在输入框上方 */}
 			<HBox>
 				{selectOptions.length > 0 ? (
-					<HBox Gap={4}>
+					<HBox Gap={SPACING.normal}>
 						{selectOptions.map((opt) => {
 							const values = opt.options?.map((o) => o.value) ?? [];
 							return (
@@ -207,7 +209,7 @@ export const InputArea: React.FC = () => {
 				OnTextChanged={onTextChanged}
 				bIsReadOnly={disabled}
 			/>
-			<HBox Gap={4}>
+			<HBox Gap={SPACING.normal}>
 				<IconBtn
 					IconName="Filter"
 					ToolTipText="Commands (/)"

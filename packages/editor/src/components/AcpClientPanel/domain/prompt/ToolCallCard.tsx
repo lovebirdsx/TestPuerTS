@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Badge, HBox, IconBtn, Section, SelectableText, VBox } from '../../../ui';
+import { Badge, HBox, IconBtn, Section, SelectableText, SPACING, VBox } from '../../../ui';
 import type { ToolItem } from '../../store';
 
 import { PathChip, ToolKindIcon } from './blocks';
@@ -53,9 +53,9 @@ export const ToolCallCard: React.FC<{ item: ToolItem }> = ({ item }) => {
 	const hasBody = item.rawInput !== undefined || item.rawOutput !== undefined || item.content !== undefined;
 
 	return (
-		<Section Tone="normal" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
-			<VBox Gap={4}>
-				<HBox Gap={4}>
+		<Section Tone="normal">
+			<VBox Gap={SPACING.normal}>
+				<HBox Gap={SPACING.normal}>
 					<IconBtn
 						Size={8}
 						IconName={expanded ? 'ChevronDown' : 'ChevronRight'}

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Badge, HBox, Section, Text, VBox } from '../../../ui';
+import { Badge, HBox, Section, SPACING, Text, VBox } from '../../../ui';
 import type { PlanItem } from '../../store';
 
 const center = { VerticalAlignment: 2 as any };
@@ -28,11 +28,11 @@ const AnimatedBadge: React.FC<{ text: string }> = ({ text }) => {
 
 export const PlanCard: React.FC<{ item: PlanItem }> = ({ item }) => {
 	return (
-		<Section Tone="accent" Title="Plan" Padding={{ Left: 6, Top: 4, Right: 6, Bottom: 4 }}>
-			<VBox Gap={2}>
+		<Section Tone="accent" Title="Plan">
+			<VBox Gap={SPACING.tight}>
 				{item.entries.length === 0 ? <Text Text="(empty)" /> : undefined}
 				{item.entries.map((entry, index) => (
-					<HBox key={index} Gap={4}>
+					<HBox key={index} Gap={SPACING.normal}>
 						{statusTone(entry.status) === 'warning' ? (
 							<AnimatedBadge text={entry.status} />
 						) : (

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { LinearColor } from 'react-umg';
 
-import { HBox, SelectableText, Text, VBox } from '../../../../ui';
+import { HBox, SelectableText, SPACING, Text, VBox } from '../../../../ui';
 
 import { ContentDispatcher } from '../contentDispatcher';
 import { extractPattern } from './sharedExtractors';
@@ -16,9 +16,9 @@ const COL_DIM: LinearColor = { R: 0.55, G: 0.55, B: 0.55, A: 1 };
 const SearchBody: React.FC<BodyProps> = ({ item }) => {
 	const pattern = extractPattern(item.rawInput);
 	return (
-		<VBox Gap={4}>
+		<VBox Gap={SPACING.normal}>
 			{pattern ? (
-				<HBox Gap={6}>
+				<HBox Gap={SPACING.loose}>
 					<Text Text="pattern:" Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_DIM }} />
 					<SelectableText Text={pattern} Font={{ Size: 9 }} />
 				</HBox>

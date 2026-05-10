@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Panel, VBox } from '../ui';
+import { Panel, SPACING, VBox } from '../ui';
 import { DrawerHost } from './domain/drawer/DrawerHost';
 import { PermissionModal } from './domain/permission/PermissionModal';
 import { InputArea, MessageStream } from './domain/prompt/PromptArea';
@@ -41,7 +41,7 @@ const PanelBody: React.FC = () => {
 
 	return (
 		<Panel Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
-			<VBox Gap={2} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
+			<VBox Gap={SPACING.tight} Slot={{ Size: { SizeRule: 1, Value: 1 } }}>
 				<TopBar />
 				<VBox>{showSettings ? <DrawerHost active="settings" /> : null}</VBox>
 				{showHistory ? (

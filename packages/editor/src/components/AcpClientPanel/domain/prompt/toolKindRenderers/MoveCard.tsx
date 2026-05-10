@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { LinearColor } from 'react-umg';
 
-import { HBox, Text } from '../../../../ui';
+import { HBox, SPACING, Text } from '../../../../ui';
 import { PathChip } from '../blocks';
 
 import { ContentDispatcher } from '../contentDispatcher';
@@ -37,7 +37,7 @@ const MoveBody: React.FC<BodyProps> = ({ item }) => {
 		return <ContentDispatcher value={item.content} />;
 	}
 	return (
-		<HBox Gap={6}>
+		<HBox Gap={SPACING.loose}>
 			{from ? <PathChip path={from} dense /> : null}
 			<Text Text="→" Font={{ Size: 9 }} ColorAndOpacity={{ SpecifiedColor: COL_DIM }} />
 			{to ? <PathChip path={to} dense /> : null}

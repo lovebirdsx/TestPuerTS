@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { openPath } from '@universe-agent/editor-common';
 
-import { HBox, Icon, Text, ToolbarButton } from '../../../../ui';
+import { HBox, Icon, SPACING, Text, ToolbarButton } from '../../../../ui';
 
 function shortenPath(path: string, maxSegments = 3): string {
 	const norm = path.replace(/\\/g, '/');
@@ -25,7 +25,7 @@ export const PathChip: React.FC<PathChipProps> = ({ path, line, dense }) => {
 	const tooltip = path + lineSuffix;
 	return (
 		<ToolbarButton ToolTipText={tooltip} OnClicked={() => openPath(path)}>
-			<HBox Gap={4}>
+			<HBox Gap={SPACING.normal}>
 				{dense ? null : <Icon Name="FolderOpen" Size={11} />}
 				<Text Text={display} Font={{ Size: 9 }} />
 			</HBox>

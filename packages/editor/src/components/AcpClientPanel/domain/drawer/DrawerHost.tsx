@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Btn, Section, Select, Text, VBox } from '../../../ui';
+import { Btn, Section, Select, SPACING, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import { Sidebar } from '../session/Sidebar';
 import { toTArray } from '../shared/ueArray';
@@ -30,7 +30,7 @@ const ConnectionSettings: React.FC = () => {
 	return (
 		<Section Title="Connection">
 			{connections.length > 0 ? (
-				<VBox Gap={2}>
+				<VBox Gap={SPACING.tight}>
 					<Text Text="Profile" />
 					<Select
 						DefaultOptions={toTArray(connectionOptions)}
@@ -59,7 +59,7 @@ export const DrawerHost: React.FC<{ active: DrawerKey }> = ({ active }) => {
 	if (active !== 'settings') return null;
 	return (
 		<Drawer title="Settings" onClose={close}>
-			<VBox Gap={6}>
+			<VBox Gap={SPACING.loose}>
 				<ConnectionSettings />
 				<Sidebar />
 			</VBox>

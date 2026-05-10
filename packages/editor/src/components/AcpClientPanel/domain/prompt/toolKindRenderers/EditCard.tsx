@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { VBox } from '../../../../ui';
+import { SPACING, VBox } from '../../../../ui';
 
 import { DiffView } from '../blocks';
 import { ContentDispatcher } from '../contentDispatcher';
@@ -21,7 +21,7 @@ const EditBody: React.FC<BodyProps> = ({ item }) => {
 	}
 
 	return (
-		<VBox Gap={4}>
+		<VBox Gap={SPACING.normal}>
 			{diffs.map((d, i) => (
 				<DiffView key={i} path={d.path} oldText={d.oldText ?? ''} newText={d.newText} />
 			))}

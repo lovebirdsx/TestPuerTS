@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { VBox } from '../../../../ui';
+import { SPACING, VBox } from '../../../../ui';
 
 import { CodeBlock } from '../blocks';
 import { ContentDispatcher } from '../contentDispatcher';
@@ -27,7 +27,7 @@ const ReadBody: React.FC<BodyProps> = ({ item }) => {
 
 	if (fileText !== undefined) {
 		return (
-			<VBox Gap={4}>
+			<VBox Gap={SPACING.normal}>
 				<CodeBlock code={fileText} language={language} />
 			</VBox>
 		);

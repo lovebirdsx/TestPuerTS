@@ -61,6 +61,32 @@ export const COL_ACCENT: LinearColor = { R: 0.034, G: 0.16, B: 0.32, A: 1.0 };
 const COL_WARNING: LinearColor = { R: 0.55, G: 0.37, B: 0.08, A: 1.0 };
 const COL_ERROR: LinearColor = { R: 0.45, G: 0.06, B: 0.05, A: 1.0 };
 
+// ── 间距设计 token（语义化命名，业务代码不要写裸数字；参见 components/CLAUDE.md） ──
+
+export const SPACING = {
+	/** 0：行紧贴（代码块内每行） */
+	none: 0,
+	/** 2：同卡内字段/标签近距堆叠；VBox·HBox 默认 */
+	tight: 2,
+	/** 4：卡片间、工具栏按钮间，最常用；Section 默认 Gap */
+	normal: 4,
+	/** 6：章节/抽屉/模态等大块 */
+	loose: 6,
+	/** 8：同行内强分组（DiffView 头部统计），罕用 */
+	wide: 8,
+} as const;
+
+export const PADDING = {
+	/** {4,4,4,4}：Panel / 简单弹出列表 */
+	panel: { Left: 4, Top: 4, Right: 4, Bottom: 4 } as const,
+	/** {6,4,6,4}：卡片（横宽纵紧）；Section 默认 Padding */
+	card: { Left: 6, Top: 4, Right: 6, Bottom: 4 } as const,
+	/** {6,6,6,6}：对称章节（带 Title 时备用） */
+	section: { Left: 6, Top: 6, Right: 6, Bottom: 6 } as const,
+	/** {8,8,8,8}：ModalPanel 默认 */
+	modal: { Left: 8, Top: 8, Right: 8, Bottom: 8 } as const,
+} as const;
+
 // ── DrawAs 枚举值（ESlateBrushDrawType，来源于 SlateBrush.h） ──
 
 const DRAW_AS_NO_DRAW = 0; // ESlateBrushDrawType::NoDrawType
@@ -91,10 +117,8 @@ const DEFAULT_CONTROL_FONT: SlateFontInfo = { Size: 9 };
 
 const DEFAULT_TEXT_COLOR: SlateColor = { SpecifiedColor: COL_FOREGROUND };
 
-const DEFAULT_PANEL_PADDING = { Left: 4, Top: 4, Right: 4, Bottom: 4 };
 const DEFAULT_PANEL_BACKGROUND: SlateBrush = { DrawAs: DRAW_AS_NO_DRAW as any };
 const SECTION_BACKGROUND: SlateBrush = roundedBrush(COL_PANEL, COL_INPUT);
-const DEFAULT_BOX_CHILD_GAP = 2;
 
 const DEFAULT_BUTTON_STYLE: ButtonStyle = {
 	Normal: roundedBrush(COL_SECONDARY, COL_INPUT),
@@ -184,23 +208,19 @@ function withChildGap(children: React.ReactNode, padding: Margin): React.ReactNo
 export const Panel = (props: BorderProps): React.ReactElement => {
 	const { children, Background, Padding, ...rest } = props;
 	return (
-		<Border
-			Background={Background ?? DEFAULT_PANEL_BACKGROUND}
-			Padding={Padding ?? DEFAULT_PANEL_PADDING}
-			{...rest}
-		>
+		<Border Background={Background ?? DEFAULT_PANEL_BACKGROUND} Padding={Padding ?? PADDING.panel} {...rest}>
 			{children}
 		</Border>
 	);
 };
 
 export const VBox = (props: VerticalBoxProps & BoxSpacingProps): React.ReactElement => {
-	const { children, Gap = DEFAULT_BOX_CHILD_GAP, ...rest } = props;
+	const { children, Gap = SPACING.tight, ...rest } = props;
 	return <VerticalBox {...rest}>{withChildGap(children, { Bottom: Gap })}</VerticalBox>;
 };
 
 export const HBox = (props: HorizontalBoxProps & BoxSpacingProps): React.ReactElement => {
-	const { children, Gap = DEFAULT_BOX_CHILD_GAP, ...rest } = props;
+	const { children, Gap = SPACING.tight, ...rest } = props;
 	return <HorizontalBox {...rest}>{withChildGap(children, { Right: Gap })}</HorizontalBox>;
 };
 
@@ -419,7 +439,7 @@ export const SelectableText = ({ Font, ColorAndOpacity, ...rest }: TextBlockProp
 export const Section = (
 	props: BorderProps & { Title?: string; Tone?: SectionTone; Gap?: number },
 ): React.ReactElement => {
-	const { children, Title, Tone = 'normal', Gap = 4, Background, Padding, ...rest } = props;
+	const { children, Title, Tone = 'normal', Gap = SPACING.normal, Background, Padding, ...rest } = props;
 	const toneBrush =
 		Tone === 'accent'
 			? roundedBrush(COL_ACCENT, COL_INPUT)
@@ -429,11 +449,7 @@ export const Section = (
 					? roundedBrush(COL_ERROR, COL_INPUT)
 					: SECTION_BACKGROUND;
 	return (
-		<Border
-			Background={Background ?? toneBrush}
-			Padding={Padding ?? { Left: 6, Top: 6, Right: 6, Bottom: 6 }}
-			{...rest}
-		>
+		<Border Background={Background ?? toneBrush} Padding={Padding ?? PADDING.card} {...rest}>
 			<VBox Gap={Gap}>
 				{Title ? (
 					<Text Text={Title} Font={{ Size: 10 }} ColorAndOpacity={{ SpecifiedColor: COL_FOREGROUND_HOVER }} />

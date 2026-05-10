@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { VBox } from '../../../../ui';
+import { SPACING, VBox } from '../../../../ui';
 
 import { TerminalBlock } from '../blocks';
 import { ContentDispatcher } from '../contentDispatcher';
@@ -20,7 +20,7 @@ const ExecuteBody: React.FC<BodyProps> = ({ item }) => {
 
 	if (output || command) {
 		return (
-			<VBox Gap={4}>
+			<VBox Gap={SPACING.normal}>
 				<TerminalBlock
 					command={command}
 					stdout={output?.stdout}

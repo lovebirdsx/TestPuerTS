@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Btn, HBox, ModalPanel, Text, VBox } from '../../../ui';
+import { Btn, HBox, ModalPanel, SPACING, Text, VBox } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 import { formatUnknown } from '../shared/formatters';
 
@@ -16,7 +16,7 @@ export const PermissionModal: React.FC = () => {
 
 	return (
 		<ModalPanel>
-			<VBox Gap={6}>
+			<VBox Gap={SPACING.loose}>
 				<Text Text={`Permission Required: ${title}`} />
 				<Text Text={formatUnknown(request.toolCall.rawInput)} AutoWrapText />
 				<HBox>

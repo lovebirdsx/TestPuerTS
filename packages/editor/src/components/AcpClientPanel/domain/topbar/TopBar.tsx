@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Spacer } from 'react-umg';
 
-import { HBox, IconBtn } from '../../../ui';
+import { HBox, IconBtn, SPACING } from '../../../ui';
 import { useStoreAction, useStoreSelector } from '../../hooks/useStore';
 
 const center = { VerticalAlignment: 2 as any };
@@ -20,7 +20,7 @@ export const TopBar: React.FC = () => {
 	const logStateToConsole = useStoreAction('logStateToConsole');
 
 	return (
-		<HBox Gap={4}>
+		<HBox Gap={SPACING.normal}>
 			<IconBtn
 				IconName="Plus"
 				ToolTipText="New session"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { SelectableText, Text, VBox } from '../../../../ui';
+import { SelectableText, SPACING, Text, VBox } from '../../../../ui';
 
 import { formatUnknown } from '../../shared/formatters';
 import { ContentDispatcher } from '../contentDispatcher';
@@ -14,7 +14,7 @@ const OtherBody: React.FC<BodyProps> = ({ item }) => {
 	const sections: React.ReactNode[] = [];
 	if (item.rawInput !== undefined) {
 		sections.push(
-			<VBox key="input" Gap={2}>
+			<VBox key="input" Gap={SPACING.tight}>
 				<Text Text="Input" Font={{ Size: 9 }} />
 				<SelectableText Text={formatUnknown(item.rawInput)} AutoWrapText Font={{ Size: 9 }} />
 			</VBox>,
@@ -22,7 +22,7 @@ const OtherBody: React.FC<BodyProps> = ({ item }) => {
 	}
 	if (item.rawOutput !== undefined) {
 		sections.push(
-			<VBox key="output" Gap={2}>
+			<VBox key="output" Gap={SPACING.tight}>
 				<Text Text="Output" Font={{ Size: 9 }} />
 				<SelectableText Text={formatUnknown(item.rawOutput)} AutoWrapText Font={{ Size: 9 }} />
 			</VBox>,
@@ -30,13 +30,13 @@ const OtherBody: React.FC<BodyProps> = ({ item }) => {
 	}
 	if (item.content !== undefined) {
 		sections.push(
-			<VBox key="content" Gap={2}>
+			<VBox key="content" Gap={SPACING.tight}>
 				<Text Text="Content" Font={{ Size: 9 }} />
 				<ContentDispatcher value={item.content} />
 			</VBox>,
 		);
 	}
-	return <VBox Gap={4}>{sections}</VBox>;
+	return <VBox Gap={SPACING.normal}>{sections}</VBox>;
 };
 
 export const OtherCard: KindRenderer = {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Icon, type IconName } from '../../../../ui';
+import { IconBtn, type IconName } from '../../../../ui';
 
 /**
  * ACP `ToolKind` → 编辑器内置图标的映射。
@@ -21,5 +21,5 @@ const KIND_TO_ICON: Record<string, IconName> = {
 
 export const ToolKindIcon: React.FC<{ kind?: string | null; size?: number }> = ({ kind, size }) => {
 	const name: IconName = kind ? (KIND_TO_ICON[kind] ?? 'Plus') : 'Plus';
-	return <Icon Name={name} Size={size} />;
+	return <IconBtn IconName={name} Size={size} ToolTipText="" />;
 };
