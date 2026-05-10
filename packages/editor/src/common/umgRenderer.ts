@@ -15,6 +15,17 @@ function propsToString(props: unknown): string {
 	return JSON.stringify(props, ['id', 'key', 'Text', 'DefaultOptions', 'SelectedOption']);
 }
 
+// 受控文本输入控件白名单：在 updateProps 时若 widget.GetText() 已等于新 Text，
+// 跳过 SetText，避免光标被重置到末尾。
+const EDITABLE_TEXT_TYPES = new Set<string>([
+	'EditableText',
+	'EditableTextBox',
+	'MultiLineEditableText',
+	'MultiLineEditableTextBox',
+	'EditorUtilityEditableTextBox',
+	'EditorUtilityMultiLineEditableTextBox',
+]);
+
 export interface IWidgetRoot {
 	appendChild(child: UEWidget): void;
 	removeChild(child: UEWidget): void;
@@ -196,12 +207,30 @@ export class UEWidget {
 			}
 		}
 		if (propChange) {
-			puerts.merge(this.nativePtr, myProps);
-			this.synchronizeWidgetProperties(this.nativePtr, this.type, myProps);
-			UE.UMGManager.SynchronizeWidgetProperties(this.nativePtr);
+			// 受控文本框：当 React 推回的 Text 与控件当前文本一致时跳过 SetText，
+			// 否则 puerts.merge → SetText 会把光标重置到末尾，用户在中间输入字符会跳尾。
+			const propsForMerge = this.filterEditableTextEcho(myProps);
+			if (Object.keys(propsForMerge).length > 0) {
+				puerts.merge(this.nativePtr, propsForMerge);
+				this.synchronizeWidgetProperties(this.nativePtr, this.type, propsForMerge);
+				UE.UMGManager.SynchronizeWidgetProperties(this.nativePtr);
+			}
 		}
 		// 同步快照供测试查询读取（包含本次变更的非 Slot / 非函数 props）
 		Object.assign(this._props, myProps);
+	}
+
+	private filterEditableTextEcho(myProps: Record<string, unknown>): Record<string, unknown> {
+		if (!('Text' in myProps) || !EDITABLE_TEXT_TYPES.has(this.type)) {
+			return myProps;
+		}
+		const widget = this.nativePtr as unknown as { GetText?: () => string };
+		if (typeof widget.GetText !== 'function' || widget.GetText() !== myProps.Text) {
+			return myProps;
+		}
+		const filtered = { ...myProps };
+		delete filtered.Text;
+		return filtered;
 	}
 
 	private unbind(name: string): void {
