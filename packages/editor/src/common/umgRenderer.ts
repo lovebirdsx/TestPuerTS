@@ -190,20 +190,31 @@ export class UEWidget {
 		const myProps = {} as Record<string, unknown>;
 		let propChange = false;
 		for (const key in newProps) {
+			if (key === 'children') {
+				continue;
+			}
 			const oldProp = oldProps[key];
 			const newProp = newProps[key];
-			if (key !== 'children' && oldProp !== newProp) {
-				if (key === 'Slot') {
+			if (key === 'Slot') {
+				if (oldProp !== newProp) {
 					this.slot = newProp;
 					puerts.merge(this.nativeSlotPtr, newProp);
 					UE.UMGManager.SynchronizeSlotProperties(this.nativeSlotPtr);
-				} else if (typeof newProp === 'function') {
-					this.unbind(key);
-					this.bind(key, newProp as (...args: unknown[]) => unknown);
-				} else {
-					myProps[key] = newProp;
-					propChange = true;
 				}
+			} else if (typeof newProp === 'function' || typeof oldProp === 'function') {
+				if (oldProp !== newProp) {
+					this.unbind(key);
+					if (typeof newProp === 'function') {
+						this.bind(key, newProp as (...args: unknown[]) => unknown);
+					}
+				}
+			} else if (!compareWidgetProps(oldProp, newProp)) {
+				// 深比较：上层包装（如 TextArea）常在每次 render 时通过 mergeDeep 生成
+				// 新的 WidgetStyle/TextStyle 引用，但内容并未变化。浅比较 `oldProp !== newProp`
+				// 会让这些 prop 进入 puerts.merge → SynchronizeWidgetProperties → SetText，
+				// 触发 Slate 端 JumpTo(EndOfDocument)，导致受控文本框光标跳尾。
+				myProps[key] = newProp;
+				propChange = true;
 			}
 		}
 		if (propChange) {
